@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="8,00"
+	Name="LiveKnock"
+	ProjectGUID="{AB9A6019-E9B2-45AE-83D4-26DD4067F158}"
+	RootNamespace="LiveKnock"
+	Keyword="MakeFileProj"
+	>
+	<Platforms>
+		<Platform
+			Name="Win32"
+		/>
+	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
+	<Configurations>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make -h version=Debug"
+				ReBuildCommandLine="make -h -a version=Debug"
+				CleanCommandLine="@del /Q .\Debug\*.*"
+				Output="$(ProjectDir)\LiveKnock.axf"
+				PreprocessorDefinitions="_DEBUG,__softfp="
+				IncludeSearchPath="$(ARMCC50INC);&quot;../LowLevel/libs/cpp&quot;;"
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="wmake -h version=Release"
+				ReBuildCommandLine="wmake -h -a version=Release"
+				CleanCommandLine="@del /Q .\Release\*.*"
+				Output="$(ProjectDir)\LiveKnock.axf"
+				PreprocessorDefinitions="__softfp="
+				IncludeSearchPath="$(ARMCC50INC);&quot;../LowLevel/libs/cpp&quot;;"
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<Filter
+			Name="Source Files"
+			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
+			>
+			<File
+				RelativePath=".\cpp\AltMaps.asm"
+				>
+			</File>
+			<File
+				RelativePath=".\cpp\LiveKnock.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\cpp\LiveMap.asm"
+				DeploymentContent="true"
+				>
+			</File>
+			<File
+				RelativePath=".\cpp\LookupHiIgnMap.cpp"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Header Files"
+			Filter="h;hpp;hxx;hm;inl;inc;xsd"
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+			>
+			<File
+				RelativePath=".\cpp\def.inc"
+				>
+			</File>
+			<File
+				RelativePath=".\cpp\misc.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cpp\types.h"
+				>
+			</File>
+		</Filter>
+		<File
+			RelativePath=".\makefile"
+			>
+		</File>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>
