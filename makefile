@@ -128,44 +128,44 @@ patch2 = 0x37900=bin\altmaps.bin, &
 ##################################################################################################
 # $(objdir)\LiveKnock.bin $(objdir)\LookupHiIgnMap.bin 
 
-$(objdir)\9327_mod.hex : $(objdir)\LiveMap.bin $(objdir)\AltMaps.bin $(objdir)\LiveKnock.bin
+$(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs
 	@echo Patch ROM...
 	@copy /Y bin\orig_93270019.hex $^@
-	@bin\hexalter $^@ $(dma_patch)
+	bin\elfpatch $^@ $[@
 
 ##################################################################################################
 # -start=P,C/3E800,D,B/FFFF8490
 ##################################################################################################
 
-$(objdir)\LiveMap.bin : LiveMap.o
-	@echo Linking $^@ ...
-	@optlnk	$(link_options) -start=P/3EC00 -OUtput="$^@" $[@
-	@optlnk	-NOLOGO -FOrm=Absolute -LIBrary=$(libname) $[@
+#$(objdir)\LiveMap.bin : LiveMap.o
+#	@echo Linking $^@ ...
+#	@optlnk	$(link_options) -start=P/3EC00 -OUtput="$^@" $[@
+#	@optlnk	-NOLOGO -FOrm=Absolute -LIBrary=$(libname) $[@
 
 ##################################################################################################
 
-$(objdir)\LiveKnock.bin : LiveKnock.o
+$(objdir)\LiveKnock.abs : LiveKnock.o LiveMap.o AltMaps.o
 	@echo Linking $^@ ...
-	@optlnk	$(link_options) -start=P/3E800,B/FFFF8490 -OUtput="$^@" $[@
-	@optlnk	-NOLOGO -FOrm=Absolute -start=P/3E800,B/FFFF8490 -LIBrary=$(libname) $[@
+	optlnk	-NOLOGO -FOrm=Absolute -start=B/FFFF8490 -LIBrary=$(libname) -OUtput="$^@" $<
+
+#	@optlnk	$(link_options) -start=P/3E800,B/FFFF8490 -OUtput="$^@" $[@
+##################################################################################################
+
+#$(objdir)\LookupHiIgnMap.bin : LookupHiIgnMap.o
+#	@echo Linking $^@ ...
+#	@optlnk	$(link_options) -start=P/3E800 -OUtput="$^@" $[@
 
 ##################################################################################################
 
-$(objdir)\LookupHiIgnMap.bin : LookupHiIgnMap.o
-	@echo Linking $^@ ...
-	@optlnk	$(link_options) -start=P/3E800 -OUtput="$^@" $[@
+#$(objdir)\AltMaps.bin : AltMaps.o
+#	@echo Linking $^@ ...
+#	@optlnk	$(link_options) -start=C/37B00 -OUtput="$^@" $[@
 
 ##################################################################################################
 
-$(objdir)\AltMaps.bin : AltMaps.o
-	@echo Linking $^@ ...
-	@optlnk	$(link_options) -start=C/37B00 -OUtput="$^@" $[@
-
-##################################################################################################
-
-$(objdir)\93270019.bin : 93270019.o
-	@echo Linking $^@ ...
-	@optlnk	$(link_options) -start=C/0 -OUtput="$^@" $[@
+#$(objdir)\93270019.bin : 93270019.o
+#	@echo Linking $^@ ...
+#	@optlnk	$(link_options) -start=C/0 -OUtput="$^@" $[@
 
 ##################################################################################################
 

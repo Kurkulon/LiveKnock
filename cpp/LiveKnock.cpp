@@ -32,7 +32,7 @@ void Hook()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-void LiveKnock()
+extern "C" void LiveKnock()
 {
 	static i16 timing;
 
