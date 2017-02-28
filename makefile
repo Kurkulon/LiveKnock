@@ -16,9 +16,9 @@ hdir = $(cppdir)
 
 !ifeq version Debug
 
-# -SIze
+# -SIze  
 
-debug_compiler_options =  -OPtimize=1
+debug_compiler_options =  -OPtimize=1 -SPeed
 debug_linker_options = 
 lbgsh_options = 
 libsuffix=d
@@ -146,7 +146,7 @@ $(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs
 
 $(objdir)\LiveKnock.abs : LiveKnock.o LiveMap.o AltMaps.o
 	@echo Linking $^@ ...
-	optlnk	-NOLOGO -FOrm=Absolute -start=B/FFFF8490 -LIBrary=$(libname) -OUtput="$^@" $<
+	optlnk	-NOLOGO -FOrm=Absolute -start=P/3E800,B/FFFF8490 -LIBrary=$(libname) -OUtput="$^@" $<
 
 #	@optlnk	$(link_options) -start=P/3E800,B/FFFF8490 -OUtput="$^@" $[@
 ##################################################################################################

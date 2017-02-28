@@ -45,7 +45,7 @@ DEADval:						.EQU	H'DEAD
 
 HookedProc:						.EQU	H'A98A
 
-
+								.IMPORT	_LiveKnock
 
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -139,7 +139,7 @@ HookedProc:						.EQU	H'A98A
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  
-	.SECTION P, CODE, LOCATE=H'3EC00
+	.SECTION P, CODE, ALIGN=4	; LOCATE=H'3EC00
 
 ; !!! PATCH this address to 0x324
 
@@ -268,7 +268,7 @@ exit:
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	.align 16
+;	.align 16
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ; !!! PATCH this address to 0x138
@@ -450,7 +450,7 @@ brE2: ;USES PREVIOUS 4 BYTE ADDRESS AND 2 BYTE LENGTH TO READ A BLOCK FROM SERIA
 
 	.NOPOOL
 
-	.align 16
+;	.align 16
 
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -493,39 +493,8 @@ TEIEinvade: ;JUMP HERE FROM EARLIER IF TRANSMISSION HAS ALREADY FINISHED
 	
 	.POOL
 
-;_SAR3:		.DATA.L H'ffffecf0
-;_DAR3:		.DATA.L H'ffffecf4
-;_DMATCR3:	.DATA.L H'ffffecf8
-;_CHCR3:	.DATA.L H'ffffecfc
-
-;_SCR0:		.DATA.L H'fffff002
-;_TDR0:		.DATA.L H'fffff003
-;_SSR0:		.DATA.L H'fffff004
-;_RDR0:		.DATA.L H'fffff005
-
-;_DMA3CONFIGwriteindirect:	.DATA.L H'10011005
-;_DMA3CONFIGwritedirect:		.DATA.L H'11005
-;_DMA3CONFIGread:			.DATA.L H'20105
-
-;_DMAOPFLAG:		.DATA.L H'ffff8480
-;_DMAOPFLAG2:		.DATA.L H'ffff8484
-;_DMAaddress:		.DATA.L H'ffff8488
-;_DMAlength:			.DATA.L H'ffff848c
-
-;_int_disable:		.DATA.L H'400
-;_int_enable:		.DATA.L H'41e
-
-;_E0:				.DATA.W H'E0
-;_E1:				.DATA.W H'E1
-;_E2:				.DATA.W H'E2
-
-;_SCR0_CLRTIE_SETTEIE:	.DATA.W H'24
-;_SCR0_SETRE_CLRTEIE:	.DATA.W H'70
-;_SCR0_CLRRE_SETTIE:	.DATA.W H'a0
-
-;/*--------------------------------*/
 	
-	.align 16
+;	.align 16
 	
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ; !!! 932700xx PATCH this address to 0xEC28
@@ -587,7 +556,7 @@ __exit:
 	jsr		@r10
 	nop
 	
-	mov.l	#tephra,r10
+	mov.l	#_LiveKnock,r10
 	jsr		@r10
 	nop
 	
