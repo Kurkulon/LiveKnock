@@ -2,6 +2,8 @@
 	.INCLUDE "cpp\def.inc"
 
 	.SECTION C, DATA, LOCATE=H'37B00
+	
+	.EXPORT	altMUT
 
 
 altMUT:		.DATA.L		wMUT1C_ECU_Load+1

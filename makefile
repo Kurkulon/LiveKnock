@@ -16,9 +16,9 @@ hdir = $(cppdir)
 
 !ifeq version Debug
 
-# -SIze  
+# -SIze -SPeed 
 
-debug_compiler_options =  -OPtimize=1 -SPeed
+debug_compiler_options =  -OPtimize=0 
 debug_linker_options = 
 lbgsh_options = 
 libsuffix=d
@@ -51,12 +51,17 @@ libname = $(objdir)\sh2_$(libsuffix).lib
 
 ##################################################################################################
 
+delimiter = _____________________________________________________________________
+
+##################################################################################################
+
 .BEFORE
 	@if NOT EXIST $(objdir) @md $(objdir) >nul
 	@echo -Head=RUNTIME -OUTput=$(libname) –CPu=SH2 –SPeed >$(objdir)\lbgsh.sub
 	@if NOT EXIST $(libname) @lbgsh -sub=$(objdir)\lbgsh.sub
 	@call echo Building $(version) version ...
 	@call buildnum.bat
+	@echo $(delimiter)	
 
 #	@call shv9420env.bat
 ##################################################################################################
@@ -128,10 +133,11 @@ patch2 = 0x37900=bin\altmaps.bin, &
 ##################################################################################################
 # $(objdir)\LiveKnock.bin $(objdir)\LookupHiIgnMap.bin 
 
-$(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs
+$(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs 93270019.o
 	@echo Patch ROM...
 	@copy /Y bin\orig_93270019.hex $^@
-	bin\elfpatch $^@ $[@
+	@bin\elfpatch $^@ $[@
+	@echo $(delimiter)	
 
 ##################################################################################################
 # -start=P,C/3E800,D,B/FFFF8490
@@ -146,7 +152,8 @@ $(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs
 
 $(objdir)\LiveKnock.abs : LiveKnock.o LiveMap.o AltMaps.o
 	@echo Linking $^@ ...
-	optlnk	-NOLOGO -FOrm=Absolute -start=P/3E800,B/FFFF8490 -LIBrary=$(libname) -OUtput="$^@" $<
+	@optlnk	-NOLOGO -FOrm=Absolute -start=P/3E800,B/FFFF8490 -LIBrary=$(libname) -OUtput="$^@" $<
+	@echo $(delimiter)	
 
 #	@optlnk	$(link_options) -start=P/3E800,B/FFFF8490 -OUtput="$^@" $[@
 ##################################################################################################
@@ -172,6 +179,7 @@ $(objdir)\LiveKnock.abs : LiveKnock.o LiveMap.o AltMaps.o
 .cpp.o:
 	@echo Compiling $[. ...
 	@shcpp $(compiler_options) -Listfile="$(objdir)\$^&.lst" -SHow=SOurce -OBjectfile="$(objdir)\$^." $[@
+	@echo $(delimiter)	
 
 #--depend="$(objdir)\$^&.d"  
 ##################################################################################################
@@ -179,7 +187,8 @@ $(objdir)\LiveKnock.abs : LiveKnock.o LiveMap.o AltMaps.o
 .asm.o:
 	@echo Compiling $[. ...
 	@asmsh $(asm_options) -List="$(objdir)\$^&.lst" -OBject="$(objdir)\$^." $[@
-	
+	@echo $(delimiter)	
+
 # -SHow=SOurce
 ##################################################################################################
 

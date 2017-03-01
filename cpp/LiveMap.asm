@@ -3,6 +3,9 @@
 	.CPU   SH2                                   ; Assembles program for the SH-2. 
 	
 	.INCLUDE "cpp\def.inc"
+	
+	.IMPORT	altMUT
+
 
 int_disable:					.EQU	H'400
 int_enable:						.EQU	H'41E
@@ -38,7 +41,7 @@ SCR0_CLRRE_SETTIE:				.EQU	H'a0
 DEADloc:						.EQU	H'ffffA800
 
 tephra:							.EQU	H'3E000		;	/*CHANGE FOR 256K ECUS*/
-ROM:							.EQU	H'37b00
+ROM:							.EQU	altMUT		; H'37b00
 RAM:							.EQU	H'FFFFA000
 LENGTH:							.EQU	H'800
 DEADval:						.EQU	H'DEAD
