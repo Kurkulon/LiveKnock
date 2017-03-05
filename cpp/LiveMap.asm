@@ -7,8 +7,6 @@
 	.IMPORT	altMUT
 
 
-int_disable:					.EQU	H'400
-int_enable:						.EQU	H'41E
 								
 								
 serialreceivewithoutdma:		.EQU	H'D34A		;/*TO BE CHANGED FOR EACH ROM*/

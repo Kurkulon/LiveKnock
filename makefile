@@ -18,7 +18,7 @@ hdir = $(cppdir)
 
 # -SIze -SPeed 
 
-debug_compiler_options =  -OPtimize=0 
+debug_compiler_options =  -OPtimize=1 
 debug_linker_options = 
 lbgsh_options = 
 libsuffix=d
@@ -133,7 +133,7 @@ patch2 = 0x37900=bin\altmaps.bin, &
 ##################################################################################################
 # $(objdir)\LiveKnock.bin $(objdir)\LookupHiIgnMap.bin 
 
-$(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs 93270019.o
+$(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs 
 	@echo Patch ROM...
 	@copy /Y bin\orig_93270019.hex $^@
 	@bin\elfpatch $^@ $[@

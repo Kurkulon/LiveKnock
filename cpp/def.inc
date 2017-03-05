@@ -1,8 +1,16 @@
 
+int_disable:					.EQU	H'400
+int_enable:						.EQU	H'41E
+Table_Lookup_byte_2D_3D			.EQU	H'C28
+Table_Lookup_word_2D_3D			.EQU	H'E02
+
+hiIgnMapIndex:												.EQU H'FFFF8401
+hiFuelMapIndex:												.EQU H'FFFF8402
+veMapIndex:													.EQU H'FFFF8403
 
 __axis_res_RPM25:											.EQU H'FFFF8460
 __axis_res_LOAD30:											.EQU H'FFFF8462
-
+rpm_x125div32_B:											.EQU H'FFFF893A
 
 MUT20_RPM_Idle_x125div16:									.EQU H'FFFF8942 
 MUT21_RPM_x125div4:											.EQU H'FFFF8944 

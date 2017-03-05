@@ -62,9 +62,6 @@ struct Map3D_W
 //#define	wMUT1E_MAF_RESET_FLAG			(*(u16*)0xFFFF89F4) 
 #define	wMUT72_Knock_Present			(*(u16*)0xFFFF89E6) // 1 - ? Knock sensor fault;
 
-#define __axis_res_RPM25				(*(u16*)0xFFFF8460)
-#define __axis_res_LOAD30				(*(u16*)0xFFFF8462)
-#define __DEADloc						(*(u16*)0xFFFFA800)
 
 #define SAR3							(*(void**)0xFFFFecf0)
 #define DAR3							(*(void**)0xFFFFecf4)
@@ -87,8 +84,21 @@ struct Map3D_W
 #define SSR0							(*(byte*)0xFFFFf004)
 #define RDR0							(*(byte*)0xFFFFf005)
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #define __byte_FFFF8400					(*(byte*)0xFFFF8400) // 1 - Alt maps
+
+#define hiIgnMapIndex					(*(byte*)0xFFFF8401) // 0..7
+#define hiFuelMapIndex					(*(byte*)0xFFFF8402) // 0..7
+#define veMapIndex						(*(byte*)0xFFFF8403) // 0..7
+
+
+
+#define __axis_res_RPM25				(*(u16*)0xFFFF8460)
+#define __axis_res_LOAD30				(*(u16*)0xFFFF8462)
+#define __DEADloc						(*(u16*)0xFFFFA800)
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #define romHiIgnMap						(*(Map3D_W*)0x38d42)
 

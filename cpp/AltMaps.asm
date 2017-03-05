@@ -1,10 +1,58 @@
 
 	.INCLUDE "cpp\def.inc"
 
+
+	.SECTION P, CODE, ALIGN=4	
+
+Lookup_HiIgnMapB:
+
+			sts.l   pr, @-r15                                               
+
+			mov.w   #hiIgnMapIndex, r0                                    
+			mov.b   @r0, r0                                     
+			and     #1, r0                                                  
+			shll2   r0                                                      
+			add		r0, r4
+
+			mov.w   #Table_Lookup_byte_2D_3D, r0                                              
+			jsr     @r0 
+			mov.l   @r4, r4
+
+			lds.l   @r15+, pr                                               
+			rts                                                             
+			nop                                                
+
+			.NOPOOL
+
+Lookup_HiIgnMapW:
+
+			sts.l   pr, @-r15                                               
+
+			mov.w   #hiIgnMapIndex, r0                                    
+			mov.b   @r0, r0                                     
+			and     #1, r0                                                  
+			shll2   r0                                                      
+			add		r0, r4
+
+			mov.w   #Table_Lookup_word_2D_3D, r0                                              
+			jsr     @r0 
+			mov.l   @r4, r4
+
+			extu.w  r0, r0                                                  
+			add     #h'7F, r0 ; ''                                         
+			add     #1, r0                                                  
+			lds.l   @r15+, pr                                               
+			rts                                                             
+			shlr8   r0            
+
+			.POOL
+
+
 	.SECTION C, DATA, LOCATE=H'37B00
 	
 	.EXPORT	altMUT
 
+			.align 4
 
 altMUT:		.DATA.L		wMUT1C_ECU_Load+1
 			.DATA.L		MUT21_RPM_x125div4+1                                    
@@ -21,7 +69,7 @@ altMUT:		.DATA.L		wMUT1C_ECU_Load+1
 			.DATA.L		wMUT32_Air_To_Fuel_Ratio+1
 			.DATA.L		wMUT2F_Vehicle_Speed+1  
 			
-			.align 1
+			.align 2
 
 			.DATA.W		H'FFFF
 			
