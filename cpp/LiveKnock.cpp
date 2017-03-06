@@ -30,34 +30,34 @@ const char str[] = __DATE__;
 
 extern "C" void LiveKnock()
 {
-	//static i16 timing;
+	static i16 timing;
 
-	//u16 ind = (byte)__axis_res_RPM25 + (byte)__axis_res_LOAD30*25;
+	u16 ind = (byte)axis_ig_RPM + (byte)axis_ig_LOAD*25;
 
-	//i16 *p = &ramHiIgnMap.data[ind];
+	i16 *p = &ramHiIgnMap.data[ind];
 
-	//timing = *p;
+	timing = *p;
 
-	//if ((__byte_FFFF8400 & 1) && (KNOCK_FLAG_FFFF8C34 & 0x40) && ((wMUT72_Knock_Present & 1) == 0) && (byte)__axis_res_LOAD30 > 10 && ind < 25*30)
-	//{
-	//	const u16 knock = wMUT26_Knock_Sum;
+	if ((_byte_FFFF8400 & 1) && (KNOCK_FLAG_FFFF8C34 & 0x40) && ((wMUT72_Knock_Present & 1) == 0) && (byte)axis_ig_LOAD > 10 && ind < 25*30)
+	{
+		const u16 knock = wMUT26_Knock_Sum;
 
-	//	if (knock > 5)
-	//	{
-	//		u16 dt = knock >> 1;
+		if (knock > 5)
+		{
+			u16 dt = knock >> 1;
 
-	//		i16 t = timing - dt;
+			i16 t = timing - dt;
 
-	//		*p = (t < -20*256) ? -20*256 : t;
-	//	}
-	//	else 
-	//	{
-	//		if (knock < 3 &&  timing < 40*256)
-	//		{
-	//			*p = timing += 1;
-	//		};
-	//	};
-	//};
+			*p = (t < -20*256) ? -20*256 : t;
+		}
+		else 
+		{
+			if (knock < 3 &&  timing < 40*256)
+			{
+				*p = timing += 1;
+			};
+		};
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

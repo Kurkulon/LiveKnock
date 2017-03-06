@@ -86,16 +86,27 @@ struct Map3D_W
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#define __byte_FFFF8400					(*(byte*)0xFFFF8400) // 1 - Alt maps
+//#define __byte_FFFF8400					(*(byte*)0xFFFF8400) // 1 - Alt maps
+//#define hiIgnMapIndex					(*(byte*)0xFFFF8401) // 0..7
+//#define hiFuelMapIndex					(*(byte*)0xFFFF8402) // 0..7
+//#define veMapIndex						(*(byte*)0xFFFF8403) // 0..7
 
-#define hiIgnMapIndex					(*(byte*)0xFFFF8401) // 0..7
-#define hiFuelMapIndex					(*(byte*)0xFFFF8402) // 0..7
-#define veMapIndex						(*(byte*)0xFFFF8403) // 0..7
+extern byte _byte_FFFF8400;
+extern byte hiIgnMapIndex;					
+extern byte hiFuelMapIndex;					
+extern byte veMapIndex;						
 
 
+//#define __axis_res_RPM25				(*(u16*)0xFFFF8460)
+//#define __axis_res_LOAD30				(*(u16*)0xFFFF8462)
 
-#define __axis_res_RPM25				(*(u16*)0xFFFF8460)
-#define __axis_res_LOAD30				(*(u16*)0xFFFF8462)
+extern u16 axis_ig_RPM;	
+extern u16 axis_ig_LOAD;	
+extern u16 axis_fu_RPM;	
+extern u16 axis_fu_LOAD;	
+extern u16 axis_ve_RPM;	
+extern u16 axis_ve_LOAD;	
+
 #define __DEADloc						(*(u16*)0xFFFFA800)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
