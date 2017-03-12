@@ -41,8 +41,16 @@ struct Map3D_W
 #define Tephra ((void(*)(void))0x3ec00)
 #define sub_A98A ((void(*)(void))0xA98A)
 
-//#define Table_Lookup_byte_2D_3D ((u8(*)(Map3D_B*))0xC28)
-#define Table_Lookup_word_2D_3D ((u16(*)(Map3D_W*))0xE02)
+#define Table_Lookup_byte_2D_3D ((u8(*)(void*))0xC28)
+#define Table_Lookup_word_2D_3D ((u16(*)(void*))0xE02)
+
+#define IG04_GetLoadCorrectedDeltaTPS					((u16(*)(void))0x181DC)
+#define Table_Lookup_Axis								((void(*)(void*))0xCC6)
+#define Query_byte_2D_3D_Table							((u16(*)(void*))0xDE0)
+#define Add_R4w_R5w_Lim_FFFF							((u16(*)(u16,u16))0x500)
+#define interpolate_r4_r5_r6							((u16(*)(u16,u16,u16))0xB16)
+#define Sub_R4w_R5w_liml_0								((u16(*)(u16,u16))0xF0C)
+#define Lim_R4_max_FF									((u16(*)(u16))0x590)
 
 
 #define __disable_irq ((void(*)(void))0x400)
@@ -51,12 +59,31 @@ struct Map3D_W
 //#pragma address wMUT26_Knock_Sum=0xFFFF8C32
 //static u16 wMUT26_Knock_Sum;
 
+#define wMUTB4_lookup_value								(*(u16*)0xFFFF8836)
+#define RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888		(*(u16*)0xFFFF8888)
+#define ZERO_8_IGNITION_FLAGS							(*(u16*)0xFFFF8A0C)
+#define egrLowOctIgn									(*(u16*)0xFFFF8BC0)
+#define egrHighOctIgn									(*(u16*)0xFFFF8BC2)
+#define octanEgrIgnTiming								(*(u16*)0xFFFF8BC8)
+#define ignition_FFFF8BC4								(*(u16*)0xFFFF8BC4)
+
+#define RPM21_6788_IGN									((void*)0x6788)
+#define LOAD12_67BC_IGN									((void*)0x67BC)
+#define LowIgn_7C68										((void*)0x7C68)
+#define LOWOCTIGNEGR_7AC8								((void*)0x7AC8)
+#define HIOCTIGNEGR_38CA								((void*)0x38CA)
+#define HighIgn_7C48									((void*)0x7C48)
+
+
+
 #define wMUT26_Knock_Sum				(*(u16*)0xFFFF8C32)
+#define wMUT27_Octane_Number					(*(u16*)0xFFFF80B8)
+
 //#define wMUT1C_ECU_Load					(*(u16*)0xFFFF8952)
 //#define	wMUT06_Timing_Advance			(*(u16*)0xFFFF8BDC)
 //#define	wMUT33_Corrected_Timing_Advance	(*(u16*)0xFFFF8BBE)
 //#define	MUT21_RPM_x125div4				(*(u16*)0xFFFF8944)
-//#define	wMUTD1_BitMap_FAA				(*(u16*)0xFFFF89D4)
+#define	wMUTD1_BitMap_FAA				(*(u16*)0xFFFF89D4)
 #define	KNOCK_FLAG_FFFF8C34				(*(u16*)0xFFFF8C34) // 0x40 - enabled knock retard;
 //#define	wMUT04_Timing					(*(u16*)0xFFFF8BBC) // wMUT04_Timing_Advance_Interpolated
 //#define	wMUT1E_MAF_RESET_FLAG			(*(u16*)0xFFFF89F4) 

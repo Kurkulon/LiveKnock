@@ -28,6 +28,20 @@ const char str[] = __DATE__;
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+inline u16 Lookup_HiIgnMap(void** p)
+{
+	//u32 t = Table_Lookup_word_2D_3D(p[hiIgnMapIndex&1]);
+
+	//t += 0x80;
+
+	//return (byte)(t >> 8);
+
+//	return ((u32)(Table_Lookup_word_2D_3D(p[hiIgnMapIndex&7])) + 0x80) >> 8;
+	return Table_Lookup_byte_2D_3D(p[hiIgnMapIndex&7]);
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 extern "C" void LiveKnock()
 {
 	static i16 timing;
@@ -58,6 +72,89 @@ extern "C" void LiveKnock()
 			};
 		};
 	};
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma noregsave(IG04_Update_OctanEgrIgnTiming)
+
+extern "C" u16 IG04_Update_OctanEgrIgnTiming()
+{
+	register u16 loIgn, ignAdd, hiIgn, octIgn, ign; 
+
+
+	wMUTB4_lookup_value = IG04_GetLoadCorrectedDeltaTPS();
+
+	Table_Lookup_Axis(RPM21_6788_IGN);
+
+	Table_Lookup_Axis(LOAD12_67BC_IGN);
+
+//	if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x20)
+	{
+		loIgn = Query_byte_2D_3D_Table(LowIgn_7C68);
+	}
+	//else
+	//{
+	//	loIgn = Query_byte_2D_3D_Table(LowIgn_7C68);
+	//};
+
+	ignAdd = Query_byte_2D_3D_Table(LOWOCTIGNEGR_7AC8);
+
+	if (ZERO_8_IGNITION_FLAGS & 8)
+	{
+		egrLowOctIgn = Add_R4w_R5w_Lim_FFFF(loIgn, Table_Lookup_byte_2D_3D(HIOCTIGNEGR_38CA));
+	}
+	else
+	{
+		egrLowOctIgn = loIgn;
+	};
+
+	if (wMUTD1_BitMap_FAA & 0x80)
+	{
+		//if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x20)
+		//{
+			hiIgn = Lookup_HiIgnMap((void**)HighIgn_7C48);//(Table_Lookup_word_2D_3D(((void**)HighIgn_7C48)[hiIgnMapIndex&7]) + 0x80) >> 8;
+//			hiIgn = Query_byte_2D_3D_Table(HighIgn_7C48);
+		//}
+		//else
+		//{
+		//	hiIgn = Query_byte_2D_3D_Table(HighIgn_7C48);
+		//};
+
+		if (ZERO_8_IGNITION_FLAGS & 8)
+		{
+			egrHighOctIgn = Add_R4w_R5w_Lim_FFFF(hiIgn, Table_Lookup_byte_2D_3D(HIOCTIGNEGR_38CA));
+		}
+		else
+		{
+			egrHighOctIgn = hiIgn;
+		};
+
+		octIgn = interpolate_r4_r5_r6(egrHighOctIgn, egrLowOctIgn, wMUT27_Octane_Number);
+
+		ign = hiIgn;
+
+	} // if (wMUTD1_BitMap2 & 0x80)
+	else
+	{
+		octIgn = egrLowOctIgn;
+
+		ign = loIgn;
+
+	}; // if (wMUTD1_BitMap2 & 0x80)
+
+	octanEgrIgnTiming = octIgn;
+
+
+	ign += ignAdd;
+
+
+	ignition_FFFF8BC4 = Lim_R4_max_FF(Sub_R4w_R5w_liml_0(ign, 128));
+
+
+	return octanEgrIgnTiming;
+
+
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

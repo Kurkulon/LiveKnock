@@ -22,6 +22,208 @@ _axis_ve_RPM:		.RES.W      1					;	.EQU H'FFFF8460
 _axis_ve_LOAD:		.RES.W      1					;	.EQU H'FFFF8462
 
 
+IG04_GetLoadCorrectedDeltaTPS					.EQU	H'181DC
+RPM21_6788_IGN									.EQU	H'6788
+Table_Lookup_Axis								.EQU	H'CC6
+LOAD12_67BC_IGN									.EQU	H'67BC
+RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888		.EQU	H'FFFF8888
+LowIgn_7C68										.EQU	H'7C68
+Query_byte_2D_3D_Table							.EQU	H'DE0
+LOWOCTIGNEGR_7AC8								.EQU	H'7AC8
+ZERO_8_IGNITION_FLAGS							.EQU	H'FFFF8A0C
+HIOCTIGNEGR_38CA								.EQU	H'38CA
+Add_R4w_R5w_Lim_FFFF							.EQU	H'500
+egrLowOctIgn									.EQU	H'FFFF8BC0
+egrHighOctIgn									.EQU	H'FFFF8BC2
+HighIgn_7C48									.EQU	H'7C48
+interpolate_r4_r5_r6							.EQU	H'B16
+octanEgrIgnTiming								.EQU	H'FFFF8BC8
+Sub_R4w_R5w_liml_0								.EQU	H'F0C
+Lim_R4_max_FF									.EQU	H'590
+ignition_FFFF8BC4								.EQU	H'FFFF8BC4
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	.IMPORT	_IG04_Update_OctanEgrIgnTiming
+
+	.SECTION P_1801E, CODE, LOCATE=H'1801E
+	
+			mov.l	#_IG04_Update_OctanEgrIgnTiming, r0                           
+			jmp   	@r0                                                             
+			nop   	                                                        
+	
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	.SECTION P, CODE, ALIGN=4
+	
+IG04_Update_OctanEgrIgnTiming:
+
+			sts.l	pr, @-r15                                               
+
+			mov.l	#IG04_GetLoadCorrectedDeltaTPS, r10                           
+			jsr   	@r10                                                             
+			nop   	                                                        
+
+			mov.l 	#wMUTB4_lookup_value, r10                               
+			mov.w 	r0, @r10                                                
+
+			mov.l 	#RPM21_6788_IGN, r4                                     
+			mov.l 	#Table_Lookup_Axis, r10                                 
+			jsr   	@r10 ; Table_Lookup_Axis                                
+			nop   	                                                        
+
+			mov.l 	#LOAD12_67BC_IGN, r4                                    
+			mov.l 	#Table_Lookup_Axis, r10                                 
+			jsr   	@r10 ; Table_Lookup_Axis                                
+			nop   	                                                        
+
+			mov.l 	#LowIgn_7C68, r4                                        
+			mov.l 	#Query_byte_2D_3D_Table, r10                            
+			jsr   	@r10 ; Query_byte_2D_3D_Table                           
+			nop   	                                                        
+
+			extu.w	r0, r1                                                  
+			mov.l 	#LOWOCTIGNEGR_7AC8, r4                                  
+
+			mov.l 	#Query_byte_2D_3D_Table, r10                            
+			jsr   	@r10 ; Query_byte_2D_3D_Table                           
+			nop   	                                                        
+
+			extu.w	r0, r2                                                  
+
+
+			mov.l 	#ZERO_8_IGNITION_FLAGS, r0                              
+			mov.w 	@r0, r0                                                 
+			tst   	#8, r0                                                  
+			bt    	loc_180F8                                               
+
+
+			mov.l 	#HIOCTIGNEGR_38CA, r4                                   
+			mov.l 	#Table_Lookup_byte_2D_3D, r10                           
+			jsr   	@r10 ; Table_Lookup_byte_2D_3D                          
+			nop   	                                                        
+
+			extu.w	r0, r0                                                  
+			extu.w	r1, r4                                                  
+			mov   	r0, r5                                                  
+			mov.l 	#Add_R4w_R5w_Lim_FFFF, r10                              
+			jsr   	@r10 ; Add_R4w_R5w_Lim_FFFF                             
+			nop   	                                                        
+
+			extu.w	r0, r1                                                  
+
+ loc_180F8:                                                                                      
+			mov.l 	#egrLowOctIgn, r10                                      
+			mov.w 	r1, @r10                                                
+
+; loc_180FC:                            	                                                        
+			mov.l 	#wMUTD1_BitMap_FAA, r0                                  
+			mov.w 	@r0, r0                                                 
+			tst   	#h'80, r0                                               
+			bt    	loc_18172                                               
+
+			mov.l 	#HighIgn_7C48, r4                                       
+			mov.l 	#Query_byte_2D_3D_Table, r10                            
+			jsr   	@r10 ; Query_byte_2D_3D_Table                           
+			nop   	                                                        
+
+			extu.w	r0, r13                                                 
+
+			mov   	r13, r1                                                 
+
+
+			mov.l 	#ZERO_8_IGNITION_FLAGS, r0                              
+			mov.w 	@r0, r0                                                 
+			tst   	#8, r0                                                  
+			bt    	loc_1814A                                               
+
+			mov.l 	#HIOCTIGNEGR_38CA, r4                                   
+			mov.l 	#Table_Lookup_byte_2D_3D, r10                           
+			jsr   	@r10 ; Table_Lookup_byte_2D_3D                          
+			nop   	                                                        
+
+			extu.w	r0, r0                                                  
+			extu.w	r1, r4                                                  
+			mov   	r0, r5                                                  
+			mov.l 	#Add_R4w_R5w_Lim_FFFF, r10                              
+			jsr   	@r10 ; Add_R4w_R5w_Lim_FFFF                             
+			nop                                                             
+
+			extu.w	r0, r1                                                  
+ 
+ loc_1814A:  
+                                                                                     
+			mov.l 	#egrHighOctIgn, r10                                     
+			mov.w 	r1, @r10                                                
+
+ loc_1814E:                            	                                                        
+			mov.l 	#wMUT27_Octane_Number, r10                              
+			mov.w 	@r10, r10                                               
+			extu.w	r10, r10                                                
+			mov.l 	#egrLowOctIgn, r11                                      
+			mov.w 	@r11, r11                                               
+			extu.w	r11, r11                                                
+			mov.l 	#egrHighOctIgn, r4                                      
+			mov.w 	@r4, r4                                                 
+			extu.w	r4, r4                                                  
+			mov   	r11, r5                                                 
+			mov   	r10, r6                                                 
+			mov.l 	#interpolate_r4_r5_r6, r10                              
+			jsr   	@r10 ; interpolate_r4_r5_r6                             
+			nop   	                                                        
+
+			extu.w	r0, r3                                                  
+
+			mov   	r1, r13                                                 
+			bra   	loc_18178                                               
+			nop                                                             
+
+			.NOPOOL
+
+ ; ---------------------------------------------------------------------------
+
+ loc_18172:                                                                                      
+			mov.l 	#egrLowOctIgn, r3                                       
+			mov.w 	@r3, r3                                                 
+
+			mov   	r1, r13                                                 
+
+ loc_18178:                            	                                                        
+			mov.l 	#octanEgrIgnTiming, r10                                 
+			mov.w 	r3, @r10                                                
+
+			extu.w	r2, r2                                                  
+			extu.w	r13, r13                                                
+			add   	r2, r13                                                 
+
+			mov   	r13, r4                                                 
+			mov.w 	#128, r5                                                
+			mov.l 	#Sub_R4w_R5w_liml_0, r10                                
+			jsr   	@r10 ; Sub_R4w_R5w_liml_0                               
+			nop   	                                                        
+
+			extu.w	r0, r4                                                  
+			mov.l 	#Lim_R4_max_FF, r10                                     
+			jsr   	@r10 ; Lim_R4_max_FF                                    
+			nop   	                                                        
+
+			mov.l 	#ignition_FFFF8BC4, r11                                 
+			mov.w 	r0, @r11                                                
+
+			mov.l 	#octanEgrIgnTiming, r0                                  
+			mov.w 	@r0, r0                                                 
+
+			                                               
+			lds.l 	@r15+, pr  
+			                                             
+			rts                                                             
+			extu.w	r0, r0   
+		
+			.POOL
+
+
+
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	.SECTION P, CODE, ALIGN=4	
