@@ -18,7 +18,7 @@ hdir = $(cppdir)
 
 # -SIze -SPeed 
 
-debug_compiler_options =  -OPtimize=1 -SIze 
+debug_compiler_options =  -OPtimize=1
 debug_linker_options = 
 lbgsh_options = 
 libsuffix=d

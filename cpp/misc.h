@@ -52,6 +52,7 @@ struct Map3D_W
 #define Sub_R4w_R5w_liml_0								((u16(*)(u16,u16))0xF0C)
 #define Lim_R4_max_FF									((u16(*)(u16))0x590)
 
+#define FU03_sub_142DC									((u16(*)(void))0x142DC)
 
 #define __disable_irq ((void(*)(void))0x400)
 #define __enable_irq ((void(*)(void))0x41e)
@@ -74,9 +75,15 @@ struct Map3D_W
 #define HIOCTIGNEGR_38CA								((void*)0x38CA)
 #define HighIgn_7C48									((void*)0x7C48)
 
+#define RPM14_6746										((void*)0x6746)
+#define LOAD9_676C										((void*)0x676C)
+#define LowOctFMp_7AA8									((void*)0x7AA8)
+#define HIGHOKTF_7A88									((void*)0x7A88)
+
+#define AFR_OctanInt									(*(u16*)0xFFFF8ACA)
 
 
-#define wMUT26_Knock_Sum				(*(u16*)0xFFFF8C32)
+#define wMUT26_Knock_Sum						(*(u16*)0xFFFF8C32)
 #define wMUT27_Octane_Number					(*(u16*)0xFFFF80B8)
 
 //#define wMUT1C_ECU_Load					(*(u16*)0xFFFF8952)

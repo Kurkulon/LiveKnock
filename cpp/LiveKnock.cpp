@@ -42,40 +42,6 @@ inline u16 Lookup_HiIgnMap(void** p)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void LiveKnock()
-{
-	static i16 timing;
-
-	u16 ind = (byte)axis_ig_RPM + (byte)axis_ig_LOAD*25;
-
-	i16 *p = &ramHiIgnMap.data[ind];
-
-	timing = *p;
-
-	if ((_byte_FFFF8400 & 1) && (KNOCK_FLAG_FFFF8C34 & 0x40) && ((wMUT72_Knock_Present & 1) == 0) && (byte)axis_ig_LOAD > 10 && ind < 25*30)
-	{
-		const u16 knock = wMUT26_Knock_Sum;
-
-		if (knock > 5)
-		{
-			u16 dt = knock >> 1;
-
-			i16 t = timing - dt;
-
-			*p = (t < -20*256) ? -20*256 : t;
-		}
-		else 
-		{
-			if (knock < 3 &&  timing < 40*256)
-			{
-				*p = timing += 1;
-			};
-		};
-	};
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 #pragma noregsave(IG04_Update_OctanEgrIgnTiming)
 
 extern "C" u16 IG04_Update_OctanEgrIgnTiming()
@@ -158,6 +124,191 @@ extern "C" u16 IG04_Update_OctanEgrIgnTiming()
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma noregsave(FU03_HI_LO_Octan)
+
+extern "C" void FU03_HI_LO_Octan()
+{
+	u16 r1, r13;
+	//sts.l   pr, @-r15                                               ; Store System Register Long
+	//mov.l   r14, @-r15                                              ; Move Long Data
+	//mov     r15, r14                                                ; Move Data
+	//mov.l   r1, @-r15                                               ; Move Long Data
+	//bsr     FU03_sub_142DC                                          ; Branch to Subroutine
+	//nop                                                             ; No Operation
+
+	wMUTB4_lookup_value = FU03_sub_142DC();
+
+	//mov.l   #wMUTB4_lookup_value, r10                               ; Move Immediate Long Data
+	//mov.w   r0, @r10                                                ; Move Word Data
+	//mov.l   #RPM14_6746, r4                                         ; Move Immediate Long Data
+	//mov.l   #Table_Lookup_Axis, r10                                 ; Move Immediate Long Data
+	//jsr     @r10 ; Table_Lookup_Axis                                ; Jump to Subroutine
+	//nop                                                             ; No Operation
+
+	Table_Lookup_Axis(RPM14_6746);
+
+
+	//mov.l   #LOAD9_676C, r4                                         ; Move Immediate Long Data
+	//mov.l   #Table_Lookup_Axis, r10                                 ; Move Immediate Long Data
+	//jsr     @r10 ; Table_Lookup_Axis                                ; Jump to Subroutine
+	//nop                                                             ; No Operation
+
+	Table_Lookup_Axis(LOAD9_676C);
+
+	//mov.l   #RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888, r0         ; test 0x20
+	// mov.w   @r0, r0                                                 ; Move Word Data
+	// tst     #h'20, r0                                               ; Test Logical
+	// bt      loc_141FE                                               ; Branch if True
+
+	if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x20)
+	{
+
+		//mov.l   #LowOctFMp_7AA8, r4                                     ; Move Immediate Long Data
+		//mov.l   #Query_byte_2D_3D_Table, r10                            ; Move Immediate Long Data
+		//jsr     @r10 ; Query_byte_2D_3D_Table                           ; Jump to Subroutine
+		//nop                                                             ; No Operation
+
+		r1 = Query_byte_2D_3D_Table(LowOctFMp_7AA8);
+
+		//extu.w  r0, r1                                                  ; Extend as Unsigned (Word)
+		//bra     loc_14208                                               ; Branch
+		//nop                                                             ; No Operation
+	}
+	else
+	{
+		r1 = Query_byte_2D_3D_Table(LowOctFMp_7AA8);
+
+		//loc_141FE:                                                                   ; CODE XREF: FU03_HI_LO_Octan+26j
+		//                            mov.l   #LowOctFMp_7AA8, r4                                     ; Move Immediate Long Data
+		//                            mov.l   #Query_byte_2D_3D_Table, r10                            ; Move Immediate Long Data
+		//                            jsr     @r10 ; Query_byte_2D_3D_Table                           ; Jump to Subroutine
+		//                            nop                                                             ; No Operation
+
+		//                            extu.w  r0, r1                                                  ; Extend as Unsigned (Word)
+
+	};
+
+
+	//loc_14208:                                                                                      ; CODE XREF: FU03_HI_LO_Octan+32j
+	//                                mov     r1, r13                                                 ; Move Data
+
+	r13 = r1;
+
+	//                                mov.l   #wMUTD1_BitMap_FAA, r0                                  ; test 0x80
+	//                                mov.w   @r0, r0                                                 ; Move Word Data
+	//                                tst     #h'80, r0                                               ; Test Logical
+	//                                bt      loc_14248                                               ; Branch if True
+
+	if ((wMUTD1_BitMap_FAA & 0x80) && (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x20))
+	{
+		//mov.l   #RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888, r0         ; test 0x20
+		//mov.w   @r0, r0                                                 ; Move Word Data
+		//tst     #h'20, r0                                               ; Test Logical
+		//bt      loc_14228                                               ; Branch if True
+
+		r13 = Query_byte_2D_3D_Table(HIGHOKTF_7A88);
+
+
+		//mov.l   #HIGHOKTF_7A88, r4                                      ; Move Immediate Long Data
+		//mov.l   #Query_byte_2D_3D_Table, r10                            ; Move Immediate Long Data
+		//jsr     @r10 ; Query_byte_2D_3D_Table                           ; Jump to Subroutine
+		//nop                                                             ; No Operation
+
+		//extu.w  r0, r13                                                 ; Extend as Unsigned (Word)
+		//bra     loc_14232                                               ; Branch
+		//nop                                                             ; No Operation
+
+	}
+	else
+	{
+
+		r13 = Query_byte_2D_3D_Table(HIGHOKTF_7A88);
+
+
+		//loc_14228:                                                                                      ; CODE XREF: FU03_HI_LO_Octan+50j
+		//                                mov.l   #HIGHOKTF_7A88, r4                                      ; Move Immediate Long Data
+		//                                mov.l   #Query_byte_2D_3D_Table, r10                            ; Move Immediate Long Data
+		//                                jsr     @r10 ; Query_byte_2D_3D_Table                           ; Jump to Subroutine
+		//                                nop                                                             ; No Operation
+
+		//                                extu.w  r0, r13                                                 ; Extend as Unsigned (Word)
+
+	};
+
+	//loc_14232:                                                                                      ; CODE XREF: FU03_HI_LO_Octan+5Cj
+	//                                mov.l   #wMUT27_Octane_Number, r10                              ; Move Immediate Long Data
+	//                                mov.w   @r10, r10                                               ; Move Word Data
+	//                                extu.w  r10, r10                                                ; Extend as Unsigned (Word)
+	//                                extu.w  r1, r1                                                  ; Extend as Unsigned (Word)
+	//                                extu.w  r13, r4                                                 ; Extend as Unsigned (Word)
+	//                                mov     r1, r5                                                  ; Move Data
+	//                                mov     r10, r6                                                 ; Move Data
+	//                                mov.l   #interpolate_r4_r5_r6, r10                              ; Move Immediate Long Data
+	//                                jsr     @r10 ; interpolate_r4_r5_r6                             ; Jump to Subroutine
+	//                                nop                                                             ; No Operation
+
+	r13 = interpolate_r4_r5_r6(r13, r1, wMUT27_Octane_Number);
+
+	//                                extu.w  r0, r13                                                 ; Extend as Unsigned (Word)
+
+
+	//loc_14248:                                                                                      ; CODE XREF: FU03_HI_LO_Octan+48j
+	//                                mov.l   #AFR_OctanInt, r10                                      ; write
+	//                                mov.w   r13, @r10                                               ; Move Word Data
+	//                                mov.l   @r15+, r1                                               ; Move Long Data
+	//                                mov.l   @r15+, r14                                              ; Move Long Data
+	//                                lds.l   @r15+, pr                                               ; Load to System Register Long
+	//                                rts                                                             ; Return from Subroutine
+	//                                nop                                                             ; No Operation
+
+	AFR_OctanInt = r13;
+
+}
+
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma noregsave(LiveKnock)
+
+extern "C" void LiveKnock()
+{
+	IG04_Update_OctanEgrIgnTiming();
+
+	FU03_HI_LO_Octan();
+
+	//static i16 timing;
+
+	//u16 ind = (byte)axis_ig_RPM + (byte)axis_ig_LOAD*25;
+
+	//i16 *p = &ramHiIgnMap.data[ind];
+
+	//timing = *p;
+
+	//if ((_byte_FFFF8400 & 1) && (KNOCK_FLAG_FFFF8C34 & 0x40) && ((wMUT72_Knock_Present & 1) == 0) && (byte)axis_ig_LOAD > 10 && ind < 25*30)
+	//{
+	//	const u16 knock = wMUT26_Knock_Sum;
+
+	//	if (knock > 5)
+	//	{
+	//		u16 dt = knock >> 1;
+
+	//		i16 t = timing - dt;
+
+	//		*p = (t < -20*256) ? -20*256 : t;
+	//	}
+	//	else 
+	//	{
+	//		if (knock < 3 &&  timing < 40*256)
+	//		{
+	//			*p = timing += 1;
+	//		};
+	//	};
+	//};
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 /*
 
 void CRANK75_Knock_sub_23F8C()
