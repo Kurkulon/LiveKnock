@@ -265,7 +265,118 @@ extern "C" void FU03_HI_LO_Octan()
 	AFR_OctanInt = r13;
 
 }
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+#pragma noregsave(FU03_VE_map_sub_14620)
+
+extern "C" void FU03_VE_map_sub_14620()
+{
+//FU03_VE_map_sub_14620:                                                                          ; CODE XREF: FU03_sub_13CE4+1Cp
+//                                sts.l   pr, @-r15                                               ; Store System Register Long
+//                                mov.l   r14, @-r15                                              ; Move Long Data
+//                                mov     r15, r14                                                ; Move Data
+
+	Table_Lookup_Axis(RPM19_6CEE);
+
+//                                mov.l   #RPM19_6CEE, r4                                         ; Move Immediate Long Data
+//                                mov.l   #Table_Lookup_Axis, r10                                 ; Move Immediate Long Data
+//                                jsr     @r10 ; Table_Lookup_Axis                                ; Jump to Subroutine
+//                                nop                                                             ; No Operation
+
+	Table_Lookup_Axis(LOAD11_6D1E);
+
+
+//                                mov.l   #LOAD11_6D1E, r4                                        ; Move Immediate Long Data
+//                                mov.l   #Table_Lookup_Axis, r10                                 ; Move Immediate Long Data
+//                                jsr     @r10 ; Table_Lookup_Axis                                ; Jump to Subroutine
+//                                nop                                                             ; No Operation
+
+	if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x200) || (EGRONOFF_103D == 0))
+	{
+
+	};
+
+//                                mov.l   #bMUTD3_BitMap4_FCA_Store_FFFF89D8, r0                  ; test 0x200
+//                                mov.w   @r0, r0                                                 ; Move Word Data
+//                                shlr2   r0                                                      ; Shift Logical Right 2
+//                                tst     #h'80, r0                                               ; Test Logical
+//                                bt      loc_14648                                               ; Branch if True
+//
+//                                mov.l   #EGRONOFF_103D, r10                                     ; Move Immediate Long Data
+//                                mov.b   @r10, r10                                               ; Move Byte Data
+//                                tst     r10, r10                                                ; Test Logical
+//                                bf      loc_14648                                               ; Branch if False
+//
+//
+//loc_14648:                                                                                      ; CODE XREF: FU03_VE_map_sub_14620+1Ej
+//                                                                                                ; FU03_VE_map_sub_14620+26j
+
+	void *p;
+	
+	if (ZERO_8_IGNITION_FLAGS & 8)
+	
+//                                mov.l   #ZERO_8_IGNITION_FLAGS, r0                              ; test 8 - EGR
+//                                mov.w   @r0, r0                                                 ; Move Word Data
+//                                tst     #8, r0                                                  ; Test Logical
+//                                bt      loc_14664                                               ; Branch if True
+	{
+		if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x20)
+
+//                                mov.l   #RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888, r0         ; test 0x20
+//                                mov.w   @r0, r0                                                 ; Move Word Data
+//                                tst     #h'20, r0                                               ; Test Logical
+//                                bt      loc_1465E                                               ; Branch if True
+		{
+			p = VE2Map_310E;
+//                                mov.l   #VE2Map_310E, r4                                        ; Move Immediate Long Data
+//                                bra     loc_14666                                               ; Branch
+//                                nop                                                             ; No Operation
+		}
+		else
+		{
+//; ---------------------------------------------------------------------------
+//
+//loc_1465E:                                                                                      ; CODE XREF: FU03_VE_map_sub_14620+36j
+			p = VE3Map_31EA;
+//                                mov.l   #VE3Map_31EA, r4                                        ; Move Immediate Long Data
+//                                bra     loc_14666                                               ; Branch
+//                                nop                                                             ; No Operation
+//
+//; ---------------------------------------------------------------------------
+		};
+	}
+	else
+	{
+		p = VE1Map_3032;
+//loc_14664:                                                                                      ; CODE XREF: FU03_VE_map_sub_14620+2Ej
+//                                mov.l   #VE1Map_3032, r4                                        ; Move Immediate Long Data
+//
+	};
+
+//loc_14666:                                                                                      ; CODE XREF: FU03_VE_map_sub_14620+3Aj
+
+	wMUT31_Volumetric_Efficiency = Table_Lookup_byte_2D_3D(p);
+
+//                                mov.l   #Table_Lookup_byte_2D_3D, r10                           ; Move Immediate Long Data
+//                                jsr     @r10 ; Table_Lookup_byte_2D_3D                          ; Jump to Subroutine
+//                                nop                                                             ; No Operation
+//
+//                                extu.w  r0, r13                                                 ; Extend as Unsigned (Word)
+//                                mov     r13, r4                                                 ; Move Data
+//                                mov.l   #sub_21BC4, r10                                         ; Move Immediate Long Data
+//                                jsr     @r10 ; sub_21BC4                                        ; Jump to Subroutine
+//                                nop                                                             ; No Operation
+//
+//                                mov.l   #wMUT31_Volumetric_Efficiency, r11                      ; write
+//                                mov.w   r0, @r11                                                ; Move Word Data
+//                                mov.l   @r15+, r14                                              ; Move Long Data
+//                                lds.l   @r15+, pr                                               ; Load to System Register Long
+//                                rts                                                             ; Return from Subroutine
+//                                nop                                                             ; No Operation
+//
+//; End of function FU03_VE_map_sub_14620
+
+}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -276,6 +387,8 @@ extern "C" void LiveKnock()
 	IG04_Update_OctanEgrIgnTiming();
 
 	FU03_HI_LO_Octan();
+
+	FU03_VE_map_sub_14620();
 
 	//static i16 timing;
 

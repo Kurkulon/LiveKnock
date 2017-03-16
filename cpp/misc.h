@@ -41,7 +41,7 @@ struct Map3D_W
 #define Tephra ((void(*)(void))0x3ec00)
 #define sub_A98A ((void(*)(void))0xA98A)
 
-#define Table_Lookup_byte_2D_3D ((u8(*)(void*))0xC28)
+#define Table_Lookup_byte_2D_3D ((u16(*)(void*))0xC28)
 #define Table_Lookup_word_2D_3D ((u16(*)(void*))0xE02)
 
 #define IG04_GetLoadCorrectedDeltaTPS					((u16(*)(void))0x181DC)
@@ -82,9 +82,20 @@ struct Map3D_W
 
 #define AFR_OctanInt									(*(u16*)0xFFFF8ACA)
 
+#define RPM19_6CEE										((void*)0x6CEE)
+#define LOAD11_6D1E										((void*)0x6D1E)
+#define bMUTD3_BitMap4_FCA_Store_FFFF89D8				(*(u16*)0xFFFF89D8)
+#define EGRONOFF_103D									(*(const byte*)0x103D)
+#define VE1Map_3032										((void*)0x3032)
+#define VE2Map_310E										((void*)0x310E)
+#define VE3Map_31EA										((void*)0x31EA)
+
+#define sub_21BC4										((u16(*)(u16))0x21BC4)
+
 
 #define wMUT26_Knock_Sum						(*(u16*)0xFFFF8C32)
 #define wMUT27_Octane_Number					(*(u16*)0xFFFF80B8)
+#define wMUT31_Volumetric_Efficiency			(*(u16*)0xFFFF8AB8)
 
 //#define wMUT1C_ECU_Load					(*(u16*)0xFFFF8952)
 //#define	wMUT06_Timing_Advance			(*(u16*)0xFFFF8BDC)

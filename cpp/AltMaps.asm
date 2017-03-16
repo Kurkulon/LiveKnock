@@ -55,6 +55,34 @@ ignition_FFFF8BC4								.EQU	H'FFFF8BC4
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+	.IMPORT	_FU03_HI_LO_Octan
+
+	.SECTION P_141C8, CODE, LOCATE=H'141C8
+	
+			mov.l	#_FU03_HI_LO_Octan, r0                           
+			jmp   	@r0                                                             
+			nop   	                                                        
+	
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	.IMPORT	_FU03_VE_map_sub_14620
+
+	.SECTION P_14620, CODE, LOCATE=H'14620
+	
+			mov.l	#_FU03_VE_map_sub_14620, r0                           
+			jmp   	@r0                                                             
+			nop   	                                                        
+	
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+;ASM_IG04_Update_OctanEgrIgnTiming: .DEFINE "1"
+
+	.AIFDEF ASM_IG04_Update_OctanEgrIgnTiming
+	
+	
+
 	.SECTION P, CODE, ALIGN=4
 	
 IG04_Update_OctanEgrIgnTiming:
@@ -271,6 +299,7 @@ Lookup_HiIgnMapW:
 
 			.POOL
 
+	.AENDI
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
