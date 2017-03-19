@@ -35,7 +35,6 @@ HIOCTIGNEGR_38CA								.EQU	H'38CA
 Add_R4w_R5w_Lim_FFFF							.EQU	H'500
 egrLowOctIgn									.EQU	H'FFFF8BC0
 egrHighOctIgn									.EQU	H'FFFF8BC2
-HighIgn_7C48									.EQU	H'7C48
 interpolate_r4_r5_r6							.EQU	H'B16
 octanEgrIgnTiming								.EQU	H'FFFF8BC8
 Sub_R4w_R5w_liml_0								.EQU	H'F0C
@@ -440,6 +439,10 @@ veMap:
 
 	.SECTION C_7A88, DATA, LOCATE=H'7A88
 
+	.EXPORT		_HIGHOKTF_7A88
+
+_HIGHOKTF_7A88:
+
 		.DATA.L		hiFuelMap                                    
 		.DATA.L		hiFuelMap                                    
 		.DATA.L		hiFuelMap                                    
@@ -458,6 +461,10 @@ veMap:
 
 	.SECTION C_7C48, DATA, LOCATE=H'7C48
 
+	.EXPORT		_HighIgn_7C48
+
+_HighIgn_7C48:									;.EQU	H'7C48
+
 		.DATA.L		hiIgnMap                                    
 		.DATA.L		hiIgnMap                                    
 		.DATA.L		hiIgnMap                                    
@@ -468,6 +475,22 @@ veMap:
 		.DATA.L		hiIgnMap + RAM - ROM                                    
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	.SECTION P, CODE, ALIGN=4		; LOCATE=H'7C48
+
+	.EXPORT		_veMapArray
+
+_veMapArray:
+
+		.DATA.L		veMap                                    
+		.DATA.L		veMap                                    
+		.DATA.L		veMap                                    
+		.DATA.L		veMap                                    
+		.DATA.L		veMap                                    
+		.DATA.L		veMap                                    
+		.DATA.L		veMap                                    
+		.DATA.L		veMap + RAM - ROM                                    
+
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	.END

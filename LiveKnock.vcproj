@@ -77,10 +77,6 @@
 				DeploymentContent="true"
 				>
 			</File>
-			<File
-				RelativePath=".\cpp\LookupHiIgnMap.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"

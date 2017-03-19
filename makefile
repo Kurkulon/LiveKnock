@@ -152,7 +152,7 @@ $(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs
 
 $(objdir)\LiveKnock.abs : LiveKnock.o LiveMap.o AltMaps.o
 	@echo Linking $^@ ...
-	@optlnk	-NOLOGO -FOrm=Absolute -start=P/3E800,B/FFFF8490 -LIBrary=$(libname) -OUtput="$^@" $<
+	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P/3E800,B/FFFF8490 -LIBrary=$(libname) -OUtput="$^@" $<
 	@echo $(delimiter)	
 
 #	@optlnk	$(link_options) -start=P/3E800,B/FFFF8490 -OUtput="$^@" $[@

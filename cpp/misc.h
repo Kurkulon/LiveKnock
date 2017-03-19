@@ -4,7 +4,27 @@
 #include "types.h"
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 #pragma pack 1
+
+struct IndexResult
+{
+	byte interpolator;
+	byte index;
+};
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+struct Axis
+{
+	IndexResult	*result; 
+	u16			*value;
+
+	u16 		len;
+	i16 		data[2];
+};
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 struct Map3D_B
 {
@@ -41,12 +61,12 @@ struct Map3D_W
 #define Tephra ((void(*)(void))0x3ec00)
 #define sub_A98A ((void(*)(void))0xA98A)
 
-#define Table_Lookup_byte_2D_3D ((u16(*)(void*))0xC28)
-#define Table_Lookup_word_2D_3D ((u16(*)(void*))0xE02)
+#define Table_Lookup_byte_2D_3D ((u16(*)(Map3D_B*))0xC28)
+#define Table_Lookup_word_2D_3D ((u16(*)(Map3D_W*))0xE02)
 
 #define IG04_GetLoadCorrectedDeltaTPS					((u16(*)(void))0x181DC)
-#define Table_Lookup_Axis								((void(*)(void*))0xCC6)
-#define Query_byte_2D_3D_Table							((u16(*)(void*))0xDE0)
+#define Table_Lookup_Axis								((void(*)(Axis*))0xCC6)
+#define Query_byte_2D_3D_Table							((u16(*)(Map3D_B**))0xDE0)
 #define Add_R4w_R5w_Lim_FFFF							((u16(*)(u16,u16))0x500)
 #define interpolate_r4_r5_r6							((u16(*)(u16,u16,u16))0xB16)
 #define Sub_R4w_R5w_liml_0								((u16(*)(u16,u16))0xF0C)
@@ -68,27 +88,31 @@ struct Map3D_W
 #define octanEgrIgnTiming								(*(u16*)0xFFFF8BC8)
 #define ignition_FFFF8BC4								(*(u16*)0xFFFF8BC4)
 
-#define RPM21_6788_IGN									((void*)0x6788)
-#define LOAD12_67BC_IGN									((void*)0x67BC)
-#define LowIgn_7C68										((void*)0x7C68)
-#define LOWOCTIGNEGR_7AC8								((void*)0x7AC8)
-#define HIOCTIGNEGR_38CA								((void*)0x38CA)
-#define HighIgn_7C48									((void*)0x7C48)
+#define RPM21_6788_IGN									((Axis*)0x6788)
+#define LOAD12_67BC_IGN									((Axis*)0x67BC)
+#define LowIgn_7C68										((Map3D_B**)0x7C68)
+#define LOWOCTIGNEGR_7AC8								((Map3D_B**)0x7AC8)
+#define HIOCTIGNEGR_38CA								((Map3D_B*)0x38CA)
 
-#define RPM14_6746										((void*)0x6746)
-#define LOAD9_676C										((void*)0x676C)
-#define LowOctFMp_7AA8									((void*)0x7AA8)
-#define HIGHOKTF_7A88									((void*)0x7A88)
+
+extern Map3D_B* HighIgn_7C48[8];		//#define HighIgn_7C48	((void*)0x7C48)
+
+#define RPM14_6746										((Axis*)0x6746)
+#define LOAD9_676C										((Axis*)0x676C)
+#define LowOctFMp_7AA8									((Map3D_B**)0x7AA8)
+
+extern Map3D_B* HIGHOKTF_7A88[8];		//#define HIGHOKTF_7A88	((void*)0x7A88)
+extern Map3D_B* veMapArray[8];		
 
 #define AFR_OctanInt									(*(u16*)0xFFFF8ACA)
 
-#define RPM19_6CEE										((void*)0x6CEE)
-#define LOAD11_6D1E										((void*)0x6D1E)
+#define RPM19_6CEE										((Axis*)0x6CEE)
+#define LOAD11_6D1E										((Axis*)0x6D1E)
 #define bMUTD3_BitMap4_FCA_Store_FFFF89D8				(*(u16*)0xFFFF89D8)
 #define EGRONOFF_103D									(*(const byte*)0x103D)
-#define VE1Map_3032										((void*)0x3032)
-#define VE2Map_310E										((void*)0x310E)
-#define VE3Map_31EA										((void*)0x31EA)
+#define VE1Map_3032										((Map3D_B*)0x3032)
+#define VE2Map_310E										((Map3D_B*)0x310E)
+#define VE3Map_31EA										((Map3D_B*)0x31EA)
 
 #define sub_21BC4										((u16(*)(u16))0x21BC4)
 
