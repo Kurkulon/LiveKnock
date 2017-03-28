@@ -164,11 +164,11 @@ RXI0:
 	mov.l	r7, @-r15
 	mov.l	r0, @-r15
 
-	mov.l	#int_disable,r10
+	mov.w	#int_disable,r10
 	jsr		@r10
 	nop             
 
-	mov.l	#RDR0,r10							;READ SERIAL PORT
+	mov.w	#RDR0,r10							;READ SERIAL PORT
 	mov.b	@r10,r10
 	extu.b	r10,r10
 	mov.w	#H'E0,r3		
@@ -179,54 +179,54 @@ RXI0:
 	cmp/hi	r3,r10
 	bt		exitformut
 	
-	mov.l   #bit7allowslogging, r0
+	mov.w   #bit7allowslogging, r0
 	mov.w   @r0, r0
 	tst     #H'80, r0							;EXIT IF NOT LOGGING
 	bt      exitformut
 	
-	mov.l   #mutorobd, r0
+	mov.w   #mutorobd, r0
 	mov.w   @r0, r0
 	tst     #H'80, r0 ;EXIT IF NOT IN MUT MODE
 	bt      exitformut
 	
-	mov.l   #receive_transmit_status_bits, r0
+	mov.w   #receive_transmit_status_bits, r0
 	mov.w   @r0, r0
 	tst     #H'80, r0							;CHECK WE ARE NOT GETTING AN ECHO OF SOMETHING WE JUST SENT
 	bf      exitformut
 
 brE012: ;FOR SETTING UP FIRST DMA TRANSFER
 
-	mov.l 	#DMAOPFLAG2,r11
+	mov.w 	#DMAOPFLAG2,r11
 	mov.l 	r10,@r11
 	mov		#0,r0
-	mov.l	#mut_timeout,r10 ;STOP MUT TIMEOUT
+	mov.w	#mut_timeout,r10 ;STOP MUT TIMEOUT
 	mov.w	r0,@r10
 	mov		#H'fffffffc,r0
-	mov.l 	#CHCR3,r10 ;RESET DMA
+	mov.w 	#CHCR3,r10 ;RESET DMA
 	mov.l 	@r10,r10
 	and		r0,r10
-	mov.l 	#CHCR3,r11
+	mov.w 	#CHCR3,r11
 	mov.l 	r10,@r11
-	mov.l 	#RDR0,r0
-	mov.l 	#SAR3,r11			;SOURCE IS SERIAL PORT
+	mov.w 	#RDR0,r0
+	mov.w 	#SAR3,r11			;SOURCE IS SERIAL PORT
 	mov.l 	r0,@r11
-	mov.l 	#DMAadr,r0
-	mov.l 	#DAR3,r11			;DESTINATION IS OUR OWN...
+	mov.w 	#DMAadr,r0
+	mov.w 	#DAR3,r11			;DESTINATION IS OUR OWN...
 	mov.l 	r0,@r11
 	mov		#6,r0				;...6 BYTE MEMORY BLOCK - FOUR BYTES ADDRESS, TWO BYTES LENGTH
-	mov.l 	#DMATCR3,r11
+	mov.w 	#DMATCR3,r11
 	mov.l 	r0,@r11
 	mov		#H'37,r0			; 0X37	IS THE NUMBER OF MY CHILDHOOD HOME - SUITABLE RANDOM NON ZERO NUMBER THAT WE CAN SET WHEN WE DON'T WANT THE ECU TO KILL OUR DMA PROCESS
-	mov.l 	#DMAOPFLAG,r10
+	mov.w 	#DMAOPFLAG,r10
 	mov.l 	r0,@r10
-	mov.l 	#SSR0,r10
+	mov.w 	#SSR0,r10
 	mov.b 	@r10,r0
 	and		#H'87,r0 ;RESET SERIAL PORT
 	mov.b 	r0,@r10
 	mov.l 	#DMA3CONFIGread,r0				;SET DMA CHANNEL 3 TO READ FROM SERIAL PORT
-	mov.l 	#CHCR3,r10
+	mov.w 	#CHCR3,r10
 	mov.l 	r0,@r10
-	mov.l 	#int_enable,r10
+	mov.w 	#int_enable,r10
 	jsr		@r10
 	nop
 	bra		exit
@@ -236,11 +236,11 @@ brE012: ;FOR SETTING UP FIRST DMA TRANSFER
 
 exitformut:
 
-	mov.l #int_enable,r10
+	mov.w #int_enable,r10
 	jsr @r10
 	nop
   
-	mov.l #serialreceivewithoutdma,r10		;BACK TO NORMAL SERIAL INTERRUPT, NONE OF OUR BUSINESS!
+	mov.w #serialreceivewithoutdma,r10		;BACK TO NORMAL SERIAL INTERRUPT, NONE OF OUR BUSINESS!
 	jsr @r10
 	nop
 
@@ -264,7 +264,7 @@ exit:
   rte				;RETURN FROM EXCEPTION/INTERRUPT
   nop
 
-	.POOL
+	.NOPOOL
 
 	.ALIGN 2
 
@@ -281,18 +281,18 @@ DMAEND:
 	sts.l 	pr,@-r15			;STACK
 	mov.l 	r0,@-r15
 	mov.l 	r10,@-r15
-	mov.l 	#int_disable,r10	;STOP INTERRUPTS
+	mov.w 	#int_disable,r10	;STOP INTERRUPTS
 	jsr		@r10
 	nop
 
 	mov		#H'fffffffc,r0
-	mov.l 	#CHCR3,r10 ;CLEAR DMA PROCESS
+	mov.w	#CHCR3,r10 ;CLEAR DMA PROCESS
 	mov.l 	@r10,r10
 	and		r10,r0
-	mov.l 	#CHCR3,r10
+	mov.w 	#CHCR3,r10
 	mov.l 	r0,@r10
 
-	mov.l	#DMAOPFLAG2,r0 ;SINCE WE USE TWO CONSECUTIVE DMA PROCESSES, I USE THIS VARIABLE TO KEEP TRACK OF WHAT WE'RE DOING - READ, WRITE ETC.
+	mov.w	#DMAOPFLAG2,r0 ;SINCE WE USE TWO CONSECUTIVE DMA PROCESSES, I USE THIS VARIABLE TO KEEP TRACK OF WHAT WE'RE DOING - READ, WRITE ETC.
 	mov.l	@r0,r0
 	mov		#1,r10
 	cmp/eq	r10,r0
@@ -321,17 +321,17 @@ DMAEND:
 
 brwrite:
 
-	mov.l	#SSR0,r10
+	mov.w	#SSR0,r10
 	mov.b	@r10,r0
 	tst		#4,r0
 	bf		TEIEinvade ;DMA MAY HAVE ENDED BUT SERIAL PORT TRANSMISSION MAY NOT HAVE
 	nop
 
 	mov.w 	#SCR0_CLRTIE_SETTEIE,r0 ;SETUP TRANSMIT END INTERRUPT IF NOT YET FINISHED
-	mov.l 	#SCR0,r10
+	mov.w 	#SCR0,r10
 	mov.b 	r0,@r10
 
-	mov.l	#int_enable,r10
+	mov.w	#int_enable,r10
 	jsr		@r10
 	nop
 	mov.l 	@r15+,r10
@@ -345,29 +345,29 @@ brwrite:
 brE0: ;USES EARLIER 4 BYTE ADDRESS AND 2 BYTE LENGTH TO LOG THE MUT TABLE
 
 	mov		#1,r0
-	mov.l 	#DMAOPFLAG2,r10
+	mov.w 	#DMAOPFLAG2,r10
 	mov.l 	r0,@r10
-	mov.l 	#DMAadr,r0
+	mov.w 	#DMAadr,r0
 	mov.l 	@r0,r0
-	mov.l 	#SAR3,r10
+	mov.w 	#SAR3,r10
 	mov.l 	r0,@r10
-	mov.l 	#TDR0,r0
-	mov.l 	#DAR3,r10
+	mov.w 	#TDR0,r0
+	mov.w 	#DAR3,r10
 	mov.l 	r0,@r10
-	mov.l 	#DMAlength,r0
+	mov.w 	#DMAlength,r0
 	mov.w 	@r0,r0
-	mov.l 	#DMATCR3,r10
+	mov.w 	#DMATCR3,r10
 	mov.l 	r0,@r10
 	mov		#H'37,r0
-	mov.l 	#DMAOPFLAG,r10
+	mov.w 	#DMAOPFLAG,r10
 	mov.l 	r0,@r10
 	mov.w 	#SCR0_CLRRE_SETTIE,r0
-	mov.l 	#SCR0,r10
+	mov.w 	#SCR0,r10
 	mov.b 	r0,@r10
 	mov.l 	#DMA3CONFIGwriteindirect,r0
-	mov.l 	#CHCR3,r10
+	mov.w 	#CHCR3,r10
 	mov.l 	r0,@r10
-	mov.l 	#int_enable,r10
+	mov.w 	#int_enable,r10
 	jsr		@r10
 	nop
 	mov.l 	@r15+,r10
@@ -381,29 +381,29 @@ brE0: ;USES EARLIER 4 BYTE ADDRESS AND 2 BYTE LENGTH TO LOG THE MUT TABLE
 brE1: ;USES PREVIOUS 4 BYTE ADDRESS AND 2 BYTE LENGTH TO WRITE A BLOCK OF RAM TO THE SERIAL PORT
 
 	mov		#1,r0
-	mov.l 	#DMAOPFLAG2,r10
+	mov.w 	#DMAOPFLAG2,r10
 	mov.l 	r0,@r10
-	mov.l 	#DMAadr,r0
+	mov.w 	#DMAadr,r0
 	mov.l 	@r0,r0
-	mov.l 	#SAR3,r10
+	mov.w 	#SAR3,r10
 	mov.l 	r0,@r10
-	mov.l 	#TDR0,r0
-	mov.l 	#DAR3,r10
+	mov.w 	#TDR0,r0
+	mov.w 	#DAR3,r10
 	mov.l 	r0,@r10
-	mov.l 	#DMAlength,r0
+	mov.w 	#DMAlength,r0
 	mov.w 	@r0,r0
-	mov.l 	#DMATCR3,r10
+	mov.w 	#DMATCR3,r10
 	mov.l 	r0,@r10
 	mov		#H'37,r0
-	mov.l 	#DMAOPFLAG,r10
+	mov.w 	#DMAOPFLAG,r10
 	mov.l 	r0,@r10
 	mov.w 	#SCR0_CLRRE_SETTIE,r0
-	mov.l 	#SCR0,r10
+	mov.w 	#SCR0,r10
 	mov.b 	r0,@r10
 	mov.l 	#DMA3CONFIGwritedirect,r0
-	mov.l 	#CHCR3,r10
+	mov.w 	#CHCR3,r10
 	mov.l 	r0,@r10
-	mov.l 	#int_enable,r10
+	mov.w 	#int_enable,r10
 	jsr		@r10
 	nop
 	mov.l 	@r15+,r10
@@ -417,31 +417,31 @@ brE1: ;USES PREVIOUS 4 BYTE ADDRESS AND 2 BYTE LENGTH TO WRITE A BLOCK OF RAM TO
 brE2: ;USES PREVIOUS 4 BYTE ADDRESS AND 2 BYTE LENGTH TO READ A BLOCK FROM SERIAL PORT AND WRITE IT TO RAM
 
 	mov		#2,r0
-	mov.l 	#DMAOPFLAG2,r10
+	mov.w 	#DMAOPFLAG2,r10
 	mov.l 	r0,@r10
-	mov.l 	#RDR0,r0
-	mov.l 	#SAR3,r10
+	mov.w 	#RDR0,r0
+	mov.w 	#SAR3,r10
 	mov.l 	r0,@r10
-	mov.l 	#DMAadr,r0
+	mov.w 	#DMAadr,r0
 	mov.l 	@r0,r0
-	mov.l 	#DAR3,r10
+	mov.w 	#DAR3,r10
 	mov.l 	r0,@r10
-	mov.l 	#DMAlength,r0
+	mov.w 	#DMAlength,r0
 	mov.w	@r0,r0
-	mov.l	#DMATCR3,r10
+	mov.w	#DMATCR3,r10
 	mov.l	r0,@r10
 	mov		#H'37,r0
-	mov.l 	#DMAOPFLAG,r10
+	mov.w 	#DMAOPFLAG,r10
 	mov.l 	r0,@r10
-	mov.l 	#SSR0,r10
+	mov.w 	#SSR0,r10
 	mov.b 	@r10,r0
 	and		#H'87,r0
 	mov.b 	r0,@r10
 	mov.l 	#DMA3CONFIGread,r0
-	mov.l 	#CHCR3,r10
+	mov.w 	#CHCR3,r10
 	mov.l 	r0,@r10
 	mov.l 	r0,@r10
-	mov.l 	#int_enable,r10
+	mov.w 	#int_enable,r10
 	jsr		@r10
 	nop
 	mov.l 	@r15+,r10 ;STACK
@@ -464,25 +464,25 @@ TEIE: ;TRANSMIT END INTERRUPT
 	sts.l 	pr,@-r15
 	mov.l 	r0,@-r15
 	mov.l 	r10,@-r15
-	mov.l 	#int_disable,r10
-	jsr @r10
+	mov.w 	#int_disable,r10
+	jsr		@r10
 	nop
 	
 TEIEinvade: ;JUMP HERE FROM EARLIER IF TRANSMISSION HAS ALREADY FINISHED
 
 	mov		#0,r0
-	mov.l 	#DMAOPFLAG,r10 ;CLEAR OUR 0X37 VARIABLE
+	mov.w 	#DMAOPFLAG,r10 ;CLEAR OUR 0X37 VARIABLE
 	mov.l 	r0,@r10
 	mov.w 	#SCR0_SETRE_CLRTEIE,r0 ;RESET SERIAL PORT INTERRUPT CONFIG
-	mov.l 	#SCR0,r10
+	mov.w 	#SCR0,r10
 	mov.b	r0,@r10
 
-	mov.l 	#SSR0,r10 ;RESET SERIAL PORT STATUS FOR NEXT COMMS
+	mov.w 	#SSR0,r10 ;RESET SERIAL PORT STATUS FOR NEXT COMMS
 	mov.b 	@r10,r0
 	and		#H'87,r0
 	mov.b	r0,@r10
 
-	mov.l	#int_enable,r10
+	mov.w	#int_enable,r10
 	jsr		@r10
 	nop
 	mov.l 	@r15+,r10 ;STACK
@@ -491,7 +491,7 @@ TEIEinvade: ;JUMP HERE FROM EARLIER IF TRANSMISSION HAS ALREADY FINISHED
 	rte
 	nop
 
-	.align 2
+;	.align 2
 	
 	.POOL
 
@@ -509,15 +509,15 @@ COPY: ;COPY ROM TO RAM IF TEPHRA'S DEAD VARIABLE IS NOT 0XDEAD
 	mov     r15, r14                                                
 	
 	mov.w 	#DEADval,r0
-	mov.l 	#DEADloc,r1
+	mov.w 	#DEADloc,r1
 	mov.w	@r1,r1
 	cmp/eq	r1,r0
 	bt		TIMEOUT
 	nop
 
 	mov.l 	#ROM,r10
-	mov.l 	#RAM,r11
-	mov.l 	#LENGTH,r1
+	mov.w 	#RAM,r11
+	mov.w 	#LENGTH,r1
 	mov		#0,r0
 	
 loop:
@@ -531,30 +531,30 @@ loop:
 
 TIMEOUT: ;KILLS DMA IF COMMS HAVE BEEN KILLED
 
-	mov.l	#int_disable,r10
+	mov.w	#int_disable,r10
 	jsr		@r10
 	nop
 
-	mov.l	#bit7allowslogging,r10
+	mov.w	#bit7allowslogging,r10
 	mov.w	@r10,r0
 	tst		#H'80,r0
 	bf		__exit
 	nop
 
 	mov		#H'fffffffc,r0
-	mov.l 	#CHCR3,r10
+	mov.w 	#CHCR3,r10
 	mov.l 	@r10,r10
 	and		r10,r0
-	mov.l 	#CHCR3,r10
+	mov.w 	#CHCR3,r10
 	mov.l 	r0,@r10
 
 	mov		#0,r0
-	mov.l 	#DMAOPFLAG,r10
+	mov.w 	#DMAOPFLAG,r10
 	mov.l 	r0,@r10
 
 __exit:
 
-	mov.l	#int_enable,r10
+	mov.w	#int_enable,r10
 	jsr		@r10
 	nop
 	
