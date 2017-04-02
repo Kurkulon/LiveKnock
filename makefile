@@ -65,9 +65,9 @@ delimiter = ____________________________________________________________________
 
 #	@call shv9420env.bat
 ##################################################################################################
-# -PACK=1
+# -PACK=1 -NOLOGO
 
-compiler_options = $(debug_compiler_options) -CPu=sh2  -NOLOGO
+compiler_options = $(debug_compiler_options) -CPu=sh2  
 
 #--asm -g -c  --thumb --diag_style=ide &
 #	 --fpmode=std --feedback "$(objdir)\bootloader.fed" --diag_suppress=68,368,1299,3017 &
@@ -133,7 +133,7 @@ patch2 = 0x37900=bin\altmaps.bin, &
 ##################################################################################################
 # $(objdir)\LiveKnock.bin $(objdir)\LookupHiIgnMap.bin 
 
-$(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs 
+$(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs
 	@echo Patch ROM...
 	@copy /Y bin\orig_93270019.hex $^@
 	@bin\elfpatch $^@ $[@
