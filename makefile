@@ -16,7 +16,7 @@ hdir = $(cppdir)
 
 !ifeq version Debug
 
-# -SIze -SPeed 
+#-SPeed   -SIze
 
 debug_compiler_options =  -OPtimize=1
 debug_linker_options = 

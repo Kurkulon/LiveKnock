@@ -97,10 +97,6 @@
 			</File>
 		</Filter>
 		<File
-			RelativePath=".\Debug\93270019.idc"
-			>
-		</File>
-		<File
 			RelativePath=".\makefile"
 			>
 		</File>

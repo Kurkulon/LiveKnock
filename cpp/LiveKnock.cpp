@@ -37,12 +37,12 @@ inline u16 Lookup_HiIgnMap(Map3D_B** p)
 	//return (byte)(t >> 8);
 
 //	return ((u32)(Table_Lookup_word_2D_3D(p[hiIgnMapIndex&7])) + 0x80) >> 8;
-	return Table_Lookup_byte_2D_3D(p[hiIgnMapIndex&7]);
+	return Table_Lookup_byte_2D_3D(p[0]);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#pragma noregsave(IG04_Update_OctanEgrIgnTiming)
+#pragma noregalloc(IG04_Update_OctanEgrIgnTiming)
 
 extern "C" u16 IG04_Update_OctanEgrIgnTiming()
 {
@@ -67,7 +67,7 @@ extern "C" u16 IG04_Update_OctanEgrIgnTiming()
 
 	if (wMUTD1_BitMap_FAA & 0x80)
 	{
-		hiIgn = Lookup_HiIgnMap(HighIgn_7C48);//(Table_Lookup_word_2D_3D(((void**)HighIgn_7C48)[hiIgnMapIndex&7]) + 0x80) >> 8;
+		hiIgn = Table_Lookup_byte_2D_3D(HighIgn_7C48[hiIgnMapIndex&7]);//(Table_Lookup_word_2D_3D(((void**)HighIgn_7C48)[hiIgnMapIndex&7]) + 0x80) >> 8;
 //		hiIgn = Query_byte_2D_3D_Table(HighIgn_7C48);
 
 		if (ZERO_8_IGNITION_FLAGS & 8)
@@ -114,6 +114,7 @@ extern "C" void FU03_HI_LO_Octan()
 
 	AFR_OctanInt = interpolate_r4_r5_r6(Query_byte_2D_3D_Table(HIGHOKTF_7A88), Query_byte_2D_3D_Table(LowOctFMp_7AA8), wMUT27_Octane_Number);
 }
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #pragma noregsave(FU03_VE_map_sub_14620)
@@ -596,120 +597,120 @@ void CRANK75_Knock_sub_23F8C()
 */
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#pragma interrupt RXI0
-
-extern "C" void RXI0()
-{
-	__disable_irq();
-
-	byte t = RDR0;
-
-	if (t >= 0xE0 && t <= 0xE2 && (bit7allowslogging & 0x80) && (mutorobd & 0x80) && (receive_transmit_status_bits & 0x80) == 0)
-	{
-		DMAOPFLAG2 = t;
-		mut_timeout = 0;
-		CHCR3 &= ~3;
-		
-		SAR3 = &RDR0;
-		DAR3 = &DMAaddress;
-		DMATCR3 = 6;
-
-		DMAOPFLAG = 0x37;
-
-		SSR0 &= 0x87;
-
-		CHCR3 = DMA3CONFIGread;
-
-		__enable_irq();
-	}
-	else
-	{
-		__enable_irq();
-
-		serialreceivewithoutdma();
-	};
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-inline void TEIEinvade()
-{
-	DMAOPFLAG = 0;
-	SCR0 = SCR0_SETRE_CLRTEIE;
-	SSR0 &= 0x87;
-}
+//#pragma interrupt RXI0
+//
+//extern "C" void RXI0()
+//{
+//	__disable_irq();
+//
+//	byte t = RDR0;
+//
+//	if (t >= 0xE0 && t <= 0xE2 && (bit7allowslogging & 0x80) && (mutorobd & 0x80) && (receive_transmit_status_bits & 0x80) == 0)
+//	{
+//		DMAOPFLAG2 = t;
+//		mut_timeout = 0;
+//		CHCR3 &= ~3;
+//		
+//		SAR3 = &RDR0;
+//		DAR3 = &DMAaddress;
+//		DMATCR3 = 6;
+//
+//		DMAOPFLAG = 0x37;
+//
+//		SSR0 &= 0x87;
+//
+//		CHCR3 = DMA3CONFIGread;
+//
+//		__enable_irq();
+//	}
+//	else
+//	{
+//		__enable_irq();
+//
+//		serialreceivewithoutdma();
+//	};
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#pragma interrupt DMAEND
-
-extern "C" void DMAEND()
-{
-	__disable_irq();
-
-	CHCR3 &= ~3;
-
-	if (DMAOPFLAG2 == 1)
-	{
-		if (SSR0 & 4)
-		{
-			TEIEinvade();
-		}
-		else
-		{
-			SCR0 = SCR0_CLRTIE_SETTEIE;
-		};
-	}
-	else if (DMAOPFLAG2 == 0xE0)
-	{
-		DMAOPFLAG2 = 1;
-		SAR3 = DMAaddress;
-		DAR3 = &TDR0;
-		DMATCR3 = DMAlength;
-		DMAOPFLAG = 0x37;
-		SCR0 = SCR0_CLRRE_SETTIE;
-		CHCR3 = DMA3CONFIGwriteindirect;
-	}
-	else if (DMAOPFLAG2 == 0xE1)
-	{
-		DMAOPFLAG2 = 1;
-		SAR3 = DMAaddress;
-		DAR3 = &TDR0;
-		DMATCR3 = DMAlength;
-		DMAOPFLAG = 0x37;
-		SCR0 = SCR0_CLRRE_SETTIE;
-		CHCR3 = DMA3CONFIGwritedirect;
-	}
-	else if (DMAOPFLAG2 == 0xE2)
-	{
-		DMAOPFLAG2 = 2;
-		SAR3 = &RDR0;;
-		DAR3 = DMAaddress;
-		DMATCR3 = DMAlength;
-		DMAOPFLAG = 0x37;
-		SSR0 &= 0x87;
-		CHCR3 = DMA3CONFIGread;
-	}
-	else
-	{
-		TEIEinvade();
-	};
-
-	__enable_irq();
-}
+//inline void TEIEinvade()
+//{
+//	DMAOPFLAG = 0;
+//	SCR0 = SCR0_SETRE_CLRTEIE;
+//	SSR0 &= 0x87;
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#pragma interrupt TEIE
+//#pragma interrupt DMAEND
+//
+//extern "C" void DMAEND()
+//{
+//	__disable_irq();
+//
+//	CHCR3 &= ~3;
+//
+//	if (DMAOPFLAG2 == 1)
+//	{
+//		if (SSR0 & 4)
+//		{
+//			TEIEinvade();
+//		}
+//		else
+//		{
+//			SCR0 = SCR0_CLRTIE_SETTEIE;
+//		};
+//	}
+//	else if (DMAOPFLAG2 == 0xE0)
+//	{
+//		DMAOPFLAG2 = 1;
+//		SAR3 = DMAaddress;
+//		DAR3 = &TDR0;
+//		DMATCR3 = DMAlength;
+//		DMAOPFLAG = 0x37;
+//		SCR0 = SCR0_CLRRE_SETTIE;
+//		CHCR3 = DMA3CONFIGwriteindirect;
+//	}
+//	else if (DMAOPFLAG2 == 0xE1)
+//	{
+//		DMAOPFLAG2 = 1;
+//		SAR3 = DMAaddress;
+//		DAR3 = &TDR0;
+//		DMATCR3 = DMAlength;
+//		DMAOPFLAG = 0x37;
+//		SCR0 = SCR0_CLRRE_SETTIE;
+//		CHCR3 = DMA3CONFIGwritedirect;
+//	}
+//	else if (DMAOPFLAG2 == 0xE2)
+//	{
+//		DMAOPFLAG2 = 2;
+//		SAR3 = &RDR0;;
+//		DAR3 = DMAaddress;
+//		DMATCR3 = DMAlength;
+//		DMAOPFLAG = 0x37;
+//		SSR0 &= 0x87;
+//		CHCR3 = DMA3CONFIGread;
+//	}
+//	else
+//	{
+//		TEIEinvade();
+//	};
+//
+//	__enable_irq();
+//}
 
-extern "C" void TEIE()
-{
-	__disable_irq();
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	TEIEinvade();
-
-	__enable_irq();
-}
+//#pragma interrupt TEIE
+//
+//extern "C" void TEIE()
+//{
+//	__disable_irq();
+//
+//	TEIEinvade();
+//
+//	__enable_irq();
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
