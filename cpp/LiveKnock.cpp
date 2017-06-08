@@ -42,13 +42,24 @@ inline u16 Lookup_HiIgnMap(Map3D_B** p)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#pragma noregalloc(IG04_Update_OctanEgrIgnTiming)
+#pragma noregsave(GetLoadCorrectedDeltaTPS)
+
+inline u16 GetLoadCorrectedDeltaTPS()
+{
+	return load_x2_deltaTPS_corrected = /*IG04_GetLoad_sub_1821E()*/ ECU_Load_x2_FFFF895C + R4_Mul_R5_Div_256_round(abs_Delta_TPS * TPS_Multiplier_Delta, Table_Lookup_byte_2D_3D(table_2D_39D2));
+
+//	return IG04_GetLoadCorrectedDeltaTPS();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma noregsave(IG04_Update_OctanEgrIgnTiming)
 
 extern "C" u16 IG04_Update_OctanEgrIgnTiming()
 {
 	register u16 loIgn, /*ignAdd,*/ hiIgn, octIgn, ign; 
 
-	wMUTB4_lookup_value = IG04_GetLoadCorrectedDeltaTPS();
+	wMUTB4_lookup_value = GetLoadCorrectedDeltaTPS();
 
 	Table_Lookup_Axis(RPM21_6788_IGN);
 
@@ -68,7 +79,7 @@ extern "C" u16 IG04_Update_OctanEgrIgnTiming()
 	if (wMUTD1_BitMap_FAA & 0x80)
 	{
 		hiIgn = Table_Lookup_byte_2D_3D(HighIgn_7C48[hiIgnMapIndex&7]);//(Table_Lookup_word_2D_3D(((void**)HighIgn_7C48)[hiIgnMapIndex&7]) + 0x80) >> 8;
-//		hiIgn = Query_byte_2D_3D_Table(HighIgn_7C48);
+		//hiIgn = Query_byte_2D_3D_Table(HighIgn_7C48);
 
 		if (ZERO_8_IGNITION_FLAGS & 8)
 		{

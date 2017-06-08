@@ -64,6 +64,7 @@ struct Map3D_W
 #define Table_Lookup_byte_2D_3D ((u16(*)(Map3D_B*))0xC28)
 #define Table_Lookup_word_2D_3D ((u16(*)(Map3D_W*))0xE02)
 
+
 #define IG04_GetLoadCorrectedDeltaTPS					((u16(*)(void))0x181DC)
 #define Table_Lookup_Axis								((void(*)(Axis*))0xCC6)
 #define Query_byte_2D_3D_Table							((u16(*)(Map3D_B**))0xDE0)
@@ -71,8 +72,12 @@ struct Map3D_W
 #define interpolate_r4_r5_r6							((u16(*)(u16,u16,u16))0xB16)
 #define Sub_R4w_R5w_liml_0								((u16(*)(u16,u16))0xF0C)
 #define Lim_R4_max_FF									((u16(*)(u16))0x590)
+#define R4_Mul_R5_Div_256_round							((u16(*)(u16,u16))0x804)
 
 #define FU03_sub_142DC									((u16(*)(void))0x142DC)
+
+#define IG04_GetLoad_sub_1821E							((u16(*)(void))0x1821E)
+
 
 #define __disable_irq ((void(*)(void))0x400)
 #define __enable_irq ((void(*)(void))0x41e)
@@ -87,12 +92,19 @@ struct Map3D_W
 #define egrHighOctIgn									(*(u16*)0xFFFF8BC2)
 #define octanEgrIgnTiming								(*(u16*)0xFFFF8BC8)
 #define ignition_FFFF8BC4								(*(u16*)0xFFFF8BC4)
+#define abs_Delta_TPS									(*(u16*)0xFFFF8BE2)
+#define TPS_Multiplier_Delta							(*(u16*)0x17A4)
+#define load_x2_deltaTPS_corrected						(*(u16*)0xFFFF8BDA)
+#define ECU_Load_x2_FFFF895C							(*(u16*)0xFFFF895C)
+
+
 
 #define RPM21_6788_IGN									((Axis*)0x6788)
 #define LOAD12_67BC_IGN									((Axis*)0x67BC)
 #define LowIgn_7C68										((Map3D_B**)0x7C68)
 #define LOWOCTIGNEGR_7AC8								((Map3D_B**)0x7AC8)
 #define HIOCTIGNEGR_38CA								((Map3D_B*)0x38CA)
+#define table_2D_39D2									((Map3D_B*)0x39D2)
 
 
 extern Map3D_B* HighIgn_7C48[8];		//#define HighIgn_7C48	((void*)0x7C48)

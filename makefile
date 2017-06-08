@@ -18,7 +18,7 @@ hdir = $(cppdir)
 
 #-SPeed   -SIze
 
-debug_compiler_options =  -OPtimize=1
+debug_compiler_options =  -OPtimize=1 
 debug_linker_options = 
 lbgsh_options = 
 libsuffix=d
@@ -67,7 +67,7 @@ delimiter = ____________________________________________________________________
 ##################################################################################################
 # -PACK=1 -NOLOGO
 
-compiler_options = $(debug_compiler_options) -CPu=sh2  
+compiler_options = $(debug_compiler_options) -CPu=sh2 -RTnext -ENAble_register
 
 #--asm -g -c  --thumb --diag_style=ide &
 #	 --fpmode=std --feedback "$(objdir)\bootloader.fed" --diag_suppress=68,368,1299,3017 &

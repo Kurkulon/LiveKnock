@@ -76,6 +76,18 @@ ignition_FFFF8BC4								.EQU	H'FFFF8BC4
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+
+;	.SECTION P_181DC, CODE, LOCATE=H'181DC
+
+;	.EXPORT		_IG04_GetLoadCorrectedDeltaTPS
+	
+;_IG04_GetLoadCorrectedDeltaTPS:
+
+;			sts.l   pr, @-r15
+
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 ;ASM_IG04_Update_OctanEgrIgnTiming: .DEFINE "1"
 
 	.AIFDEF ASM_IG04_Update_OctanEgrIgnTiming
