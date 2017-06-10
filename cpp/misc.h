@@ -107,7 +107,7 @@ struct Map3D_W
 #define table_2D_39D2									((Map3D_B*)0x39D2)
 
 
-extern Map3D_B* HighIgn_7C48[8];		//#define HighIgn_7C48	((void*)0x7C48)
+extern Map3D_W* HighIgn_7C48[8];		//#define HighIgn_7C48	((void*)0x7C48)
 
 #define RPM14_6746										((Axis*)0x6746)
 #define LOAD9_676C										((Axis*)0x676C)
@@ -187,6 +187,7 @@ extern u16 axis_fu_RPM;
 extern u16 axis_fu_LOAD;	
 extern u16 axis_ve_RPM;	
 extern u16 axis_ve_LOAD;	
+extern u32 frameCount;
 
 #define __DEADloc						(*(u16*)0xFFFFA800)
 

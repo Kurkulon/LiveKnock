@@ -78,7 +78,7 @@ extern "C" u16 IG04_Update_OctanEgrIgnTiming()
 
 	if (wMUTD1_BitMap_FAA & 0x80)
 	{
-		hiIgn = Table_Lookup_byte_2D_3D(HighIgn_7C48[hiIgnMapIndex&7]);//(Table_Lookup_word_2D_3D(((void**)HighIgn_7C48)[hiIgnMapIndex&7]) + 0x80) >> 8;
+		hiIgn = ((u32)(Table_Lookup_word_2D_3D(HighIgn_7C48[hiIgnMapIndex&7]) + 0x80)) >> 8;//(Table_Lookup_word_2D_3D(((void**)HighIgn_7C48)[hiIgnMapIndex&7]) + 0x80) >> 8;
 		//hiIgn = Query_byte_2D_3D_Table(HighIgn_7C48);
 
 		if (ZERO_8_IGNITION_FLAGS & 8)
@@ -176,6 +176,8 @@ extern "C" void LiveKnock()
 		hiFuelMapIndex = 0;	
 		veMapIndex = 0;		
 	};
+
+	frameCount += 1;
 
 	//IG04_Update_OctanEgrIgnTiming();
 
