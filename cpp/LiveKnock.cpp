@@ -1,3 +1,5 @@
+#include <umachine.h>
+
 #include "misc.h"
 
 
@@ -179,40 +181,35 @@ extern "C" void LiveKnock()
 
 	frameCount += 1;
 
-	//IG04_Update_OctanEgrIgnTiming();
+	
 
-	//FU03_HI_LO_Octan();
+	//u16 ind = (byte)axis_ig_RPM + (byte)axis_ig_LOAD*21;
 
-	//FU03_VE_map_sub_14620();
+	byte al = ((u32)(swapb(axis_ig_LOAD)+0x80)>>8);
 
-	//static i16 timing;
+	if (hiIgnMapIndex == 7 && (KNOCK_FLAG_FFFF8C34 & 0x40) && ((wMUT72_Knock_Present & 1) == 0) && al > 4)
+	{
+		u16 ind = ((u32)(swapb(axis_ig_RPM)+0x80)>>8) + al*21;
 
-	//u16 ind = (byte)axis_ig_RPM + (byte)axis_ig_LOAD*25;
+		i16 *p = &hiIgnMapRAM[ind];
+		
+		const i16 loign = (loIgnMapData[ind]+20)*256;
 
-	//i16 *p = &ramHiIgnMap.data[ind];
+		i16 timing = *p;
 
-	//timing = *p;
+		const u16 knock = wMUT26_Knock_Sum;
 
-	//if ((_byte_FFFF8400 & 1) && (KNOCK_FLAG_FFFF8C34 & 0x40) && ((wMUT72_Knock_Present & 1) == 0) && (byte)axis_ig_LOAD > 10 && ind < 25*30)
-	//{
-	//	const u16 knock = wMUT26_Knock_Sum;
+		if (knock > 3)
+		{
+			timing -= knock >> 1;
 
-	//	if (knock > 5)
-	//	{
-	//		u16 dt = knock >> 1;
-
-	//		i16 t = timing - dt;
-
-	//		*p = (t < -20*256) ? -20*256 : t;
-	//	}
-	//	else 
-	//	{
-	//		if (knock < 3 &&  timing < 40*256)
-	//		{
-	//			*p = timing += 1;
-	//		};
-	//	};
-	//};
+			*p = (timing < loign) ? loign : timing;
+		}
+		else 
+		{
+			if (timing < 40*256) *p = timing + 1;
+		};
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

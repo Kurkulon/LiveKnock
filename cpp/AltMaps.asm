@@ -467,9 +467,19 @@ veMapRAM .EQU veMapData + RAM - ROM
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+	.EXPORT		_hiFuelMapRAM, _hiIgnMapRAM, _veMapRAM
+
 	.SECTION    sec_hiFuelMapRAM,	DATA, LOCATE=hiFuelMapRAM
+	
+_hiFuelMapRAM:		.RES.W      1
+	
 	.SECTION    sec_hiIgnMapRAM,	DATA, LOCATE=hiIgnMapRAM
+
+_hiIgnMapRAM:		.RES.W      1
+
 	.SECTION    sec_veMapRAM,		DATA, LOCATE=veMapRAM
+
+_veMapRAM:			.RES.W      1
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

@@ -5,7 +5,7 @@
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#pragma pack 1
+#pragma pack 4
 
 struct IndexResult
 {
@@ -31,8 +31,10 @@ struct Map3D_B
 	byte type; // 2 - 2D, 3 - 3D
 	byte add;
 
-	u16 *ptrRowInd;
-	u16 *ptrColInd;
+	u16 ptrRowIndHi;
+	u16 ptrRowIndLo;
+	u16 ptrColIndHi;
+	u16 ptrColIndLo;
 
 	byte rowLen;
 
@@ -46,8 +48,10 @@ struct Map3D_W
 	u16 type; // 2 - 2D, 3 - 3D
 	u16	add;
 
-	u16 *ptrRowInd;
-	u16 *ptrColInd;
+	u16 ptrRowIndHi;
+	u16 ptrRowIndLo;
+	u16 ptrColIndHi;
+	u16 ptrColIndLo;
 
 	u16 rowLen;
 
@@ -189,13 +193,19 @@ extern u16 axis_ve_RPM;
 extern u16 axis_ve_LOAD;	
 extern u32 frameCount;
 
+extern byte hiFuelMapRAM[];
+extern i16	hiIgnMapRAM[];
+extern byte veMapRAM[];
+
 #define __DEADloc						(*(u16*)0xFFFFA800)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#define romHiIgnMap						(*(Map3D_W*)0x38d42)
+#define loIgnMapData						((const i8*)0x05413)
 
-#define ramHiIgnMap						(*(Map3D_W*)0xFFFFA000)
+//#define romHiIgnMap						(*(Map3D_W*)0x38d42)
+
+//#define ramHiIgnMap						(*(Map3D_W*)0xFFFFA000)
 
 #define kPa2load(v) (v*2)
 
