@@ -365,20 +365,17 @@ Lookup_HiIgnMapW:
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	.SECTION C, DATA, LOCATE=H'37B00
+	.SECTION C_MUT, DATA, LOCATE=H'1400
 	
-	.EXPORT	altMUT, ROM
-
 			.align 4
 
-ROM:
 altMUT:		
 			.DATA.L		wMUT1C_ECU_Load+1
 			.DATA.L		MUT21_RPM_x125div4+1                                    
 			.DATA.L		wMUT26_Knock_Retard+1                                   
 			.DATA.L		wMUT06_Timing_Advance+1                                 
-			.DATA.L		_axis_ig_RPM+1
-			.DATA.L		_axis_ig_LOAD+1
+			.DATA.L		wMUT3A_AirTemp_ADC8bit+1
+			.DATA.L		wMUT10_Coolant_Temperature_Scaled+1
 			.DATA.L		wMUT3C_Rear_O2_ADC8bit+1
 			.DATA.L		wMUT1A_Manifold_AbsPressure_ADC8bit+1                   
 			.DATA.L		wMUT17_TPS_ADC8bit+1
@@ -387,13 +384,23 @@ altMUT:
 			.DATA.L		wMUT33_Corrected_Timing_Advance+1
 			.DATA.L		wMUT32_Air_To_Fuel_Ratio+1
 			.DATA.L		wMUT2F_Vehicle_Speed+1  
+			.DATA.L		_axis_ig_RPM+1
+			.DATA.L		_axis_ig_LOAD+1
+			.DATA.L		_axis_fu_RPM+1
+			.DATA.L		_axis_fu_LOAD+1
+			.DATA.L		_axis_ve_RPM+1
+			.DATA.L		_axis_ve_LOAD+1
 			
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+	.SECTION C, DATA, LOCATE=H'38000
+	
+	.EXPORT	 ROM
+
 			.align 4
+ROM:
 
 			.DATA.W		H'FFFF
-			
 
 hiFuelMap:
 			.DATA.W 	H'300                                                   
@@ -471,7 +478,7 @@ veMapRAM .EQU veMapData + RAM - ROM
 
 	.SECTION    sec_hiFuelMapRAM,	DATA, LOCATE=hiFuelMapRAM
 	
-_hiFuelMapRAM:		.RES.W      1
+_hiFuelMapRAM:		.RES.B      1
 	
 	.SECTION    sec_hiIgnMapRAM,	DATA, LOCATE=hiIgnMapRAM
 
@@ -479,7 +486,7 @@ _hiIgnMapRAM:		.RES.W      1
 
 	.SECTION    sec_veMapRAM,		DATA, LOCATE=veMapRAM
 
-_veMapRAM:			.RES.W      1
+_veMapRAM:			.RES.B      1
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

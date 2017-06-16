@@ -14,11 +14,13 @@ hdir = $(cppdir)
 #libdir = ..\LowLevel\libs
 #bindir = $(%ARMCC50BIN)
 
+gnu_compiler_options =  -fno-show-column -m2 -c -fno-diagnostics-show-option -Os
+
 !ifeq version Debug
 
-#-SPeed   -SIze
+# -SPeed 
 
-debug_compiler_options =  -OPtimize=1 
+debug_compiler_options =  -OPtimize=1 -SIze 
 debug_linker_options = 
 lbgsh_options = 
 libsuffix=d
@@ -152,7 +154,7 @@ $(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs
 
 $(objdir)\LiveKnock.abs : LiveKnock.o LiveMap.o AltMaps.o
 	@echo Linking $^@ ...
-	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P/3E800,B/FFFF8490 -LIBrary=$(libname) -OUtput="$^@" $<
+	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P/2CC0,B/FFFF8490 -LIBrary=$(libname) -OUtput="$^@" $<
 	@echo $(delimiter)	
 
 #	@optlnk	$(link_options) -start=P/3E800,B/FFFF8490 -OUtput="$^@" $[@
@@ -175,6 +177,8 @@ $(objdir)\LiveKnock.abs : LiveKnock.o LiveMap.o AltMaps.o
 #	@optlnk	$(link_options) -start=C/0 -OUtput="$^@" $[@
 
 ##################################################################################################
+#	
+#	@sh-elf-gcc  $(gnu_compiler_options) -o "$(objdir)\$^." $[@
 
 .cpp.o:
 	@echo Compiling $[. ...
