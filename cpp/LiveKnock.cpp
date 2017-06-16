@@ -48,9 +48,7 @@ inline u16 Lookup_HiIgnMap(Map3D_B** p)
 
 inline u16 GetLoadCorrectedDeltaTPS()
 {
-	return load_x2_deltaTPS_corrected = /*IG04_GetLoad_sub_1821E()*/ ECU_Load_x2_FFFF895C + R4_Mul_R5_Div_256_round(abs_Delta_TPS * TPS_Multiplier_Delta, Table_Lookup_byte_2D_3D(table_2D_39D2));
-
-//	return IG04_GetLoadCorrectedDeltaTPS();
+	return load_x2_deltaTPS_corrected = ECU_Load_x2_FFFF895C + R4_Mul_R5_Div_256_round(abs_Delta_TPS * TPS_Multiplier_Delta, Table_Lookup_byte_2D_3D(table_2D_39D2));
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -59,56 +57,15 @@ inline u16 GetLoadCorrectedDeltaTPS()
 
 extern "C" u16 IG04_Update_OctanEgrIgnTiming()
 {
-	register u16 loIgn, /*ignAdd,*/ hiIgn, octIgn, ign; 
-
 	wMUTB4_lookup_value = GetLoadCorrectedDeltaTPS();
 
 	Table_Lookup_Axis(RPM21_6788_IGN);
 
 	Table_Lookup_Axis(LOAD12_67BC_IGN);
 
-	loIgn = Query_byte_2D_3D_Table(LowIgn_7C68);
+	ignition_FFFF8BC4 = egrHighOctIgn = ((u32)(Table_Lookup_word_2D_3D(HighIgn_7C48[hiIgnMapIndex&7]) + 0x80)) >> 8;
 
-	if (ZERO_8_IGNITION_FLAGS & 8)
-	{
-		egrLowOctIgn = Add_R4w_R5w_Lim_FFFF(loIgn, Table_Lookup_byte_2D_3D(HIOCTIGNEGR_38CA));
-	}
-	else
-	{
-		egrLowOctIgn = loIgn;
-	};
-
-	if (wMUTD1_BitMap_FAA & 0x80)
-	{
-		hiIgn = ((u32)(Table_Lookup_word_2D_3D(HighIgn_7C48[hiIgnMapIndex&7]) + 0x80)) >> 8;//(Table_Lookup_word_2D_3D(((void**)HighIgn_7C48)[hiIgnMapIndex&7]) + 0x80) >> 8;
-		//hiIgn = Query_byte_2D_3D_Table(HighIgn_7C48);
-
-		if (ZERO_8_IGNITION_FLAGS & 8)
-		{
-			egrHighOctIgn = Add_R4w_R5w_Lim_FFFF(hiIgn, Table_Lookup_byte_2D_3D(HIOCTIGNEGR_38CA));
-		}
-		else
-		{
-			egrHighOctIgn = hiIgn;
-		};
-
-		octIgn = interpolate_r4_r5_r6(egrHighOctIgn, egrLowOctIgn, wMUT27_Octane_Number);
-
-		ign = hiIgn;
-
-	}
-	else
-	{
-		octIgn = egrLowOctIgn;
-
-		ign = loIgn;
-	};
-
-	octanEgrIgnTiming = octIgn;
-
-	ignition_FFFF8BC4 = Lim_R4_max_FF(Sub_R4w_R5w_liml_0(ign + Query_byte_2D_3D_Table(LOWOCTIGNEGR_7AC8), 128));
-
-	return octanEgrIgnTiming;
+	return octanEgrIgnTiming = interpolate_r4_r5_r6(egrHighOctIgn, egrLowOctIgn = Query_byte_2D_3D_Table(LowIgn_7C68), wMUT27_Octane_Number);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -117,8 +74,6 @@ extern "C" u16 IG04_Update_OctanEgrIgnTiming()
 
 extern "C" void FU03_HI_LO_Octan()
 {
-//	u16 r1, r13;
-
 	wMUTB4_lookup_value = FU03_sub_142DC();
 
 	Table_Lookup_Axis(RPM14_6746);
@@ -138,28 +93,28 @@ extern "C" void FU03_VE_map_sub_14620()
 
 	Table_Lookup_Axis(LOAD11_6D1E);
 
-	if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x200) || (EGRONOFF_103D == 0))
-	{
+	//if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x200) || (EGRONOFF_103D == 0))
+	//{
 
-	};
+	//};
 
-	Map3D_B *p;
-	
-	if (ZERO_8_IGNITION_FLAGS & 8)
-	{
-		if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x20)
-		{
-			p = VE2Map_310E;
-		}
-		else
-		{
-			p = VE3Map_31EA;
-		};
-	}
-	else
-	{
-		p = VE1Map_3032;
-	};
+	//Map3D_B *p;
+	//
+	//if (ZERO_8_IGNITION_FLAGS & 8)
+	//{
+	//	if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x20)
+	//	{
+	//		p = VE2Map_310E;
+	//	}
+	//	else
+	//	{
+	//		p = VE3Map_31EA;
+	//	};
+	//}
+	//else
+	//{
+	//	p = VE1Map_3032;
+	//};
 
 	wMUT31_Volumetric_Efficiency = Table_Lookup_byte_2D_3D(veMapArray[veMapIndex&7]);
 }
