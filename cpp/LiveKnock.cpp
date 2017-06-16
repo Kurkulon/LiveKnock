@@ -14,37 +14,15 @@
 
 const char str[] = __DATE__;
 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-//extern "C" byte Lookup_HiIgnMap(Map3D_W** p)
-//{
-//	u32 t = Table_Lookup_word_2D_3D(p[hiIgnMapIndex&1]);
-//
-//	t += 0x80;
-//
-//	return (byte)(t >> 8);
-//
-////	return ((u32)(Table_Lookup_word_2D_3D(p[hiIgnMapIndex&1])) + 0x80) >> 8;
-//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-inline u16 Lookup_HiIgnMap(Map3D_B** p)
+inline u16 Lookup_HiIgnMap()
 {
-	//u32 t = Table_Lookup_word_2D_3D(p[hiIgnMapIndex&1]);
-
-	//t += 0x80;
-
-	//return (byte)(t >> 8);
-
-//	return ((u32)(Table_Lookup_word_2D_3D(p[hiIgnMapIndex&7])) + 0x80) >> 8;
-	return Table_Lookup_byte_2D_3D(p[0]);
+	return ((u32)(Table_Lookup_word_2D_3D(HighIgn_7C48[hiIgnMapIndex&7]) + 0x80)) >> 8;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-#pragma noregsave(GetLoadCorrectedDeltaTPS)
 
 inline u16 GetLoadCorrectedDeltaTPS()
 {
@@ -63,7 +41,7 @@ extern "C" u16 IG04_Update_OctanEgrIgnTiming()
 
 	Table_Lookup_Axis(LOAD12_67BC_IGN);
 
-	ignition_FFFF8BC4 = egrHighOctIgn = ((u32)(Table_Lookup_word_2D_3D(HighIgn_7C48[hiIgnMapIndex&7]) + 0x80)) >> 8;
+	ignition_FFFF8BC4 = egrHighOctIgn = Lookup_HiIgnMap();
 
 	return octanEgrIgnTiming = interpolate_r4_r5_r6(egrHighOctIgn, egrLowOctIgn = Query_byte_2D_3D_Table(LowIgn_7C68), wMUT27_Octane_Number);
 }
@@ -80,7 +58,7 @@ extern "C" void FU03_HI_LO_Octan()
 
 	Table_Lookup_Axis(LOAD9_676C);
 
-	AFR_OctanInt = interpolate_r4_r5_r6(Query_byte_2D_3D_Table(HIGHOKTF_7A88), Query_byte_2D_3D_Table(LowOctFMp_7AA8), wMUT27_Octane_Number);
+	AFR_OctanInt = interpolate_r4_r5_r6(Table_Lookup_byte_2D_3D(HIGHOKTF_7A88[hiFuelMapIndex&7]), Query_byte_2D_3D_Table(LowOctFMp_7AA8), wMUT27_Octane_Number);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -92,29 +70,6 @@ extern "C" void FU03_VE_map_sub_14620()
 	Table_Lookup_Axis(RPM19_6CEE);
 
 	Table_Lookup_Axis(LOAD11_6D1E);
-
-	//if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x200) || (EGRONOFF_103D == 0))
-	//{
-
-	//};
-
-	//Map3D_B *p;
-	//
-	//if (ZERO_8_IGNITION_FLAGS & 8)
-	//{
-	//	if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x20)
-	//	{
-	//		p = VE2Map_310E;
-	//	}
-	//	else
-	//	{
-	//		p = VE3Map_31EA;
-	//	};
-	//}
-	//else
-	//{
-	//	p = VE1Map_3032;
-	//};
 
 	wMUT31_Volumetric_Efficiency = Table_Lookup_byte_2D_3D(veMapArray[veMapIndex&7]);
 }
@@ -136,9 +91,6 @@ extern "C" void LiveKnock()
 
 	frameCount += 1;
 
-	
-
-	//u16 ind = (byte)axis_ig_RPM + (byte)axis_ig_LOAD*21;
 
 	byte al = ((u32)(swapb(axis_ig_LOAD)+0x80)>>8);
 
