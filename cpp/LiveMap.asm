@@ -7,6 +7,22 @@
 	.INCLUDE "cpp\def.inc"
 	
 
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	.SECTION    B_LIVEMAP, DATA, LOCATE=H'FFFF8000
+
+DMAOPFLAG:						.RES.L 1	; H'ffff8480
+DMAOPFLAG2:						.RES.L 1	; H'ffff8484
+DMAadr:							.RES.L 1	; H'ffff8488
+DMAlength:						.RES.W 1	; H'ffff848c
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	.SECTION C_10A0_13FF_LIM, CODE, LOCATE=H'13FF
+
+					.DATA.B      H'FF
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 								
 								
@@ -28,10 +44,6 @@ TDR0:							.EQU	H'fffff003
 SSR0:							.EQU	H'fffff004
 RDR0:							.EQU	H'fffff005
 
-DMAOPFLAG:						.EQU	H'ffff8480
-DMAOPFLAG2:						.EQU	H'ffff8484
-DMAadr:							.EQU	H'ffff8488
-DMAlength:						.EQU	H'ffff848c
 
 SCR0_CLRTIE_SETTEIE:			.EQU	H'24
 SCR0_SETRE_CLRTEIE:				.EQU	H'70

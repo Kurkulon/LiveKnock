@@ -1,27 +1,32 @@
 
 	.INCLUDE "cpp\def.inc"
 
-	.SECTION    BA,DATA, LOCATE=H'FFFF8400
+	.SECTION    B_ALTMAPS, DATA, LOCATE=H'FFFF8278
 	
-	.EXPORT		__byte_FFFF8400, _hiIgnMapIndex, _hiFuelMapIndex, _veMapIndex
+	.EXPORT		_hiIgnMapIndex, _hiFuelMapIndex, _veMapIndex
 	
-__byte_FFFF8400		.RES.B      1
-_hiIgnMapIndex:		.RES.B      1					;	.EQU H'FFFF8401
-_hiFuelMapIndex:	.RES.B      1					;	.EQU H'FFFF8402
-_veMapIndex:		.RES.B      1					;	.EQU H'FFFF8403
+_hiIgnMapIndex:		.RES.B      1					
+_hiFuelMapIndex:	.RES.B      1					
+_veMapIndex:		.RES.B      1					
 
 	.ALIGN 2	
 	
 	.EXPORT		_axis_ig_RPM, _axis_ig_LOAD, _axis_fu_RPM, _axis_fu_LOAD, _axis_ve_RPM, _axis_ve_LOAD
 
-_axis_ig_RPM:		.RES.W      1					;	.EQU H'FFFF8460
-_axis_ig_LOAD:		.RES.W      1					;	.EQU H'FFFF8462
-_axis_fu_RPM:		.RES.W      1					;	.EQU H'FFFF8460
-_axis_fu_LOAD:		.RES.W      1					;	.EQU H'FFFF8462
-_axis_ve_RPM:		.RES.W      1					;	.EQU H'FFFF8460
-_axis_ve_LOAD:		.RES.W      1					;	.EQU H'FFFF8462
+_axis_ig_RPM:		.RES.W      1					
+_axis_ig_LOAD:		.RES.W      1					
+_axis_fu_RPM:		.RES.W      1					
+_axis_fu_LOAD:		.RES.W      1					
+_axis_ve_RPM:		.RES.W      1					
+_axis_ve_LOAD:		.RES.W      1					
 
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+	.SECTION    C_2CC0_2FFF_LIM, DATA, LOCATE=H'2FFF
+
+					.DATA.B      H'FF
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 IG04_GetLoadCorrectedDeltaTPS					.EQU	H'181DC
 RPM21_6788_IGN									.EQU	H'6788
@@ -88,244 +93,6 @@ _frameCount:		.RES.L      1					;	.EQU H'FFFF8462
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-
-;	.SECTION P_181DC, CODE, LOCATE=H'181DC
-
-;	.EXPORT		_IG04_GetLoadCorrectedDeltaTPS
-	
-;_IG04_GetLoadCorrectedDeltaTPS:
-
-;			sts.l   pr, @-r15
-
-
-;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-;ASM_IG04_Update_OctanEgrIgnTiming: .DEFINE "1"
-
-	.AIFDEF ASM_IG04_Update_OctanEgrIgnTiming
-	
-	
-
-	.SECTION P, CODE, ALIGN=4
-	
-IG04_Update_OctanEgrIgnTiming:
-
-			sts.l	pr, @-r15                                               
-
-			mov.l	#IG04_GetLoadCorrectedDeltaTPS, r10                           
-			jsr   	@r10                                                             
-			nop   	                                                        
-
-			mov.l 	#wMUTB4_lookup_value, r10                               
-			mov.w 	r0, @r10                                                
-
-			mov.l 	#RPM21_6788_IGN, r4                                     
-			mov.l 	#Table_Lookup_Axis, r10                                 
-			jsr   	@r10 ; Table_Lookup_Axis                                
-			nop   	                                                        
-
-			mov.l 	#LOAD12_67BC_IGN, r4                                    
-			mov.l 	#Table_Lookup_Axis, r10                                 
-			jsr   	@r10 ; Table_Lookup_Axis                                
-			nop   	                                                        
-
-			mov.l 	#LowIgn_7C68, r4                                        
-			mov.l 	#Query_byte_2D_3D_Table, r10                            
-			jsr   	@r10 ; Query_byte_2D_3D_Table                           
-			nop   	                                                        
-
-			extu.w	r0, r1                                                  
-			mov.l 	#LOWOCTIGNEGR_7AC8, r4                                  
-
-			mov.l 	#Query_byte_2D_3D_Table, r10                            
-			jsr   	@r10 ; Query_byte_2D_3D_Table                           
-			nop   	                                                        
-
-			extu.w	r0, r2                                                  
-
-
-			mov.l 	#ZERO_8_IGNITION_FLAGS, r0                              
-			mov.w 	@r0, r0                                                 
-			tst   	#8, r0                                                  
-			bt    	loc_180F8                                               
-
-
-			mov.l 	#HIOCTIGNEGR_38CA, r4                                   
-			mov.l 	#Table_Lookup_byte_2D_3D, r10                           
-			jsr   	@r10 ; Table_Lookup_byte_2D_3D                          
-			nop   	                                                        
-
-			extu.w	r0, r0                                                  
-			extu.w	r1, r4                                                  
-			mov   	r0, r5                                                  
-			mov.l 	#Add_R4w_R5w_Lim_FFFF, r10                              
-			jsr   	@r10 ; Add_R4w_R5w_Lim_FFFF                             
-			nop   	                                                        
-
-			extu.w	r0, r1                                                  
-
- loc_180F8:                                                                                      
-			mov.l 	#egrLowOctIgn, r10                                      
-			mov.w 	r1, @r10                                                
-
-; loc_180FC:                            	                                                        
-			mov.l 	#wMUTD1_BitMap_FAA, r0                                  
-			mov.w 	@r0, r0                                                 
-			tst   	#h'80, r0                                               
-			bt    	loc_18172                                               
-
-			mov.l 	#HighIgn_7C48, r4                                       
-			mov.l 	#Query_byte_2D_3D_Table, r10                            
-			jsr   	@r10 ; Query_byte_2D_3D_Table                           
-			nop   	                                                        
-
-			extu.w	r0, r13                                                 
-
-			mov   	r13, r1                                                 
-
-
-			mov.l 	#ZERO_8_IGNITION_FLAGS, r0                              
-			mov.w 	@r0, r0                                                 
-			tst   	#8, r0                                                  
-			bt    	loc_1814A                                               
-
-			mov.l 	#HIOCTIGNEGR_38CA, r4                                   
-			mov.l 	#Table_Lookup_byte_2D_3D, r10                           
-			jsr   	@r10 ; Table_Lookup_byte_2D_3D                          
-			nop   	                                                        
-
-			extu.w	r0, r0                                                  
-			extu.w	r1, r4                                                  
-			mov   	r0, r5                                                  
-			mov.l 	#Add_R4w_R5w_Lim_FFFF, r10                              
-			jsr   	@r10 ; Add_R4w_R5w_Lim_FFFF                             
-			nop                                                             
-
-			extu.w	r0, r1                                                  
- 
- loc_1814A:  
-                                                                                     
-			mov.l 	#egrHighOctIgn, r10                                     
-			mov.w 	r1, @r10                                                
-
- loc_1814E:                            	                                                        
-			mov.l 	#wMUT27_Octane_Number, r10                              
-			mov.w 	@r10, r10                                               
-			extu.w	r10, r10                                                
-			mov.l 	#egrLowOctIgn, r11                                      
-			mov.w 	@r11, r11                                               
-			extu.w	r11, r11                                                
-			mov.l 	#egrHighOctIgn, r4                                      
-			mov.w 	@r4, r4                                                 
-			extu.w	r4, r4                                                  
-			mov   	r11, r5                                                 
-			mov   	r10, r6                                                 
-			mov.l 	#interpolate_r4_r5_r6, r10                              
-			jsr   	@r10 ; interpolate_r4_r5_r6                             
-			nop   	                                                        
-
-			extu.w	r0, r3                                                  
-
-			mov   	r1, r13                                                 
-			bra   	loc_18178                                               
-			nop                                                             
-
-			.NOPOOL
-
- ; ---------------------------------------------------------------------------
-
- loc_18172:                                                                                      
-			mov.l 	#egrLowOctIgn, r3                                       
-			mov.w 	@r3, r3                                                 
-
-			mov   	r1, r13                                                 
-
- loc_18178:                            	                                                        
-			mov.l 	#octanEgrIgnTiming, r10                                 
-			mov.w 	r3, @r10                                                
-
-			extu.w	r2, r2                                                  
-			extu.w	r13, r13                                                
-			add   	r2, r13                                                 
-
-			mov   	r13, r4                                                 
-			mov.w 	#128, r5                                                
-			mov.l 	#Sub_R4w_R5w_liml_0, r10                                
-			jsr   	@r10 ; Sub_R4w_R5w_liml_0                               
-			nop   	                                                        
-
-			extu.w	r0, r4                                                  
-			mov.l 	#Lim_R4_max_FF, r10                                     
-			jsr   	@r10 ; Lim_R4_max_FF                                    
-			nop   	                                                        
-
-			mov.l 	#ignition_FFFF8BC4, r11                                 
-			mov.w 	r0, @r11                                                
-
-			mov.l 	#octanEgrIgnTiming, r0                                  
-			mov.w 	@r0, r0                                                 
-
-			                                               
-			lds.l 	@r15+, pr  
-			                                             
-			rts                                                             
-			extu.w	r0, r0   
-		
-			.POOL
-
-
-
-;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-	.SECTION P, CODE, ALIGN=4	
-
-Lookup_HiIgnMapB:
-
-			sts.l   pr, @-r15                                               
-
-			mov.w   #_hiIgnMapIndex, r0                                    
-			mov.b   @r0, r0                                     
-			and     #1, r0                                                  
-			shll2   r0                                                      
-			add		r0, r4
-
-			mov.w   #Table_Lookup_byte_2D_3D, r0                                              
-			jsr     @r0 
-			mov.l   @r4, r4
-
-			lds.l   @r15+, pr                                               
-			rts                                                             
-			nop                                                
-
-			.NOPOOL
-
-Lookup_HiIgnMapW:
-
-			sts.l   pr, @-r15                                               
-
-			mov.w   #_hiIgnMapIndex, r0                                    
-			mov.b   @r0, r0                                     
-			and     #1, r0                                                  
-			shll2   r0                                                      
-			add		r0, r4
-
-			mov.w   #Table_Lookup_word_2D_3D, r0                                              
-			jsr     @r0 
-			mov.l   @r4, r4
-
-			extu.w  r0, r0                                                  
-			add     #h'7F, r0 ; ''                                         
-			add     #1, r0                                                  
-			lds.l   @r15+, pr                                               
-			rts                                                             
-			shlr8   r0            
-
-			.POOL
-
-	.AENDI
-
-;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 	.SECTION C_6746, DATA, LOCATE=H'6748
 
 		.DATA.W		_axis_fu_RPM                                    
@@ -362,6 +129,20 @@ Lookup_HiIgnMapW:
 	.SECTION C_67BC, DATA, LOCATE=H'67BC
 
 		.DATA.L		_axis_ig_LOAD                                    
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	.SECTION C_6CEE, DATA, LOCATE=H'6CEE
+
+		.DATA.W		H'FFFF                                   
+		.DATA.W		_axis_ve_RPM                                    
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	.SECTION C_6D1E, DATA, LOCATE=H'6D1E
+
+		.DATA.W		H'FFFF                                   
+		.DATA.W		_axis_ve_LOAD                                    
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
