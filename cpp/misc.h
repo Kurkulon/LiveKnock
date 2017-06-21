@@ -77,14 +77,24 @@ struct Map3D_W
 #define Sub_R4w_R5w_liml_0								((u16(*)(u16,u16))0xF0C)
 #define Lim_R4_max_FF									((u16(*)(u16))0x590)
 #define R4_Mul_R5_Div_256_round							((u16(*)(u16,u16))0x804)
+#define Div_R4_R5_R0									((u16(*)(u16,u16))0x9B0)
+#define Lim16_R4w__R5_R6								((u16(*)(u16,u16,u16))0x5A8)
+#define MUL_R4w_R5w_DIV_R6w_Round_R0					((u16(*)(u16,u16,u16))0x68A)
 
 #define FU03_sub_142DC									((u16(*)(void))0x142DC)
 
 #define IG04_GetLoad_sub_1821E							((u16(*)(void))0x1821E)
 
 
-#define __disable_irq ((void(*)(void))0x400)
-#define __enable_irq ((void(*)(void))0x41e)
+#define __disable_irq									((void(*)(void))0x400)
+#define __enable_irq									((void(*)(void))0x41e)
+
+#define Timer_Counter_Related_sub_C928					((void(*)(void))0xC928)
+#define Knock_Output_Calc_sub_AC96						((void(*)(void))0xAC96)
+
+#define sub_21E84										((bool(*)(void))0x21E84)
+#define BC06_sub_1E2D0									((void(*)(void))0x1E2D0)
+	
 
 //#pragma address wMUT26_Knock_Sum=0xFFFF8C32
 //static u16 wMUT26_Knock_Sum;
@@ -100,7 +110,16 @@ struct Map3D_W
 #define TPS_Multiplier_Delta							(*(u16*)0x17A4)
 #define load_x2_deltaTPS_corrected						(*(u16*)0xFFFF8BDA)
 #define ECU_Load_x2_FFFF895C							(*(u16*)0xFFFF895C)
+#define RPM_DELTA_FFFF8948								(*(u16*)0xFFFF8948)
+#define timingAdvScaled									(*(u16*)0xFFFF8BE0)
 
+#define ignCoilTime_3									(*(u16*)0xFFFF8C0E)
+#define ignCoilTime_1									(*(u16*)0xFFFF8C10)
+#define ignCoilTime_Fin									(*(u16*)0xFFFF8C12)
+#define crankHT_x_4us_3									(*(u16*)0xFFFF8F04)
+#define max_Knock_Retard								(*(u16*)0xFFFF8C42)
+#define word_FFFF8BCA									(*(u16*)0xFFFF8BCA)
+#define coolantTempScld_COPY_1							(*(u16*)0xFFFF88B0)
 
 
 #define RPM21_6788_IGN									((Axis*)0x6788)
@@ -131,21 +150,31 @@ extern Map3D_B* veMapArray[8];
 #define VE3Map_31EA										((Map3D_B*)0x31EA)
 
 #define sub_21BC4										((u16(*)(u16))0x21BC4)
+#define sub_21E4C										((u16(*)(u16))0x21E4C)
 
 
+#define	wMUT04_Timing_Advance_Interpolated		(*(u16*)0xFFFF8BBC)
+#define	wMUT05_Timing_Advance_Scaled			(*(u16*)0xFFFF8BDE)
+#define	wMUT06_Timing_Advance					(*(u16*)0xFFFF8BDC)
+#define wMUT10_Coolant_Temperature_Scaled		(*(u16*)0xFFFF88AA)
+#define wMUT1C_ECU_Load							(*(u16*)0xFFFF8952)
+#define wMUT22									(*(u16*)0xFFFF80C6)
 #define wMUT26_Knock_Sum						(*(u16*)0xFFFF8C32)
+#define wMUT26_Knock_Retard						(*(u16*)0xFFFF8C32)
 #define wMUT27_Octane_Number					(*(u16*)0xFFFF80B8)
+#define wMUT2D_Ignition_Battery_Trim			(*(u16*)0xFFFF9982)
+#define wMUT2E_Vehicle_Speed_Frequency			(*(u16*)0xFFFF89C6)
 #define wMUT31_Volumetric_Efficiency			(*(u16*)0xFFFF8AB8)
 
-//#define wMUT1C_ECU_Load					(*(u16*)0xFFFF8952)
-//#define	wMUT06_Timing_Advance			(*(u16*)0xFFFF8BDC)
-//#define	wMUT33_Corrected_Timing_Advance	(*(u16*)0xFFFF8BBE)
-//#define	MUT21_RPM_x125div4				(*(u16*)0xFFFF8944)
-#define	wMUTD1_BitMap_FAA				(*(u16*)0xFFFF89D4)
-#define	KNOCK_FLAG_FFFF8C34				(*(u16*)0xFFFF8C34) // 0x40 - enabled knock retard;
-//#define	wMUT04_Timing					(*(u16*)0xFFFF8BBC) // wMUT04_Timing_Advance_Interpolated
-//#define	wMUT1E_MAF_RESET_FLAG			(*(u16*)0xFFFF89F4) 
-#define	wMUT72_Knock_Present			(*(u16*)0xFFFF89E6) // 1 - ? Knock sensor fault;
+#define	wMUT33_Corrected_Timing_Advance			(*(u16*)0xFFFF8BBE)
+#define	MUT21_RPM_x125div4						(*(u16*)0xFFFF8944)
+#define	wMUTD1_BitMap_FAA						(*(u16*)0xFFFF89D4)
+#define	KNOCK_FLAG_FFFF8C34						(*(u16*)0xFFFF8C34) // 0x40 - enabled knock retard;
+#define	wMUT04_Timing							(*(u16*)0xFFFF8BBC) // wMUT04_Timing_Advance_Interpolated
+#define	wMUT1E_MAF_RESET_FLAG					(*(u16*)0xFFFF89F4) 
+#define	wMUT6F_Knock_Acceleration				(*(u16*)0xFFFF85B6) // 1 - ? Knock sensor fault;
+#define	wMUT71_Sensor_Error						(*(u16*)0xFFFF89E2) // 1 - ? Knock sensor fault;
+#define	wMUT72_Knock_Present					(*(u16*)0xFFFF89E6) // 1 - ? Knock sensor fault;
 
 
 #define SAR3							(*(void**)0xFFFFecf0)
@@ -168,6 +197,8 @@ extern Map3D_B* veMapArray[8];
 #define TDR0							(*(byte*)0xFFFFf003)
 #define SSR0							(*(byte*)0xFFFFf004)
 #define RDR0							(*(byte*)0xFFFFf005)
+
+#define CEL8_7100						((Axis*)0x7100)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -210,6 +241,9 @@ extern byte veMapRAM[];
 #define kPa2load(v) (v*2)
 
 #define rpm2mut(v) (v*4/125)
+
+#define SET(v, m) (v |= m)
+#define CLR(v, m) (v &= ~m)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

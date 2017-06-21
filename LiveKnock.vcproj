@@ -69,6 +69,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cpp\Ignition.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\cpp\LiveKnock.cpp"
 				>
 			</File>
