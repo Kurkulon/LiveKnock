@@ -80,6 +80,7 @@ struct Map3D_W
 #define Div_R4_R5_R0									((u16(*)(u16,u16))0x9B0)
 #define Lim16_R4w__R5_R6								((u16(*)(u16,u16,u16))0x5A8)
 #define MUL_R4w_R5w_DIV_R6w_Round_R0					((u16(*)(u16,u16,u16))0x68A)
+#define Mul_R4w_R5w_Div_128_Round_Into_R0				((u16(*)(u16,u16))0x762)
 
 #define FU03_sub_142DC									((u16(*)(void))0x142DC)
 
@@ -101,6 +102,8 @@ struct Map3D_W
 
 #define wMUTB4_lookup_value								(*(u16*)0xFFFF8836)
 #define RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888		(*(u16*)0xFFFF8888)
+#define RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_COPY_FFFF888A	(*(u16*)0xFFFF888A)
+#define INTAKE_AIR_TEMPERATURE_COPY_FFFF88BA			(*(u16*)0xFFFF88BA)
 #define ZERO_8_IGNITION_FLAGS							(*(u16*)0xFFFF8A0C)
 #define egrLowOctIgn									(*(u16*)0xFFFF8BC0)
 #define egrHighOctIgn									(*(u16*)0xFFFF8BC2)
@@ -165,6 +168,7 @@ extern Map3D_B* veMapArray[8];
 #define wMUT2D_Ignition_Battery_Trim			(*(u16*)0xFFFF9982)
 #define wMUT2E_Vehicle_Speed_Frequency			(*(u16*)0xFFFF89C6)
 #define wMUT31_Volumetric_Efficiency			(*(u16*)0xFFFF8AB8)
+#define wMUT33_Corrected_Timing_Advance			(*(u16*)0xFFFF8BBE)
 
 #define	wMUT33_Corrected_Timing_Advance			(*(u16*)0xFFFF8BBE)
 #define	MUT21_RPM_x125div4						(*(u16*)0xFFFF8944)
@@ -175,6 +179,7 @@ extern Map3D_B* veMapArray[8];
 #define	wMUT6F_Knock_Acceleration				(*(u16*)0xFFFF85B6) // 1 - ? Knock sensor fault;
 #define	wMUT71_Sensor_Error						(*(u16*)0xFFFF89E2) // 1 - ? Knock sensor fault;
 #define	wMUT72_Knock_Present					(*(u16*)0xFFFF89E6) // 1 - ? Knock sensor fault;
+#define	wMUT9D_IGN_ADDITION						(*(u16*)0xFFFF8EDC) // 1 - ? Knock sensor fault;
 
 
 #define SAR3							(*(void**)0xFFFFecf0)
