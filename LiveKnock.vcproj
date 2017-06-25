@@ -69,6 +69,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cpp\crank.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\cpp\Ignition.cpp"
 				>
 			</File>
@@ -89,6 +93,10 @@
 			>
 			<File
 				RelativePath=".\cpp\def.inc"
+				>
+			</File>
+			<File
+				RelativePath=".\cpp\hwreg.h"
 				>
 			</File>
 			<File

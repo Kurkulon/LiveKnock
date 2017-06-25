@@ -14,6 +14,7 @@
 
 const char str[] = __DATE__;
 
+extern "C" void IG04_root_Update_Ignition();
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -80,6 +81,8 @@ extern "C" void FU03_VE_map_sub_14620()
 
 extern "C" void LiveKnock()
 {
+	IG04_root_Update_Ignition();
+
 	if (__DEADloc != 0xDEAD)
 	{
 		__DEADloc = 0xDEAD;
