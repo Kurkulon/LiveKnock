@@ -73,6 +73,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cpp\idle.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\cpp\Ignition.cpp"
 				>
 			</File>

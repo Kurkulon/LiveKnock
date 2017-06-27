@@ -76,14 +76,6 @@ static u16 	Barometric_Correction_sub_22084();
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#define CRANKING				0x01 
-#define MAP_error				0x02
-#define DECELERATION_FUEL_CUT	0x04
-#define FUEL_CUT				0x08
-#define STALL					0x10
-#define CLOSED_LOOP_GENERIC		0x80
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #define IGN_TEST_FLAG_0_F32					(*(const byte*)0xF32)
 

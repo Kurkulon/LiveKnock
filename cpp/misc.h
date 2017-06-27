@@ -74,6 +74,15 @@ struct Map3D_W
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+#define CRANKING				0x01 
+#define MAP_error				0x02
+#define DECELERATION_FUEL_CUT	0x04
+#define FUEL_CUT				0x08
+#define STALL					0x10
+#define CLOSED_LOOP_GENERIC		0x80
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 #define Tephra ((void(*)(void))0x3ec00)
 #define sub_A98A ((void(*)(void))0xA98A)
 
@@ -86,6 +95,7 @@ struct Map3D_W
 #define Query_byte_2D_3D_Table							((u32(*)(Map3D_B**))0xDE0)
 
 #define GET_FROM_MASSIVE_byte							((u32(*)(const byte*))0xDC6)
+#define GET_LOC_DIM_sub_DF6								((u32(*)(void*))0xDF6)
 
 
 #define Lim_R4_max_FF									((u32(*)(u16))0x590)

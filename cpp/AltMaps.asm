@@ -66,29 +66,29 @@ _frameCount:		.RES.L      1					;	.EQU H'FFFF8462
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-;	.IMPORT	_IG04_Update_OctanEgrIgnTiming
+	.IMPORT	_IG04_Update_OctanEgrIgnTiming
 
-;	.SECTION P_1801E, CODE, LOCATE=H'1801E
+	.SECTION P_1801E, CODE, LOCATE=H'1801E
 	
-;			mov.l	#_IG04_Update_OctanEgrIgnTiming, r0                           
-;			jmp   	@r0                                                             
-;			nop   	                                                        
+			mov.l	#_IG04_Update_OctanEgrIgnTiming, r0                           
+			jmp   	@r0                                                             
+			nop   	                                                        
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	.IMPORT	_SysInit_NVRAM_OctaneNum, _SysInit_sub_16D74, _IG04_root_Update_Ignition
+;	.IMPORT	_SysInit_NVRAM_OctaneNum, _SysInit_sub_16D74, _IG04_root_Update_Ignition
 
-	.SECTION P_ED48, DATA, LOCATE=H'ED48
+;	.SECTION P_ED48, DATA, LOCATE=H'ED48
 	
-			.DATA.L _SysInit_NVRAM_OctaneNum
+;			.DATA.L _SysInit_NVRAM_OctaneNum
 	
-	.SECTION P_F128, DATA, LOCATE=H'F128
+;	.SECTION P_F128, DATA, LOCATE=H'F128
 	
-			.DATA.L _SysInit_sub_16D74
+;			.DATA.L _SysInit_sub_16D74
 	
-	.SECTION P_EBF4, DATA, LOCATE=H'EBF4
+;	.SECTION P_EBF4, DATA, LOCATE=H'EBF4
 	
-			.DATA.L _IG04_root_Update_Ignition
+;			.DATA.L _IG04_root_Update_Ignition
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
