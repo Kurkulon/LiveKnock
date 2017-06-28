@@ -186,8 +186,8 @@ altMUT:
 			.DATA.L		wMUT33_Corrected_Timing_Advance+1
 			.DATA.L		wMUT32_Air_To_Fuel_Ratio+1
 			.DATA.L		wMUT2F_Vehicle_Speed+1  
-			.DATA.L		_axis_ig_RPM+1
-			.DATA.L		_axis_ig_LOAD+1
+			.DATA.L		wMUT0C_Fuel_Trim_Low+1
+			.DATA.L		wMUT0F_Oxygen_Feedback_Trim+1
 			.DATA.L		_axis_fu_RPM+1
 			.DATA.L		_axis_fu_LOAD+1
 			.DATA.L		_axis_ve_RPM+1
