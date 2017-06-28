@@ -62,7 +62,7 @@ extern "C" void FU03_VE_map_sub_14620()
 
 	Table_Lookup_Axis(LOAD11_6D1E);
 
-	wMUT31_Volumetric_Efficiency = Table_Lookup_byte_2D_3D(veMapArray[veMapIndex&7]);
+	wMUT31_Volumetric_Efficiency = Table_Lookup_word_2D_3D(veMapArray[veMapIndex&7]) >> 8;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
