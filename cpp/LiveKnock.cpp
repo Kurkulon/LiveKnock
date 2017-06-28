@@ -1,5 +1,6 @@
 #include <umachine.h>
 
+#include "ram.h"
 #include "misc.h"
 
 
@@ -94,7 +95,7 @@ extern "C" void LiveKnock()
 
 		i16 timing = *p;
 
-		const u16 knock = wMUT26_Knock_Sum;
+		const u16 knock = wMUT26_Knock_Retard;
 
 		if (knock > 3)
 		{

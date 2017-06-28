@@ -2,6 +2,7 @@
 
 #include <umachine.h>
 
+#include "ram.h"
 #include "misc.h"
 
 
