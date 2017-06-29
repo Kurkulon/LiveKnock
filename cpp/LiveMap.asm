@@ -9,7 +9,7 @@
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	.SECTION    B_LIVEMAP, DATA, LOCATE=H'FFFF8000
+	.SECTION    B_LIVEMAP, DATA, LOCATE=H'FFFF8400
 
 DMAOPFLAG:						.RES.L 1	; H'ffff8480
 DMAOPFLAG2:						.RES.L 1	; H'ffff8484

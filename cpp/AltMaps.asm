@@ -1,7 +1,7 @@
 
 	.INCLUDE "cpp\def.inc"
 
-	.SECTION    B_ALTMAPS, DATA, LOCATE=H'FFFF8278
+	.SECTION    B_ALTMAPS, DATA, LOCATE=H'FFFF8420
 	
 	.EXPORT		_hiIgnMapIndex, _hiFuelMapIndex, _veMapIndex, _fixAFR, _openLoop, _veFeedBackO2R
 	
@@ -25,7 +25,7 @@ _axis_ve_LOAD:		.RES.W      1
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	.SECTION    B_ALTMAPS_LIM, DATA, LOCATE=H'FFFF82A0
+	.SECTION    B_ALTMAPS_LIM, DATA, LOCATE=H'FFFF8500
 	
 					.RES.B		1
 	
