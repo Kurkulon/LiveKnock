@@ -82,81 +82,99 @@ extern "C" void LiveKnock()
 		fixAFR = false;
 		openLoop = false;
 		veFeedBackO2R = false;
+
+		u32 *p = (u32*)0xFFFF8400; // 0xFFFFABA4
+
+		for (u32 i = 0; i < 64; i++) //279
+		{
+			*p++ = 0;
+		};
 	};
 
-	frameCount += 1;
+	u32 *p = (u32*)0xFFFF8400;
 
-
-	if ((wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING)) == 0)
+	for (u32 i = 0; i < 64; i++)
 	{
-		if (openLoop)
+		if (*p++ != 0)
 		{
-			CLR(wMUTD1_BitMap_FAA, 0x10); // Closed loop
-		}
-		else
-		{
-			wMUTD1_BitMap_FAA |= Periphery_FAA & 0x10; // Closed loop
+			frameCount += 1;
+
+			break;
 		};
+	};
+	
+
+
+	//if ((wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING)) == 0)
+	//{
+	//	if (openLoop)
+	//	{
+	//		CLR(wMUTD1_BitMap_FAA, 0x10); // Closed loop
+	//	}
+	//	else
+	//	{
+	//		wMUTD1_BitMap_FAA |= Periphery_FAA & 0x10; // Closed loop
+	//	};
 
 
 
-		u32 al = ((u32)(swapb(axis_ig_LOAD)+127)>>8);
+	//	u32 al = ((u32)(swapb(axis_ig_LOAD)+127)>>8);
 
-		if (hiIgnMapIndex == 7 && (KNOCK_FLAG_FFFF8C34 & 0x40) && ((wMUT72_Knock_Present & 1) == 0) && al > 4)
-		{
-			u32 ind = ((u32)(swapb(axis_ig_RPM)+127)>>8) + al*21;
+	//	if (hiIgnMapIndex == 7 && (KNOCK_FLAG_FFFF8C34 & 0x40) && ((wMUT72_Knock_Present & 1) == 0) && al > 4)
+	//	{
+	//		u32 ind = ((u32)(swapb(axis_ig_RPM)+127)>>8) + al*21;
 
-			u16 *p = &hiIgnMapRAM[ind];
-			
-			const u32 loign = (loIgnMapData[ind]+20)*256;
+	//		u16 *p = &hiIgnMapRAM[ind];
+	//		
+	//		const u32 loign = (loIgnMapData[ind]+20)*256;
 
-			u32 timing = *p;
+	//		u32 timing = *p;
 
-			const u32 knock = wMUT26_Knock_Retard;
+	//		const u32 knock = wMUT26_Knock_Retard;
 
-			if (knock > 3)
-			{
-				timing -= knock >> 1;
+	//		if (knock > 3)
+	//		{
+	//			timing -= knock >> 1;
 
-				*p = (timing < loign) ? loign : timing;
-			}
-			else 
-			{
-				if (timing < 40*256) *p = timing + 1;
-			};
-		};
+	//			*p = (timing < loign) ? loign : timing;
+	//		}
+	//		else 
+	//		{
+	//			if (timing < 40*256) *p = timing + 1;
+	//		};
+	//	};
 
 
-		if (/*openLoop && */veFeedBackO2R && veMapIndex == 7 && wMUT32_Air_To_Fuel_Ratio > LAMBDA(0.98) && wMUT32_Air_To_Fuel_Ratio < LAMBDA(1.02))
-		{
-			u32	al = ((u32)(swapb((u32)axis_ve_LOAD)+127)>>8);
-			u32 ar = ((u32)(swapb((u32)axis_ve_RPM)+127)>>8);
+	//	if (/*openLoop && */veFeedBackO2R && veMapIndex == 7 && wMUT32_Air_To_Fuel_Ratio > LAMBDA(0.98) && wMUT32_Air_To_Fuel_Ratio < LAMBDA(1.02))
+	//	{
+	//		u32	al = ((u32)(swapb((u32)axis_ve_LOAD)+127)>>8);
+	//		u32 ar = ((u32)(swapb((u32)axis_ve_RPM)+127)>>8);
 
-			if (al < 11 && ar < 19)
-			{
-				u16 *p = &veMapRAM[ar + al * 19];
+	//		if (al < 11 && ar < 19)
+	//		{
+	//			u16 *p = &veMapRAM[ar + al * 19];
 
-				u32 ve = *p;
+	//			u32 ve = *p;
 
-				i32 d = wMUT13_Front_O2_ADC8bit;  //wMUT3C_Rear_O2_ADC8bit;
+	//			i32 d = wMUT13_Front_O2_ADC8bit;  //wMUT3C_Rear_O2_ADC8bit;
 
-				d -= OXIGEN(0.5);
+	//			d -= OXIGEN(0.5);
 
-				ve -= d/4;
+	//			ve -= d/4;
 
-				if (ve < VE16(20))
-				{
-					ve = VE16(20);
-				}
-				else if (ve > VE16(115))
-				{
-					ve = VE16(115);
-				};
+	//			if (ve < VE16(20))
+	//			{
+	//				ve = VE16(20);
+	//			}
+	//			else if (ve > VE16(115))
+	//			{
+	//				ve = VE16(115);
+	//			};
 
-				*p = ve;
-			};
-		};
-	}; // if ((wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING)) == 0)
+	//			*p = ve;
+	//		};
+	//	};
+	//}; // if ((wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING)) == 0)
 
 }
 
