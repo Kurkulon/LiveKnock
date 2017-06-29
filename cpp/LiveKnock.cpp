@@ -127,7 +127,7 @@ extern "C" void LiveKnock()
 		};
 
 
-		if (openLoop && veFeedBackO2R && veMapIndex == 7 && wMUT32_Air_To_Fuel_Ratio > LAMBDA(0.98) && wMUT32_Air_To_Fuel_Ratio < LAMBDA(1.02))
+		if (/*openLoop && */veFeedBackO2R && veMapIndex == 7 && wMUT32_Air_To_Fuel_Ratio > LAMBDA(0.98) && wMUT32_Air_To_Fuel_Ratio < LAMBDA(1.02))
 		{
 			u32	al = ((u32)(swapb((u32)axis_ve_LOAD)+127)>>8);
 			u32 ar = ((u32)(swapb((u32)axis_ve_RPM)+127)>>8);
@@ -142,7 +142,7 @@ extern "C" void LiveKnock()
 
 				d -= OXIGEN(0.5);
 
-				ve += d/4;
+				ve -= d/4;
 
 				if (ve < VE16(20))
 				{
