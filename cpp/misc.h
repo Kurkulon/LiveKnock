@@ -186,6 +186,7 @@ extern Map3D_W* veMapArray[8];
 #define sub_21BC4										((u16(*)(u16))0x21BC4)
 #define sub_21E4C										((u16(*)(u16))0x21E4C)
 
+#define Periphery_FAA									(*(const u16*)0xFAA)
 
 
 
@@ -436,6 +437,9 @@ extern byte _byte_FFFF8400;
 extern byte hiIgnMapIndex;					
 extern byte hiFuelMapIndex;					
 extern byte veMapIndex;						
+extern bool fixAFR;						
+extern bool openLoop;						
+extern bool veFeedBackO2R;						
 
 
 //#define __axis_res_RPM25				(*(u16*)0xFFFF8460)
@@ -450,8 +454,8 @@ extern u16 axis_ve_LOAD;
 extern u32 frameCount;
 
 extern byte hiFuelMapRAM[];
-extern i16	hiIgnMapRAM[];
-extern byte veMapRAM[];
+extern u16	hiIgnMapRAM[];
+extern u16	veMapRAM[];
 
 #define __DEADloc						(*(u16*)0xFFFFA800)
 
@@ -468,6 +472,14 @@ extern byte veMapRAM[];
 #define kPa2load(v) (v*2)
 
 #define rpm2mut(v) (v*4/125)
+
+#define AFR(v) ((u32)(14.7*128/v+0.5))
+#define LAMBDA(v) ((u32)(128*v+0.5))
+
+#define OXIGEN(v) ((u32)(0.0195*v+0.5))
+
+#define VE8(v)	((u32)(v*2.56-48))
+#define VE16(v) ((u32)((v*2.56-48)*256))
 
 #define SET(v, m) (v |= m)
 #define CLR(v, m) (v &= ~m)
