@@ -477,7 +477,7 @@ extern u16	veMapRAM[];
 #define AFR(v) ((u32)(14.7*128/v+0.5))
 #define LAMBDA(v) ((u32)(128*v+0.5))
 
-#define OXIGEN(v) ((u32)(0.0195*v+0.5))
+#define OXIGEN(v) ((u32)(v/0.0195+0.5))
 
 #define VE8(v)	((u32)(v*2.56-48))
 #define VE16(v) ((u32)((v*2.56-48)*256))
