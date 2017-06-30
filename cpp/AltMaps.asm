@@ -95,6 +95,13 @@ _frameCount:		.RES.L      1					;	.EQU H'FFFF8462
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+	.SECTION P_F506, CODE, LOCATE=H'F506
+
+			nop   	                                                        
+
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 	.IMPORT	_FU03_HI_LO_Octan
 
 	.SECTION P_141C8, CODE, LOCATE=H'141C8
@@ -190,9 +197,9 @@ altMUT:
 			.DATA.L		wMUT32_Air_To_Fuel_Ratio+1
 			.DATA.L		wMUT2F_Vehicle_Speed+1  
 			.DATA.L		wMUT0C_Fuel_Trim_Low+1
-			.DATA.L		wMUT0F_Oxygen_Feedback_Trim+1
+			.DATA.L		wMUT0F_Oxygen_Feedback_Trim
 			.DATA.L		wMUT13_Front_O2_ADC8bit+1
-			.DATA.L		wMUT32_Air_To_Fuel_Ratio+1
+			.DATA.L		wMUT31_Volumetric_Efficiency+1
 			.DATA.L		_axis_ve_RPM+1
 			.DATA.L		_axis_ve_LOAD+1
 			

@@ -115,6 +115,7 @@ struct Map3D_W
 
 #define __disable_irq									((void(*)(void))0x400)
 #define __enable_irq									((void(*)(void))0x41e)
+#define F500_Init_Load_ECU_Info_And_BitMap_Flags		((void(*)(void))0xF58C)
 
 #define Timer_Counter_Related_sub_C928					((void(*)(void))0xC928)
 #define Knock_Output_Calc_sub_AC96						((void(*)(void))0xAC96)
@@ -437,9 +438,9 @@ extern byte _byte_FFFF8400;
 extern byte hiIgnMapIndex;					
 extern byte hiFuelMapIndex;					
 extern byte veMapIndex;						
-extern bool fixAFR;						
-extern bool openLoop;						
-extern bool veFeedBackO2R;						
+extern byte fixAFR;						
+extern byte openLoop;						
+extern byte veFeedBackO2R;						
 
 
 //#define __axis_res_RPM25				(*(u16*)0xFFFF8460)

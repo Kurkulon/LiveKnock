@@ -76,7 +76,28 @@ static void AA05_sub_1945C();
 #define sub_21ECC							((u16(*)(u16))0x21ECC)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+/*
+static void F500_sub_10C6E()
+{
+	if ((wMUT1E_MAF_RESET_FLAG & STALL) == 0)
+	{
+		Table_Lookup_Axis(BAR5_6D66);
 
+		u32 r1 = Table_Lookup_byte_2D_3D(AFRRPM_4C1A);
+
+		u32 r2 = wMUT31_Volumetric_Efficiency + word_1524;
+
+		Mul_R4_R5w_Div_R6w_R0(Mul_R4_R5w_div256__R0(MUT21_RPM_x125div4 * word_223E * 1067, r2), wMUT1C_ECU_Load * r1, 26240);
+
+		
+	}
+	else
+	{
+
+	};
+}
+*/
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 static void AA05_IDLE_sub_192FC()
 {
 	u16 r1;

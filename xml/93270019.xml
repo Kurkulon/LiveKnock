@@ -1,0 +1,188 @@
+<rom>
+	<romid>
+		<xmlid>93270019</xmlid>
+		<internalidaddress>f52</internalidaddress>
+		<internalidhex>93270019</internalidhex>
+		<caseid>MN132784</caseid>
+		<make>Mitsubishi</make>
+		<market>JDM</market>
+		<model>Lancer</model>
+		<transmission>5MT</transmission>
+		<year>2006</year>
+		<flashmethod>mitsukernel</flashmethod>
+		<memmodel>SH7052</memmodel>
+	</romid>
+
+	<include>lancer9base</include>
+
+	<table name="AFR-RPM reach lim" category="Fuel" address="32cc" type="2D" level="1" scaling="AFR">
+		<table name="RPM" address="6d46" type="Y Axis" elements="15" scaling="RPMStatLimit"/>
+	</table>
+
+	<table name="OBD-II Codes" address="96b0">
+	</table>
+
+	<table name="Volume Efficiency Map 1" >
+		<table name="Load"/>
+		<table name="RPM"/>
+	</table>
+
+	<table name="VE 16bit Map" address="382a2" category="AltMode" type="3D" swapxy="true" scaling="VE16">
+		<table name="Load" address="6d28" type="X Axis" elements="11" scaling="Load"/>
+		<table name="RPM" address="6cf8" type="Y Axis" elements="19" scaling="RPM"/>
+	</table>
+
+	<table name="Volume Efficiency Map 2" address="31f5">
+		<table name="Load" address="6d28"/>
+		<table name="RPM" address="6cf8"/>
+	</table>
+
+	<table name="Volume Efficiency Map 3" address="303d">
+		<table name="Load" address="6d28"/>
+		<table name="RPM" address="6cf8"/>
+	</table>
+
+	<table name="IPW Adder for Cold Start 1" address="359c">
+		<table name="Coolant Temperature" address="6880"/>
+	</table>
+
+	<table name="IPW Adder for Cold Start 2" address="536a">
+		<table name="Coolant Temperature" address="68bc"/>
+	</table>
+
+	<table name="High Octane Fuel Map" address="5dfd">
+		<table name="Load" address="6776"/>
+		<table name="RPM" address="6750"/>
+	</table>
+
+	<table name="Low Octane Fuel Map" address="5389">
+		<table name="Load" address="6776"/>
+		<table name="RPM" address="6750"/>
+	</table>
+
+	<table name="High Octane Ignition Map" address="36b9">
+		<table name="Load" address="67c6"/>
+		<table name="RPM" address="6792"/>
+	</table>
+
+	<table name="Low Octane Ignition Map" address="5413">
+		<table name="Load" address="67c6"/>
+		<table name="RPM" address="6792"/>
+	</table>
+
+	<table name="Ignition Map c1" address="37c1">
+		<table name="Load" address="67c6"/>
+		<table name="RPM" address="6792"/>
+	</table>
+
+	<table name="Ignition Map c2" address="38d5">
+		<table name="Load" address="67c6"/>
+		<table name="RPM" address="6792"/>
+	</table>
+
+	<table name="Injector Battery Voltage Latency Compensation" address="3428">
+		<table name="Battery Voltage" address="66b8"/>
+	</table>
+
+	<table name="Rev Limit" address="1576"/>
+
+	<table name="Accel Enrichment 1" address="348a">
+		<table name="RPM" address="6594"/>
+	</table>
+
+	<table name="Accel Enrichment 2" address="3498">
+		<table name="RPM" address="6594"/>
+	</table>
+
+	<table name="Open Loop Load 1" address="3334">
+		<table name="RPM" address="64d6"/>
+	</table>
+
+	<table name="Open Loop Load 2" address="3348">
+		<table name="RPM" address="64d6"/>
+	</table>
+
+	<table name="Idle Stepper Look-up Table" address="4777">
+		<table name="Coolant Temperature" address="6950"/>
+		<table name="LOAD" address="696a"/>
+	</table>
+
+	<table name="Knock Sensor Filter Map 1" address="3feb">
+		<table name="TAR" address="6b34"/>
+		<table name="RPM" address="6b14"/>
+	</table>
+
+	<table name="Knock Sensor Filter Map 2" address="4059">
+		<table name="TAR" address="6b34"/>
+		<table name="RPM" address="6b14"/>
+	</table>
+
+	<table name="Knock Sensor Filter Map 3" address="40c1">
+		<table name="TAR" address="6b34"/>
+		<table name="RPM" address="6b14"/>
+	</table>
+
+	<table name="Knock Sensor Filter Map 4" address="4e21">
+		<table name="TAR" address="6b34"/>
+		<table name="RPM" address="6b14"/>
+	</table>
+
+	<table name="Knock Sensor Filter Map 5" address="4135">
+		<table name="TAR" address="6b34"/>
+		<table name="RPM" address="6b14"/>
+	</table>
+
+	<table name="Knock Sensor Filter Map 6" address="3f7d">
+		<table name="TAR" address="6b34"/>
+		<table name="RPM" address="6b14"/>
+	</table>
+
+	<table name="Knock Sensor Filter Map 7" address="4a57">
+		<table name="TAR" address="6b34"/>
+		<table name="RPM" address="6b14"/>
+	</table>
+
+	<table name="Knock Sensor Filter Map 8" address="49e9">
+		<table name="TAR" address="6b34"/>
+		<table name="RPM" address="6b14"/>
+	</table>
+
+	<table name="Knock Sensor Filter Map 9" address="431b">
+		<table name="TAR" address="6b34"/>
+		<table name="RPM" address="6b14"/>
+	</table>
+
+	<table name="Knock Sensor Filter Map 10" address="4389">
+		<table name="TAR" address="6b34"/>
+		<table name="RPM" address="6b14"/>
+	</table>
+
+	<table name="Knock Sensor Filter Map 11" address="43f7">
+		<table name="TAR" address="6b34"/>
+		<table name="RPM" address="6b14"/>
+	</table>
+
+	<table name="Knock Sensor Filter Map 12" address="4465">
+		<table name="TAR" address="6b34"/>
+		<table name="RPM" address="6b14"/>
+	</table>
+
+	<table name="Knock Sensor Filter Map 13" address="44d3">
+		<table name="TAR" address="6b34"/>
+		<table name="RPM" address="6b14"/>
+	</table>
+
+	<table name="Knock Sensor Filter Map 14" address="4541">
+		<table name="TAR" address="6b34"/>
+		<table name="RPM" address="6b14"/>
+	</table>
+
+	<table name="Thermo Fan Duty" address="3c4a">
+		<table name="Conditions"/>
+		<table name="Engine Temp" address="68fc"/>
+	</table>
+
+	<table name="Speed Limit" address="1578">
+	</table>
+
+</rom>

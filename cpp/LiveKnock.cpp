@@ -71,6 +71,10 @@ extern "C" void FU03_VE_map_sub_14620()
 
 extern "C" void LiveKnock()
 {
+	__disable_irq();
+
+	F500_Init_Load_ECU_Info_And_BitMap_Flags();
+
 	if (__DEADloc != 0xDEAD)
 	{
 		__DEADloc = 0xDEAD;
@@ -82,41 +86,26 @@ extern "C" void LiveKnock()
 		fixAFR = false;
 		openLoop = false;
 		veFeedBackO2R = false;
-
-		//u32 *p = (u32*); // 0xFFFFABA4
-
-		//for (u32 i = 0; i < 279; i++) //279
-		//{
-		//	*p++ = 0xFFFFFFFF;
-		//};
 	};
 
-	//u32 *p = (u32*)0xFFFFABA4;
+	if (openLoop)
+	{
+		CLR(wMUTD1_BitMap_FAA, 0x10); // Closed loop
+	}
+	else
+	{
+		wMUTD1_BitMap_FAA |= Periphery_FAA & 0x10; // Closed loop
+	};
 
-	//for (u32 i = 0; i < 279; i++)
-	//{
-	//	if (*p++ != 0xFFFFFFFF)
-	//	{
-	//		frameCount += 1;
+	__enable_irq();
 
-	//		break;
-	//	};
-	//};
 	
 	frameCount += 1;
 
 
+
 	if ((wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING)) == 0)
 	{
-		//if (openLoop)
-		//{
-		//	CLR(wMUTD1_BitMap_FAA, 0x10); // Closed loop
-		//}
-		//else
-		//{
-		//	wMUTD1_BitMap_FAA |= Periphery_FAA & 0x10; // Closed loop
-		//};
-
 
 
 		u32 al = ((u32)(swapb(axis_ig_LOAD)+127)>>8);
@@ -146,35 +135,35 @@ extern "C" void LiveKnock()
 		};
 
 
-		//if (/*openLoop && */veFeedBackO2R && veMapIndex == 7 && wMUT32_Air_To_Fuel_Ratio > LAMBDA(0.98) && wMUT32_Air_To_Fuel_Ratio < LAMBDA(1.02))
-		//{
-		//	u32	al = ((u32)(swapb((u32)axis_ve_LOAD)+127)>>8);
-		//	u32 ar = ((u32)(swapb((u32)axis_ve_RPM)+127)>>8);
+		if (openLoop && veFeedBackO2R && veMapIndex == 7 && wMUT32_Air_To_Fuel_Ratio > LAMBDA(0.98) && wMUT32_Air_To_Fuel_Ratio < LAMBDA(1.02))
+		{
+			u32	al = ((u32)(swapb((u32)axis_ve_LOAD)+127)>>8);
+			u32 ar = ((u32)(swapb((u32)axis_ve_RPM)+127)>>8);
 
-		//	if (al < 11 && ar < 19)
-		//	{
-		//		u16 *p = &veMapRAM[ar + al * 19];
+			if (al < 11 && ar < 19)
+			{
+				u16 *p = &veMapRAM[ar + al * 19];
 
-		//		u32 ve = *p;
+				u32 ve = *p;
 
-		//		i32 d = wMUT13_Front_O2_ADC8bit;  //wMUT3C_Rear_O2_ADC8bit;
+				i32 d = wMUT13_Front_O2_ADC8bit;  //wMUT3C_Rear_O2_ADC8bit;
 
-		//		d -= OXIGEN(0.5);
+				d -= OXIGEN(0.5);
 
-		//		ve -= d/4;
+				ve -= d/4;
 
-		//		if (ve < VE16(20))
-		//		{
-		//			ve = VE16(20);
-		//		}
-		//		else if (ve > VE16(115))
-		//		{
-		//			ve = VE16(115);
-		//		};
+				if (ve < VE16(20))
+				{
+					ve = VE16(20);
+				}
+				else if (ve > VE16(115))
+				{
+					ve = VE16(115);
+				};
 
-		//		*p = ve;
-		//	};
-		//};
+				*p = ve;
+			};
+		};
 	}; // if ((wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING)) == 0)
 
 }
