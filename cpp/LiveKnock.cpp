@@ -67,6 +67,80 @@ extern "C" void FU03_VE_map_sub_14620()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+static void FeedBack_O2R()
+{
+	if ((wMUT1E_MAF_RESET_FLAG & (DECELERATION_FUEL_CUT|FUEL_CUT)) == 0 
+		&& veFeedBackO2R && veMapIndex == 7 
+		&& wMUT32_Air_To_Fuel_Ratio > LAMBDA(0.98) && wMUT32_Air_To_Fuel_Ratio < LAMBDA(1.02))
+	{
+		u32	al = ((u32)(swapb((u32)axis_ve_LOAD)+127)>>8);
+		u32 ar = ((u32)(swapb((u32)axis_ve_RPM)+127)>>8);
+
+		if (al < 11 && ar < 19)
+		{
+			u16 *p = &veMapRAM[ar + al * 19];
+
+			u32 ve = *p;
+
+			i32 d = wMUT13_Front_O2_ADC8bit;  //wMUT3C_Rear_O2_ADC8bit;
+
+			d -= OXIGEN(0.5);
+
+			ve -= d/2;
+
+			if (ve < VE16(20))
+			{
+				ve = VE16(20);
+			}
+			else if (ve > VE16(115))
+			{
+				ve = VE16(115);
+			};
+
+			*p = ve;
+		};
+	};
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma inline(FeedBack_WBO2)
+
+static void FeedBack_WBO2()
+{
+	if ((wMUT1E_MAF_RESET_FLAG & (DECELERATION_FUEL_CUT|FUEL_CUT)) == 0 && veMapIndex == 15)
+	{
+		u32	al = ((u32)(swapb((u32)axis_ve_LOAD)+127)>>8);
+		u32 ar = ((u32)(swapb((u32)axis_ve_RPM)+127)>>8);
+
+		if (al < 11 && ar < 19)
+		{
+			u16 *p = &veMapRAM[ar + al * 19];
+
+			u32 ve = *p;
+
+			i32 d = Div_R4_R5_R0(32027, 125 + wMUT3C_Rear_O2_ADC8bit);
+
+			d -= wMUT32_Air_To_Fuel_Ratio;
+
+			ve -= d/2;
+
+			if (ve < VE16(40))
+			{
+				ve = VE16(40);
+			}
+			else if (ve > VE16(118.35))
+			{
+				ve = VE16(118.35);
+			};
+
+			*p = ve;
+		};
+	};
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 #pragma noregsave(LiveKnock)
 
 extern "C" void LiveKnock()
@@ -106,11 +180,9 @@ extern "C" void LiveKnock()
 
 	if ((wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING)) == 0)
 	{
-
-
 		u32 al = ((u32)(swapb(axis_ig_LOAD)+127)>>8);
 
-		if (hiIgnMapIndex == 7 && (KNOCK_FLAG_FFFF8C34 & 0x40) && ((wMUT72_Knock_Present & 1) == 0) && al > 4)
+		if (hiIgnMapIndex == 15 && (KNOCK_FLAG_FFFF8C34 & 0x40) && ((wMUT72_Knock_Present & 1) == 0) && al > 4)
 		{
 			u32 ind = ((u32)(swapb(axis_ig_RPM)+127)>>8) + al*21;
 
@@ -134,38 +206,8 @@ extern "C" void LiveKnock()
 			};
 		};
 
+		FeedBack_WBO2();
 
-		if ((wMUT1E_MAF_RESET_FLAG & (DECELERATION_FUEL_CUT|FUEL_CUT)) == 0 
-			&& veFeedBackO2R && veMapIndex == 7 
-			&& wMUT32_Air_To_Fuel_Ratio > LAMBDA(0.98) && wMUT32_Air_To_Fuel_Ratio < LAMBDA(1.02))
-		{
-			u32	al = ((u32)(swapb((u32)axis_ve_LOAD)+127)>>8);
-			u32 ar = ((u32)(swapb((u32)axis_ve_RPM)+127)>>8);
-
-			if (al < 11 && ar < 19)
-			{
-				u16 *p = &veMapRAM[ar + al * 19];
-
-				u32 ve = *p;
-
-				i32 d = wMUT13_Front_O2_ADC8bit;  //wMUT3C_Rear_O2_ADC8bit;
-
-				d -= OXIGEN(0.5);
-
-				ve -= d/2;
-
-				if (ve < VE16(20))
-				{
-					ve = VE16(20);
-				}
-				else if (ve > VE16(115))
-				{
-					ve = VE16(115);
-				};
-
-				*p = ve;
-			};
-		};
 	}; // if ((wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING)) == 0)
 
 }
