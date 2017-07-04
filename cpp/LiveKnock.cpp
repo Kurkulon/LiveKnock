@@ -172,6 +172,8 @@ extern "C" void LiveKnock()
 		wMUTD1_BitMap_FAA |= Periphery_FAA & 0x10; // Closed loop
 	};
 
+	CLR(bMUTD3_BitMap4_FCA_Store_FFFF89D8, 0x800); // Disable Front/Rear O2 heater check: clear bit 11 address 0xFCA 
+
 	__enable_irq();
 
 	
