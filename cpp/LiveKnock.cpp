@@ -3,6 +3,7 @@
 #include "ram.h"
 #include "misc.h"
 
+// Disable Front/Rear O2 heater check: clear bit 11 address 0xFCA
 
 //extern "C" void IG04_root_Update_Ignition();
 
