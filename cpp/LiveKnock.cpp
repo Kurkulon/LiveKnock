@@ -155,13 +155,13 @@ extern "C" void LiveKnock()
 
 			if (knock > 3)
 			{
-				timing -= knock >> 1;
+				timing -= knock;
 
 				*p = (timing < loign) ? loign : timing;
 			}
 			else 
 			{
-				if (timing < 40*256) *p = timing + 1;
+				if (timing < 60*256) *p = timing + 3;
 			};
 		};
 
