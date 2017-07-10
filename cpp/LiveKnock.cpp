@@ -5,66 +5,6 @@
 
 // Disable Front/Rear O2 heater check: clear bit 11 address 0xFCA
 
-//extern "C" void IG04_root_Update_Ignition();
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-inline u16 Lookup_HiIgnMap()
-{
-	return ((u32)(Table_Lookup_word_2D_3D(HighIgn_7C48[hiIgnMapIndex&7]) + 0x80)) >> 8;
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-inline u16 GetLoadCorrectedDeltaTPS()
-{
-	return load_x2_deltaTPS_corrected = ECU_Load_x2_FFFF895C + R4_Mul_R5_Div_256_round(abs_Delta_TPS * TPS_Multiplier_Delta, Table_Lookup_byte_2D_3D(table_2D_39D2));
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-#pragma noregsave(IG04_Update_OctanEgrIgnTiming)
-
-extern "C" u16 IG04_Update_OctanEgrIgnTiming()
-{
-	wMUTB4_lookup_value = GetLoadCorrectedDeltaTPS();
-
-	Table_Lookup_Axis(RPM21_6788_IGN);
-
-	Table_Lookup_Axis(LOAD12_67BC_IGN);
-
-	ignition_FFFF8BC4 = egrHighOctIgn = Lookup_HiIgnMap();
-
-	return octanEgrIgnTiming = interpolate_r4_r5_r6(egrHighOctIgn, egrLowOctIgn = Query_byte_2D_3D_Table(LowIgn_7C68), wMUT27_Octane_Number);
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-#pragma noregsave(FU03_HI_LO_Octan)
-
-extern "C" void FU03_HI_LO_Octan()
-{
-	wMUTB4_lookup_value = FU03_sub_142DC();
-
-	Table_Lookup_Axis(RPM14_6746);
-
-	Table_Lookup_Axis(LOAD9_676C);
-
-	AFR_OctanInt = (fixAFR) ? AFR(14.7) : interpolate_r4_r5_r6(Table_Lookup_byte_2D_3D(HIGHOKTF_7A88[hiFuelMapIndex&7]), Query_byte_2D_3D_Table(LowOctFMp_7AA8), wMUT27_Octane_Number);
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-#pragma noregsave(FU03_VE_map_sub_14620)
-
-extern "C" void FU03_VE_map_sub_14620()
-{
-	Table_Lookup_Axis(RPM19_6CEE);
-
-	Table_Lookup_Axis(LOAD11_6D1E);
-
-	wMUT31_Volumetric_Efficiency = Table_Lookup_word_2D_3D(veMapArray[veMapIndex&7]) >> 8;
-}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -109,34 +49,50 @@ static void FeedBack_O2R()
 
 static void FeedBack_WBO2()
 {
-	if ((wMUT1E_MAF_RESET_FLAG & (DECELERATION_FUEL_CUT|FUEL_CUT)) == 0 && veMapIndex == 15)
+	static u16 timer;
+
+	if (veMapIndex == 15 && (wMUT1E_MAF_RESET_FLAG & (DECELERATION_FUEL_CUT|FUEL_CUT|MAP_error)) == 0 && wMUT73_TPS_Open_Delta < 10 && wMUT74_TPS_Close_Delta < 10)
 	{
-		u32	al = ((u32)(swapb((u32)axis_ve_LOAD)+127)>>8);
-		u32 ar = ((u32)(swapb((u32)axis_ve_RPM)+127)>>8);
-
-		if (al < 11 && ar < 19)
+		if (timer == 0)
 		{
-			u16 *p = &veMapRAM[ar + al * 19];
+			u32	al = ((u32)(swapb((u32)axis_ve_LOAD)+127)>>8);
+			u32 ar = ((u32)(swapb((u32)axis_ve_RPM)+127)>>8);
 
-			u32 ve = *p;
-
-			i32 d = Div_R4_R5_R0(32027, 125 + wMUT3C_Rear_O2_ADC8bit);
-
-			d -= wMUT32_Air_To_Fuel_Ratio;
-
-			ve -= d/2;
-
-			if (ve < VE16(40))
+			if (al < 11 && ar < 19)
 			{
-				ve = VE16(40);
-			}
-			else if (ve > VE16(118.35))
-			{
-				ve = VE16(118.35);
+				u16 *p = &veMapRAM[ar + al * 19];
+
+				u32 ve = *p;
+
+				i32 d = Div_R4_R5_R0(32027, 125 + wMUT3C_Rear_O2_ADC8bit);
+
+				if (d > AFR(18) && d < AFR(9))
+				{
+					d -= wMUT32_Air_To_Fuel_Ratio;
+
+					ve -= d/2;
+
+					if (ve < VE16(40))
+					{
+						ve = VE16(40);
+					}
+					else if (ve > VE16(118.35))
+					{
+						ve = VE16(118.35);
+					};
+
+					*p = ve;
+				};
 			};
-
-			*p = ve;
+		}
+		else
+		{
+			timer -= 1;
 		};
+	}
+	else
+	{
+		timer = 100;
 	};
 }
 

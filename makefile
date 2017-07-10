@@ -87,9 +87,9 @@ $(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs
 
 ##################################################################################################
 
-$(objdir)\LiveKnock.abs : LiveMap.o AltMaps.o LiveKnock.o idle.o # Ignition.o crank.o ,P_Ignition/39000,P_crank/3C000
+$(objdir)\LiveKnock.abs : LiveMap.o AltMaps.o Hooks.o LiveKnock.o idle.o # Ignition.o crank.o ,P_Ignition/39000,P_crank/3C000
 	@echo Linking $^@ ...
-	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P/2CC0,B/FFFF8480 -LIBrary=$(libname) -OUtput="$^@" $<
+	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P_Hooks/2CC0,P/39000,B/FFFF8480 -LIBrary=$(libname) -OUtput="$^@" $<
 	@echo $(delimiter)	
 
 ##################################################################################################

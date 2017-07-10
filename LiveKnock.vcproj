@@ -73,6 +73,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cpp\Hooks.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\cpp\idle.cpp"
 				>
 			</File>
@@ -95,6 +99,14 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\cpp\constbyte.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cpp\constword.h"
+				>
+			</File>
 			<File
 				RelativePath=".\cpp\def.inc"
 				>
