@@ -45,13 +45,24 @@ static void FeedBack_O2R()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#pragma inline(FeedBack_WBO2)
+#pragma noregsave(FeedBack_WBO2)
 
 static void FeedBack_WBO2()
 {
 	static u16 timer;
+	static TM32 tm;
+	static u16 prevLoad;
+	
+	u16 deltaLoad = 0;
 
-	if (veMapIndex == 15 && (wMUT1E_MAF_RESET_FLAG & (DECELERATION_FUEL_CUT|FUEL_CUT|MAP_error)) == 0 && wMUT73_TPS_Open_Delta < 10 && wMUT74_TPS_Close_Delta < 10)
+	if (tm.Check(10))
+	{
+		deltaLoad = (wMUT1C_ECU_Load > prevLoad) ? (wMUT1C_ECU_Load - prevLoad) : (prevLoad - wMUT1C_ECU_Load);
+
+		prevLoad = wMUT1C_ECU_Load;
+	};
+
+	if (veMapIndex == 15 && (wMUT1E_MAF_RESET_FLAG & (DECELERATION_FUEL_CUT|FUEL_CUT|MAP_error)) == 0 && deltaLoad <= kPa2load(1))
 	{
 		if (timer == 0)
 		{
@@ -64,6 +75,7 @@ static void FeedBack_WBO2()
 
 				u32 ve = *p;
 
+//				i32 d = 32027 / (125 + wMUT3C_Rear_O2_ADC8bit); //
 				i32 d = Div_R4_R5_R0(32027, 125 + wMUT3C_Rear_O2_ADC8bit);
 
 				if (d > AFR(18) && d < AFR(9))
@@ -76,12 +88,16 @@ static void FeedBack_WBO2()
 					{
 						ve = VE16(40);
 					}
-					else if (ve > VE16(118.35))
+					else if (ve > VE16(118))
 					{
-						ve = VE16(118.35);
+						ve = VE16(118);
 					};
 
 					*p = ve;
+				}
+				else
+				{
+					timer = 100;
 				};
 			};
 		}
@@ -141,7 +157,7 @@ extern "C" void LiveKnock()
 	{
 		u32 al = ((u32)(swapb(axis_ig_LOAD)+127)>>8);
 
-		if (hiIgnMapIndex == 15 && (KNOCK_FLAG_FFFF8C34 & 0x40) && ((wMUT72_Knock_Present & 1) == 0) && al > 4)
+		if (hiIgnMapIndex == 15 && (KNOCK_FLAG_FFFF8C34 & 0x40) && ((wMUT72_Knock_Present & 1) == 0) && (al-5) < 6)
 		{
 			u32 ind = ((u32)(swapb(axis_ig_RPM)+127)>>8) + al*21;
 

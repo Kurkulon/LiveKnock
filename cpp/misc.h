@@ -458,6 +458,18 @@ extern byte hiFuelMapRAM[];
 extern u16	hiIgnMapRAM[];
 extern u16	veMapRAM[];
 
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+struct TM32
+{
+	u32 pt;
+
+	bool Check(u32 v) { if ((frameCount - pt) >= v) { pt = frameCount; return true; } else { return false; }; }
+	void Reset() { pt = frameCount; }
+};
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 #define __DEADloc						(*(u16*)0xFFFFA800)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
