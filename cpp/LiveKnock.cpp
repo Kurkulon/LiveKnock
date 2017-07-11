@@ -10,8 +10,7 @@
 
 static void FeedBack_O2R()
 {
-	if ((wMUT1E_MAF_RESET_FLAG & (DECELERATION_FUEL_CUT|FUEL_CUT)) == 0 
-		&& veFeedBackO2R && veMapIndex == 7 
+	if ((wMUT1E_MAF_RESET_FLAG & (DECELERATION_FUEL_CUT|FUEL_CUT)) == 0 && veMapIndex == 15 
 		&& wMUT32_Air_To_Fuel_Ratio > LAMBDA(0.98) && wMUT32_Air_To_Fuel_Ratio < LAMBDA(1.02))
 	{
 		u32	al = ((u32)(swapb((u32)axis_ve_LOAD)+127)>>8);
@@ -75,14 +74,13 @@ static void FeedBack_WBO2()
 
 				u32 ve = *p;
 
-//				i32 d = 32027 / (125 + wMUT3C_Rear_O2_ADC8bit); //
 				i32 d = Div_R4_R5_R0(32027, 125 + wMUT3C_Rear_O2_ADC8bit);
 
 				if (d > AFR(18) && d < AFR(9))
 				{
 					d -= wMUT32_Air_To_Fuel_Ratio;
 
-					ve -= d/2;
+					ve -= d * veFeedBackMul;
 
 					if (ve < VE16(40))
 					{
@@ -132,7 +130,7 @@ extern "C" void LiveKnock()
 
 		fixAFR = false;
 		openLoop = false;
-		veFeedBackO2R = false;
+		veFeedBackMul = 1;
 	};
 
 	if (openLoop)

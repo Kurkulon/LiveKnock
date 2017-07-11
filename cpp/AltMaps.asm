@@ -3,14 +3,14 @@
 
 	.SECTION    B_ALTMAPS, DATA, LOCATE=H'FFFF8420
 	
-	.EXPORT		_hiIgnMapIndex, _hiFuelMapIndex, _veMapIndex, _fixAFR, _openLoop, _veFeedBackO2R
+	.EXPORT		_hiIgnMapIndex, _hiFuelMapIndex, _veMapIndex, _fixAFR, _openLoop, _veFeedBackMul
 	
 _hiIgnMapIndex:		.RES.B      1					
 _hiFuelMapIndex:	.RES.B      1					
 _veMapIndex:		.RES.B      1					
 _fixAFR:			.RES.B      1					
 _openLoop:			.RES.B      1					
-_veFeedBackO2R:		.RES.B      1					
+_veFeedBackMul:		.RES.B      1					
 
 	.ALIGN 2	
 	

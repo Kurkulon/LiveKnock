@@ -440,7 +440,7 @@ extern byte hiFuelMapIndex;
 extern byte veMapIndex;						
 extern byte fixAFR;						
 extern byte openLoop;						
-extern byte veFeedBackO2R;						
+extern byte veFeedBackMul;						
 
 
 //#define __axis_res_RPM25				(*(u16*)0xFFFF8460)
