@@ -129,6 +129,14 @@
 			</File>
 		</Filter>
 		<File
+			RelativePath=".\xml\93270019.xml"
+			>
+		</File>
+		<File
+			RelativePath=".\xml\lancer9base.xml"
+			>
+		</File>
+		<File
 			RelativePath=".\makefile"
 			>
 		</File>

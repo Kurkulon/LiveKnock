@@ -15,6 +15,11 @@
 
 	<include>lancer9base</include>
 
+	<table name="VE 16bit Map" address="382a2" category="AltMode" type="3D" swapxy="true" scaling="VE16">
+		<table name="Load" address="6d28" type="X Axis" elements="11" scaling="Load"/>
+		<table name="RPM" address="6cf8" type="Y Axis" elements="19" scaling="RPM"/>
+	</table>
+
 	<table name="AFR-RPM reach lim" category="Fuel" address="32cc" type="2D" level="1" scaling="AFR">
 		<table name="RPM" address="6d46" type="Y Axis" elements="15" scaling="RPMStatLimit"/>
 	</table>
@@ -22,22 +27,17 @@
 	<table name="OBD-II Codes" address="96b0">
 	</table>
 
-	<table name="Volume Efficiency Map 1" >
-		<table name="Load"/>
-		<table name="RPM"/>
-	</table>
+	<table name="VE2Map_DRIVE_EGR_IA_ON" address="3119">
+    <table name="Load" address="6d28"/>
+    <table name="RPM" address="6cf8"/>
+  </table>
 
-	<table name="VE 16bit Map" address="382a2" category="AltMode" type="3D" swapxy="true" scaling="VE16">
-		<table name="Load" address="6d28" type="X Axis" elements="11" scaling="Load"/>
-		<table name="RPM" address="6cf8" type="Y Axis" elements="19" scaling="RPM"/>
-	</table>
-
-	<table name="Volume Efficiency Map 2" address="31f5">
+	<table name="VE3Map_NEUTRAL_EGR_IA_ON" address="31f5">
 		<table name="Load" address="6d28"/>
 		<table name="RPM" address="6cf8"/>
 	</table>
 
-	<table name="Volume Efficiency Map 3" address="303d">
+	<table name="VE1Map_NO_EGR_IA" address="303d">
 		<table name="Load" address="6d28"/>
 		<table name="RPM" address="6cf8"/>
 	</table>
