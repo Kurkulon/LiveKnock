@@ -7,7 +7,7 @@
 
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+/*
 static void FeedBack_O2R()
 {
 	if ((wMUT1E_MAF_RESET_FLAG & (DECELERATION_FUEL_CUT|FUEL_CUT)) == 0 && veMapIndex == 15 
@@ -41,9 +41,9 @@ static void FeedBack_O2R()
 		};
 	};
 }
-
+*/
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+/*
 #pragma noregsave(FeedBack_WBO2)
 
 static void FeedBack_WBO2()
@@ -107,6 +107,69 @@ static void FeedBack_WBO2()
 	else
 	{
 		timer = 100;
+	};
+}
+*/
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma noregsave(FeedBack_WBO2)
+
+static void FeedBack_WBO2()
+{
+	static u16 timer;
+//	static TM32 tm;
+	static u16 pi;
+	const u16 LDT = 100;
+	
+
+	if (veMapIndex == 15 && (wMUT1E_MAF_RESET_FLAG & (DECELERATION_FUEL_CUT|FUEL_CUT|MAP_error)) == 0)
+	{
+		u32	al = ((u32)(swapb((u32)axis_ve_LOAD)+127)>>8);
+		u32 ar = ((u32)(swapb((u32)axis_ve_RPM)+127)>>8);
+		u32 ind = ar + al * 19;
+
+		if (ind != pi || al >= 11 || ar >= 19)
+		{
+			timer == LDT;
+			pi = ind;
+		}
+		else if (timer == 0)
+		{
+			u32 d = Div_R4_R5_R0(32027, 125 + wMUT3C_Rear_O2_ADC8bit);
+
+			if (d > AFR(18) && d < AFR(9))
+			{
+				u32 min = wMUT32_Air_To_Fuel_Ratio - 30;
+				u32 max = wMUT32_Air_To_Fuel_Ratio + 30;
+
+				if (d < min) d = min; else if (d > max) d = max;
+
+				u16 &p = veMapRAM[ind];
+
+				d = Div_R4_R5_R0(p * wMUT32_Air_To_Fuel_Ratio, d);
+
+				if (d < VE16(40))
+				{
+					d = VE16(40);
+				}
+				else if (d > VE16(118))
+				{
+					d = VE16(118);
+				};
+
+				p = d;
+			};
+
+			timer = LDT;
+		}
+		else
+		{
+			timer -= 1;
+		};
+	}
+	else
+	{
+		timer = LDT;
 	};
 }
 
