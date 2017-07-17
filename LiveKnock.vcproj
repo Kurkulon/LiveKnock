@@ -73,6 +73,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cpp\F500.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\cpp\Hooks.cpp"
 				>
 			</File>

@@ -6,45 +6,50 @@
 #include "misc.h"
 #include "hwreg.h"
 
+#include "constbyte.h"
+#include "constword.h"
+#include "ram.h"
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 
-#define crankPrevICR0AH_A       (*(u32*)0xFFFF9AB8)
-
-#define ici0A_TCNT2A           	(*(u16*)0xFFFF9AC0)
-#define crank_ICR0AH_250ns     	(*(u32*)0xFFFF9AC4)
-#define crank_OSBR2_4us        	(*(u16*)0xFFFF9AC8)
-#define crank_Flags            	(*(u16*)0xFFFF9ACA)
-
-
-
-#define	crankHT_x_4us_4        	(*(u16*)0xFFFF8F06)        //Время полуоборота коленвала                
-#define	null_CrankHT_x_4us_2   	(*(u16*)0xFFFF8F08)                                                     
-#define	null_CrankHT_x_4us_1   	(*(u16*)0xFFFF8F0A)                                                     
-#define	null_crank_dt_ICR0AH_A 	(*(u32*)0xFFFF8F0C)                                                     
-#define	crank_dt_ICR0AH_B      	(*(u32*)0xFFFF8F10)                                                     
-#define	crankHT_A              	(*(u16*)0xFFFF8F18)                                                     
-#define	crankHT_B              	(*(u16*)0xFFFF8F1A)                                                     
-#define	crankPrevOSBR2_A       	(*(u16*)0xFFFF8F1C)                                                     
-#define	crankPrev_OSBR2_B      	(*(u16*)0xFFFF8F1E)                                                     
-#define	camshaft_Shift         	(*(u16*)0xFFFF8F20)                                                     
-#define	stroke_FFFF8F22        	(*(u16*)0xFFFF8F22)                                                     
-#define	strokeNumber           	(*(u16*)0xFFFF8F24)                                                     
-#define	stroke_FFFF8F26        	(*(u16*)0xFFFF8F26)                                                     
-#define	word_FFFF8F28          	(*(u16*)0xFFFF8F28)                                                     
-#define	word_FFFF8F2A          	(*(u16*)0xFFFF8F2A)                                                     
-#define	word_FFFF8F2C          	(*(u16*)0xFFFF8F2C)                                                     
-#define	word_FFFF8F2E          	(*(u16*)0xFFFF8F2E)                                                     
-#define	word_FFFF8F30          	(*(u16*)0xFFFF8F30)                                                     
-#define	word_FFFF8F32          	(*(u16*)0xFFFF8F32)                                                     
-#define	word_FFFF8F34          	(*(u16*)0xFFFF8F34)                                                     
-
-#define	timer_up_FFFF8522      	(*(u16*)0xFFFF8522)                                                     
-#define	timer_up_FFFF8524      	(*(u16*)0xFFFF8524)                                                     
-
-#define	word_FFFF886E          	(*(u16*)0xFFFF886E)                                                     
-#define	word_FFFF8870			(*(u16*)0xFFFF8870)                                                     
+//#define crankPrevICR0AH_A       (*(u32*)0xFFFF9AB8)
+//
+//#define ici0A_TCNT2A           	(*(u16*)0xFFFF9AC0)
+//#define crank_ICR0AH_250ns     	(*(u32*)0xFFFF9AC4)
+//#define crank_OSBR2_4us        	(*(u16*)0xFFFF9AC8)
+//#define crank_Flags            	(*(u16*)0xFFFF9ACA)
+//
+//
+//
+//#define	crankHT_x_4us_4        	(*(u16*)0xFFFF8F06)        //Время полуоборота коленвала                
+//#define	null_CrankHT_x_4us_2   	(*(u16*)0xFFFF8F08)                                                     
+//#define	null_CrankHT_x_4us_1   	(*(u16*)0xFFFF8F0A)                                                     
+//#define	null_crank_dt_ICR0AH_A 	(*(u32*)0xFFFF8F0C)                                                     
+//#define	crank_dt_ICR0AH_B      	(*(u32*)0xFFFF8F10)                                                     
+//#define	crankHT_A              	(*(u16*)0xFFFF8F18)                                                     
+//#define	crankHT_B              	(*(u16*)0xFFFF8F1A)                                                     
+//#define	crankPrevOSBR2_A       	(*(u16*)0xFFFF8F1C)                                                     
+//#define	crankPrev_OSBR2_B      	(*(u16*)0xFFFF8F1E)                                                     
+//#define	camshaft_Shift         	(*(u16*)0xFFFF8F20)                                                     
+//#define	stroke_FFFF8F22        	(*(u16*)0xFFFF8F22)                                                     
+//#define	strokeNumber           	(*(u16*)0xFFFF8F24)                                                     
+//#define	stroke_FFFF8F26        	(*(u16*)0xFFFF8F26)                                                     
+//#define	word_FFFF8F28          	(*(u16*)0xFFFF8F28)                                                     
+//#define	word_FFFF8F2A          	(*(u16*)0xFFFF8F2A)                                                     
+//#define	word_FFFF8F2C          	(*(u16*)0xFFFF8F2C)                                                     
+//#define	word_FFFF8F2E          	(*(u16*)0xFFFF8F2E)                                                     
+//#define	word_FFFF8F30          	(*(u16*)0xFFFF8F30)                                                     
+//#define	word_FFFF8F32          	(*(u16*)0xFFFF8F32)                                                     
+//#define	word_FFFF8F34          	(*(u16*)0xFFFF8F34)                                                     
+//
+//#define	timer_up_FFFF8522      	(*(u16*)0xFFFF8522)                                                     
+//#define	timer_up_FFFF8524      	(*(u16*)0xFFFF8524)                                                     
+//
+//#define	word_FFFF886E          	(*(u16*)0xFFFF886E)                                                     
+//#define	word_FFFF8870			(*(u16*)0xFFFF8870)                                                     
+//
 
 #define	word_98BA				((const u16*)0x98BA)                                                     
 

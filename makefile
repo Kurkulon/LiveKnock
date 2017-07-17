@@ -79,7 +79,7 @@ link_options = -NOLOGO -FOrm=Binary -LISt -SHow=SY -LIBrary=$(libname)
   
 ##################################################################################################
 
-$(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs
+$(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs $(objdir)\stock.abs
 	@echo Patch ROM...
 	@copy /Y bin\orig_93270019.hex $^@
 	@bin\elfpatch $^@ $[@
@@ -87,7 +87,7 @@ $(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs
 
 ##################################################################################################
 
-$(objdir)\LiveKnock.abs : LiveMap.o AltMaps.o Hooks.o LiveKnock.o idle.o # Ignition.o crank.o ,P_Ignition/39000,P_crank/3C000
+$(objdir)\LiveKnock.abs : LiveMap.o AltMaps.o Hooks.o LiveKnock.o # Ignition.o crank.o ,P_Ignition/39000,P_crank/3C000
 	@echo Linking $^@ ...
 	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P_Hooks/2CC0,P/39000,B/FFFF8480 -LIBrary=$(libname) -OUtput="$^@" $<
 	@echo $(delimiter)	
@@ -104,6 +104,15 @@ $(objdir)\LiveKnock.abs : LiveMap.o AltMaps.o Hooks.o LiveKnock.o idle.o # Ignit
 .asm.o:
 	@echo Compiling $[. ...
 	@asmsh $(asm_options) -List="$(objdir)\$^&.lst" -OBject="$(objdir)\$^." $[@
+	@echo $(delimiter)	
+
+##################################################################################################
+##################################################################################################
+
+$(objdir)\stock.abs : Ignition.o crank.o idle.o F500.o
+	@echo Linking $^@ ...
+	@copy /Y $[@ $^@
+	@rem optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P_Ignition/39000,P_crank/3C000,B/FFFF8480 -LIBrary=$(libname) -OUtput="$^@" $<
 	@echo $(delimiter)	
 
 ##################################################################################################
