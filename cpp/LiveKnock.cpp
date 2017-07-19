@@ -193,7 +193,7 @@ extern "C" void LiveKnock()
 
 		fixAFR = false;
 		openLoop = false;
-		veFeedBackMul = 1;
+		veFeedBackMul = 5;
 	};
 
 	if (openLoop)

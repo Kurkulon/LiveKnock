@@ -219,7 +219,8 @@ extern u16 axis_fu_RPM;
 extern u16 axis_fu_LOAD;	
 extern u16 axis_ve_RPM;	
 extern u16 axis_ve_LOAD;	
-extern u16 ign_LOAD;	
+extern byte ign_LOAD;	
+extern byte ign_tbl_mul;	
 extern u32 frameCount;
 
 extern byte hiFuelMapRAM[];
