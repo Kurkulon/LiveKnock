@@ -278,7 +278,7 @@ void F500_sub_F834()
 
 	if (bMUTD2_FBA_MAF_MAP_FLAG & 8) // AYC/ACD
 	{
-//		if ((wMUT40_Stored_Faults_Lo & 8) || (wMUT44_Stored_Faults_Lo_2 & 0xEF))
+		if ((wMUT40_Stored_Faults_Lo & 8) || (wMUT44_Stored_Faults_Lo_2 & 0xEF)) {};
 
 		if (NVRAM_FFFF802C & 1)
 		{
