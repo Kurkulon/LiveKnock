@@ -192,8 +192,8 @@ extern "C" void LiveKnock()
 		veMapIndex = 0;	
 
 		fixAFR = false;
-		openLoop = false;
-		veFeedBackMul = 5;
+		openLoop = true;
+//		veFeedBackMul = 5;
 	};
 
 	if (openLoop)
@@ -218,7 +218,7 @@ extern "C" void LiveKnock()
 	{
 		u32 al = ((u32)(swapb(axis_ig_LOAD)+127)>>8);
 
-		if (hiIgnMapIndex == 15 && (KNOCK_FLAG_FFFF8C34 & 0x40) && ((wMUT72_Knock_Present & 1) == 0) && (al-5) < 6)
+		if (hiIgnMapIndex == 15 && (KNOCK_FLAG_FFFF8C34 & 0x40) && ((wMUT72_Knock_Present & 1) == 0)/* && (al-5) < 6*/)
 		{
 			u32 ind = ((u32)(swapb(axis_ig_RPM)+127)>>8) + al*21;
 
@@ -238,7 +238,7 @@ extern "C" void LiveKnock()
 			}
 			else 
 			{
-				if (timing < 60*256) *p = timing + 3;
+				if (timing < 60*256) *p = timing + 1;
 			};
 		};
 

@@ -89,8 +89,6 @@ struct Map3D_W
 #define Table_Lookup_byte_2D_3D ((u16(*)(Map3D_B*))0xC28)
 #define Table_Lookup_word_2D_3D ((u32(*)(Map3D_W*))0xE02)
 
-
-//#define IG04_GetLoadCorrectedDeltaTPS					((u16(*)(void))0x181DC)
 #define Table_Lookup_Axis								((void(*)(Axis*))0xCC6)
 #define Query_byte_2D_3D_Table							((u32(*)(Map3D_B**))0xDE0)
 
@@ -123,38 +121,6 @@ struct Map3D_W
 #define sub_21E84										((bool(*)(void))0x21E84)
 #define BC06_sub_1E2D0									((void(*)(void))0x1E2D0)
 	
-
-//#pragma address wMUT26_Knock_Sum=0xFFFF8C32
-//static u16 wMUT26_Knock_Sum;
-
-//#define wMUTB4_lookup_value								(*(u16*)0xFFFF8836)
-//#define RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888		(*(u16*)0xFFFF8888)
-//#define RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_COPY_FFFF888A	(*(u16*)0xFFFF888A)
-//#define INTAKE_AIR_TEMPERATURE_COPY_FFFF88BA			(*(u16*)0xFFFF88BA)
-//#define ZERO_8_IGNITION_FLAGS							(*(u16*)0xFFFF8A0C)
-//#define egrLowOctIgn									(*(u16*)0xFFFF8BC0)
-//#define egrHighOctIgn									(*(u16*)0xFFFF8BC2)
-//#define octanEgrIgnTiming								(*(u16*)0xFFFF8BC8)
-//#define ignition_FFFF8BC4								(*(u16*)0xFFFF8BC4)
-//#define abs_Delta_TPS									(*(u16*)0xFFFF8BE2)
-//#define TPS_Multiplier_Delta							(*(u16*)0x17A4)
-//#define load_x2_deltaTPS_corrected						(*(u16*)0xFFFF8BDA)
-//#define ECU_Load_x2_FFFF895C							(*(u16*)0xFFFF895C)
-//#define RPM_DELTA_FFFF8948								(*(u16*)0xFFFF8948)
-//#define timingAdvScaled									(*(u16*)0xFFFF8BE0)
-
-//#define ignCoilTime_3									(*(u16*)0xFFFF8C0E)
-//#define ignCoilTime_1									(*(u16*)0xFFFF8C10)
-//#define ignCoilTime_Fin									(*(u16*)0xFFFF8C12)
-//#define crankHT_x_4us_3									(*(u16*)0xFFFF8F04)
-//#define max_Knock_Retard								(*(u16*)0xFFFF8C42)
-//#define word_FFFF8BCA									(*(u16*)0xFFFF8BCA)
-//#define coolantTempScld_COPY_1							(*(u16*)0xFFFF88B0)
-//#define rpm_x125div32_B									(*(u16*)0xFFFF893A)
-
-//#define RPM_x_4_096__1									(*(u16*)0xFFFF894A)
-//#define RPM_x_4_096__2									(*(u16*)0xFFFF894C)
-//#define RPM_x_4_096__3									(*(u16*)0xFFFF894E)
 
 
 #define RPM21_6788_IGN									((Axis*)0x6788)
