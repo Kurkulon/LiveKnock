@@ -119,13 +119,13 @@ static void FeedBack_WBO2()
 	static u16 timer;
 //	static TM32 tm;
 	static u16 pi;
-	const u16 LDT = 100;
+	const u16 LDT = 200;
 	
 
 	if (veMapIndex == 15 && (wMUT1E_MAF_RESET_FLAG & (DECELERATION_FUEL_CUT|FUEL_CUT|MAP_error)) == 0)
 	{
-		u32	al = ((u32)(swapb((u32)axis_ve_LOAD)+127)>>8);
-		u32 ar = ((u32)(swapb((u32)axis_ve_RPM)+127)>>8);
+		u32	al = ((u32)(swapb((u32)axis_ve_LOAD)+128)>>8);
+		u32 ar = ((u32)(swapb((u32)axis_ve_RPM)+128)>>8);
 		u32 ind = ar + al * 19;
 
 		if (ind != pi || al >= 11 || ar >= 19)
@@ -139,8 +139,8 @@ static void FeedBack_WBO2()
 
 			if (d > AFR(18) && d < AFR(9))
 			{
-				u32 min = wMUT32_Air_To_Fuel_Ratio - 30;
-				u32 max = wMUT32_Air_To_Fuel_Ratio + 30;
+				u32 min = wMUT32_Air_To_Fuel_Ratio - 20;
+				u32 max = wMUT32_Air_To_Fuel_Ratio + 20;
 
 				if (d < min) d = min; else if (d > max) d = max;
 
@@ -157,7 +157,7 @@ static void FeedBack_WBO2()
 					d = VE16(118);
 				};
 
-				p = d;
+				fb_VE = d >> 8; //p = d;
 			};
 
 			timer = LDT;
@@ -216,29 +216,30 @@ extern "C" void LiveKnock()
 
 	if ((wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING)) == 0)
 	{
-		u32 al = ((u32)(swapb(axis_ig_LOAD)+127)>>8);
+		u32 al = ((u32)(swapb(axis_ig_LOAD)+128)>>8);
+		u32 ar = ((u32)(swapb(axis_ig_RPM)+128)>>8);
 
-		if (hiIgnMapIndex == 15 && (KNOCK_FLAG_FFFF8C34 & 0x40) && ((wMUT72_Knock_Present & 1) == 0)/* && (al-5) < 6*/)
+		if (hiIgnMapIndex == 15 && (KNOCK_FLAG_FFFF8C34 & 0x40) && ((wMUT72_Knock_Present & 1) == 0) && ar > 7 && wMUT17_TPS_ADC8bit >= TPS(11))
 		{
-			u32 ind = ((u32)(swapb(axis_ig_RPM)+127)>>8) + al*21;
+			u32 ind = ar + al*21;
 
-			u16 *p = &hiIgnMapRAM[ind];
+			u16 &p = hiIgnMapRAM[ind];
 			
 			const u32 loign = (loIgnMapData[ind]+20)*256;
 
-			u32 timing = *p;
+			u32 timing = p;
 
 			const u32 knock = wMUT26_Knock_Retard;
 
 			if (knock > 3)
 			{
-				timing -= knock;
+				timing = Sub_R4w_R5w_liml_0(timing, knock);
 
-				*p = (timing < loign) ? loign : timing;
+				p = (timing < loign) ? loign : timing;
 			}
 			else 
 			{
-				if (timing < 60*256) *p = timing + 1;
+				if (timing < 60*256) p = timing + 1;
 			};
 		};
 

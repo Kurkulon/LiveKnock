@@ -186,7 +186,7 @@ extern u16 axis_fu_LOAD;
 extern u16 axis_ve_RPM;	
 extern u16 axis_ve_LOAD;	
 extern byte ign_LOAD;	
-extern byte ign_tbl_mul;	
+extern byte fb_VE;	
 extern u32 frameCount;
 
 extern byte hiFuelMapRAM[];
@@ -220,6 +220,8 @@ struct TM32
 #define kPa2load(v) (v*2)
 
 #define rpm2mut(v) (v*4/125)
+
+#define TPS(v) ((u32)(v*255/100+0.5))
 
 #define AFR(v) ((u32)(14.7*128/v+0.5))
 #define LAMBDA(v) ((u32)(128*v+0.5))
