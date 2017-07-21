@@ -119,7 +119,7 @@ static void FeedBack_WBO2()
 	static u16 timer;
 //	static TM32 tm;
 	static u16 pi;
-	const u16 LDT = 200;
+	const u16 LDT = 100;
 	
 
 	if (veMapIndex == 15 && (wMUT1E_MAF_RESET_FLAG & (DECELERATION_FUEL_CUT|FUEL_CUT|MAP_error)) == 0)
@@ -146,7 +146,7 @@ static void FeedBack_WBO2()
 
 				u16 &p = veMapRAM[ind];
 
-				d = Div_R4_R5_R0(p * wMUT32_Air_To_Fuel_Ratio, d);
+				d = Div_R4_R5w(p * wMUT32_Air_To_Fuel_Ratio, d);
 
 				if (d < VE16(40))
 				{
@@ -187,9 +187,9 @@ extern "C" void LiveKnock()
 	{
 		__DEADloc = 0xDEAD;
 
-		hiIgnMapIndex = 0;	
+		hiIgnMapIndex = 15;	
 		hiFuelMapIndex = 0;	
-		veMapIndex = 0;	
+		veMapIndex = 15;	
 
 		fixAFR = false;
 		openLoop = true;

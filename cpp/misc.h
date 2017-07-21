@@ -102,7 +102,8 @@ struct Map3D_W
 #define Add_R4w_R5w_Lim_FFFF							((u32(*)(u16,u16))0x500)
 #define Sub_R4w_R5w_liml_0								((u32(*)(u16,u16))0xF0C)
 #define R4_Mul_R5_Div_256_round							((u32(*)(u16,u16))0x804)
-#define Div_R4_R5_R0									((u16(*)(u16,u16))0x9B0)
+#define Div_R4_R5_R0									((u32(*)(u16,u16))0x9B0)
+#define Div_R4_R5w										((u32(*)(u32,u16))0x902)
 #define Mul_R4w_R5w_Div_128_Round_Into_R0				((u32(*)(u16,u16))0x762)
 
 #define interpolate_r4_r5_r6							((u16(*)(u16,u16,u16))0xB16)
@@ -224,6 +225,8 @@ struct TM32
 #define TPS(v) ((u32)(v*255/100+0.5))
 
 #define AFR(v) ((u32)(14.7*128/v+0.5))
+#define WB02(v) ((u32)((v-7.35)*255/(22.39-7.35)+0.5))
+
 #define LAMBDA(v) ((u32)(128*v+0.5))
 
 #define OXIGEN(v) ((u32)(v/0.0195+0.5))
