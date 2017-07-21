@@ -132,7 +132,7 @@ static void FeedBack_WBO2()
 
 		if (ind != pi || al >= 11 || ar >= 19)
 		{
-			ve_timer == LDT;
+			ve_timer = LDT;
 			pi = ind;
 		}
 		else if (ve_timer == 0)
