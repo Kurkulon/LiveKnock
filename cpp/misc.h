@@ -107,7 +107,8 @@ struct Map3D_W
 #define Mul_R4w_R5w_Div_128_Round_Into_R0				((u32(*)(u16,u16))0x762)
 
 #define interpolate_r4_r5_r6							((u16(*)(u16,u16,u16))0xB16)
-#define Lim16_R4w__R5_R6								((u32(*)(u16,u16,u16))0x5A8)
+#define Lim16_R4w__R5_R6								((u32(*)(u16, u16 max, u16 min))0x5A8)
+#define Lim_R4__R5_R6									((u32(*)(u32 v, u32 max, u32 min))0x5B0)
 #define MUL_R4w_R5w_DIV_R6w_Round_R0					((u32(*)(u16,u16,u16))0x68A)
 
 #define FU03_sub_142DC									((u16(*)(void))0x142DC)
@@ -186,7 +187,8 @@ extern u16 axis_fu_RPM;
 extern u16 axis_fu_LOAD;	
 extern u16 axis_ve_RPM;	
 extern u16 axis_ve_LOAD;	
-extern byte ign_LOAD;	
+extern byte ve_index;	
+extern byte ve_timer;	
 extern byte fb_VE;	
 extern u32 frameCount;
 

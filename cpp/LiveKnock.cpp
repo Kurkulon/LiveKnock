@@ -116,10 +116,10 @@ static void FeedBack_WBO2()
 
 static void FeedBack_WBO2()
 {
-	static u16 timer;
+//	static u16 timer;
 //	static TM32 tm;
-	static u16 pi;
-	const u16 LDT = 100;
+	static byte pi;
+	const byte LDT = 200;
 	
 
 	if (veMapIndex == 15 && (wMUT1E_MAF_RESET_FLAG & (DECELERATION_FUEL_CUT|FUEL_CUT|MAP_error)) == 0)
@@ -128,12 +128,14 @@ static void FeedBack_WBO2()
 		u32 ar = ((u32)(swapb((u32)axis_ve_RPM)+128)>>8);
 		u32 ind = ar + al * 19;
 
+		ve_index = ind;
+
 		if (ind != pi || al >= 11 || ar >= 19)
 		{
-			timer == LDT;
+			ve_timer == LDT;
 			pi = ind;
 		}
-		else if (timer == 0)
+		else if (ve_timer == 0)
 		{
 			u32 d = Div_R4_R5_R0(32027, 125 + wMUT3C_Rear_O2_ADC8bit);
 
@@ -146,30 +148,21 @@ static void FeedBack_WBO2()
 
 				u16 &p = veMapRAM[ind];
 
-				d = Div_R4_R5w(p * wMUT32_Air_To_Fuel_Ratio, d);
-
-				if (d < VE16(40))
-				{
-					d = VE16(40);
-				}
-				else if (d > VE16(118))
-				{
-					d = VE16(118);
-				};
+				d = Lim_R4__R5_R6(Div_R4_R5w(p * wMUT32_Air_To_Fuel_Ratio, d), VE16(118), VE16(40));
 
 				fb_VE = d >> 8; //p = d;
 			};
 
-			timer = LDT;
+			ve_timer = LDT;
 		}
 		else
 		{
-			timer -= 1;
+			ve_timer -= 1;
 		};
 	}
 	else
 	{
-		timer = LDT;
+		ve_timer = LDT;
 	};
 }
 
@@ -239,7 +232,7 @@ extern "C" void LiveKnock()
 			}
 			else 
 			{
-				if (timing < 60*256) p = timing + 1;
+				if (timing < 65*256) p = timing + 1;
 			};
 		};
 

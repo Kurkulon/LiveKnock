@@ -14,7 +14,7 @@ _veFeedBackMul:		.RES.B      1
 
 	.ALIGN 2	
 	
-	.EXPORT		_axis_ig_RPM, _axis_ig_LOAD, _axis_fu_RPM, _axis_fu_LOAD, _axis_ve_RPM, _axis_ve_LOAD, _ign_LOAD, _fb_VE
+	.EXPORT		_axis_ig_RPM, _axis_ig_LOAD, _axis_fu_RPM, _axis_fu_LOAD, _axis_ve_RPM, _axis_ve_LOAD, _ve_index, _fb_VE, _ve_timer
 
 _axis_ig_RPM:		.RES.W      1					
 _axis_ig_LOAD:		.RES.W      1					
@@ -23,7 +23,8 @@ _axis_fu_LOAD:		.RES.W      1
 _axis_ve_RPM:		.RES.W      1					
 _axis_ve_LOAD:		.RES.W      1					
 _fb_VE				.RES.B      1					
-_ign_LOAD:			.RES.B      1					
+_ve_index:			.RES.B      1					
+_ve_timer:			.RES.B      1					
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -191,14 +192,14 @@ altMUT:
 			.DATA.L		wMUT3A_AirTemp_ADC8bit+1
 			.DATA.L		wMUT10_Coolant_Temperature_Scaled+1
 			.DATA.L		wMUT3C_Rear_O2_ADC8bit+1
-			.DATA.L		_ign_LOAD                   
+			.DATA.L		_ve_index                   
 			.DATA.L		wMUT17_TPS_ADC8bit+1
 			.DATA.L		wMUT2A_Injector_Pulse_Width_us                          
 			.DATA.L		wMUT27_Octane_Number+1
 			.DATA.L		_fb_VE
 			.DATA.L		wMUT32_Air_To_Fuel_Ratio+1
 			.DATA.L		wMUT2F_Vehicle_Speed+1  
-			.DATA.L		wMUT0C_Fuel_Trim_Low+1
+			.DATA.L		_ve_timer
 			.DATA.L		wMUT0F_Oxygen_Feedback_Trim
 			.DATA.L		wMUT13_Front_O2_ADC8bit+1
 			.DATA.L		wMUT31_Volumetric_Efficiency+1
