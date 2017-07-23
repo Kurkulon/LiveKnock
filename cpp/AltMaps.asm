@@ -239,13 +239,15 @@ hiFuelMapRAM .EQU hiFuelMapData + RAM - ROM
 
 			.align 4
 
+	.EXPORT	 _hiIgnMapData
+
 hiIgnMap:
 			.DATA.W 	3                                                  
 			.DATA.W 	0                                                  
 			.DATA.L 	_axis_ig_RPM
 			.DATA.L 	_axis_ig_LOAD
 			.DATA.W 	21
-hiIgnMapData:
+_hiIgnMapData:
             .DATA.W  H'1C00, H'1D00, H'1D00, H'1D00, H'1D00, H'2000, H'2400, H'2B00, H'3400, H'3500, H'3500, H'3500, H'3600, H'3700, H'3900, H'3A00, H'3B00, H'3B00, H'3B00, H'3B00, H'3B00
             .DATA.W  H'1D00, H'1E00, H'1E00, H'1E00, H'1E00, H'2100, H'2500, H'2C00, H'3500, H'3600, H'3600, H'3600, H'3600, H'3700, H'3900, H'3B00, H'3C00, H'3C00, H'3C00, H'3C00, H'3C00
             .DATA.W  H'1D00, H'1E00, H'1E00, H'1E00, H'1E00, H'2100, H'2500, H'2C00, H'3500, H'3600, H'3600, H'3700, H'3700, H'3700, H'3800, H'3A00, H'3D00, H'3D00, H'3D00, H'3D00, H'3C00
@@ -259,7 +261,7 @@ hiIgnMapData:
             .DATA.W   H'A00,  H'B00, H'1000, H'1200, H'1400, H'1600, H'1800, H'1A00, H'1E00, H'1E00, H'2100, H'2600, H'2600, H'2600, H'2500, H'2500, H'2800, H'2F00, H'2F00, H'2F00, H'2F00
             .DATA.W   H'A00,  H'A00,  H'D00,  H'F00, H'1100, H'1300, H'1500, H'1800, H'1800, H'1A00, H'1D00, H'2200, H'2200, H'2200, H'2100, H'2100, H'2400, H'2C00, H'2C00, H'2C00, H'2C00
 
-hiIgnMapRAM .EQU hiIgnMapData + RAM - ROM
+hiIgnMapRAM .EQU _hiIgnMapData + RAM - ROM
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

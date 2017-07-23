@@ -195,6 +195,7 @@ extern u32 frameCount;
 extern byte hiFuelMapRAM[];
 extern u16	hiIgnMapRAM[];
 extern u16	veMapRAM[];
+extern const u16 hiIgnMapData[];
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

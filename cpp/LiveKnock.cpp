@@ -122,7 +122,7 @@ static void FeedBack_WBO2()
 	const byte LDT = 200;
 	
 
-	if (veMapIndex == 15 && (wMUT1E_MAF_RESET_FLAG & (DECELERATION_FUEL_CUT|FUEL_CUT|MAP_error)) == 0)
+	if ((wMUT1E_MAF_RESET_FLAG & (DECELERATION_FUEL_CUT|FUEL_CUT|MAP_error)) == 0)
 	{
 		u32	al = ((u32)(swapb((u32)axis_ve_LOAD)+128)>>8);
 		u32 ar = ((u32)(swapb((u32)axis_ve_RPM)+128)>>8);
@@ -150,7 +150,9 @@ static void FeedBack_WBO2()
 
 				d = Lim_R4__R5_R6(Div_R4_R5w(p * wMUT32_Air_To_Fuel_Ratio, d), VE16(118), VE16(40));
 
-				fb_VE = d >> 8; //p = d;
+				fb_VE = d >> 8;
+
+				if (veMapIndex == 15) { p = d; };
 			};
 
 			ve_timer = LDT;
@@ -182,7 +184,7 @@ extern "C" void LiveKnock()
 
 		hiIgnMapIndex = 15;	
 		hiFuelMapIndex = 0;	
-		veMapIndex = 15;	
+		veMapIndex = 7;	
 
 		fixAFR = false;
 		openLoop = true;
@@ -207,6 +209,7 @@ extern "C" void LiveKnock()
 
 
 
+
 	if ((wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING)) == 0)
 	{
 		u32 al = ((u32)(swapb(axis_ig_LOAD)+128)>>8);
@@ -217,8 +220,6 @@ extern "C" void LiveKnock()
 			u32 ind = ar + al*21;
 
 			u16 &p = hiIgnMapRAM[ind];
-			
-			const u32 loign = (loIgnMapData[ind]+20)*256;
 
 			u32 timing = p;
 
@@ -226,13 +227,15 @@ extern "C" void LiveKnock()
 
 			if (knock > 3)
 			{
-				timing = Sub_R4w_R5w_liml_0(timing, knock);
+				const u32 loign = (loIgnMapData[ind]+20)*256;
+
+				timing = Sub_R4w_R5w_liml_0(timing, knock>>2);
 
 				p = (timing < loign) ? loign : timing;
 			}
 			else 
 			{
-				if (timing < 65*256) p = timing + 1;
+				if (timing < hiIgnMapData[ind]) p = timing + 1;
 			};
 		};
 
