@@ -111,6 +111,9 @@ struct Map3D_W
 #define Lim_R4__R5_R6									((u32(*)(u32 v, u32 max, u32 min))0x5B0)
 #define MUL_R4w_R5w_DIV_R6w_Round_R0					((u32(*)(u16,u16,u16))0x68A)
 
+#define R4_Complex_Into_R0_sub_898						((u16(*)(u32))0x898)
+#define Add_R4_R5_Lim_FFFFFFFF							((u32(*)(u32,u32))0x51C)
+
 #define FU03_sub_142DC									((u16(*)(void))0x142DC)
 
 #define __disable_irq									((void(*)(void))0x400)

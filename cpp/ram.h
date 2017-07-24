@@ -764,7 +764,7 @@
 #define      dword_FFFF8AA4                 							(*(u32*)0xFFFF8AA4)                                                        
 #define      word_FFFF8AAA                  							(*(u16*)0xFFFF8AAA)                                                        
 #define      word_FFFF8AB0                  							(*(u16*)0xFFFF8AB0)                                                        
-#define      null_bMUT28                    						(*(byte*)   0xFFFF8AB3)                                                     
+#define      null_bMUT28                    					       (*(byte*)0xFFFF8AB3)                                                     
 #define      wMUT31_Volumetric_Efficiency   							(*(u16*)0xFFFF8AB8)                                                        
 #define      LOAD_TRIMS_FFFF8ABA            							(*(u16*)0xFFFF8ABA)                                                        
 #define      FUEL_BEFORE_ENRICHMENT_aka_Temp1_FFFF8ABC					(*(u16*)0xFFFF8ABC)                                              

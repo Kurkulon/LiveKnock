@@ -203,8 +203,8 @@ altMUT:
 			.DATA.L		wMUT0F_Oxygen_Feedback_Trim
 			.DATA.L		wMUT13_Front_O2_ADC8bit+1
 			.DATA.L		wMUT31_Volumetric_Efficiency+1
-			.DATA.L		_axis_ve_RPM+1
-			.DATA.L		_axis_ve_LOAD+1
+			.DATA.L		wMUT6A_Knock_ADC_Processed+1
+			.DATA.L		wMUT72_Knock_Present+1
 			
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

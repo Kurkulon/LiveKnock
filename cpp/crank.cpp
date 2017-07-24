@@ -13,6 +13,8 @@
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
+#define Get_ADC_Knock				((void(*)(void))0xA92C)
+#define CRANK75_Knock_sub_24AC0		((void(*)(void))0x24AC0)
 
 //#define crankPrevICR0AH_A       (*(u32*)0xFFFF9AB8)
 //
@@ -415,18 +417,19 @@ static bool Check_PEDRL_4()
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-/*
 
 void CRANK75_Knock_sub_23F8C()
 {
-	if ((wMUTD1_BitMap2 & 0x80) == 0) // 0x80 - Enable High Oct Ign Map Lookup and other
+	const u32 r8 = 0x8000;
+
+	if ((wMUTD1_BitMap_FAA & 0x80) == 0) // 0x80 - Enable High Oct Ign Map Lookup and other
 	{
 		return;
 	};
 
 	Get_ADC_Knock();
 
-	r1 = wMUT30_Knock_Voltage;
+	u32 r1 = wMUT30_Knock_Voltage;
 
 	if (r1 > 100)
 	{
@@ -449,7 +452,7 @@ void CRANK75_Knock_sub_23F8C()
 		r1 = 255;
 	};
 
-	r2 = wMUT6A_Knock_ADC_Processed;
+	u32 r2 = wMUT6A_Knock_ADC_Processed;
 
 	wMUT6A_Knock_ADC_Processed = r1;
 
@@ -458,6 +461,8 @@ void CRANK75_Knock_sub_23F8C()
 	if ((KNOCK_FLAG_FFFF8C34 & 0x400) // 0x400 - (MUT21_RPM_x125div4 >= word_1C28(2000))&&(wMUT1C_ECU_Load >= word_1C26(55kPa))
 		&& (KNOCK_FLAG1_FFFF8C36 & 1) == 0)
 	{
+		u32 r13, r3;
+
 		if (wMUT6A_Knock_ADC_Processed >= r1)
 		{
 			r13 = wMUT6A_Knock_ADC_Processed - r1;
@@ -480,20 +485,20 @@ void CRANK75_Knock_sub_23F8C()
 		{
 			wMUT72_Knock_Present &= ~1;
 
-			wMUT6E_Knock_Dynamics = 0;
+			wMUT6E_KnockFaultCheckTimer = 0;
 		}
 		else
 		{
-			if (wMUT6E_Knock_Dynamics < 0xFFFFFFFF)
+			if (wMUT6E_KnockFaultCheckTimer < 0xFFFFFFFF)
 			{
-				wMUT6E_Knock_Dynamics += 1;
+				wMUT6E_KnockFaultCheckTimer += 1;
 			};
 
-			if (wMUT6E_Knock_Dynamics > word_1C30)
+			if (wMUT6E_KnockFaultCheckTimer > word_1C30)
 			{
 				wMUT72_Knock_Present |= 1;
 
-				wMUT6E_Knock_Dynamics = word_1C30;
+				wMUT6E_KnockFaultCheckTimer = word_1C30;
 			};
 		};
 
@@ -502,7 +507,7 @@ void CRANK75_Knock_sub_23F8C()
 	} // if (KNOCK_FLAG_FFFF8C34 & 0x400)
 	else
 	{
-		wMUT6E_Knock_Dynamics = 0;
+		wMUT6E_KnockFaultCheckTimer = 0;
 
 		wMUT6D_Knock_Change = 0;
 	};
@@ -516,22 +521,22 @@ void CRANK75_Knock_sub_23F8C()
 
 	if ((KNOCK_FLAG_FFFF8C34 & 0x40) == 0) // 0x40 - enabled knock retard; IG04_Check_17074()
 	{
-		wMUT26_Knock_Sum = 0;
+		wMUT26_Knock_Retard = 0;
 
 		CRANK75_Knock_sub_24AC0();
 
 		r1 = 0;
 	}
-	else if ((wMUT72_Knock_Present & 1) // 1 - ? Knock sensor fault; (wMUT6E_Knock_Dynamics >= word_1C30)
+	else if (wMUT72_Knock_Present & 1) // 1 - ? Knock sensor fault; (wMUT6E_Knock_Dynamics >= word_1C30)
 	{
 
 		if (KNOCK_FLAG_FFFF8C34 & 0x80)
 		{
-			wMUT26_Knock_Retard = t1_knock_control_ign_retard_faulty_sensor_17E8
+			wMUT26_Knock_Retard = t1_knock_control_ign_retard_faulty_sensor_17E8;
 		}
 		else
 		{
-			wMUT26_Knock_Retard = t1_knock_control_ign_retard_faulty_sensor_17EA
+			wMUT26_Knock_Retard = t1_knock_control_ign_retard_faulty_sensor_17EA;
 		};
 
 		CRANK75_Knock_sub_24AC0();
@@ -546,11 +551,11 @@ void CRANK75_Knock_sub_23F8C()
 		{
 			if (KNOCK_FLAG_FFFF8C34 & 0x80)
 			{
-				r1 = t1_knock_control_?_17CC;
+				r1 = t1_knock_control__17CC;
 			}
 			else
 			{
-				r1 = t1_knock_control_?_17CE;
+				r1 = t1_knock_control__17CE;
 			};
 
 			r1 = 1 + MUL_R4w_R5w_DIV_R6w_Round_R0(KNOCK_BASE_MINUS_ADC_FFFF8C40, r1, KNOCK_BASE_FFFF8C3A << 3);
@@ -656,13 +661,15 @@ void CRANK75_Knock_sub_23F8C()
 
 		max_Retard = max_Knock_Retard;
 
+		u32 r13;
+
 		if (KNOCK_FLAG_FFFF8C34 & 0x80)
 		{
-			r13 = t1_knock_control_?_17D0;
+			r13 = t1_knock_control__17D0;
 		}
 		else
 		{
-			r13 = t1_knock_control_?_17D2;
+			r13 = t1_knock_control__17D2;
 		};
 
 		if (r1 > r13)
@@ -714,7 +721,7 @@ void CRANK75_Knock_sub_23F8C()
 	}
 	else 
 	{
-		if ((KNOCK_BASE_MINUS_ADC_FFFF8C40 != 0)
+		if (KNOCK_BASE_MINUS_ADC_FFFF8C40 != 0)
 		{
 			r2 = 0x100;
 		}
@@ -722,7 +729,7 @@ void CRANK75_Knock_sub_23F8C()
 		{
 			r2 = 0x10;
 		}
-		else if ((KNOCK_VAR2_FFFF8C3E >> 8) != 0) && ((KNOCK_VAR2_FFFF8C3E >> 8) * t1_knock_multiplier_1822 <= (wMUT6A_Knock_ADC_Processed << 3)))
+		else if ((KNOCK_VAR2_FFFF8C3E >> 8) != 0 && ((KNOCK_VAR2_FFFF8C3E >> 8) * t1_knock_multiplier_1822 <= (wMUT6A_Knock_ADC_Processed << 3)))
 		{
 			r2 = 0x100;
 		};
@@ -805,4 +812,4 @@ void CRANK75_Knock_sub_23F8C()
 	};
 
 }
-*/
+
