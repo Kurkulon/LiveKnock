@@ -4,6 +4,8 @@
 
 #include "ram.h"
 #include "misc.h"
+#include "constbyte.h"
+#include "constword.h"
 
 
 static void AA05_IDLE_sub_192FC();
@@ -11,29 +13,29 @@ static void AA05_sub_1945C();
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#define byte_102E							(*(const byte*)0x102E)
+//#define byte_102E							(*(const byte*)0x102E)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#define word_19E6							(*(const u16*)0x19E6)
-#define word_18C0							(*(const u16*)0x18C0)
-#define word_18C2							(*(const u16*)0x18C2)
-#define word_18C4							(*(const u16*)0x18C4)
-#define Desired_Idle_RPM_with_AC_on_18BE	(*(const u16*)0x18BE)
-#define word_1A20							(*(const u16*)0x1A20)
-#define word_1A22							(*(const u16*)0x1A22)
-#define word_1A24							(*(const u16*)0x1A24)
-#define word_1A26							(*(const u16*)0x1A26)
+//#define word_19E6							(*(const u16*)0x19E6)
+//#define word_18C0							(*(const u16*)0x18C0)
+//#define word_18C2							(*(const u16*)0x18C2)
+//#define word_18C4							(*(const u16*)0x18C4)
+//#define Desired_Idle_RPM_with_AC_on_18BE	(*(const u16*)0x18BE)
+//#define word_1A20							(*(const u16*)0x1A20)
+//#define word_1A22							(*(const u16*)0x1A22)
+//#define word_1A24							(*(const u16*)0x1A24)
+//#define word_1A26							(*(const u16*)0x1A26)
 
 #define CEL8_6DA0							(*(const u16*)0x6DA0)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#define SPEED_FLAGS						(*(u16*)0xFFFF8A0A)
-#define word_FFFF8CBC					(*(u16*)0xFFFF8CBC)
-#define word_FFFF8CBE					(*(u16*)0xFFFF8CBE)
-#define word_FFFF86C2					(*(u16*)0xFFFF86C2)
-#define u16_FLAGS_FFFF8C96				(*(u16*)0xFFFF8C96)
+//#define SPEED_FLAGS						(*(u16*)0xFFFF8A0A)
+//#define word_FFFF8CBC					(*(u16*)0xFFFF8CBC)
+//#define word_FFFF8CBE					(*(u16*)0xFFFF8CBE)
+//#define word_FFFF86C2					(*(u16*)0xFFFF86C2)
+//#define u16_FLAGS_FFFF8C96				(*(u16*)0xFFFF8C96)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

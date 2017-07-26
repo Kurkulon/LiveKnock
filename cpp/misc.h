@@ -98,6 +98,7 @@ struct Map3D_W
 
 #define Lim_R4_max_FF									((u32(*)(u16))0x590)
 #define sub_21E14										((u16(*)(u16))0x21E14)
+#define Trunc_R4_byte_R0								((u16(*)(u32))0x864)
 
 #define Add_R4w_R5w_Lim_FFFF							((u32(*)(u16,u16))0x500)
 #define Sub_R4w_R5w_liml_0								((u32(*)(u16,u16))0xF0C)
@@ -114,6 +115,8 @@ struct Map3D_W
 #define R4_Complex_Into_R0_sub_898						((u16(*)(u32))0x898)
 #define Add_R4_R5_Lim_FFFFFFFF							((u32(*)(u32,u32))0x51C)
 
+
+
 #define FU03_sub_142DC									((u16(*)(void))0x142DC)
 
 #define __disable_irq									((void(*)(void))0x400)
@@ -125,6 +128,7 @@ struct Map3D_W
 
 #define sub_21E84										((bool(*)(void))0x21E84)
 #define BC06_sub_1E2D0									((void(*)(void))0x1E2D0)
+#define PEDR_LO_Check_sub_A790							((bool(*)(void))0xA790)
 	
 
 
@@ -242,6 +246,9 @@ struct TM32
 
 #define SET(v, m) (v |= m)
 #define CLR(v, m) (v &= ~m)
+
+#define TRG(f, m, v, l, h) { if (f & m) { if (v <= l) { CLR(f, m);	}; } else {	if (v > h) { SET(f, m);	};};}
+
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

@@ -10,6 +10,7 @@
 #undef F500_Init_Load_ECU_Info_And_BitMap_Flags
 
 #define sub_A374	((void(*)(void))0xA374)
+#define F500_Get_All_ADC	((void(*)(void))0xA7F0)
 
 
 void F500_root_sub();
@@ -50,6 +51,13 @@ void F500_sub_10F08();
 void F500_Countdown_Timers_sub_10F5C();
 void F500_Battery_Calcs_sub_1101A();
 
+
+#define CEL8_685C							((Axis*)0x685C)
+#define CEL9_6876							((Axis*)0x6876)
+#define CEL10_68B2							((Axis*)0x68B2)
+#define CEL12_68D0							((Axis*)0x68D0)
+#define CEL8_6D98							((Axis*)0x6D98)
+#define CEL9_75BA							((Axis*)0x75BA)
 
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -173,20 +181,9 @@ void F500_sub_F834()
 		CLR(r1, 8);
 	};
 
-	if (word_FFFF8D60 & r9)
-	{
-		if (wMUT12_Coolant_Temperature_Min_81 <= word_1A86)
-		{
-			CLR(word_FFFF8D60, 0x100);
-		};
-	}
-	else
-	{
-		if (wMUT12_Coolant_Temperature_Min_81 > word_1A88)
-		{
-			SET(word_FFFF8D60, 0x100);
-		};
-	};
+
+	TRG(word_FFFF8D60, r9, wMUT12_Coolant_Temperature_Min_81, word_1A86, word_1A88);
+
 
 	if ((wMUT1E_MAF_RESET_FLAG & (CRANKING|STALL)) || cranking_end_timer_up < word_18B8 || (word_FFFF8D60 & 0x100))
 	{
@@ -221,20 +218,9 @@ void F500_sub_F834()
 
 		u32 r13 = (byte)(fix8_FFFF8DCE>>8);
 
-		if (wMUT19_Startup_Check_Bits & 0x2000)
-		{
-			if (r13 <= word_2110)
-			{
-				CLR(wMUT19_Startup_Check_Bits, 0x2000);
-			};
-		}
-		else
-		{
-			if (r13 > word_210E)
-			{
-				SET(wMUT19_Startup_Check_Bits, 0x2000);
-			};
-		};
+
+		TRG(wMUT19_Startup_Check_Bits, 0x2000, r13, word_2110, word_210E);
+
 
 		if ((r1 & 0x11) == 0x11)
 		{
@@ -299,15 +285,70 @@ void F500_sub_F834()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-void F500_sub_FBB4()
+u16 F500_sub_FBB4(u32 v)
 {
+	const u32 r2 = 0x2000;
 
+	if (wMUT15_Barometric_Pressure > word_19F0)
+	{
+		timer_FFFF8784 = word_19FC;
+	};
+
+	u32 r13 = Trunc_R4_byte_R0(fix8_FFFF8DCE);
+
+	TRG(wMUT19_Startup_Check_Bits, 0x2000, r13, word_2110, word_210E);
+
+	if ((v & 0x11) == 0x11)
+	{
+		if (wMUT11_Intake_Air_Temperature_Scaled > word_19F8 
+			|| (IATONOFF_105E != 0 && (wMUT19_Startup_Check_Bits & r2))
+			|| timer_FFFF8784 == 0
+			|| wMUT10_Coolant_Temperature_Scaled < word_19FA
+			|| cranking_end_timer_up < (word_19F4 * 20))
+		{
+			v &= ~1;
+		};
+	};
+
+	return v;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void F500_sub_FD34()
 {
+	timer_FFFF8576 = timer_down_TXFLAG3_FFFF8574;
+
+	if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 2)
+	{
+		timer_down_TXFLAG3_FFFF8574 = t1_unk_18BC;
+	};
+
+	if (timer_down_TXFLAG3_FFFF8574 == 0)
+	{
+		timer_up_FFFF852C = 0;
+	};
+
+	if (PEDR_LO_Check_sub_A790())
+	{
+		timer_FFFF8582 = 280;
+	};
+
+	if (timer_up_FFFF852C > 4)
+	{
+		SET(SPEED_FLAGS, 0x100);
+	};
+
+	if (timer_down_TXFLAG3_FFFF8574 != 0)
+	{
+		SET(word_FFFF93D2, 0x400);
+	}
+	else
+	{
+		CLR(word_FFFF93D2, 0x400);
+		SET(word_FFFF8A10, 0x80);
+	};
+
 
 }
 
@@ -315,22 +356,69 @@ void F500_sub_FD34()
 
 void F500_sub_FDB6()
 {
-
+	if (timer_down_TXFLAG3_FFFF8574 != 0)
+	{
+		if ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_COPY_FFFF888A ^ RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888) & RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_COPY_FFFF888A & 0x40)
+		{
+			SET(BOOSTCHECK2_FFFF8A0E, 0x80);
+		};
+	}
+	else
+	{
+		CLR(BOOSTCHECK2_FFFF8A0E, 0x80);
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void F500_sub_FDF4()
 {
+	F500_Get_All_ADC();
 
+	F500_Coolant_Temp_Threshold_Tests();
+
+	F500_Update_IAT_Sensor();
+	F500_sub_10188();
+	F500_sub_10220();
+	F500_TPS_Load_RPM_Calcs();
+	F500_TPS_sub_103DA();
+	F500_sub_1044C();
+
+	if ((bMUTD2_FBA_MAF_MAP_FLAG & 0x40) || (bMUTD4_BitMap5_FDA_Store_FFFF89DA & 0x800))
+	{
+		F500_Battery_Calcs_sub_1101A();
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void F500_Coolant_Temp_Threshold_Tests()
 {
+	if (wMUT07_CoolTemp_ADC8bit < word_1BFE || wMUT07_CoolTemp_ADC8bit > word_1BFC)
+	{
+		SET(wMUT71_Sensor_Error, 1);
+	}
+	else
+	{
+		CLR(wMUT71_Sensor_Error, 1);
+	};
 
-}
+	F500_Coolant_Calc1_sub_FF2C();
+
+	F500_Coolant_Calibration_Calc();
+
+	Table_Lookup_Axis(CEL8_685C);
+	Table_Lookup_Axis(CEL9_6876);
+	Table_Lookup_Axis(CEL10_68B2);
+	Table_Lookup_Axis(CEL12_68D0);
+	Table_Lookup_Axis(CEL8_6D98);
+	Table_Lookup_Axis(CEL9_75BA);
+
+	if (timer_down_TXFLAG3_FFFF8574 == 0 && (SPEED_FLAGS & 0x400))
+	{
+		coolantTempScld_COPY_2 = wMUT10_Coolant_Temperature_Scaled;
+	};
+}	
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
