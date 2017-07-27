@@ -613,7 +613,7 @@
 #define      word_FFFF8940                  							(*(u16*)0xFFFF8940)                                                        
 #define      MUT20_RPM_Idle_x125div16       							(*(u16*)0xFFFF8942)                                                        
 #define      MUT21_RPM_x125div4             							(*(u16*)0xFFFF8944)                                                        
-#define      word_FFFF8946                  							(*(u16*)0xFFFF8946)                                                        
+#define      prev_RPM_x125div4                  							(*(u16*)0xFFFF8946)                                                        
 #define      RPM_DELTA_FFFF8948             							(*(u16*)0xFFFF8948)                                                        
 #define      RPM_x_4_096__1                 							(*(u16*)0xFFFF894A)                                                        
 #define      RPM_x_4_096__2                 							(*(u16*)0xFFFF894C)                                                        

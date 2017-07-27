@@ -1022,7 +1022,7 @@
 #define      word_222E												(*(const u16*)0x222E)
 #define      word_2230												(*(const u16*)0x2230)
 #define      t1_unk_some_RPM_2232									(*(const u16*)0x2232)
-#define      word_223C												(*(const u16*)0x223C)
+#define      word_223C												(*(const u16*)0x223C) // 18
 #define      word_223E												(*(const u16*)0x223E)
 #define      word_2248												(*(const u16*)0x2248)
 #define      word_2258												(*(const u16*)0x2258)

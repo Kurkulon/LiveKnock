@@ -15,6 +15,7 @@ _veFeedBackMul:		.RES.B      1
 	.ALIGN 2	
 	
 	.EXPORT		_axis_ig_RPM, _axis_ig_LOAD, _axis_fu_RPM, _axis_fu_LOAD, _axis_ve_RPM, _axis_ve_LOAD, _ve_index, _fb_VE, _ve_timer
+	.EXPORT		_forcedIdleRPM
 
 _axis_ig_RPM:		.RES.W      1					
 _axis_ig_LOAD:		.RES.W      1					
@@ -25,6 +26,7 @@ _axis_ve_LOAD:		.RES.W      1
 _fb_VE				.RES.B      1					
 _ve_index:			.RES.B      1					
 _ve_timer:			.RES.B      1					
+_forcedIdleRPM:		.RES.B      1					
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -50,13 +52,13 @@ Query_byte_2D_3D_Table							.EQU	H'DE0
 LOWOCTIGNEGR_7AC8								.EQU	H'7AC8
 ZERO_8_IGNITION_FLAGS							.EQU	H'FFFF8A0C
 HIOCTIGNEGR_38CA								.EQU	H'38CA
-Add_R4w_R5w_Lim_FFFF							.EQU	H'500
+Add_Lim_FFFF							.EQU	H'500
 egrLowOctIgn									.EQU	H'FFFF8BC0
 egrHighOctIgn									.EQU	H'FFFF8BC2
 interpolate_r4_r5_r6							.EQU	H'B16
 octanEgrIgnTiming								.EQU	H'FFFF8BC8
-Sub_R4w_R5w_liml_0								.EQU	H'F0C
-Lim_R4_max_FF									.EQU	H'590
+Sub_Lim_0								.EQU	H'F0C
+Lim_FF									.EQU	H'590
 ignition_FFFF8BC4								.EQU	H'FFFF8BC4
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -124,6 +126,14 @@ _frameCount:		.RES.L      1					;	.EQU H'FFFF8462
 			jmp   	@r0                                                             
 			nop   	                                                        
 	
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	.IMPORT	_Hook_ForcedIdleRPM
+
+	.SECTION C_19454, CODE, LOCATE=H'19454
+	
+		.DATA.L		_Hook_ForcedIdleRPM                                    
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

@@ -96,24 +96,34 @@ struct Map3D_W
 #define GET_LOC_DIM_sub_DF6								((u32(*)(void*))0xDF6)
 
 
-#define Lim_R4_max_FF									((u32(*)(u16))0x590)
+#define Lim_FF											((u32(*)(u16))0x590)
+#define Lim_FFFF										((u32(*)(u32))0x598)
 #define sub_21E14										((u16(*)(u16))0x21E14)
-#define Trunc_R4_byte_R0								((u16(*)(u32))0x864)
+#define SHLR8											((byte(*)(u32))0x864)
 
-#define Add_R4w_R5w_Lim_FFFF							((u32(*)(u16,u16))0x500)
-#define Sub_R4w_R5w_liml_0								((u32(*)(u16,u16))0xF0C)
-#define R4_Mul_R5_Div_256_round							((u32(*)(u16,u16))0x804)
-#define Div_R4_R5_R0									((u32(*)(u16,u16))0x9B0)
-#define Div_R4_R5w										((u32(*)(u32,u16))0x902)
-#define Mul_R4w_R5w_Div_128_Round_Into_R0				((u32(*)(u16,u16))0x762)
+#define Add_Lim_FFFF									((u32(*)(u16,u16))0x500)
+#define Add_Lim_FFFFFFFF								((u32(*)(u32,u32))0x51C)
+#define Sub_Lim_0										((u32(*)(u16,u16))0xF0C)
+#define Mul_Fix8_R										((u32(*)(u16,u16))0x804)
+#define Div_WW											((u32(*)(u16,u16))0x9B0)
+#define Div_DW											((u32(*)(u32,u16))0x902)
+#define DIV_DW_R										((u32(*)(u32,u16))0x9F2)
+#define Mul_Fix7_R										((u32(*)(u16,u16))0x762)
+#define Mul_DW_Div										((u32(*)(u32,u16,u16))0x5E8)
+#define Mul32_Fix8										((u32(*)(u32,u16))0x7E6)
+#define Mul16											((u32(*)(u16,u16))0xEEE)
+#define Mul_Lim_FFFF									((u32(*)(u16,u16))0xED8)
+
+#define mem_incr										((void(*)(void*,void*))0x562)
+#define mem_decr										((void(*)(void*,void*))0x53E)
+#define memsetz											((void(*)(void*,void*))0x52C)
 
 #define interpolate_r4_r5_r6							((u16(*)(u16,u16,u16))0xB16)
-#define Lim16_R4w__R5_R6								((u32(*)(u16, u16 max, u16 min))0x5A8)
-#define Lim_R4__R5_R6									((u32(*)(u32 v, u32 max, u32 min))0x5B0)
-#define MUL_R4w_R5w_DIV_R6w_Round_R0					((u32(*)(u16,u16,u16))0x68A)
+#define Lim16											((u32(*)(u16, u16 max, u16 min))0x5A8)
+#define Lim32											((u32(*)(u32 v, u32 max, u32 min))0x5B0)
+#define Mul_Div_R										((u32(*)(u16,u16,u16))0x68A)
 
-#define R4_Complex_Into_R0_sub_898						((u16(*)(u32))0x898)
-#define Add_R4_R5_Lim_FFFFFFFF							((u32(*)(u32,u32))0x51C)
+#define Div_65536_R										((u16(*)(u32))0x898)
 
 
 
@@ -140,6 +150,17 @@ struct Map3D_W
 #define table_2D_39D2									((Map3D_B*)0x39D2)
 
 
+#define RPM5_6830										((Axis*)0x6830)
+#define VOLT7_6844_Throttle								((Axis*)0x6844)
+
+#define TEMPCOMP_3BEE									((Map3D_B*)0x3BEE)
+#define LIMPHOME_33F4									((Map3D_B*)0x33F4)
+
+
+
+
+
+
 extern Map3D_W* HighIgn_7C48[8];		//#define HighIgn_7C48	((void*)0x7C48)
 
 #define RPM14_6746										((Axis*)0x6746)
@@ -161,6 +182,7 @@ extern Map3D_W* veMapArray[8];
 
 #define sub_21BC4										((u16(*)(u16))0x21BC4)
 #define sub_21E4C										((u16(*)(u16))0x21E4C)
+#define sub_21CA8										((u16(*)(u16))0x21CA8)
 
 #define Periphery_FAA									(*(const u16*)0xFAA)
 
@@ -197,6 +219,7 @@ extern u16 axis_ve_LOAD;
 extern byte ve_index;	
 extern byte ve_timer;	
 extern byte fb_VE;	
+extern byte forcedIdleRPM;	
 extern u32 frameCount;
 
 extern byte hiFuelMapRAM[];

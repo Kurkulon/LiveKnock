@@ -8,8 +8,7 @@
 #include "constword.h"
 
 
-static void AA05_IDLE_sub_192FC();
-static void AA05_sub_1945C();
+
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -46,60 +45,193 @@ static void AA05_sub_1945C();
 #define CEL8_6914							((Axis*)0x6914)
 #define CEL8_79AE							((Axis*)0x79AE)
 
+#define CEL8_6946_IDLE						((Axis*)0x6946)
+#define RPM27_6960_IDLE						((Axis*)0x6960)
+
+
+
+
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #define IDLERPMDRV_7A08						((Map3D_B**)0x7A08)
 #define IDLERPMNEYT_7A28					((Map3D_B**)0x7A28)
 
-
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #define IDLERPMNS_485E						((Map3D_B*)0x485E)
+#define IDLESTEPLOOKtab_476C				((Map3D_B*)0x476C)
 
-#define KNOCKLOAD_3A6E						((Map3D_B*)0x3A6E)
-#define knockLoad_OctaneUpdate				((Map3D_B*)0x3A80)
-#define IGNCOILCHGTIME1_3A3E				((Map3D_B*)0x3A3E)
-#define IGNCOILCHGTIME2_3A4E				((Map3D_B*)0x3A4E)
-#define IGNCOILCHGTIME3_3A5E				((Map3D_B*)0x3A5E)
-#define unk023_59E4							((Map3D_B*)0x59E4)
-#define unk028_5FFE							((Map3D_B*)0x5FFE)
-#define unk118_59CE							((Map3D_B*)0x59CE)
-#define unk033_589E							((Map3D_B*)0x589E)
-#define unk032_588E							((Map3D_B*)0x588E)
-#define unk115_58AE							((Map3D_B*)0x58AE)
-#define unk116_58B8							((Map3D_B*)0x58B8)
-#define LOWTRMTEMPCOOL_3A30					((Map3D_B*)0x3A30)
-#define AFRAIRTEMP1_630A					((Map3D_B*)0x630A)
-#define IGNTRMAIRTEMPLOAD_3A1E				((Map3D_B*)0x3A1E)
-#define IGNTRMAIRTEMP_3A04					((Map3D_B*)0x3A04)
+//#define KNOCKLOAD_3A6E						((Map3D_B*)0x3A6E)
+//#define knockLoad_OctaneUpdate				((Map3D_B*)0x3A80)
+//#define IGNCOILCHGTIME1_3A3E				((Map3D_B*)0x3A3E)
+//#define IGNCOILCHGTIME2_3A4E				((Map3D_B*)0x3A4E)
+//#define IGNCOILCHGTIME3_3A5E				((Map3D_B*)0x3A5E)
+//#define unk023_59E4							((Map3D_B*)0x59E4)
+//#define unk028_5FFE							((Map3D_B*)0x5FFE)
+//#define unk118_59CE							((Map3D_B*)0x59CE)
+//#define unk033_589E							((Map3D_B*)0x589E)
+//#define unk032_588E							((Map3D_B*)0x588E)
+//#define unk115_58AE							((Map3D_B*)0x58AE)
+//#define unk116_58B8							((Map3D_B*)0x58B8)
+//#define LOWTRMTEMPCOOL_3A30					((Map3D_B*)0x3A30)
+//#define AFRAIRTEMP1_630A					((Map3D_B*)0x630A)
+//#define IGNTRMAIRTEMPLOAD_3A1E				((Map3D_B*)0x3A1E)
+//#define IGNTRMAIRTEMP_3A04					((Map3D_B*)0x3A04)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 #define sub_21ECC							((u16(*)(u16))0x21ECC)
+#define sub_21EF8							((u16(*)(void))0x21EF8)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-/*
-static void F500_sub_10C6E()
+
+static void SysInit_NVRAM_18F80();
+static void SysInit_sub_19014();
+extern "C" void AA05_root_sub_19096();
+static void AA05_sub_19188();
+static void AA05_sub_19260();
+static void AA05_sub_1929C();
+static void AA05_sub_192CA();
+static void AA05_IDLE_sub_192FC();
+static void AA05_sub_1945C();
+static void AA05_sub_195A2();
+static void AA05_sub_19804();
+static void AA05_sub_1997C();
+static void AA05_GENERATOR_CHARGING_sub_19A2C();
+static void AA05_sub_19B98();
+static void AA05_sub_19E10();
+static void AA05_Init_sub_19E2A();
+static u16 AA05_IDLESTEPLOOKtab_sub_19E5A(u16);
+static void AA05_sub_19E8C();
+static void AA05_sub_19EEC();
+static void AA05_sub_19F0E();
+static void AA05_sub_19F22();
+static void AA05_sub_1A068();
+static void AA05_sub_1A0BA();
+static void AA05_sub_1A0E8();
+static void AA05_sub_1A11C();
+static void AA05_sub_1A304();
+static void AA05_sub_1A3F8();
+static void AA05_sub_1A448();
+static void AA05_sub_1A462();
+static void AA05_sub_1A476();
+static void AA05_sub_1A4A6();
+static void AA05_sub_1A4F2();
+static void AA05_sub_1A58E();
+static void AA05_sub_1A5A8();
+static void AA05_sub_1A74E();
+static void AA05_sub_1A7E0();
+static void AA05_sub_1A8CA();
+static void AA05_sub_1A99C();
+static void AA05_sub_1A9D0();
+static void AA05_sub_1AAB4();
+static void AA05_sub_1AB00();
+static void AA05_sub_1AB72();
+static void AA05_sub_1ABA4();
+static void AA05_sub_1ABEC();
+static void AA05_Set_MUT22_0x04();
+static void AA05_sub_1AD34();
+static void AA05_sub_1ADF4();
+static void AA05_sub_1AE26();
+static void AA05_sub_1AE76();
+static void AA05_sub_1AE90();
+static void AA05_sub_1AEC6();
+static void AA05_sub_1AF30();
+static void AA05_sub_1B178();
+static void AA05_sub_1B196();
+static void AA05_sub_1B260();
+static void AA05_sub_1B282();
+static void AA05_sub_1B470();
+static void AA05_sub_1B4C2();
+static void AA05_sub_1B588();
+static void AA05_sub_1B652();
+static void AA05_sub_1B67E();
+static void AA05_sub_1B7C0();
+static void AA05_sub_1B7EA();
+static void AA05_sub_1B81C();
+static void AA05_sub_1B876();
+static void AA05_sub_1B89C();
+static void AA05_Return_0_1();
+static void AA05_sub_1B8CA();
+static void AA05_sub_1B8F2();
+static void AA05_sub_1B934();
+static void AA05_sub_1BA2C();
+static void AA05_sub_1BAC6();
+static void AA05_sub_1BAFE();
+static void AA05_sub_1BB1A();
+static void AA05_sub_1BB96();
+static void AA05_sub_1BC6E();
+static void AA05_sub_1BD34();
+static void AA05_sub_1BD6C();
+static void AA05_sub_1BDA0();
+static void AA05_sub_1BDC6();
+static void AA05_sub_1BE74();
+
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void SysInit_NVRAM_18F80()
 {
-	if ((wMUT1E_MAF_RESET_FLAG & STALL) == 0)
-	{
-		Table_Lookup_Axis(BAR5_6D66);
 
-		u32 r1 = Table_Lookup_byte_2D_3D(AFRRPM_4C1A);
-
-		u32 r2 = wMUT31_Volumetric_Efficiency + word_1524;
-
-		Mul_R4_R5w_Div_R6w_R0(Mul_R4_R5w_div256__R0(MUT21_RPM_x125div4 * word_223E * 1067, r2), wMUT1C_ECU_Load * r1, 26240);
-
-		
-	}
-	else
-	{
-
-	};
 }
-*/
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void SysInit_sub_19014()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void AA05_root_sub_19096()
+{
+	AA05_sub_19188();
+	AA05_sub_1A7E0();
+	AA05_sub_1AD34();
+
+	if (sub_21EF8() != 0 && (wMUT22 & 0xB0) == 0)
+	{
+		word_FFFF8CA8 = AA05_IDLESTEPLOOKtab_sub_19E5A(word_FFFF8CAA = wMUT9E);
+		CLR(wMUT22, 0x3F);
+		CLR(wMUT23, 0xB5);
+	};
+
+	AA05_sub_1BD6C();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_19188()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_19260()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1929C()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_192CA()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 static void AA05_IDLE_sub_192FC()
 {
 	u16 r1;
@@ -167,7 +299,7 @@ static void AA05_IDLE_sub_192FC()
 		r1 = word_FFFF8CBE;
 	};
 
-	wMUT24_Target_Idle_RPM = sub_21ECC(Lim_R4_max_FF(r1));
+	wMUT24_Target_Idle_RPM = sub_21ECC(Lim_FF(r1));
 
 
 }
@@ -206,12 +338,12 @@ static void AA05_sub_1945C()
 		{		
 			if (byte_102E == 2 && (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 1))
 			{
-				r1 = word_18C2 + MUL_R4w_R5w_DIV_R6w_Round_R0(word_FFFF86C2, word_1A22, word_1A24 * 80);
+				r1 = word_18C2 + Mul_Div_R(word_FFFF86C2, word_1A22, word_1A24 * 80);
 			};
 		}
 		else
 		{
-			r1 = MUL_R4w_R5w_DIV_R6w_Round_R0(word_FFFF86C2, word_1A22, word_1A24 * 80);
+			r1 = Mul_Div_R(word_FFFF86C2, word_1A22, word_1A24 * 80);
 
 			u16 r2 = CEL8_6DA0 - 1;
 
@@ -220,7 +352,7 @@ static void AA05_sub_1945C()
 			r1 += p->m2d.data[r2];
 		};
 
-		word_FFFF8CBE = Lim_R4_max_FF(r1);
+		word_FFFF8CBE = Lim_FF(r1);
 	}
 	else
 	{
@@ -230,3 +362,513 @@ static void AA05_sub_1945C()
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_195A2()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_19804()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1997C()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_GENERATOR_CHARGING_sub_19A2C()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_19B98()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_19E10()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_Init_sub_19E2A()
+{
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static u16 AA05_IDLESTEPLOOKtab_sub_19E5A(u16 v)
+{
+	Table_Lookup_Axis(CEL8_6946_IDLE);
+
+	wMUTB4_lookup_value = v;
+
+	Table_Lookup_Axis(RPM27_6960_IDLE);
+
+	return Table_Lookup_byte_2D_3D(IDLESTEPLOOKtab_476C);
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_19E8C()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_19EEC()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_19F0E()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_19F22()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1A068()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1A0BA()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1A0E8()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1A11C()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1A304()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1A3F8()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1A448()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1A462()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1A476()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1A4A6()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1A4F2()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1A58E()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1A5A8()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1A74E()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1A7E0()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1A8CA()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1A99C()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1A9D0()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1AAB4()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1AB00()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1AB72()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1ABA4()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1ABEC()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_Set_MUT22_0x04()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1AD34()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1ADF4()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1AE26()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1AE76()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1AE90()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1AEC6()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1AF30()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1B178()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1B196()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1B260()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1B282()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1B470()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1B4C2()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1B588()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1B652()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1B67E()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1B7C0()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1B7EA()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1B81C()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1B876()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1B89C()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_Return_0_1()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1B8CA()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1B8F2()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1B934()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1BA2C()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1BAC6()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1BAFE()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1BB1A()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1BB96()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1BC6E()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1BD34()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1BD6C()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1BDA0()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1BDC6()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void AA05_sub_1BE74()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+

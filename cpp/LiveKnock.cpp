@@ -74,7 +74,7 @@ static void FeedBack_WBO2()
 
 				u32 ve = *p;
 
-				i32 d = Div_R4_R5_R0(32027, 125 + wMUT3C_Rear_O2_ADC8bit);
+				i32 d = Div_WW(32027, 125 + wMUT3C_Rear_O2_ADC8bit);
 
 				if (d > AFR(18) && d < AFR(9))
 				{
@@ -137,7 +137,7 @@ static void FeedBack_WBO2()
 		}
 		else if (ve_timer == 0)
 		{
-			u32 d = Div_R4_R5_R0(32027, 125 + wMUT3C_Rear_O2_ADC8bit);
+			u32 d = Div_WW(32027, 125 + wMUT3C_Rear_O2_ADC8bit);
 
 			if (d > AFR(18) && d < AFR(9))
 			{
@@ -148,7 +148,7 @@ static void FeedBack_WBO2()
 
 				u16 &p = veMapRAM[ind];
 
-				d = Lim_R4__R5_R6(Div_R4_R5w(p * wMUT32_Air_To_Fuel_Ratio, d), VE16(118), VE16(40));
+				d = Lim32(Div_DW(p * wMUT32_Air_To_Fuel_Ratio, d), VE16(118), VE16(40));
 
 				fb_VE = d >> 8;
 
@@ -188,6 +188,7 @@ extern "C" void LiveKnock()
 
 		fixAFR = false;
 		openLoop = true;
+		forcedIdleRPM = 0;
 //		veFeedBackMul = 5;
 	};
 
@@ -229,7 +230,7 @@ extern "C" void LiveKnock()
 			{
 				const u32 loign = (loIgnMapData[ind]+20)*256;
 
-				timing = Sub_R4w_R5w_liml_0(timing, knock>>2);
+				timing = Sub_Lim_0(timing, knock>>2);
 
 				p = (timing < loign) ? loign : timing;
 			}

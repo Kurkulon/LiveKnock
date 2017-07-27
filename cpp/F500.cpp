@@ -9,8 +9,9 @@
 
 #undef F500_Init_Load_ECU_Info_And_BitMap_Flags
 
-#define sub_A374	((void(*)(void))0xA374)
+#define sub_A374			((void(*)(void))0xA374)
 #define F500_Get_All_ADC	((void(*)(void))0xA7F0)
+#define F500_sub_21C80		((bool(*)(void))0x21C80)
 
 
 void F500_root_sub();
@@ -35,14 +36,14 @@ void F500_TPS_sub_103DA();
 void F500_sub_1044C();
 bool F500_CheckIdleRPM();
 void F500_MAP_Coolant_Calcs();
-void F500_sub_10820();
+bool F500_sub_10820();
 void F500_sub_10878();
 void F500_sub_108AA();
 void F500_sub_108FE();
 void F500_sub_10984();
 void F500_sub_10A80();
 void F500_sub_10AA6();
-void F500_Check_MAP_Fault();
+bool F500_Check_MAP_Fault();
 void F500_Load_sub_10B72();
 void F500_sub_10C6E();
 void F500_sub_10E10();
@@ -58,7 +59,44 @@ void F500_Battery_Calcs_sub_1101A();
 #define CEL12_68D0							((Axis*)0x68D0)
 #define CEL8_6D98							((Axis*)0x6D98)
 #define CEL9_75BA							((Axis*)0x75BA)
+#define BAR5_6D66							((Axis*)0x6D66)
+#define LOAD9_65C0							((Axis*)0x65C0)
+#define RPM11_64AC							((Axis*)0x64AC)
+#define LOAD9_65F8							((Axis*)0x65F8)
 
+
+
+
+
+
+
+
+#define AFRRPM_4C1A							((Map3D_B *)0x4C1A)
+#define AIRTEMPCOMPAFR1_33C4				((Map3D_B *)0x33C4)
+#define AIRTEMPCOMPAFR1_45D8				((Map3D_B *)0x45D8)
+#define LOADAFR_33B4						((Map3D_B *)0x33B4)
+
+
+
+
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+void F500_InitManifoldVars()
+{
+	u32 r1 = wMUT1A_Manifold_AbsPressure_ADC8bit;
+
+	__disable_irq();
+
+	Manifold_ADC8bit_1 = r1;
+	Manifold_ADC8bit_2 = r1;
+	Manifold_ADC8bit_3 = r1;
+	Manifold_ADC8bit_4 = r1;
+	Manifold_AbsPressure_ADC8bit_avrg = r1;
+	Manifold_AbsPressure_ADC8bit_x256_avrg = r1 << 8;
+
+	__enable_irq();
+}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -294,7 +332,7 @@ u16 F500_sub_FBB4(u32 v)
 		timer_FFFF8784 = word_19FC;
 	};
 
-	u32 r13 = Trunc_R4_byte_R0(fix8_FFFF8DCE);
+	u32 r13 = SHLR8(fix8_FFFF8DCE);
 
 	TRG(wMUT19_Startup_Check_Bits, 0x2000, r13, word_2110, word_210E);
 
@@ -499,114 +537,439 @@ bool F500_CheckIdleRPM()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+//#define RTF ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_COPY_FFFF888A ^ RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888) & RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_COPY_FFFF888A)
+
 void F500_MAP_Coolant_Calcs()
 {
+	u32 r1 = Table_Lookup_byte_2D_3D(AIRTEMPCOMPAFR1_33C4);
 
+	if (wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING))
+	{
+		word_FFFF8AE2 = 0;
+		word_FFFF8AE4 = 0x80;
+	}
+	else
+	{	
+		u32 RTF = ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_COPY_FFFF888A ^ RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888) & RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_COPY_FFFF888A);
+
+		if (word_FFFF8AE2 != 0 
+			|| ((RTF & 0x80) == 0 && (RTF & 0x20) == 0 && (byte_105C == 0 || (RTF & 8) == 0))
+			|| (MAF_MAP__MULTIPLIER_FFFF8ABE >= r1 && COOLANT_REL_6_FFFF8AC2 == 0 && COOLANT_REL_7_FFFF8AEC == 0))
+		{
+			if (word_FFFF86EA == 0)
+			{
+				if (word_FFFF8AE4 > 0x80 && (Bitmap_Store_A_FFFF89EE & 2))
+				{
+					word_FFFF8AE4 = Sub_Lim_0(word_FFFF8AE4, t1_unk_20A8);
+				};
+			}
+			else
+			{
+				word_FFFF8AE4 = t1_unk_20AA;
+			};
+		}
+		else
+		{
+			word_FFFF86EA = t1_unk_20AC;
+			word_FFFF8AE4 = t1_unk_20AA;
+		};
+
+		if (word_FFFF8AE4 < 0x80) { word_FFFF8AE4 = 0x80; };
+
+		if (F500_sub_10820() && word_FFFF8AE4 == 0x80 && (Bitmap_Store_A_FFFF89EE & 2))
+		{
+			word_FFFF8AE2 = Sub_Lim_0(word_FFFF8AE2, t1_unk_20AE);
+		}
+		else
+		{
+			word_FFFF8AE2 = 0xFF;
+		};
+	};
+
+	u32 r2 = word_FFFF8AE2;
+
+	r1 = interpolate_r4_r5_r6(r1, Table_Lookup_byte_2D_3D(AIRTEMPCOMPAFR1_45D8), r2);
+
+	if ((wMUT1E_MAF_RESET_FLAG & MAP_error) == 0)
+	{
+		r2 = 0x80;
+
+		r1 = Sub_Lim_0(r1, 0x80);
+
+		if (MUT21_RPM_x125div4 > t1_unk_1776/*16*/)
+		{
+			Table_Lookup_Axis(LOAD9_65F8);
+			r2 = Table_Lookup_byte_2D_3D(LOADAFR_33B4);
+		};
+
+		r1 = Lim_FF(Mul_Div_R(r1*r2, 0x80, 0x4000) + 0x80);
+	};
+
+	MAF_MAP__MULTIPLIER_FFFF8ABE = r1;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-void F500_sub_10820()
+bool F500_sub_10820()
 {
+	bool r13 = ((stored_DTC_5 & 1) || (last_Drive_DTC[5] & 1));
 
+
+	if ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x80) == 0)
+	{
+		return false;
+	};
+
+	if ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x20) == 0) // Engine Running
+	{
+		return false;
+	};
+	
+	if (r13)
+	{
+		return false;
+	};
+
+	if ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 4)) // timer_down_FFFF89CE != 0
+	{
+		return false;
+	};
+
+	if (byte_105C == 0)
+	{
+		return true;
+	};
+
+	if ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 8)) // 0: wMUT10_Coolant_Temperature_Scaled <= word_18BA(60)
+	{
+		return false;
+	};
+
+	return true;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void F500_sub_10878()
 {
+	if (wMUT1E_MAF_RESET_FLAG & STALL)
+	{
+		F500_sub_108AA();
+	}
+	else
+	{
+		F500_sub_108FE();
+		F500_sub_10984();
+	};
 
+	F500_sub_10A80();
+
+	Table_Lookup_Axis(RPM11_64AC);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void F500_sub_108AA()
 {
+	__disable_irq();
 
+	crankHT_x_4us_3 = 0xFFFF;
+
+	RPM_x_4_096__3 = 0;
+	RPM_x_4_096__2 = 0;
+	RPM_x_4_096__1 = 0;
+
+	__enable_irq();
+
+	MUT21_RPM_x125div4 = 0;
+
+	MUT20_RPM_Idle_x125div16 = 0;
+
+	rpm_x125div32_B = 0;
+
+	prev_RPM_x125div4 = 0;
+	
+	rpm_x125div32_A = 0;
+	
+	dif_rpm_x125div32_AB = 0;
+	
+	RPM_DELTA_FFFF8948 = 128;
+	
+	null_RPM_x125div256 = 0;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void F500_sub_108FE()
 {
+	__disable_irq();
 
+	u32 r1 = crankHT_x_4us_3;
+	u32 r2 = crankHT_x_4us_4;
+
+	__enable_irq();
+
+	rpm_x125div32_A = DIV_DW_R(1920000, r2);
+
+	rpm_x125div32_B = DIV_DW_R(1920000, r1);
+
+	MUT20_RPM_Idle_x125div16 = Lim_FF((rpm_x125div32_B + 1) >> 1);
+	
+	MUT21_RPM_x125div4 = Lim_FF((rpm_x125div32_B + 4) >> 3);
+	
+	null_RPM_x125div256 = DIV_DW_R(15360000, r1);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void F500_sub_10984()
 {
+	if (cranking_end_timer_up >= word_16BC)
+	{
+		dif_rpm_x125div32_AB = Lim_FF(Sub_Lim_0(rpm_x125div32_A, rpm_x125div32_B));
 
+		if (Bitmap_Store_A_FFFF89EE & 4)
+		{
+			return;
+		};
+
+		RPM_DELTA_FFFF8948 = Lim_FF(Sub_Lim_0(MUT21_RPM_x125div4 + 128, prev_RPM_x125div4));
+	}
+	else
+	{
+		dif_rpm_x125div32_AB = 0;
+		RPM_DELTA_FFFF8948 = 128;
+	};
+
+	prev_RPM_x125div4 = MUT21_RPM_x125div4;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void F500_sub_10A80()
 {
-
+	word_FFFF8950 = (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 4) ? word_17B0/*232*/ : t1_unk_17AE/*232*/;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void F500_sub_10AA6()
 {
+	if (wMUT1E_MAF_RESET_FLAG & STALL)
+	{
+		F500_InitManifoldVars();
+	};
 
+	if (F500_Check_MAP_Fault() || F500_sub_21C80())
+	{
+		SET(wMUT71_Sensor_Error, 8);
+	}
+	else
+	{
+		CLR(wMUT71_Sensor_Error, 8);
+	};
+
+	F500_sub_10E10();
+
+	F500_Load_sub_10B72();
+
+	Table_Lookup_Axis(LOAD9_65C0);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-void F500_Check_MAP_Fault()
+bool F500_Check_MAP_Fault()
 {
+	u32 r13 = wMUT1A_Manifold_AbsPressure_ADC8bit;
 
+	TRG(ZERO_8_IGNITION_FLAGS, 0x10, wMUT8A_TPS_Corrected, word_1C68, word_1C6A);
+
+	return (r13 >= word_1C66 || ((timer_down_FFFF89CE == 0 || (ZERO_8_IGNITION_FLAGS & 0x10)) && r13 < word_1C64));
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void F500_Load_sub_10B72()
 {
+	__disable_irq();
 
+	u32 r1 = Manifold_AbsPressure_ADC8bit_avrg;
+	u32 r2 = Manifold_AbsPressure_ADC8bit_x256_avrg >> 7;
+	u32 r8 = wMUT1A_Manifold_AbsPressure_ADC8bit;
+
+	__enable_irq();
+
+	wMUT1D_Manifold_Absolute_Pressure_Mean = r1;
+
+	if ((wMUT1E_MAF_RESET_FLAG & MAP_error) == 0)
+	{
+		if (wMUTC0_bMUT54_Acceleration_Enrichment != 0 || wMUTC1_bMUT55_Deceleration_Enleanment != 0)
+		{
+			r1 = r8;
+			r2 = r8 << 1;
+		};
+	};
+
+	r1 = Lim_FF(r1);
+
+	wMUT1C_ECU_Load = r1;
+	ECU_Load_1 = r1;
+	ECU_Load_null = r1;
+	wMUT1F_ECU_Load_Previous = r1;
+	wMUT1C_ECU_Load = r1;
+	ECU_Load_x2_FFFF8962 = r2;
+	null_ECU_Load_x2_FFFF8960 = r2;
+	null_ECU_Load_x2_FFFF895E = r2;
+	ECU_Load_x2_FFFF895C = r2;
+	Manifold_AbsPressure_null = r8;
+
+	wMUTB4_lookup_value = Lim_FF(Table_Lookup_byte_2D_3D(TEMPCOMP_3BEE) + wMUT8A_TPS_Corrected);
+
+	Table_Lookup_Axis(RPM5_6830);
+
+	Table_Lookup_Axis(VOLT7_6844_Throttle);
+
+	load_vs_tps = sub_21CA8(Table_Lookup_byte_2D_3D(LIMPHOME_33F4));
+
+	r1 = wMUT1C_ECU_Load;
+
+	if ((wMUT1E_MAF_RESET_FLAG & MAP_error) == 0)
+	{
+		r1 = Sub_Lim_0(r1 + 205 , wMUT15_Barometric_Pressure);
+	};
+
+	load_FFFF8976 = Lim_FF(r1);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void F500_sub_10C6E()
 {
+	if ((wMUT1E_MAF_RESET_FLAG & STALL) == 0)
+	{
+		Table_Lookup_Axis(BAR5_6D66);
 
+		u32 r1 = Table_Lookup_byte_2D_3D(AFRRPM_4C1A);
+
+		u32 r2 = wMUT31_Volumetric_Efficiency + word_1524/*48*/;
+
+		word_FFFF89C0 = Div_65536_R(Mul_DW_Div(Mul32_Fix8(MUT21_RPM_x125div4 * word_223E/*101*/ * 1067, r2), wMUT1C_ECU_Load * r1, 26240));
+	}
+	else
+	{
+		word_FFFF89C0 = 0;
+	};
+
+	MAF_MAP__Hz_FFFF89BC = Lim_FF(Mul_Div_R(word_FFFF89C0, 1024, word_223C /*18*/ * 100));
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void F500_sub_10E10()
 {
+	__disable_irq();
 
+	wMUT56_MAX_MAP_FALL_CHANGE = Lim_FF(MAX_MAP_FALL_CHANGE);
+	wMUT57_MAX_MAP_RISE_CHANGE = Lim_FF(MAX_MAP_RISE_CHANGE);
+
+	MAX_MAP_FALL_CHANGE = 0;
+	MAX_MAP_RISE_CHANGE = 0;
+
+
+	__enable_irq();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void F500_MAP_Hz_Calc_sub_10E54()
 {
+	u32 r1 = SPEED_PULSES_FFFF89C4;
 
+	u32 r13 = Div_WW(2260, r1);
+
+	wMUT2E_Vehicle_Speed_Frequency = (r13 < 254) ? r13 : 254;
+
+	VEHICLE_SPEED_0_FFFF8A3C = Lim_FFFF((rpm_x125div32_B * r1) >> 2);
+
+	if (timer_down_TXFLAG3_FFFF8574 == 0)
+	{
+		CLR(SPEED_FLAGS, 8);
+	}
+	else
+	{
+		if (wMUT2E_Vehicle_Speed_Frequency >= word_1D7E/*20*/)
+		{
+			SET(SPEED_FLAGS, 8);
+		};
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void F500_sub_10F08()
 {
+	if (wMUTD1_BitMap_FAA & 2)
+	{
+		wMUT5A = word_FFFF8A20;
+		wMUT5B_Rear_02_Voltage = word_FFFF8A22;
+	}
+	else
+	{
+		u32 r13 = t1_unk_158A/*26*/;
 
+		wMUT5B_Rear_02_Voltage = wMUT5A = (wMUT15_Barometric_Pressure <= word_158C/*183*/) ? Sub_Lim_0(r13, word_158E/*0*/) : r13;
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void F500_Countdown_Timers_sub_10F5C()
 {
+	__disable_irq();
 
+	CLR(Bitmap_Store_A_FFFF89EE, 0x1FF);
+
+	Bitmap_Store_A_FFFF89EE |= (Bitmap_Store_B_FFFF89F0 & 0x1FF);
+
+	CLR(Bitmap_Store_B_FFFF89F0, 0x1FF);
+
+	__enable_irq();
+
+	if (Bitmap_Store_A_FFFF89EE & 1)
+	{
+		mem_incr(&cranking_end_timer_up, &timer_up_FFFF8548);
+		mem_decr(&timer_down_TXFLAG3_FFFF8574, &word_FFFF86A0);
+	};
+
+	if (Bitmap_Store_A_FFFF89EE & 1)
+	{
+		mem_incr(&timer_up_FFFF8548, &timer_up_FFFF8548);
+		mem_decr(&word_FFFF86A0, &bMUTDD);
+	};
+
+	if (Bitmap_Store_A_FFFF89EE & 4)
+	{
+		mem_incr(&timer_up_FFFF8548, &timer_up_FFFF8548);
+		mem_decr(&bMUTDD, &timer_FFFF8784);
+	};
+
+	if (Bitmap_Store_A_FFFF89EE & 8)
+	{
+		mem_incr(&timer_up_FFFF8548, &word_FFFF8550);
+		mem_decr(&timer_FFFF8784, &word_FFFF8834);
+	};
+
+	if (timer_down_TXFLAG3_FFFF8574 == 0)
+	{
+		timer_up_FFFF852C = 0;
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void F500_Battery_Calcs_sub_1101A()
 {
-
+	Mul_Lim_FFFF(wMUT88_Fuel_Level_ADC8bit, 191);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

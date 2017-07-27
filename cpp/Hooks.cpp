@@ -18,7 +18,7 @@ inline u16 Lookup_HiIgnMap()
 
 inline u16 GetLoadCorrectedDeltaTPS()
 {
-	return load_x2_deltaTPS_corrected = ECU_Load_x2_FFFF895C + R4_Mul_R5_Div_256_round(abs_Delta_TPS * TPS_Multiplier_Delta, Table_Lookup_byte_2D_3D(table_2D_39D2));
+	return load_x2_deltaTPS_corrected = ECU_Load_x2_FFFF895C + Mul_Fix8_R(abs_Delta_TPS * TPS_Multiplier_Delta, Table_Lookup_byte_2D_3D(table_2D_39D2));
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -67,6 +67,14 @@ extern "C" void FU03_VE_map_sub_14620()
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma noregsave(Hook_ForcedIdleRPM)
+
+extern "C" u16 Hook_ForcedIdleRPM(u16 v)
+{
+	return (forcedIdleRPM != 0) ? forcedIdleRPM : v;
+}
+
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

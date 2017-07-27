@@ -639,7 +639,7 @@ static bool IG04_KNOCKLOAD_sub_1718E()
 		return true;
 	};
 
-	if (R4_Mul_R5_Div_256_round(Sub_R4w_R5w_liml_0(coolTempCorrectedIgnTiming, egrLowOctIgn), 728) >= wMUT26_Knock_Retard)
+	if (Mul_Fix8_R(Sub_Lim_0(coolTempCorrectedIgnTiming, egrLowOctIgn), 728) >= wMUT26_Knock_Retard)
 	{
 		return true;
 	};
@@ -747,7 +747,7 @@ static void IG04_OctaneNumKnockUpdate()
 			timer_Knock = word_1804;
 		};
 
-		octaneNum = Lim16_R4w__R5_R6(octaneNum, 0, 0xFF);
+		octaneNum = Lim16(octaneNum, 0, 0xFF);
 
 	};
 }
@@ -970,7 +970,7 @@ static void IG04_sub_178D0()
 
 		__disable_irq();
 
-		word_FFFF8BFA = Lim_R4_max_FF(MUL_R4w_R5w_DIV_R6w_Round_R0(r1, r2 * Table_Lookup_byte_2D_3D(unk116_58B8), 0x4000));
+		word_FFFF8BFA = Lim_FF(Mul_Div_R(r1, r2 * Table_Lookup_byte_2D_3D(unk116_58B8), 0x4000));
 
 		__enable_irq();
 
@@ -1275,7 +1275,7 @@ static void IG04_Update_MUT04_Timing_Advance_Interpolated()
 		if (tAdv < r2) { tAdv = r2; };
 	};
 
-	tAdv = Sub_R4w_R5w_liml_0(tAdv + IG04_SET0x80IGNPAR2_sub_18A1C() - 0x80, 0x8000);
+	tAdv = Sub_Lim_0(tAdv + IG04_SET0x80IGNPAR2_sub_18A1C() - 0x80, 0x8000);
 
 	r2 = IG04_sub_18A2E();
 
@@ -1295,7 +1295,7 @@ static void IG04_Update_MUT04_Timing_Advance_Interpolated()
 		tAdv = fixTimingValue + 20;
 	};
 
-	tAdv = Lim16_R4w__R5_R6(tAdv, 0, 70);
+	tAdv = Lim16(tAdv, 0, 70);
 
 	IGNITION_FINAL3_FFFF8C0C = tAdv;
 
@@ -1345,7 +1345,7 @@ static u16 IG04_Update_OctanEgrIgnTiming()
 
 	if (ZERO_8_IGNITION_FLAGS & 8)
 	{
-		egrLowOctIgn = Add_R4w_R5w_Lim_FFFF(loIgn, Table_Lookup_byte_2D_3D(HIOCTIGNEGR_38CA));
+		egrLowOctIgn = Add_Lim_FFFF(loIgn, Table_Lookup_byte_2D_3D(HIOCTIGNEGR_38CA));
 	}
 	else
 	{
@@ -1358,7 +1358,7 @@ static u16 IG04_Update_OctanEgrIgnTiming()
 
 		if (ZERO_8_IGNITION_FLAGS & 8)
 		{
-			egrHighOctIgn = Add_R4w_R5w_Lim_FFFF(hiIgn, Table_Lookup_byte_2D_3D(HIOCTIGNEGR_38CA));
+			egrHighOctIgn = Add_Lim_FFFF(hiIgn, Table_Lookup_byte_2D_3D(HIOCTIGNEGR_38CA));
 		}
 		else
 		{
@@ -1378,7 +1378,7 @@ static u16 IG04_Update_OctanEgrIgnTiming()
 
 	octanEgrIgnTiming = octIgn;
 
-	ignition_FFFF8BC4 = Lim_R4_max_FF(Sub_R4w_R5w_liml_0(ign + Query_byte_2D_3D_Table(LOWOCTIGNEGR_7AC8), 128));
+	ignition_FFFF8BC4 = Lim_FF(Sub_Lim_0(ign + Query_byte_2D_3D_Table(LOWOCTIGNEGR_7AC8), 128));
 
 	return octanEgrIgnTiming;
 }
@@ -1387,7 +1387,7 @@ static u16 IG04_Update_OctanEgrIgnTiming()
 
 static u16 GetLoadCorrectedDeltaTPS()
 {
-	return load_x2_deltaTPS_corrected = IG04_GetLoad_sub_1821E() /*ECU_Load_x2_FFFF895C*/ + R4_Mul_R5_Div_256_round(abs_Delta_TPS * TPS_Multiplier_Delta, Table_Lookup_byte_2D_3D(table_2D_39D2));
+	return load_x2_deltaTPS_corrected = IG04_GetLoad_sub_1821E() /*ECU_Load_x2_FFFF895C*/ + Mul_Fix8_R(abs_Delta_TPS * TPS_Multiplier_Delta, Table_Lookup_byte_2D_3D(table_2D_39D2));
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1424,7 +1424,7 @@ static u16 IG04_Ign_Temp_Correct(u16 v)
 	else if (w_1822E_loc2 == 0)
 	{
 		w_1822E_loc2 = word_20B4 * 2;
-		w_1822E_loc3 = Lim_R4_max_FF(w_1822E_loc3 + word_20B2);
+		w_1822E_loc3 = Lim_FF(w_1822E_loc3 + word_20B2);
 	};
 
 	w_1822E_loc4 = 0;
@@ -1460,7 +1460,7 @@ static u16 IG04_IGNIT_TESTS_183E8(u16 v)
 
 	if (IGN_TEST_FLAG_1044 && IG04_sub_18464() && r >= 20)
 	{
-		 r = 20 + Mul_R4w_R5w_Div_128_Round_Into_R0(r - 20, (IGN_MULT_FLAG_FFFF8DBC & 0x40) ? t1_1B08 : word_1B0A);
+		 r = 20 + Mul_Fix7_R(r - 20, (IGN_MULT_FLAG_FFFF8DBC & 0x40) ? t1_1B08 : word_1B0A);
 	};
 
 	if (r >= v)
@@ -1510,7 +1510,7 @@ static u16 IG04_Ignition_Fuel_Timing_Calcs_sub_18494()
 	{
 		u16 r1 = word_17BE + 20;
 
-		u16 r2 = Sub_R4w_R5w_liml_0(wMUT33_Corrected_Timing_Advance, word_17BC);
+		u16 r2 = Sub_Lim_0(wMUT33_Corrected_Timing_Advance, word_17BC);
 
 		__disable_irq();
 
@@ -1580,22 +1580,22 @@ static u16 IG04_Airtemp_Ignition_Compensation_sub_185FC()
 
 	if (ZERO_8_IGNITION_FLAGS & 2)
 	{
-		r1 = Sub_R4w_R5w_liml_0(r1, t1_unk_1758);
+		r1 = Sub_Lim_0(r1, t1_unk_1758);
 	};
 
 	if (IGN_FLAG9_FFFF8BB6 & 0x10)
 	{
-		r1 = Sub_R4w_R5w_liml_0(r1, word_1868);
+		r1 = Sub_Lim_0(r1, word_1868);
 	};
 
 	if (byte_1034 != 0 && load_ECU_Ignintion >= word_1854 && wMUT10_Coolant_Temperature_Scaled >= CTEMPER38_1858)
 	{
-		r1 = Sub_R4w_R5w_liml_0(r1, (wMUT10_Coolant_Temperature_Scaled >= CTEMPER39_1856) ? word_185A : word_185C);
+		r1 = Sub_Lim_0(r1, (wMUT10_Coolant_Temperature_Scaled >= CTEMPER39_1856) ? word_185A : word_185C);
 	};
 
 	if (IG04_sub_18728())
 	{
-		r1 = Sub_R4w_R5w_liml_0(r1, word_21A0);
+		r1 = Sub_Lim_0(r1, word_21A0);
 	};
 
 
@@ -1632,7 +1632,7 @@ static u16 IG04_sub_1876E()
 
 	if (IGN_FLAG9_FFFF8BB6 & 0x10)
 	{
-		r1 = Mul_R4w_R5w_Div_128_Round_Into_R0(wMUT24_Target_Idle_RPM, word_17B6);
+		r1 = Mul_Fix7_R(wMUT24_Target_Idle_RPM, word_17B6);
 
 		u16 r8 = 0;
 
@@ -1652,33 +1652,33 @@ static u16 IG04_sub_1876E()
 			r8 = 1;
 		};
 
-		u16 r13 = R4_Mul_R5_Div_256_round((wMUT2E_Vehicle_Speed_Frequency > word_262C) ? word_262A : word_17A8, r3);
+		u16 r13 = Mul_Fix8_R((wMUT2E_Vehicle_Speed_Frequency > word_262C) ? word_262A : word_17A8, r3);
 
 		if (r13 > word_17AA)
 		{
 			r13 = word_17AA;
 		};
 
-		r1 = (r8 != 0) ? Sub_R4w_R5w_liml_0(0x80, r13) : Lim_R4_max_FF(r13 + 0x80);
+		r1 = (r8 != 0) ? Sub_Lim_0(0x80, r13) : Lim_FF(r13 + 0x80);
 	}
 	else
 	{
 		if (BOOSTCHECK2_FFFF8A0E & 0x1000)
 		{
-			u16 r2 = Sub_R4w_R5w_liml_0(rpm_x125div32_B, ((RPM_x_4_096__3 >> 3) + 1) >> 1);
+			u16 r2 = Sub_Lim_0(rpm_x125div32_B, ((RPM_x_4_096__3 >> 3) + 1) >> 1);
 
 			if (r2 > word_2342)
 			{
-				r1 = Sub_R4w_R5w_liml_0(0x80, R4_Mul_R5_Div_256_round(word_2344, r2));
+				r1 = Sub_Lim_0(0x80, Mul_Fix8_R(word_2344, r2));
 			};
 		}
 		else if (wMUT1E_MAF_RESET_FLAG & 0x8000) // timing knockdown on light acceleration and less than 3000rpm
 		{
-			u16 r2 = Sub_R4w_R5w_liml_0(rpm_x125div32_B, ((RPM_x_4_096__2 >> 3) + 1) >> 1);
+			u16 r2 = Sub_Lim_0(rpm_x125div32_B, ((RPM_x_4_096__2 >> 3) + 1) >> 1);
 
 			if (r2 > word_1844)
 			{
-				r1 = Sub_R4w_R5w_liml_0(0x80, R4_Mul_R5_Div_256_round(word_1846, r2));
+				r1 = Sub_Lim_0(0x80, Mul_Fix8_R(word_1846, r2));
 			};
 		};
 	};
@@ -1696,11 +1696,11 @@ static u16 IG04_RPM_CORR_sub_18952()
 
 		&& (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x80))
 	{
-		u16 r3 = R4_Mul_R5_Div_256_round(Sub_R4w_R5w_liml_0(rpm_x125div32_B, word_184C), word_1850);
+		u16 r3 = Mul_Fix8_R(Sub_Lim_0(rpm_x125div32_B, word_184C), word_1850);
 
 		r13 = (r3 >= word_184E) ? word_184E : r3;
 
-		r13 = Sub_R4w_R5w_liml_0(0x80, r13);
+		r13 = Sub_Lim_0(0x80, r13);
 	};
 
 	return IGN_CORR_RPM_FFFF8BD4 = r13;
@@ -1734,7 +1734,7 @@ static u16 IG04_sub_18A2E()
 	else if ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x20) 
 			&& wMUT10_Coolant_Temperature_Scaled >= word_1890 
 			&& (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 4)
-			&& Sub_R4w_R5w_liml_0(RPM_DELTA_FFFF8948, 0x80) >= word_1892)
+			&& Sub_Lim_0(RPM_DELTA_FFFF8948, 0x80) >= word_1892)
 	{
 		__disable_irq();
 
@@ -1752,8 +1752,8 @@ static u16 IG04_sub_18A2E()
 
 static void IG04_sub_18B48()
 {
-	word_FFFF8BCA = Sub_R4w_R5w_liml_0(word_178A + 57, Div_R4_R5_R0(wMUT04_Timing_Advance_Interpolated*256, 90));
-//	word_FFFF96C8 = Sub_R4w_R5w_liml_0(word_178A + 57, Div_R4_R5_R0(word_FFFF96CA * 256, 90));
+	word_FFFF8BCA = Sub_Lim_0(word_178A + 57, Div_WW(wMUT04_Timing_Advance_Interpolated*256, 90));
+//	word_FFFF96C8 = Sub_Lim_0(word_178A + 57, Div_WW(word_FFFF96CA * 256, 90));
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1777,7 +1777,7 @@ static void IG04_Ignition_coil_charge_sub_18BD4()
 
 	if (crankHT_x_4us_3 <= word_17A0)
 	{
-		t = Sub_R4w_R5w_liml_0(t, R4_Mul_R5_Div_256_round(word_17A0 - crankHT_x_4us_3, Table_Lookup_byte_2D_3D(IGNCOILCHGTIME2_3A4E)));
+		t = Sub_Lim_0(t, Mul_Fix8_R(word_17A0 - crankHT_x_4us_3, Table_Lookup_byte_2D_3D(IGNCOILCHGTIME2_3A4E)));
 	};
 
 	ignCoilTime_1 = t;
@@ -1790,7 +1790,7 @@ static void IG04_Ignition_coil_charge_sub_18BD4()
 
 static void IG04_UpdateTimingMUT()
 {
-	wMUT06_Timing_Advance = Sub_R4w_R5w_liml_0(81, R4_Mul_R5_Div_256_round(timingAdvScaled, 90));
+	wMUT06_Timing_Advance = Sub_Lim_0(81, Mul_Fix8_R(timingAdvScaled, 90));
 
 	wMUT05_Timing_Advance_Scaled = wMUT06_Timing_Advance - 20;
 }
@@ -1805,7 +1805,7 @@ static void IG04_sub_18C86()
 	}
 	else if (Bitmap_Store_A_FFFF89EE & 2)
 	{
-		word_FFFF8C0A = Add_R4w_R5w_Lim_FFFF(word_FFFF8C0A, word_24FA);
+		word_FFFF8C0A = Add_Lim_FFFF(word_FFFF8C0A, word_24FA);
 
 		if (word_FFFF8C0A >= 0xFF)
 		{
@@ -1876,7 +1876,7 @@ static u16 IG04_sub_21DCE(u16 v)
 {
 	if (IGN_TEST_FLAG_0_F32 == 1)
 	{
-		return Sub_R4w_R5w_liml_0(((u32)wMUT9D_IGN_ADDITION >> 1) + v, 0x40);
+		return Sub_Lim_0(((u32)wMUT9D_IGN_ADDITION >> 1) + v, 0x40);
 	}
 	else if (IGN_TEST_FLAG_0_F32 == 2)
 	{
@@ -1892,7 +1892,7 @@ static u16 IG04_sub_21DCE(u16 v)
 
 static u16 Barometric_Correction_sub_22084()
 {
-	return IGN_BARO_COMP_FFFF8BD6 = Sub_R4w_R5w_liml_0(0x80, 0);
+	return IGN_BARO_COMP_FFFF8BD6 = Sub_Lim_0(0x80, 0);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
