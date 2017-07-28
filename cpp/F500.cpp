@@ -63,6 +63,9 @@ void F500_Battery_Calcs_sub_1101A();
 #define LOAD9_65C0							((Axis*)0x65C0)
 #define RPM11_64AC							((Axis*)0x64AC)
 #define LOAD9_65F8							((Axis*)0x65F8)
+#define mapInletAirTemp_Scaling				((Axis*)0x9B82)
+#define CEL7_692E							((Axis*)0x692E)
+#define map_Coolant_Temp_Scaling			((Axis*)0x99A8)
 
 
 
@@ -75,7 +78,11 @@ void F500_Battery_Calcs_sub_1101A();
 #define AIRTEMPCOMPAFR1_33C4				((Map3D_B *)0x33C4)
 #define AIRTEMPCOMPAFR1_45D8				((Map3D_B *)0x45D8)
 #define LOADAFR_33B4						((Map3D_B *)0x33B4)
-
+#define TPS_2D_3ED6							((Map3D_B *)0x3ED6)
+#define MAP_2D_3EE8							((Map3D_B *)0x3EE8)
+#define byte_9B00							((Map3D_B *)0x9B00)
+#define CORFUELAIR_33A6						((Map3D_B *)0x33A6)
+#define COOLTEMSCAL_98FA					((Map3D_B *)0x98FA)
 
 
 
@@ -462,6 +469,40 @@ void F500_Coolant_Temp_Threshold_Tests()
 
 void F500_Coolant_Calc1_sub_FF2C()
 {
+	u32 r1 = adc_CoolTemp_10bit_MUTCF;
+
+
+	u32 r2 = map_Coolant_Temp_Scaling->data[map_Coolant_Temp_Scaling->len - 1 - t1_unk_1C08];
+
+	if (wMUT71_Sensor_Error & 0x11)
+	{
+		r1 = map_Coolant_Temp_Scaling->data[map_Coolant_Temp_Scaling->len - 1 - coolTemp_sensor_err_val];
+	};
+
+	if (wMUT1E_MAF_RESET_FLAG & STALL)
+	{
+		COOLANT_TEMPERATURE_2BYTE_FFFF88A8 = r1;
+	}
+	else if (Bitmap_Store_A_FFFF89EE & 8)
+	{
+		r1 = Lim16(r1, Sub_Lim_0(COOLANT_TEMPERATURE_2BYTE_FFFF88A8, 12), COOLANT_TEMPERATURE_2BYTE_FFFF88A8 + 4);
+
+		if ((SPEED_FLAGS & 0x1000) && r2 <= r1)
+		{
+			r1 = r2;
+		};
+
+		COOLANT_TEMPERATURE_2BYTE_FFFF88A8 = r1;
+	};
+
+	if (COOLANT_TEMPERATURE_2BYTE_FFFF88A8 > r2)
+	{
+		CLR(SPEED_FLAGS, 0x1000);
+	}
+	else
+	{
+		SET(SPEED_FLAGS, 0x1000);
+	};
 
 }
 
@@ -469,28 +510,83 @@ void F500_Coolant_Calc1_sub_FF2C()
 
 void F500_Coolant_Calibration_Calc()
 {
+	wMUTB4_lookup_value = adc_CoolTemp_10bit_MUTCF;
 
+	Table_Lookup_Axis(map_Coolant_Temp_Scaling);
+
+	coolTempScaledSensor = Table_Lookup_byte_2D_3D(COOLTEMSCAL_98FA);
+
+	wMUT12_Coolant_Temperature_Min_81 = (wMUT71_Sensor_Error & 0x11) ? coolTemp_sensor_err_val : coolTempScaledSensor;
+
+	if (adc_CoolTemp_10bit_MUTCF == COOLANT_TEMPERATURE_2BYTE_FFFF88A8)
+	{
+		wMUT10_Coolant_Temperature_Scaled = coolTempScaledSensor;
+	}
+	else
+	{
+		wMUTB4_lookup_value = COOLANT_TEMPERATURE_2BYTE_FFFF88A8;
+
+		Table_Lookup_Axis(map_Coolant_Temp_Scaling);
+
+		wMUT10_Coolant_Temperature_Scaled = Table_Lookup_byte_2D_3D(COOLTEMSCAL_98FA);
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void F500_Update_IAT_Sensor()
 {
+	if (wMUT3A_AirTemp_ADC8bit < word_1C0E || wMUT3A_AirTemp_ADC8bit > word_1C0C)
+	{
+		SET(wMUT71_Sensor_Error, 2);
+	}
+	else
+	{
+		CLR(wMUT71_Sensor_Error, 2);
+	};
 
+	F500_Update_Air_Temp_Scaled();
+	
+	Table_Lookup_Axis(CEL7_692E);
+													
+	LOAD_TRIMS_FFFF8ABA = Table_Lookup_byte_2D_3D(CORFUELAIR_33A6);
+
+	if (timer_down_TXFLAG3_FFFF8574 == 0 && (SPEED_FLAGS & 0x400))
+	{
+		NVRAM_Intake_Air_Temperature_Scaled = wMUT11_Intake_Air_Temperature_Scaled;
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void F500_Update_Air_Temp_Scaled()
 {
+	Table_Lookup_Axis(mapInletAirTemp_Scaling);
 
+	inletAirTempScaledInternal = Table_Lookup_byte_2D_3D(byte_9B00);
+
+	if (wMUT71_Sensor_Error & 2)
+	{
+		wMUT11_Intake_Air_Temperature_Scaled = IAT_sensor_err_val/*84*/;
+	}
+	else
+	{
+		wMUT11_Intake_Air_Temperature_Scaled = inletAirTempScaledInternal;
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void F500_sub_10188()
 {
+	CLR(wMUT71_Sensor_Error, 4);
 
+	wMUT15_Barometric_Pressure = Barometric_FFFF8024;
+
+	FUEL_BEFORE_ENRICHMENT_aka_Temp1_FFFF8ABC = 0x80;
+
+	TPS_MAP_Addition =	Table_Lookup_byte_2D_3D(TPS_2D_3ED6);
+	MAP_Addition =		Table_Lookup_byte_2D_3D(MAP_2D_3EE8);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -511,27 +607,165 @@ void F500_O22_Manipulations_sub_1023C()
 
 void F500_TPS_Load_RPM_Calcs()
 {
+	u32 TPS = wMUT17_TPS_ADC8bit;
 
+	if (bMUTD2_FBA_MAF_MAP_FLAG & 8)
+	{
+		bool c =		(wMUT1E_MAF_RESET_FLAG & (CRANKING|STALL)) 
+					||	(wMUT71_Sensor_Error & 8) 
+					||	TPS <= t1_unk_some_TPS_2116/*236*/ 
+					||	wMUT1C_ECU_Load >= t1_unk_some_LOAD_2114/*124*/ 
+					||	MUT21_RPM_x125div4 >= t1_unk_some_RPM_2232/*32(1000)*/;
+
+		if (c && TPS >= word_2118)
+		{	
+			timer_FFFF8786 = word_211A/*8*/;
+			CLR(wMUT71_Sensor_Error, 0x40);
+			CLR(wMUT71_Sensor_Error, 0x1000);
+		}
+		else
+		{
+			if (timer_FFFF8786 == 0)
+			{
+				SET(wMUT71_Sensor_Error, 0x40);
+			};
+
+			SET(wMUT71_Sensor_Error, 0x1000);
+		};
+	}
+	else
+	{
+		if (((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x80) && TPS > word_1C12/*102*/) || TPS < word_1C14/*10*/)
+		{
+			SET(wMUT71_Sensor_Error, 0x40);
+		}
+		else
+		{
+			CLR(wMUT71_Sensor_Error, 0x40);
+		};
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void F500_TPS_sub_103DA()
 {
+	__disable_irq();
 
+	wMUT73_TPS_Open_Delta = TPS_Open_Delta;
+
+	wMUT74_TPS_Close_Delta = TPS_Close_Delta;
+
+	TPS_Close_Delta = 0;
+
+	TPS_Open_Delta = 0;
+
+	__enable_irq();
+
+	if (Bitmap_Store_A_FFFF89EE & 1)
+	{
+		word_FFFF8904 = Sub_Lim_0(prev_TPS_sub_103DA, wMUT17_TPS_ADC8bit);
+
+		prev_TPS_sub_103DA = wMUT17_TPS_ADC8bit;
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void F500_sub_1044C()
 {
+	u32 r1 = wMUT1B_TPS_Idle_Adder;
 
+	if (F500_CheckIdleRPM())
+	{
+		SET(wMUT1E_MAF_RESET_FLAG, IDLE);
+	}
+	else
+	{
+		timer_FFFF857A = word_198E;
+
+		CLR(wMUT1E_MAF_RESET_FLAG, IDLE);
+	};
+
+	if (timer_FFFF857A == 0)
+	{
+		u32 r13 = wMUT8A_TPS_Corrected;
+
+		timer_FFFF857A = word_198E;
+
+		if (r13 > 33)
+		{
+			r1 -= 1;
+		}
+		else if (r13 < 33)
+		{
+			r1 += 1;
+		};
+	};
+
+	if (bMUTD2_FBA_MAF_MAP_FLAG & 8)
+	{
+		r1 = Sub_Lim_0(161, TPS_NVRAM_FFFF802A >> 2);
+
+		if (FLAGS_FFFF8EB0 & 0x80)
+		{
+			r1 = 0x80;
+		};
+	};
+
+	wMUT1B_TPS_Idle_Adder = Lim16(r1, word_1994/*113*/, word_1992/*143*/);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 bool F500_CheckIdleRPM()
 {
+	if (wMUT1E_MAF_RESET_FLAG & (CRANKING|STALL))
+	{
+		return false;
+	};
+
+	if ((wMUT23 & 0x10) == 0)
+	{
+		return false;
+	};
+
+	if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x10)
+	{
+		return false;
+	};
+
+	if (wMUT10_Coolant_Temperature_Scaled <= word_1986)
+	{
+		return false;
+	};
+
+	if (wMUT73_TPS_Open_Delta > word_198C)
+	{
+		return false;
+	};
+
+	u32 r13 = wMUT17_TPS_ADC8bit;
+
+	if (r13 < word_198A || r13 > word_1988)
+	{
+		return false;
+	};
+
+	if (MUT20_RPM_Idle_x125div16 >= wMUT24_Target_Idle_RPM)
+	{
+		r13 = MUT20_RPM_Idle_x125div16 - wMUT24_Target_Idle_RPM;
+	}
+	else
+	{
+		r13 = wMUT24_Target_Idle_RPM - MUT20_RPM_Idle_x125div16;
+	};
+
+	if (r13 > word_1990)
+	{
+		return false;
+	};
+
 	return true;
 }
 

@@ -3,19 +3,18 @@
 
 	.SECTION    B_ALTMAPS, DATA, LOCATE=H'FFFF8420
 	
-	.EXPORT		_hiIgnMapIndex, _hiFuelMapIndex, _veMapIndex, _fixAFR, _openLoop, _veFeedBackMul
+	.EXPORT		_hiIgnMapIndex, _hiFuelMapIndex, _veMapIndex, _fixAFR, _openLoop, _forcedIdleRPM
 	
 _hiIgnMapIndex:		.RES.B      1					
 _hiFuelMapIndex:	.RES.B      1					
 _veMapIndex:		.RES.B      1					
 _fixAFR:			.RES.B      1					
 _openLoop:			.RES.B      1					
-_veFeedBackMul:		.RES.B      1					
+_forcedIdleRPM:		.RES.B      1					
 
 	.ALIGN 2	
 	
 	.EXPORT		_axis_ig_RPM, _axis_ig_LOAD, _axis_fu_RPM, _axis_fu_LOAD, _axis_ve_RPM, _axis_ve_LOAD, _ve_index, _fb_VE, _ve_timer
-	.EXPORT		_forcedIdleRPM
 
 _axis_ig_RPM:		.RES.W      1					
 _axis_ig_LOAD:		.RES.W      1					
@@ -26,7 +25,6 @@ _axis_ve_LOAD:		.RES.W      1
 _fb_VE				.RES.B      1					
 _ve_index:			.RES.B      1					
 _ve_timer:			.RES.B      1					
-_forcedIdleRPM:		.RES.B      1					
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

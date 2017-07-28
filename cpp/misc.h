@@ -80,6 +80,7 @@ struct Map3D_W
 #define FUEL_CUT				0x08
 #define STALL					0x10
 #define CLOSED_LOOP_GENERIC		0x80
+#define IDLE					0x1000
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
