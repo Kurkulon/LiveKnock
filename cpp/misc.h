@@ -111,9 +111,11 @@ struct Map3D_W
 #define DIV_DW_R										((u32(*)(u32,u16))0x9F2)
 #define Mul_Fix7_R										((u32(*)(u16,u16))0x762)
 #define Mul_DW_Div										((u32(*)(u32,u16,u16))0x5E8)
+#define Mul_Div											((u32(*)(u16,u16,u16))0x5D0)
 #define Mul32_Fix8										((u32(*)(u32,u16))0x7E6)
 #define Mul16											((u32(*)(u16,u16))0xEEE)
 #define Mul_Lim_FFFF									((u32(*)(u16,u16))0xED8)
+#define Mul_Fix8_Lim_FFFF								((u32(*)(u16,u16))0x7D0)
 
 #define mem_incr										((void(*)(void*,void*))0x562)
 #define mem_decr										((void(*)(void*,void*))0x53E)
