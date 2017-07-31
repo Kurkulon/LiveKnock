@@ -14,6 +14,7 @@
 
 
 #define Get_ADC_Knock				((void(*)(void))0xA92C)
+#define INJECTOR_RESCALED_sub_26174	((u16(*)(u16))0x26174)
 //#define CRANK75_Knock_sub_24AC0		((void(*)(void))0x24AC0)
 
 //#define crankPrevICR0AH_A       (*(u32*)0xFFFF9AB8)
@@ -56,6 +57,8 @@
 #define	word_98BA				((const u16*)0x98BA)                                                     
 #define	word_98C4				((const u16*)0x98C4)                                                     
 #define	word_98CC				((const u16*)0x98CC)                                                     
+#define	word_98E6				((const u16*)0x98E6)                                                     
+#define	word_98D4				((const u16*)0x98D4)                                                     
 
 #define	word_98C2				(*(const u16*)0x98BA)                                                     
 
@@ -262,9 +265,38 @@ static void atu22_CMF2G_event()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void Ign_handler(u16 v)
+static void Ign_handler(u16 mask)
 {
+	u16 r1 = mask;
 
+	ClearTSR_2E_2F_2G(r1);
+
+	SET(local_2636C, timerMask_1_2E_2F & r1);
+
+	r1 = timerMask_1_2E_2F & local_2636C;
+
+	if (timerMask_1_2E_2F == r1)
+	{
+		if (state_FFFF8C60 == 2)
+		{
+			state_FFFF8C60 = 1;
+
+			if ((word_FFFF8C5E & 1) == 0)
+			{
+				SetIgnSparkStartTime(r1, timerValue_1_2E_2F);
+			};
+		}
+		else if (state_FFFF8C60 == 1 && (word_FFFF8C5E & 1) == 0)
+		{
+			// loc_263CE
+
+			state_FFFF8C60 = 0;
+
+			SetIgnCoilChargeStartTime(timerMask_0_2E_2F, timerValue_0_2E_2F);
+		};
+
+		local_2636C &= ~r1;
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1159,7 +1191,164 @@ static void CRANK5_SetIgnCoilTime_Fin()
 
 static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 {
+	u32 r2, r8, r9 = 0, r1 = v1;
 
+	if (v1 == 1)
+	{
+		// async_25DE6
+
+		if ((FUEL_CUT_FLAG_FFFF8A5E & 0x80) && (RPM_FLAGS & 1) && (word_FFFF8AD6 != 0 || (word_FFFF8F2A & 2) == 0))
+		{
+			// loc_25E06
+
+			r2 = 0;
+		}
+		else
+		{
+			// loc_25E0C
+
+			r2 = 2;
+		};
+
+		// loc_25E0E
+
+		r8 = word_FFFF8A4E;
+	}
+	else
+	{
+		// loc_25120
+	};
+
+
+	// loc_25E12
+
+	if (r2 != 0 && r8 != 0)
+	{
+		// loc_25E26
+
+		r9 = 0;
+
+		if (MUT21_RPM_x125div4 <= rpm_1508/*255(7968)*/)
+		{
+			r9 = word_1504/*5*/ << 5;
+		};
+
+		bMUTC5_InjPulseW_8us = injPulseWidth_null = r8 = Lim16(INJECTOR_RESCALED_sub_26174(r8), 65000, r9);
+
+		wMUT2A_Injector_Pulse_Width_us = Mul_Lim_FFFF(r8, 8);
+
+		if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 4) && (word_FFFF929A == 6 || word_FFFF929A == 9))
+		{
+			// loc_25E82
+
+			word_FFFF929A += 1;
+		};
+
+		// loc_25E8A
+
+		bMUTC6_FFFF8A52 = r8;
+
+		MUT_2B_FFFF9996 = Mul_Lim_FFFF(r8, 8);
+
+		if (r2 == 1)
+		{
+			if ((word_FFFF8B4E & 0x80) == 0)
+			{
+				// loc_25F98
+
+			}
+			else if ((word_FFFF8B4E & 0x40) == 0)
+			{
+				r2 = 0;
+			}
+			else
+			{
+				// loc_25EC0
+
+				u32 r13 = 3;
+
+				if (strokeNumber != 0)
+				{
+					r13 = Sub_Lim_0(strokeNumber, 1);
+				};
+
+				if ((wMUT1E_MAF_RESET_FLAG & CRANKING) && (word_FFFF8A48 & 0x80) && (word_FFFF8B4E & 0x20) == 0 && (word_FFFF89F2 & 0x400) == 0 && (word_FFFF89F2 & 0x800) == 0)
+				{
+					SET(word_FFFF89F2, 0x800);
+
+					r2 = word_98D4[r13];
+				}
+				else
+				{
+					// loc_25F88
+					r2 = word_98D4[strokeNumber];
+				};
+			};
+
+		}
+		else if (r2 == 3)
+		{
+			if ((BOOSTCHECK2_FFFF8A0E & 0x40) == 0 && (word_FFFF89F2 & 0x400) == 0)
+			{
+				SET(word_FFFF89F2, 0x400);
+				word_FFFF8F28 ^= 1;
+			};
+
+			// loc_25FEA
+
+			r2 = word_98E6[word_FFFF8F28];
+			word_FFFF8F28 ^= 1;
+		}
+		else
+		{
+			// loc_26002
+			r2 = 0xF;
+		};
+
+		// loc_26004
+
+		CLR(word_FFFF8B4E, 0x40);
+
+		if ((word_FFFF8A48 & 0x80) && r1 == 0)
+		{
+			StartInjectSync(r8, r2);
+
+			r9 = 0;
+		}
+		else
+		{
+			// inj_async_2602C
+			StartInjectAsync(r8, r2);
+
+			r9 = 1;
+		};
+
+		// loc_26038
+
+		r8 = 0;
+
+		for (u32 r1 = 1; r1 <= 8; r1 <<= 1)
+		{
+			if (r2 & r1)
+			{
+				r8 += 1;
+			};
+		};
+
+		dword_FFFF8B68 = Add_Lim_FFFFFFFF(dword_FFFF8B68, Mul16(r8, word_FFFF8A4E) << 1);
+	}
+	else
+	{
+		// loc_2607E
+		injPulseWidth_null = 0;
+	};
+
+	// loc_26084
+
+	if (r9 != 0)
+	{
+		CRANK_sub_262D0();
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
