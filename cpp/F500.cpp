@@ -6,6 +6,7 @@
 #include "constbyte.h"
 #include "constword.h"
 #include "ram.h"
+#include "EnVars.h"
 
 #undef F500_Init_Load_ECU_Info_And_BitMap_Flags
 
@@ -13,6 +14,7 @@
 #define F500_Get_All_ADC	((void(*)(void))0xA7F0)
 #define F500_sub_21C80		((bool(*)(void))0x21C80)
 
+#define ENGINE_MAIN_VARIABLES_DIM_off_9198		((EnVars*)0x9198)
 
 void F500_root_sub();
 void F500_Init_Load_ECU_Info_And_BitMap_Flags();
@@ -30,7 +32,7 @@ void F500_Update_IAT_Sensor();
 void F500_Update_Air_Temp_Scaled();
 void F500_sub_10188();
 void F500_sub_10220();
-void F500_O22_Manipulations_sub_1023C();
+void F500_O22_Manipulations_sub_1023C(EnVars* ev);
 void F500_TPS_Load_RPM_Calcs();
 void F500_TPS_sub_103DA();
 void F500_sub_1044C();
@@ -593,14 +595,22 @@ void F500_sub_10188()
 
 void F500_sub_10220()
 {
-
+	if (Bitmap_Store_A_FFFF89EE & 1)
+	{
+		F500_O22_Manipulations_sub_1023C(ENGINE_MAIN_VARIABLES_DIM_off_9198);
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-void F500_O22_Manipulations_sub_1023C()
+void F500_O22_Manipulations_sub_1023C(EnVars* ev)
 {
+	if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 8) == 0 || (*ev->_176_word_FFFF9296 & 4) == 0)
+	{
+		O2_SECONDARY_SENSOR_VOLTAGE_SHLL8_CLIPPED_FFFF88D0 = Interpolate_256(O2_SECONDARY_SENSOR_VOLTAGE_SHLL8_CLIPPED_FFFF88D0, wMUT3C_Rear_O2_ADC8bit << 8, t1_unk_16FE);
 
+		*ev->_40_wMUT5C_ADC_Rear_02_Voltage = Div_256_R(O2_SECONDARY_SENSOR_VOLTAGE_SHLL8_CLIPPED_FFFF88D0);
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

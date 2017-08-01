@@ -101,6 +101,7 @@ struct Map3D_W
 #define Lim_FFFF										((u32(*)(u32))0x598)
 #define sub_21E14										((u16(*)(u16))0x21E14)
 #define SHLR8											((byte(*)(u32))0x864)
+#define Mult_R4_65536									((u32(*)(u16))0x876)
 
 #define Add_Lim_FFFF									((u32(*)(u16,u16))0x500)
 #define Add_Lim_FFFFFFFF								((u32(*)(u32,u32))0x51C)
@@ -113,6 +114,7 @@ struct Map3D_W
 #define Mul_DW_Div										((u32(*)(u32,u16,u16))0x5E8)
 #define Mul_Div											((u32(*)(u16,u16,u16))0x5D0)
 #define Mul32_Fix8										((u32(*)(u32,u16))0x7E6)
+#define Mul_R4_R5w_Div_128_Into_R0						((u32(*)(u32,u16))0x780)
 #define Mul16											((u32(*)(u16,u16))0xEEE)
 #define Mul_Lim_FFFF									((u32(*)(u16,u16))0xED8)
 #define Mul_Fix8_Lim_FFFF								((u32(*)(u16,u16))0x7D0)
@@ -128,6 +130,8 @@ struct Map3D_W
 
 #define Div_65536_R										((u16(*)(u32))0x898)
 
+#define Interpolate_256									((u16(*)(u16,u16,u16))0xAB8)
+#define Div_256_R										((byte(*)(u16))0x87C)
 
 
 #define FU03_sub_142DC									((u16(*)(void))0x142DC)

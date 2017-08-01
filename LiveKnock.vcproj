@@ -77,6 +77,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cpp\FU03.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\cpp\Hooks.cpp"
 				>
 			</File>
@@ -113,6 +117,10 @@
 			</File>
 			<File
 				RelativePath=".\cpp\def.inc"
+				>
+			</File>
+			<File
+				RelativePath=".\cpp\EnVars.h"
 				>
 			</File>
 			<File

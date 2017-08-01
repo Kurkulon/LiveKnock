@@ -72,6 +72,8 @@ static void CRANK75_root_sub_DB40(u16 osbr, u32 icr);
 
 static void SetIgnCoilChargeStartTime(u16 mask, u16 v);
 static void SetIgnSparkStartTime(u16 mask, u16 v);
+static void StartInjectSync(u16 mask, u16 v);
+static void StartInjectAsync(u16 mask, u16 v);
 
 static void CRANK75_sub_232A0();
 static void CRANK75_Knock_sub_23F8C();
@@ -88,6 +90,7 @@ static void CRANK5_sub_2506E();
 static void CRANK5_SetIgnCoilTime_Fin();
 static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2);
 static void CRANK75_sub_260B8();
+static void CRANK_sub_262D0();
 
 
 static void atu22_IMF2G_event();
@@ -1360,6 +1363,13 @@ static void CRANK75_sub_260B8()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+static void CRANK_sub_262D0()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 static void SetIgnCoilChargeStartTime(u16 mask, u16 v)
 {
 
@@ -1368,6 +1378,20 @@ static void SetIgnCoilChargeStartTime(u16 mask, u16 v)
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 static void SetIgnSparkStartTime(u16 mask, u16 v)
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void StartInjectSync(u16 mask, u16 v)
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void StartInjectAsync(u16 mask, u16 v)
 {
 
 }
