@@ -12,6 +12,7 @@
 
 #define sub_21E2A									((bool(*)(void))0x21E2A)
 #define sub_21C0C									((u16(*)(u16))0x21C0C)
+#define sub_21D9C									((bool(*)(void))0x21D9C)
 
 
 #define ENGINE_MAIN_VARIABLES_DIM_off_9198		((EnVars*)0x9198)
@@ -52,7 +53,7 @@
 static void SysInit_NVRAM_Trims();
 static void FU03_Init_Trims();
 static void SysInit_sub_13B04();
-static void FU03_root_sub();
+extern "C" void FU03_root_sub();
 static void FU03_sub_13CE4();
 static void FU03_sub_13D8C();
 static void FU03_sub_13DA2();
@@ -85,9 +86,9 @@ static u16 FU03_sub_14C9A();
 static void FU03_sub_14CBC();
 static bool FU03_sub_14CDC();
 static void FU03_sub_14EE0(EnVars*);
-static void FU03_sub_14F14();
-static void FU03_sub_Oxygen_Feedback_Trim();
-static void FU03_sub_1525A();
+static void FU03_sub_14F14(EnVars* ev);
+static void FU03_sub_Oxygen_Feedback_Trim(EnVars* ev);
+static u16 FU03_sub_1525A(EnVars* ev);
 static void FU03_sub_15300();
 static void FU03_sub_153E4();
 static void FU03_sub_1559C();
@@ -185,7 +186,7 @@ static void SysInit_sub_13B04()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void FU03_root_sub()
+extern "C" void FU03_root_sub()
 {
 	FU03_sub_13CE4();
 	FU03_sub_14B50();
@@ -845,26 +846,156 @@ static bool FU03_sub_14CDC()
 
 static void FU03_sub_14EE0(EnVars* ev)
 {
+	FU03_sub_14F14(ev);
+	FU03_sub_Oxygen_Feedback_Trim(ev);
 
+	//ev->_432_word_8DB0
+
+	//FU03_sub_15300();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void FU03_sub_14F14()
+static void FU03_sub_14F14(EnVars* ev)
 {
+	u32 r8 = Table_Lookup_byte_2D_3D(STFUELMINT_45CA);
+	u32 r2 = Table_Lookup_byte_2D_3D(STFUELMAXT_45BC);
 
+	if (*ev->_12_wMUT18_Open_Loop_Bit_Array & 0x40)
+	{
+		r2 = word_15B2;
+	};
+
+	*ev->_132_limLo_O2_Feedback_Trim = r8 << 8;
+	*ev->_136_limHi_O2_Feedback_Trim = r2 << 8;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void FU03_sub_Oxygen_Feedback_Trim()
+static void FU03_sub_Oxygen_Feedback_Trim(EnVars* ev)
 {
+	u16 *r2 = ev->_96_wMUT0F_Oxygen_Feedback_Trim;
+	u16 *r9 = ev->_100_word_FFFF8A74;
 
+
+	if (wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING))
+	{
+		*ev->_200_word_FFFF92B6 = 0x8080;
+	}
+	else if ((Bitmap_Store_A_FFFF89EE & 4) && (*ev->_196_word_FFFF928E & 2))
+	{
+		*ev->_200_word_FFFF92B6 = Interpolate_256(*ev->_200_word_FFFF92B6, *r2, (word_FFFF8D58 & 0x2000) ? word_215A : word_1DAA);
+	};
+
+	// loc_14FE8
+
+	u32 r8 = (sub_21D9C()) ? FU03_sub_1525A(ev) : 4;
+
+	// loc_15094
+
+	__disable_irq();
+
+	if (r8 == 2)
+	{
+		*r2 = (word_15B6 << 8) + 0x80;
+	}
+	else if (r8 == 4)
+	{
+		*r2 = 0x8080;
+	}
+	else if (r8 == 8)
+	{
+		*r2 = (word_15B4 << 8) + 0x80;
+	}
+	else if (r8 == 16)
+	{
+		*r2 = (word_15B8 << 8) + 0x80;
+	};
+
+	// loc_150EE
+
+	__enable_irq();
+
+	if (*ev->_4_wMUT1E_MAF_RESET_FLAG & FUEL_CUT)
+	{
+		if ((*ev->_8_prev_MUT1E_FLAGS & FUEL_CUT) == 0)
+		{
+			__disable_irq();
+
+			*r2 = *r9;
+
+			__enable_irq();
+		};
+
+		// loc_15118
+
+		*r9 = *r2;
+	}
+	else
+	{
+		r8 = 0;
+		u32 r13 = 0x8080;
+		u32 r3 = *ev->_184_word_FFFF929A;
+
+		if (wMUT1E_MAF_RESET_FLAG & STALL)
+		{
+			r13 = 0x8080;
+		}
+		else if (open_Loop_disable != 0 && timer_FFFF8596 != 0)
+		{
+			r8 = 1;
+		}
+		else if (*ev->_20_FUEL_CUT_FLAG_FFFF8A5E & 8)
+		{
+			u32 r0 = *ev->_132_limLo_O2_Feedback_Trim;
+
+			u32 r2 = (word_1A1C << 8) + 128;
+
+			r13 = (r2 >= r0) ? r2 : r0;
+		}
+		else if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 4) && r3 == 3)
+		{
+			r13 = *ev->_192_word_FFFF92A2;
+		}
+		else if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 4) && r3 >= 3  && r3 <= 12)
+		{
+			r13 = *ev->_188_word_FFFF929E;
+		}
+		else if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 1)
+		{
+			if (((wMUT1E_MAF_RESET_FLAG & DECELERATION_FUEL_CUT) || (wMUT19_Startup_Check_Bits & 0x80) == 0) && ((*ev->_196_word_FFFF928E & 0x1000) || word_FFFF86FA != 0))
+			{
+				r13 = *ev->_200_word_FFFF92B6;
+			}
+			else
+			{
+				r13 = 0x8080;
+			};
+		}
+		else
+		{
+			if ((wMUTD0_BitMap1 & 1) == 0 || (wMUT19_Startup_Check_Bits & 0x80))
+			{
+				r13 = 0x8080;
+			}
+			else
+			{
+				r8 = 1;
+			};
+		};
+
+		// loc_15240
+
+		if (r8 == 0)
+		{
+			*r9 = r13;
+		};
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void FU03_sub_1525A()
+static u16 FU03_sub_1525A(EnVars* ev)
 {
 
 }
