@@ -14,7 +14,7 @@
 
 
 #define Get_ADC_Knock				((void(*)(void))0xA92C)
-#define INJECTOR_RESCALED_sub_26174	((u16(*)(u16))0x26174)
+//#define INJECTOR_RESCALED_sub_26174	((u16(*)(u16))0x26174)
 //#define CRANK75_Knock_sub_24AC0		((void(*)(void))0x24AC0)
 
 //#define crankPrevICR0AH_A       (*(u32*)0xFFFF9AB8)
@@ -59,6 +59,7 @@
 #define	word_98CC				((const u16*)0x98CC)                                                     
 #define	word_98E6				((const u16*)0x98E6)                                                     
 #define	word_98D4				((const u16*)0x98D4)                                                     
+#define	byte_342F				((const byte*)0x342F)                                                     
 
 #define	word_98C2				(*(const u16*)0x98BA)                                                     
 
@@ -72,8 +73,11 @@ static void CRANK75_root_sub_DB40(u16 osbr, u32 icr);
 
 static void SetIgnCoilChargeStartTime(u16 mask, u16 v);
 static void SetIgnSparkStartTime(u16 mask, u16 v);
-static void StartInjectSync(u16 mask, u16 v);
-static void StartInjectAsync(u16 mask, u16 v);
+
+void StartInjectSync(u16 v, u16 mask);
+void StartInjectAsync(u16 v, u16 mask);
+
+u16 INJECTOR_RESCALED_sub_26174(u16 v);
 
 static void CRANK75_sub_232A0();
 static void CRANK75_Knock_sub_23F8C();
@@ -1200,7 +1204,7 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 	{
 		// async_25DE6
 
-		if ((FUEL_CUT_FLAG_FFFF8A5E & 0x80) && (RPM_FLAGS & 1) && (word_FFFF8AD6 != 0 || (word_FFFF8F2A & 2) == 0))
+		if (ONE(FUEL_CUT_FLAG_FFFF8A5E, 0x80) && ONE(RPM_FLAGS, 1) && (word_FFFF8AD6 != 0 || ZRO(word_FFFF8F2A, 2)))
 		{
 			// loc_25E06
 
@@ -1220,6 +1224,188 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 	else
 	{
 		// loc_25120
+
+		if (crankHT_x_4us_3 < Rev_Limit_Sensor_Error_1576)
+		{
+			SET(RPM_FLAGS, 0x20);
+		}
+		else
+		{
+			CLR(RPM_FLAGS, 0x20);
+		};
+		
+		// loc_25142
+
+		u32 r13 = Add_Lim_FFFF(manifold_SumCount, manifold_SumCount_prev);
+
+		if (r13 != 0)
+		{
+			Manifold_AbsPressure_ADC8bit_x256_avrg = Div_DW(Add_R4w_R5w(manifold_Sum, manifold_Sum_prev) << 8, r13);
+
+			Manifold_AbsPressure_ADC8bit_avrg = Manifold_AbsPressure_ADC8bit_x256_avrg >> 8;
+		};
+
+		// loc_25192
+
+		manifold_SumCount_prev = manifold_SumCount;
+
+		manifold_SumCount = 0;
+
+		manifold_Sum_prev = manifold_Sum;
+
+		manifold_Sum = 0;
+
+		if (RPM_FLAGS & 2)
+		{
+			// loc_251BA
+	
+			Manifold_ADC8bit_1 = wMUT1A_Manifold_AbsPressure_ADC8bit;
+			Manifold_ADC8bit_2 = Manifold_ADC8bit_1;
+			Manifold_ADC8bit_3 = Manifold_ADC8bit_1;
+			Manifold_ADC8bit_4 = Manifold_ADC8bit_1;
+
+			Manifold_AbsPressure_ADC8bit_x256_avrg = (Manifold_AbsPressure_ADC8bit_avrg = load_vs_tps) << 8;
+		};
+
+		// loc_252C0
+
+		if (load_FFFF8976 < baro_FFFF8B10 && word_FFFF86F4 == 0 && ABSDIF(wMUT1A_Manifold_AbsPressure_ADC8bit, Manifold_ADC8bit_1) >= word_2AB2/*2*/)
+		{
+			u32 r2;
+
+			if (wMUT1A_Manifold_AbsPressure_ADC8bit >= Manifold_ADC8bit_1)
+			{
+				r2 = Add_Lim_FFFF(Manifold_AbsPressure_ADC8bit_x256_avrg, Mul_Div((wMUT1A_Manifold_AbsPressure_ADC8bit - Manifold_ADC8bit_1) << 8 , word_2542/*122*/, 32));
+			}
+			else
+			{
+				// loc_25368
+
+				r2 = Sub_Lim_0(Manifold_AbsPressure_ADC8bit_x256_avrg, Mul_Div((Manifold_ADC8bit_1 - wMUT1A_Manifold_AbsPressure_ADC8bit) << 8 , word_2544/*122*/, 32));
+			};
+
+			// loc_2539A
+
+			MAFSxMAF_MULTIPLIER_1_FFFF89A8 = Lim16(r2, word_254A << 8,  wMUT15_Barometric_Pressure << 8);
+		}
+		else
+		{
+			// loc_253C0
+
+			MAFSxMAF_MULTIPLIER_1_FFFF89A8 = Manifold_AbsPressure_ADC8bit_x256_avrg;
+		};
+
+		// loc_253C8
+
+		if (wMUT1A_Manifold_AbsPressure_ADC8bit >= Manifold_ADC8bit_4)
+		{
+			r13 = wMUT1A_Manifold_AbsPressure_ADC8bit - Manifold_ADC8bit_4;
+
+			if (MAX_MAP_FALL_CHANGE < r13)
+			{
+				MAX_MAP_FALL_CHANGE = r13;
+			};
+		}
+		else
+		{
+			// loc_253F6
+
+			r13 = Manifold_ADC8bit_4 - wMUT1A_Manifold_AbsPressure_ADC8bit;
+
+			if (MAX_MAP_RISE_CHANGE < r13)
+			{
+				MAX_MAP_RISE_CHANGE = r13;
+			};
+		};
+
+		// loc_25414
+
+		manifold_FFFF8988 = wMUT1A_Manifold_AbsPressure_ADC8bit;
+		manifold_FFFF898E = Manifold_ADC8bit_4;
+
+		bool r2 = true;
+
+		if (wMUTC0_bMUT54_Acceleration_Enrichment != 0)
+		{
+			if (wMUTC0_bMUT54_Acceleration_Enrichment > word_1672)
+			{
+				r13 = Mul_Fix8_Lim_FFFF(wMUTC0_bMUT54_Acceleration_Enrichment, enrichCoolTemp);
+
+				wMUTC0_bMUT54_Acceleration_Enrichment = (r13 >= word_1672) ? r13 : word_1672;
+			}
+			else if (word_FFFF8B2C == 0)
+			{
+				wMUTC0_bMUT54_Acceleration_Enrichment = Mul_Fix8_Lim_FFFF(wMUTC0_bMUT54_Acceleration_Enrichment, word_1674);
+			}
+			else
+			{
+				// loc_25492
+
+				r2 = false;
+			};
+		};
+
+		// loc_25494
+
+		if (r2 && wMUT10_Coolant_Temperature_Scaled < word_167A)
+		{
+			word_FFFF8B2C = word_1678;
+		};
+
+		// loc_254AE
+
+		if(word_FFFF8B2C != 0)
+		{
+			word_FFFF8B2C -= 1;
+		};
+
+		if(word_FFFF8B30 != 0)
+		{
+			word_FFFF8B30 -= 1;
+		};
+
+		// loc_254CE
+
+		r2 = true;
+
+		if (wMUTC1_bMUT55_Deceleration_Enleanment != 0)
+		{
+			if (wMUTC1_bMUT55_Deceleration_Enleanment > word_168C)
+			{
+				r13 = Mul_Fix8_Lim_FFFF(wMUTC1_bMUT55_Deceleration_Enleanment, word_FFFF8B1C);
+
+				wMUTC1_bMUT55_Deceleration_Enleanment = (r13 >= word_168C) ? r13 : word_168C;
+			}
+			else if (word_FFFF8B2E == 0)
+			{
+				wMUTC1_bMUT55_Deceleration_Enleanment = Mul_Fix8_Lim_FFFF(wMUTC1_bMUT55_Deceleration_Enleanment, word_168E);
+			}
+			else
+			{
+				// loc_2553C
+
+				r2 = false;
+			};
+		};
+
+		// loc_2553E
+
+		if (r2 && wMUT10_Coolant_Temperature_Scaled < word_1690)
+		{
+			word_FFFF8B2E = word_1692;
+		};
+
+		// loc_254AE
+
+		if(word_FFFF8B2E != 0)
+		{
+			word_FFFF8B2E -= 1;
+		};
+
+
+
+
+
 	};
 
 
@@ -1255,12 +1441,12 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 
 		if (r2 == 1)
 		{
-			if ((word_FFFF8B4E & 0x80) == 0)
+			if (ZRO(word_FFFF8B4E, 0x80))
 			{
 				// loc_25F98
 
 			}
-			else if ((word_FFFF8B4E & 0x40) == 0)
+			else if (ZRO(word_FFFF8B4E, 0x40))
 			{
 				r2 = 0;
 			}
@@ -1275,7 +1461,7 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 					r13 = Sub_Lim_0(strokeNumber, 1);
 				};
 
-				if ((wMUT1E_MAF_RESET_FLAG & CRANKING) && (word_FFFF8A48 & 0x80) && (word_FFFF8B4E & 0x20) == 0 && (word_FFFF89F2 & 0x400) == 0 && (word_FFFF89F2 & 0x800) == 0)
+				if ((wMUT1E_MAF_RESET_FLAG & CRANKING) && (word_FFFF8A48 & 0x80) && ZRO(word_FFFF8B4E, 0x20) && ZRO(word_FFFF89F2, 0x400) && ZRO(word_FFFF89F2, 0x800))
 				{
 					SET(word_FFFF89F2, 0x800);
 
@@ -1291,7 +1477,7 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 		}
 		else if (r2 == 3)
 		{
-			if ((BOOSTCHECK2_FFFF8A0E & 0x40) == 0 && (word_FFFF89F2 & 0x400) == 0)
+			if (ZRO(BOOSTCHECK2_FFFF8A0E, 0x40) && ZRO(word_FFFF89F2, 0x400))
 			{
 				SET(word_FFFF89F2, 0x400);
 				word_FFFF8F28 ^= 1;
@@ -1384,16 +1570,30 @@ static void SetIgnSparkStartTime(u16 mask, u16 v)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void StartInjectSync(u16 mask, u16 v)
+void StartInjectSync(u16 v, u16 mask)
 {
 
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void StartInjectAsync(u16 mask, u16 v)
+void StartInjectAsync(u16 v, u16 mask)
 {
 
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+u16 INJECTOR_RESCALED_sub_26174(u16 v)
+{
+	if (v <= 260)
+	{
+		v = Add_Lim_FFFF(v, Div_R4_R5__R0(byte_342F[v>>2], 2));
+	};
+
+	// loc_261AC
+
+	return Add_Lim_FFFF(v, injectorLatencyRescaled);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

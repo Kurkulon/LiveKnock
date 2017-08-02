@@ -13,6 +13,7 @@
 #define sub_21E2A									((bool(*)(void))0x21E2A)
 #define sub_21C0C									((u16(*)(u16))0x21C0C)
 #define sub_21D9C									((bool(*)(void))0x21D9C)
+#define sub_21D6C									((u16(*)(u16))0x21D6C)
 
 
 #define ENGINE_MAIN_VARIABLES_DIM_off_9198		((EnVars*)0x9198)
@@ -23,6 +24,7 @@
 #define LOAD9_676C								((Axis*)0x676C)
 #define MUTB4_672E								((Axis*)0x672E)
 #define BAR5_6D66								((Axis*)0x6D66)
+#define VOLT7_66AE								((Axis*)0x66AE)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -40,15 +42,27 @@
 #define POSTCRANKENRICH1_4892					((Map3D_B *)0x4892)
 #define leanspoolafradjustment_3652				((Map3D_B *)0x3652)
 #define unk034_3EFA								((Map3D_B *)0x3EFA)
+#define INJBATVOLTCOMP_3422						((Map3D_B *)0x3422)
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#define COLD1ST_3594							((Map3D_W *)0x3594)
+#define IPW_Adder_for_Cold_Start2_5362			((Map3D_W *)0x5362)
+ 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #define AFRTMP_302A								((const byte*)0x302A)
 #define unk137_35AE								((const byte*)0x35AE)
 
+#define word_98E6								((const u16*)0x98E6)
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #undef FU03_sub_142DC
+
+extern u16 INJECTOR_RESCALED_sub_26174(u16 v);
+extern void StartInjectAsync(u16 v, u16 mask);
+extern void StartInjectSync(u16 v, u16 mask);
 
 static void SysInit_NVRAM_Trims();
 static void FU03_Init_Trims();
@@ -997,7 +1011,7 @@ static void FU03_sub_Oxygen_Feedback_Trim(EnVars* ev)
 
 static u16 FU03_sub_1525A(EnVars* ev)
 {
-
+	return 0;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1074,7 +1088,11 @@ static void FU03_IPW_compensation()
 
 static void FU03_InjLatencyUpdate()
 {
+	Table_Lookup_Axis(VOLT7_66AE);
+	
+	wMUT79_Injector_Latency = sub_21D6C(Table_Lookup_byte_2D_3D(INJBATVOLTCOMP_3422));
 
+	injectorLatencyRescaled = Mul_Div_R(wMUT79_Injector_Latency, INJLATBASE, 8);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1130,7 +1148,205 @@ static void FU03_ASYNHACCELENRICH_sub_1623E()
 
 static void FU03_sub_162D8()
 {
+	const u32 r8 = 0x2000;
 
+	if (MUT21_RPM_x125div4 >= word_152A)
+	{
+		CLR(FUEL_CUT_FLAG_FFFF8A5E, 2);
+	};
+
+	if ((wMUT1E_MAF_RESET_FLAG & STALL) &&  (FUEL_CUT_FLAG_FFFF8A5E & 2) == 0)
+	{
+		CLR(FUEL_CUT_FLAG_FFFF8A5E, 1);
+	};
+
+	// loc_16428
+
+	if (wMUT1E_MAF_RESET_FLAG & STALL)
+	{
+		CLR(BOOSTCHECK2_FFFF8A0E, 0x40);
+
+		__disable_irq();
+
+		CLR(word_FFFF89F2, 0x400);
+
+		__enable_irq();
+
+		if (wMUT10_Coolant_Temperature_Scaled <= word_1782/*255*/ && wMUT10_Coolant_Temperature_Scaled <= word_24F6/*255*/)
+		{
+			__disable_irq();
+
+			word_FFFF8BAA = word_2576/*0*/;
+
+			if (wMUT10_Coolant_Temperature_Scaled <= word_25EE/*0*/)
+			{
+				word_FFFF8BAA = word_25EC/*0*/;
+			};
+
+			__enable_irq();
+		};
+	};
+
+	// loc_1649C
+
+	if (wMUT10_Coolant_Temperature_Scaled > word_1782/*255*/)
+	{
+		SET(FUEL_CUT_FLAG_FFFF8A5E, 0x80);
+	}
+	else
+	{
+		CLR(FUEL_CUT_FLAG_FFFF8A5E, 0x80);
+	};
+
+	// loc_164BE
+
+	if (wMUT10_Coolant_Temperature_Scaled <= word_24F6/*255*/)	
+	{
+		SET(word_FFFF8A48, 0x40);
+	}
+	else
+	{
+		CLR(word_FFFF8A48, 0x40);
+	};
+
+	// loc_16502
+
+	__disable_irq();
+
+	if ((wMUT1E_MAF_RESET_FLAG & CRANKING) && word_FFFF8BAA != 0)	
+	{
+		SET(RPM_FLAGS, r8);
+	}
+	else
+	{
+		CLR(RPM_FLAGS, r8);
+	};
+
+	// loc_16538
+
+	__enable_irq();
+
+
+	if (ONE(wMUT1E_MAF_RESET_FLAG, CRANKING) && ZRO(FUEL_CUT_FLAG_FFFF8A5E, 1))
+	{
+		// loc_16560
+
+		u32 r1;
+
+		if (ONE(FUEL_CUT_FLAG_FFFF8A5E, 0x80))
+		{
+			r1 = Table_Lookup_word_2D_3D(COLD1ST_3594);
+		}
+		else
+		{
+			r1 = Table_Lookup_word_2D_3D(IPW_Adder_for_Cold_Start2_5362);
+
+			if (ONE(word_FFFF8A48, 0x20))
+			{
+				r1 = Mul_Fix7_R(r1, word_25E2/*90(0.7)*/);
+			};
+
+			word_FFFF8BAC = r1;
+		};
+	
+		// loc_1659E
+
+		if (r1 != 0)
+		{
+			r1 = INJECTOR_RESCALED_sub_26174(r1);
+		};
+
+		// loc_165AE
+
+		u32 r11;
+
+		if (ONE(RPM_FLAGS, r8))
+		{
+			__disable_irq();
+
+			bMUTC6_FFFF8A52 = r1;
+			bMUTC5_InjPulseW_8us = r1;
+
+			r11 = word_98E6[word_FFFF8F28];
+
+			word_FFFF8F28 ^= 1;
+		}
+		else
+		{
+			__disable_irq();
+
+			bMUTC6_FFFF8A52 = r1;
+			bMUTC5_InjPulseW_8us = r1;
+
+			r11 = 0xF;
+		};
+
+		// loc_165F6
+
+		StartInjectAsync(r1, r11);
+
+		__enable_irq();
+
+		SET(FUEL_CUT_FLAG_FFFF8A5E, 3);
+		SET(BOOSTCHECK2_FFFF8A0E, 0x40);
+	};
+
+	// loc_16612
+
+	if (ONE(RPM_FLAGS, r8) && ONE(word_FFFF8A48, 0x80) && ZRO(word_FFFF89F2, 0x400))
+	{
+		// loc_1663A
+
+		u32 r1 = word_FFFF8BAC;
+
+		__disable_irq();
+
+		SET(word_FFFF89F2, 0x400);
+		
+		__enable_irq();
+
+		if (r1 != 0)
+		{
+			r1 = INJECTOR_RESCALED_sub_26174(r1);
+		};
+
+		// loc_16664
+
+		__disable_irq();
+
+		bMUTC6_FFFF8A52 = r1;
+		bMUTC5_InjPulseW_8us = r1;
+	
+		if (ZRO(BOOSTCHECK2_FFFF8A0E, 0x40))
+		{
+			word_FFFF8F28 ^= 1;
+		};
+
+		// loc_16682
+
+		u32 r2 = word_98E6[word_FFFF8F28];
+
+		word_FFFF8F28 ^= 1;
+
+		if (word_FFFF8BAA != 0)
+		{
+			if (word_FFFF8BAA != 0)
+			{
+				word_FFFF8BAA -= 1;
+			};
+
+			if (word_FFFF8BAA == 0)
+			{
+				CLR(RPM_FLAGS, 0x2000);
+			};
+
+			StartInjectSync(r1, r2);
+		};
+		
+		// loc_1673C
+
+		__enable_irq();
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

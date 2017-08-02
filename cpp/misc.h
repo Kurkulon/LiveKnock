@@ -105,11 +105,13 @@ struct Map3D_W
 
 #define Add_Lim_FFFF									((u32(*)(u16,u16))0x500)
 #define Add_Lim_FFFFFFFF								((u32(*)(u32,u32))0x51C)
+#define Add_R4w_R5w										((u32(*)(u16,u16))0x514)
 #define Sub_Lim_0										((u32(*)(u16,u16))0xF0C)
 #define Mul_Fix8_R										((u32(*)(u16,u16))0x804)
 #define Div_WW											((u32(*)(u16,u16))0x9B0)
 #define Div_DW											((u32(*)(u32,u16))0x902)
 #define DIV_DW_R										((u32(*)(u32,u16))0x9F2)
+#define Div_R4_R5__R0									((u16(*)(u16,u16))0x8C4)
 #define Mul_Fix7_R										((u32(*)(u16,u16))0x762)
 #define Mul_DW_Div										((u32(*)(u32,u16,u16))0x5E8)
 #define Mul_Div											((u32(*)(u16,u16,u16))0x5D0)
@@ -276,6 +278,11 @@ struct TM32
 
 #define SET(v, m) (v |= m)
 #define CLR(v, m) (v &= ~m)
+
+#define ONE(v, m) ((v & m) != 0)
+#define ZRO(v, m) ((v & m) == 0)
+
+#define ABSDIF(a, b) (((a) >= (b)) ? ((a) - (b)) : ((b) - (a)))
 
 #define TRG(f, m, v, l, h) { if (f & m) { if (v <= l) { CLR(f, m);	}; } else {	if (v > h) { SET(f, m);	};};}
 
