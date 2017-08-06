@@ -14,7 +14,7 @@ _forcedIdleRPM:		.RES.B      1
 
 	.ALIGN 2	
 	
-	.EXPORT		_axis_ig_RPM, _axis_ig_LOAD, _axis_fu_RPM, _axis_fu_LOAD, _axis_ve_RPM, _axis_ve_LOAD, _ve_index, _fb_VE, _ve_timer
+	.EXPORT		_axis_ig_RPM, _axis_ig_LOAD, _axis_fu_RPM, _axis_fu_LOAD, _axis_ve_RPM, _axis_ve_LOAD, _ve_index, _fb_VE, _ve_timer, _timeRPM
 
 _axis_ig_RPM:		.RES.W      1					
 _axis_ig_LOAD:		.RES.W      1					
@@ -25,6 +25,8 @@ _axis_ve_LOAD:		.RES.W      1
 _fb_VE				.RES.B      1					
 _ve_index:			.RES.B      1					
 _ve_timer:			.RES.B      1					
+					.RES.B      1					
+_timeRPM:			.RES.W      1					
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -213,6 +215,8 @@ altMUT:
 			.DATA.L		wMUT31_Volumetric_Efficiency+1
 			.DATA.L		wMUT6A_Knock_ADC_Processed+1
 			.DATA.L		wMUT72_Knock_Present+1
+			.DATA.L		_timeRPM
+			.DATA.L		_timeRPM+1
 			
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

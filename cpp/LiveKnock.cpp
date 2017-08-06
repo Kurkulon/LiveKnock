@@ -162,6 +162,7 @@ static void TimeRPM()
 		pi = ar;
 
 		rpmTimeRAM[ar] = timer;
+		timeRPM = timer;
 
 		timer = 0;
 	}

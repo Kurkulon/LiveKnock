@@ -232,6 +232,7 @@ extern byte ve_timer;
 extern byte fb_VE;	
 extern byte forcedIdleRPM;	
 extern u32 frameCount;
+extern u16 timeRPM;	
 
 extern byte hiFuelMapRAM[];
 extern u16	hiIgnMapRAM[];
