@@ -1762,10 +1762,7 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 				ipw = 0;
 			};
 
-			if (word_FFFF8AD0 < 0xFFFF)
-			{
-				word_FFFF8AD0 += 1;
-			};
+			INCLIM(word_FFFF8AD0);
 
 			if (word_FFFF8AD0 >= 4)
 			{
@@ -1777,10 +1774,7 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 			word_FFFF8AD0 = 0;
 		};
 
-		if (word_FFFF8F30 < 0xFFFF)
-		{
-			word_FFFF8F30 += 1;
-		};
+		INCLIM(word_FFFF8F30);
 
 		if (word_FFFF8F30 >= 2)
 		{
@@ -1798,10 +1792,7 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 
 			ipw = word_FFFF8BAE;
 
-			if (word_FFFF8BAA != 0)
-			{
-				word_FFFF8BAA -= 1;
-			};
+			DECLIM(word_FFFF8BAA);
 
 			if (word_FFFF8BAA == 0)
 			{
@@ -1814,10 +1805,7 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 
 			ipw = word_FFFF8BAE;
 
-			if (word_FFFF8BAA != 0)
-			{
-				word_FFFF8BAA -= 1;
-			};
+			DECLIM(word_FFFF8BAA)
 
 			if (word_FFFF8BAA == 0)
 			{

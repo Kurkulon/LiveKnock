@@ -768,7 +768,7 @@
 #define      wMUT31_Volumetric_Efficiency   							(*(u16*)0xFFFF8AB8)                                                        
 #define      k_InAirTemp            							(*(u16*)0xFFFF8ABA)                                                        
 #define      FUEL_BEFORE_ENRICHMENT_aka_Temp1_FFFF8ABC					(*(u16*)0xFFFF8ABC)                                              
-#define      MAF_MAP__MULTIPLIER_FFFF8ABE  								(*(u16*)0xFFFF8ABE)                                                        
+#define      enrichmentWarmUp  								(*(u16*)0xFFFF8ABE)                                                        
 #define      word_FFFF8AC0                  							(*(u16*)0xFFFF8AC0)                                                        
 #define      COOLANT_REL_6_FFFF8AC2         							(*(u16*)0xFFFF8AC2)                                                        
 #define      word_FFFF8AC4                  							(*(u16*)0xFFFF8AC4)                                                        

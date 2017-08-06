@@ -785,7 +785,7 @@ bool F500_CheckIdleRPM()
 
 void F500_MAP_Coolant_Calcs()
 {
-	u32 r1 = Table_Lookup_byte_2D_3D(AIRTEMPCOMPAFR1_33C4);
+	u32 enrichCoolant = Table_Lookup_byte_2D_3D(AIRTEMPCOMPAFR1_33C4);
 
 	if (wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING))
 	{
@@ -797,19 +797,19 @@ void F500_MAP_Coolant_Calcs()
 		u32 RTF = ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_COPY_FFFF888A ^ RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888) & RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_COPY_FFFF888A);
 
 		if (word_FFFF8AE2 != 0 
-			|| ((RTF & 0x80) == 0 && (RTF & 0x20) == 0 && (byte_105C == 0 || (RTF & 8) == 0))
-			|| (MAF_MAP__MULTIPLIER_FFFF8ABE >= r1 && COOLANT_REL_6_FFFF8AC2 == 0 && COOLANT_REL_7_FFFF8AEC == 0))
+			|| ((RTF & 0x80) == 0 && (RTF & 0x20) == 0 && (byte_105C/*0*/ == 0 || (RTF & 8) == 0))
+			|| (enrichmentWarmUp >= enrichCoolant && COOLANT_REL_6_FFFF8AC2 == 0 && COOLANT_REL_7_FFFF8AEC == 0))
 		{
 			if (word_FFFF86EA == 0)
 			{
 				if (word_FFFF8AE4 > 0x80 && (Bitmap_Store_A_FFFF89EE & 2))
 				{
-					word_FFFF8AE4 = Sub_Lim_0(word_FFFF8AE4, t1_unk_20A8);
+					word_FFFF8AE4 = Sub_Lim_0(word_FFFF8AE4, t1_unk_20A8/*6*/);
 				};
 			}
 			else
 			{
-				word_FFFF8AE4 = t1_unk_20AA;
+				word_FFFF8AE4 = t1_unk_20AA/*128*/;
 			};
 		}
 		else
@@ -822,7 +822,7 @@ void F500_MAP_Coolant_Calcs()
 
 		if (F500_sub_10820() && word_FFFF8AE4 == 0x80 && (Bitmap_Store_A_FFFF89EE & 2))
 		{
-			word_FFFF8AE2 = Sub_Lim_0(word_FFFF8AE2, t1_unk_20AE);
+			word_FFFF8AE2 = Sub_Lim_0(word_FFFF8AE2, t1_unk_20AE/*6*/);
 		}
 		else
 		{
@@ -830,26 +830,24 @@ void F500_MAP_Coolant_Calcs()
 		};
 	};
 
-	u32 r2 = word_FFFF8AE2;
-
-	r1 = interpolate_r4_r5_r6(r1, Table_Lookup_byte_2D_3D(AIRTEMPCOMPAFR1_45D8), r2);
+	enrichCoolant = interpolate_r4_r5_r6(enrichCoolant, Table_Lookup_byte_2D_3D(AIRTEMPCOMPAFR1_45D8), word_FFFF8AE2);
 
 	if ((wMUT1E_MAF_RESET_FLAG & MAP_error) == 0)
 	{
-		r2 = 0x80;
+		u32 enrichRPM = 0x80;
 
-		r1 = Sub_Lim_0(r1, 0x80);
+		enrichCoolant = Sub_Lim_0(enrichCoolant, 0x80);
 
-		if (MUT21_RPM_x125div4 > t1_unk_1776/*16*/)
+		if (MUT21_RPM_x125div4 > t1_unk_1776/*16(500)*/)
 		{
 			Table_Lookup_Axis(LOAD9_65F8);
-			r2 = Table_Lookup_byte_2D_3D(LOADAFR_33B4);
+			enrichRPM= Table_Lookup_byte_2D_3D(LOADAFR_33B4);
 		};
 
-		r1 = Lim_FF(Mul_Div_R(r1*r2, 0x80, 0x4000) + 0x80);
+		enrichCoolant = Lim_FF(Mul_Div_R(enrichCoolant * enrichRPM, 0x80, 0x4000) + 0x80);
 	};
 
-	MAF_MAP__MULTIPLIER_FFFF8ABE = r1;
+	enrichmentWarmUp = enrichCoolant;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

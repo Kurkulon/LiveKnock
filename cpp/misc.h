@@ -286,6 +286,10 @@ struct TM32
 #define ONE(v, m) ((v & m) != 0)
 #define ZRO(v, m) ((v & m) == 0)
 
+#define INCLIM(v) { if (v < 0xFFFF) {v += 1;}; }
+#define DECLIM(v) { if (v != 0) {v -= 1;}; }
+
+
 #define ABSDIF(a, b) (((a) >= (b)) ? ((a) - (b)) : ((b) - (a)))
 
 #define TRG(f, m, v, l, h) { if (f & m) { if (v <= l) { CLR(f, m);	}; } else {	if (v > h) { SET(f, m);	};};}
