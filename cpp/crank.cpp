@@ -1877,6 +1877,13 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 			{
 				// loc_25F98
 
+				r2 = word_98D4[strokeNumber+1];
+
+				if (word_FFFF8B4E & 0x40)
+				{
+					r2 |= word_98D4[strokeNumber];
+				};
+
 			}
 			else if (ZRO(word_FFFF8B4E, 0x40))
 			{
