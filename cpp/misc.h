@@ -79,6 +79,7 @@ struct Map3D_W
 #define DECELERATION_FUEL_CUT	0x04
 #define FUEL_CUT				0x08
 #define STALL					0x10
+#define REVLIM					0x20
 #define CLOSED_LOOP_GENERIC		0x80
 #define IDLE					0x1000
 
@@ -117,6 +118,7 @@ struct Map3D_W
 #define Mul_Div											((u32(*)(u16,u16,u16))0x5D0)
 #define Mul32_Fix8										((u32(*)(u32,u16))0x7E6)
 #define Mul_R4_R5w_Div_128_Into_R0						((u32(*)(u32,u16))0x780)
+#define Mul_R4_R5_Div_128_Into_R0						((u32(*)(u16,u16))0x752)
 #define Mul16											((u32(*)(u16,u16))0xEEE)
 #define Mul_Lim_FFFF									((u32(*)(u16,u16))0xED8)
 #define Mul_Fix8_Lim_FFFF								((u32(*)(u16,u16))0x7D0)
@@ -234,6 +236,7 @@ extern u32 frameCount;
 extern byte hiFuelMapRAM[];
 extern u16	hiIgnMapRAM[];
 extern u16	veMapRAM[];
+extern u16	rpmTimeRAM[];
 extern const u16 hiIgnMapData[];
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

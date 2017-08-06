@@ -298,7 +298,16 @@ veMapRAM .EQU veMapData + RAM - ROM
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	.EXPORT		_hiFuelMapRAM, _hiIgnMapRAM, _veMapRAM
+			.align 2
+			
+rpmTimeData:                    
+            .DATAB.W  21, 0
+			
+rpmTimeRAM .EQU rpmTimeData + RAM - ROM
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	.EXPORT		_hiFuelMapRAM, _hiIgnMapRAM, _veMapRAM, _rpmTimeRAM
 
 	.SECTION    sec_hiFuelMapRAM,	DATA, LOCATE=hiFuelMapRAM
 	
@@ -311,6 +320,10 @@ _hiIgnMapRAM:		.RES.W      1
 	.SECTION    sec_veMapRAM,		DATA, LOCATE=veMapRAM
 
 _veMapRAM:			.RES.B      1
+
+	.SECTION    sec_rpmTimeRAM,		DATA, LOCATE=rpmTimeRAM
+
+_rpmTimeRAM:		.RES.B      1
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

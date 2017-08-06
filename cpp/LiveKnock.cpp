@@ -7,6 +7,7 @@
 
 #pragma noregsave(FeedBack_WBO2)
 static void FeedBack_WBO2();
+static void TimeRPM();
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -81,6 +82,8 @@ extern "C" void LiveKnock()
 
 		FeedBack_WBO2();
 
+		TimeRPM();
+
 	}; // if ((wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING)) == 0)
 
 }
@@ -141,6 +144,38 @@ static void FeedBack_WBO2()
 	{
 		ve_timer = LDT;
 	};
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma noregsave(TimeRPM)
+
+static void TimeRPM()
+{
+	static u16 timer;
+	static byte pi;
+
+	byte ar = (byte)axis_ig_RPM;
+
+	if (ar > pi)
+	{
+		pi = ar;
+
+		rpmTimeRAM[ar] = timer;
+
+		timer = 0;
+	}
+	else if (ar < 5)
+	{
+		pi = ar;
+
+		timer = 0xFFFF;
+	}
+	else if (timer < 0xFFFF)
+	{
+		timer += 1;
+	};
+
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

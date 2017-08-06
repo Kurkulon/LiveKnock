@@ -551,7 +551,7 @@ void F500_Update_IAT_Sensor()
 	
 	Table_Lookup_Axis(CEL7_692E);
 													
-	LOAD_TRIMS_FFFF8ABA = Table_Lookup_byte_2D_3D(CORFUELAIR_33A6);
+	k_InAirTemp = Table_Lookup_byte_2D_3D(CORFUELAIR_33A6);
 
 	if (timer_down_TXFLAG3_FFFF8574 == 0 && (SPEED_FLAGS & 0x400))
 	{
