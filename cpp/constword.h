@@ -496,7 +496,7 @@
 #define      word_1A50												(*(const u16*)0x1A50)
 #define      word_1A52												(*(const u16*)0x1A52)
 #define      word_1A54												(*(const u16*)0x1A54)
-#define      word_1A56												(*(const u16*)0x1A56)
+#define      word_1A56												(*(const u16*)0x1A56) /// 80
 #define      word_1A58												(*(const u16*)0x1A58)
 #define      word_1A5A												(*(const u16*)0x1A5A)
 #define      rpm_1A5C												(*(const u16*)0x1A5C)
