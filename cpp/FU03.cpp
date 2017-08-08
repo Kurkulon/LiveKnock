@@ -25,6 +25,9 @@
 #define MUTB4_672E								((Axis*)0x672E)
 #define BAR5_6D66								((Axis*)0x6D66)
 #define VOLT7_66AE								((Axis*)0x66AE)
+#define CEL12_68D0								((Axis*)0x68D0)
+#define CEL11_6892								((Axis*)0x6892)
+#define RPM8_658A								((Axis*)0x658A)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -44,6 +47,9 @@
 #define unk034_3EFA								((Map3D_B *)0x3EFA)
 #define INJBATVOLTCOMP_3422						((Map3D_B *)0x3422)
 #define unk114_57A6								((Map3D_B *)0x57A6)
+#define unk066_5856								((Map3D_B *)0x5856)
+#define STIPWRPMCOR2_3492						((Map3D_B *)0x3492)
+#define word_3484								((Map3D_B *)0x3484)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -111,9 +117,9 @@ static void FU03_sub_15740();
 static void FU03_sub_15870();
 static void FU03_sub_158AC();
 static void FU03_sub_159DC();
-static void FU03_STIPWRPMCOR();
-static void FU03_sub_15C22();
-static void FU03_IPW_compensation();
+static u16 FU03_STIPWRPMCOR();
+static u16 FU03_sub_15C22();
+static u16 FU03_IPW_compensation();
 static void FU03_InjLatencyUpdate();
 static void FU03_sub_15E14();
 static void FU03_sub_15E48();
@@ -1033,7 +1039,98 @@ static void FU03_sub_153E4()
 
 static void FU03_sub_1559C()
 {
+	u32 r8 = FU03_STIPWRPMCOR();
 
+	u32 r9 = FU03_sub_15C22();
+
+	u32 var_10 = FU03_IPW_compensation();
+
+	Table_Lookup_Axis(CEL11_6892);
+
+	u32 var_C = Mult_R4_65536(Table_Lookup_byte_2D_3D(unk066_5856));
+
+	u32 r1 = Mult_R4_65536(unk066_5856->m2d.data[CEL12_68D0->len - 1]);
+
+	r8 = Mul_DW_Div(var_C, r8 * r9, 0x4000);
+
+	u32 r2 = Mul_DW_Div(r8, var_10 << 7, 0x4000);
+
+	if (r2 < r1)
+	{
+		r2 = r1;
+	};
+
+	if (word_FFFF8A48 & 0x20)
+	{
+		r2 = Mul_R4_R5w_Div_128_Round_R0(r2, word_25E0);
+	};
+
+	u32 r0 = Mul_Fix8_R(wMUT15_Barometric_Pressure, 0xA0) * word_25EA;
+
+	r0 = Mul_DW_Div(r2, r0, 0x400);
+
+	r0 = Mul32_lim(r0, 4);
+
+	r2 = Div_65536_R(r0);
+
+	if (wMUT1E_MAF_RESET_FLAG & CRANKING)
+	{
+		u32 r1 = t1_unk_154E;
+		u32 r13 = t1_unk_1550;
+
+		if (FUEL_CUT_FLAG_FFFF8A5E & 0x8000)
+		{
+			r1 = r13;
+		};
+
+		u32 r8 = r1 << 8;
+
+		r1 = r2;
+
+		r1 >>= 1;
+
+		if (r1 >= r8)
+		{
+			SET(FUEL_CUT_FLAG_FFFF8A5E, 0x8004);
+
+			r2 = r1;
+		}
+		else
+		{
+			r1 = t1_unk_1546;
+			r13 = t1_unk_154A;
+
+			if (FUEL_CUT_FLAG_FFFF8A5E & 4)
+			{
+				r1 = r13;
+			};
+
+			r1 <<= 8;
+
+			if (r2 >= r1)
+			{
+				SET(FUEL_CUT_FLAG_FFFF8A5E, 4);
+			}
+			else
+			{
+				CLR(FUEL_CUT_FLAG_FFFF8A5E, 4);
+
+				r2 = Mul_Lim_FFFF(r2, 4);
+			};
+		};
+
+		CLR(FUEL_CUT_FLAG_FFFF8A5E, 0x8000);
+	}
+	else
+	{
+		// loc_15B3A
+
+		CLR(FUEL_CUT_FLAG_FFFF8A5E, 0x8004);
+
+		r2 = Mul_Lim_FFFF(r2, 4);
+	};
+
+	word_FFFF8AFC = r2;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1066,21 +1163,33 @@ static void FU03_sub_159DC()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void FU03_STIPWRPMCOR()
+static u16 FU03_STIPWRPMCOR()
 {
+	if (wMUT1E_MAF_RESET_FLAG & STALL)
+	{
+		__disable_irq();
 
+		RPM8_FFFF8B00 = 0;
+		RPM8_FFFF8B02 = 0;
+
+		__enable_irq();
+	};
+
+	Table_Lookup_Axis(RPM8_658A);
+
+	return Table_Lookup_byte_2D_3D((SPEED_FLAGS & 4) ? STIPWRPMCOR2_3492 : word_3484);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void FU03_sub_15C22()
+static u16 FU03_sub_15C22()
 {
-
+//	if (wMUT1E_MAF_RESET_FLAG
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void FU03_IPW_compensation()
+static u16 FU03_IPW_compensation()
 {
 
 }

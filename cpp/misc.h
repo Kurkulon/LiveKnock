@@ -129,6 +129,8 @@ struct Map3D_W
 #define Mul16											((u32(*)(u16,u16))0xEEE)
 #define Mul_Lim_FFFF									((u32(*)(u16,u16))0xED8)
 #define Mul_Fix8_Lim_FFFF								((u32(*)(u16,u16))0x7D0)
+#define Mul32_lim										((u32(*)(u32,u32))0xEF8)
+#define Mul_R4_R5w_Div_128_Round_R0						((u32(*)(u32,u16))0x7A6)
 
 #define mem_incr										((void(*)(void*,void*))0x562)
 #define mem_decr										((void(*)(void*,void*))0x53E)
