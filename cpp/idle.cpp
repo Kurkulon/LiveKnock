@@ -233,7 +233,7 @@ static void AA05_sub_19260()
 {
 	word_FFFF8CDC = wMUT0D_Fuel_Trim_Middle;
 
-	if ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x80) == 0)
+	if ((RT_FLAG1_FFFF8888 & 0x80) == 0)
 	{
 		word_FFFF85D8 = word_194C/*20*/;
 	};
@@ -264,7 +264,7 @@ static void AA05_sub_192CA()
 {
 	u32 r3, r13;
 
-	if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x20) // Engine Running
+	if (RT_FLAG1_FFFF8888 & 0x20) // Engine Running
 	{
 		r3 = word_1926;
 		r13 = word_1928;
@@ -286,7 +286,7 @@ static void AA05_IDLE_sub_192FC()
 {
 	u16 r1;
 
-	if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x20) // Engine Running
+	if (RT_FLAG1_FFFF8888 & 0x20) // Engine Running
 	{
 		if (SPEED_FLAGS & 4)
 		{
@@ -297,7 +297,7 @@ static void AA05_IDLE_sub_192FC()
 			r1 = Table_Lookup_byte_2D_3D(IDLERPMNS_485E);
 		};
 
-		if ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x4000) && r1 < word_19E6)
+		if ((RT_FLAG1_FFFF8888 & 0x4000) && r1 < word_19E6)
 		{
 			r1 = word_19E6;
 		};
@@ -311,13 +311,13 @@ static void AA05_IDLE_sub_192FC()
 
 	AA05_sub_1945C();
 
-	if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x10) 
+	if (RT_FLAG1_FFFF8888 & AC_SWITCH) 
 	{
 		u16 r13;
 
-		if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x20) 
+		if (RT_FLAG1_FFFF8888 & 0x20) 
 		{
-			if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 1) 
+			if (RT_FLAG1_FFFF8888 & 1) 
 			{
 				r13 = word_18C2;
 			}
@@ -328,7 +328,7 @@ static void AA05_IDLE_sub_192FC()
 		}
 		else
 		{
-			if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 1) 
+			if (RT_FLAG1_FFFF8888 & 1) 
 			{
 				r13 = word_18C4;
 			}
@@ -380,13 +380,13 @@ static void AA05_sub_1945C()
 
 	word_FFFF86C2 = (wMUT11_Intake_Air_Temperature_Scaled > word_1A20) ? word_1A24 * 80 : 0;
 
-	if (word_FFFF86C2 != 0 && (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x20))
+	if (word_FFFF86C2 != 0 && (RT_FLAG1_FFFF8888 & 0x20))
 	{
 		u16 r1 = 0;
 
-		if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x10)
+		if (RT_FLAG1_FFFF8888 & AC_SWITCH)
 		{		
-			if (byte_102E == 2 && (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 1))
+			if (byte_102E == 2 && (RT_FLAG1_FFFF8888 & 1))
 			{
 				r1 = word_18C2 + Mul_Div_R(word_FFFF86C2, word_1A22, word_1A24 * 80);
 			};
@@ -417,9 +417,9 @@ static void AA05_sub_195A2()
 {
 	if (byte_1039/*0*/ == 1)
 	{
-		u32 RTF = ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_COPY_FFFF888A ^ RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888) & RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_COPY_FFFF888A);
+		u32 RTF = ((RT_FLAG1_COPY_FFFF888A ^ RT_FLAG1_FFFF8888) & RT_FLAG1_COPY_FFFF888A);
 
-		if (RTF & 8)
+		if (RTF & POWER_STEERING)
 		{
 			word_FFFF854A = 0;
 		};
@@ -447,11 +447,11 @@ static void AA05_sub_195A2()
 
 		u32 r13;
 
-		if ((wMUT23 & 0x200) == 0 && (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888  & 0x18) == 0)
+		if ((wMUT23 & 0x200) == 0 && ZRO(RT_FLAG1_FFFF8888, AC_SWITCH|POWER_STEERING))
 		{
 			SET(wMUT23, 0x1000);
 
-			r13 = (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x20/*Engine Running*/) ? word_18D0 : word_18D2;
+			r13 = (RT_FLAG1_FFFF8888 & 0x20/*Engine Running*/) ? word_18D0 : word_18D2;
 
 			if (r13 > word_FFFF854A)
 			{
@@ -468,11 +468,11 @@ static void AA05_sub_195A2()
 		};
 
 
-		if ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 8) == 0)
+		if ((RT_FLAG1_FFFF8888 & POWER_STEERING) == 0)
 		{
 			r13 = word_FFFF8CD2;
 		}
-		else if ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 20) == 0)
+		else if ((RT_FLAG1_FFFF8888 & 20) == 0)
 		{
 			r13 = word_18CA/*33*/;
 		}
@@ -485,7 +485,7 @@ static void AA05_sub_195A2()
 		{
 			if ((wMUT23 & 0x1800) == 0x1000)
 			{
-				if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x20)
+				if (RT_FLAG1_FFFF8888 & 0x20)
 				{
 					word_FFFF85D0 = word_18DA/*6*/;
 				}
@@ -504,7 +504,7 @@ static void AA05_sub_195A2()
 
 		if (wMUT23 & 0x800)
 		{
-			u32 r3 = (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x20) ? word_18D4/*7*/ : word_18D6/*7*/;
+			u32 r3 = (RT_FLAG1_FFFF8888 & 0x20) ? word_18D4/*7*/ : word_18D6/*7*/;
 			
 			if (r13 < r3)
 			{
@@ -528,18 +528,18 @@ static void AA05_sub_195A2()
 
 static void AA05_sub_19804()
 {
-	u32 RTF = ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_COPY_FFFF888A ^ RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888) & RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888);
+	u32 RTF = ((RT_FLAG1_COPY_FFFF888A ^ RT_FLAG1_FFFF8888) & RT_FLAG1_FFFF8888);
 
 	if (wMUT23 & 1)
 	{
 		timer_up_FFFF8534 = 0xFFFF;
 		timer_up_FFFF8536 = 0xFFFF;
 	}
-	else if (((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_COPY_FFFF888A ^ RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888) & RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888) & 8)
+	else if (((RT_FLAG1_COPY_FFFF888A ^ RT_FLAG1_FFFF8888) & RT_FLAG1_FFFF8888) & POWER_STEERING)
 	{
 		timer_up_FFFF8534 = 0;
 	}
-	else if (((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_COPY_FFFF888A ^ RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888) & RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_COPY_FFFF888A) & 8) 
+	else if (((RT_FLAG1_COPY_FFFF888A ^ RT_FLAG1_FFFF8888) & RT_FLAG1_COPY_FFFF888A) & POWER_STEERING) 
 	{
 		timer_up_FFFF8536 = 0;
 
@@ -548,9 +548,9 @@ static void AA05_sub_19804()
 
 	u32 r1;
 
-	if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x10)
+	if (RT_FLAG1_FFFF8888 & AC_SWITCH)
 	{
-		if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x10)
+		if (RT_FLAG1_FFFF8888 & AC_SWITCH)
 		{
 			r1 = word_2BD2;
 		}
@@ -561,7 +561,7 @@ static void AA05_sub_19804()
 	}
 	else
 	{
-		if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x10)
+		if (RT_FLAG1_FFFF8888 & AC_SWITCH)
 		{
 			r1 = word_2BCE;
 		}
@@ -573,7 +573,7 @@ static void AA05_sub_19804()
 
 	u32 r3;
 
-	if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 8)
+	if (RT_FLAG1_FFFF8888 & POWER_STEERING)
 	{
 		if (timer_up_FFFF8536 <= word_2BDA)
 		{
@@ -581,11 +581,11 @@ static void AA05_sub_19804()
 		}
 		else
 		{
-			u32 r13 = (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x10) ? word_2BCC : word_2BCA;
+			u32 r13 = (RT_FLAG1_FFFF8888 & AC_SWITCH) ? word_2BCC : word_2BCA;
 
 			if (timer_up_FFFF8534 <= r13)
 			{
-				if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x10)
+				if (RT_FLAG1_FFFF8888 & AC_SWITCH)
 				{
 					r3 = word_2BC8;
 				}
@@ -605,18 +605,18 @@ static void AA05_sub_19804()
 	{
 		r3 = Sub_Lim_0(r3, word_18CE);
 
-		if ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 8) && r3 < r1)
+		if ((RT_FLAG1_FFFF8888 & POWER_STEERING) && r3 < r1)
 		{
 			r3 = r1;
 		};
 
 		u32 r13; 
 
-		if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 8)
+		if (RT_FLAG1_FFFF8888 & POWER_STEERING)
 		{
 			r13 = word_18CC;
 		}
-		else if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x10)
+		else if (RT_FLAG1_FFFF8888 & AC_SWITCH)
 		{
 			r13 = word_2BD8;
 		}
@@ -628,7 +628,7 @@ static void AA05_sub_19804()
 		word_FFFF85D0 = r13;
 	};
 
-	if ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 8) && r3 == r1)
+	if ((RT_FLAG1_FFFF8888 & POWER_STEERING) && r3 == r1)
 	{
 		SET(word_FFFF8C94, 0x10);
 	};

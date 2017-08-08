@@ -7,10 +7,11 @@
 #include "constword.h"
 #include "ram.h"
 #include "EnVars.h"
+#include "hwreg.h"
 
 #undef F500_Init_Load_ECU_Info_And_BitMap_Flags
 
-#define sub_A374			((void(*)(void))0xA374)
+//#define sub_A374			((void(*)(void))0xA374)
 #define F500_Get_All_ADC	((void(*)(void))0xA7F0)
 #define F500_sub_21C80		((bool(*)(void))0x21C80)
 
@@ -53,6 +54,7 @@ void F500_MAP_Hz_Calc_sub_10E54();
 void F500_sub_10F08();
 void F500_Countdown_Timers_sub_10F5C();
 void F500_Battery_Calcs_sub_1101A();
+void sub_A374();
 
 
 #define CEL8_685C							((Axis*)0x685C)
@@ -145,9 +147,9 @@ void F500_Init_Load_ECU_Info_And_BitMap_Flags()
 
 void F500_sub_F6E6()
 {
-	if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x40)
+	if (RT_FLAG1_FFFF8888 & STARTER)
 	{
-		timer_up_FFFF852A = 0;
+		starter_timer_up = 0;
 	};
 
 	if (wMUT1E_MAF_RESET_FLAG & CRANKING)
@@ -157,7 +159,7 @@ void F500_sub_F6E6()
 
 	if (wMUT1E_MAF_RESET_FLAG & (CRANKING|STALL))
 	{
-		timer_up_FFFF852E = 0;
+		cranking_stall_timer_up = 0;
 
 		coolantTempScld_COPY_1 = wMUT10_Coolant_Temperature_Scaled;
 
@@ -175,7 +177,7 @@ void F500_sub_F7E4()
 
 	sub_A374();
 
-	RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_COPY_FFFF888A = RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888;
+	RT_FLAG1_COPY_FFFF888A = RT_FLAG1_FFFF8888;
 
 	word_FFFF8892 = word_FFFF8890;
 	LAUNCH_TEST_FLAG_1_COPY_FFFF889C = LAUNCH_TEST_FLAG_1_FFFF889A;
@@ -218,14 +220,14 @@ void F500_sub_F834()
 		CLR(r2, 0x10);
 	};
 
-	if ((wMUT1E_MAF_RESET_FLAG & (CRANKING|STALL)) || timer_up_FFFF852A < word_18B6)
+	if ((wMUT1E_MAF_RESET_FLAG & (CRANKING|STALL)) || starter_timer_up < word_18B6/*20*/)
 	{
 		SET(r1, 0x20);
 	};
 
 	if (wMUT10_Coolant_Temperature_Scaled <= word_18BA)
 	{
-		CLR(r1, 8);
+		CLR(r1, POWER_STEERING);
 	};
 
 
@@ -234,14 +236,14 @@ void F500_sub_F834()
 
 	if ((wMUT1E_MAF_RESET_FLAG & (CRANKING|STALL)) || cranking_end_timer_up < word_18B8 || (word_FFFF8D60 & 0x100))
 	{
-		CLR(r1, 0x10);
+		CLR(r1, AC_SWITCH);
 	};
 
 	CLR(word_FFFF8CE4, 0x8000);
 
 	if (byte_102E == 2)
 	{
-		if ((r1 & 0x10) && (cranking_end_timer_up < (word_19F6 * 20)))
+		if ((r1 & AC_SWITCH) && (cranking_end_timer_up < (word_19F6 * 20)))
 		{
 			SET(r2, r9);
 		}
@@ -249,7 +251,7 @@ void F500_sub_F834()
 		{
 			CLR(r2, 0x100);
 
-			if ((r1 & 0x10) && (r1 & 1))
+			if ((r1 & AC_SWITCH) && (r1 & 1))
 			{
 				SET(r2, r9);
 			};
@@ -279,7 +281,7 @@ void F500_sub_F834()
 		};
 	};
 
-	if ((bMUTD2_FBA_MAF_MAP_FLAG & 0x10) == 0 && ((r1 & 0x10) == 0 || byte_102E == 0))
+	if ((bMUTD2_FBA_MAF_MAP_FLAG & 0x10) == 0 && ((r1 & AC_SWITCH) == 0 || byte_102E == 0))
 	{
 		CLR(r1, 1);
 		CLR(r2, 0x100);
@@ -293,13 +295,13 @@ void F500_sub_F834()
 
 	if (MUT_CMD_0 & 1) // MUT_D9 Fix timing at 5 degrees
 	{
-		SET(r1, 0x1000);
-		CLR(r1, 0x800);
+		SET(r1, FIX_TIMING);
+		CLR(r1, SPEED_ADJUST);
 	};
 
 	if (MUT_CMD_1 & 0x40) // MUT_C3 SAS (Speed Adjusting Screw)
 	{
-		SET(r1, 0x1800);
+		SET(r1, FIX_TIMING|SPEED_ADJUST);
 	};
 
 	CLR(r1, 4);
@@ -323,7 +325,7 @@ void F500_sub_F834()
 		};
 	};
 
-	RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 = r1;
+	RT_FLAG1_FFFF8888 = r1;
 
 	word_FFFF8890 = r2;
 
@@ -366,7 +368,7 @@ void F500_sub_FD34()
 {
 	timer_FFFF8576 = timer_down_TXFLAG3_FFFF8574;
 
-	if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 2)
+	if (RT_FLAG1_FFFF8888 & 2)
 	{
 		timer_down_TXFLAG3_FFFF8574 = t1_unk_18BC;
 	};
@@ -405,7 +407,7 @@ void F500_sub_FDB6()
 {
 	if (timer_down_TXFLAG3_FFFF8574 != 0)
 	{
-		if ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_COPY_FFFF888A ^ RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888) & RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_COPY_FFFF888A & 0x40)
+		if ((RT_FLAG1_COPY_FFFF888A ^ RT_FLAG1_FFFF8888) & RT_FLAG1_COPY_FFFF888A & STARTER)
 		{
 			SET(BOOSTCHECK2_FFFF8A0E, 0x80);
 		};
@@ -645,7 +647,7 @@ void F500_TPS_Load_RPM_Calcs()
 	}
 	else
 	{
-		if (((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x80) && TPS > word_1C12/*102*/) || TPS < word_1C14/*10*/)
+		if (((RT_FLAG1_FFFF8888 & 0x80) && TPS > word_1C12/*102*/) || TPS < word_1C14/*10*/)
 		{
 			SET(wMUT71_Sensor_Error, 0x40);
 		}
@@ -740,7 +742,7 @@ bool F500_CheckIdleRPM()
 		return false;
 	};
 
-	if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x10)
+	if (RT_FLAG1_FFFF8888 & AC_SWITCH)
 	{
 		return false;
 	};
@@ -781,7 +783,7 @@ bool F500_CheckIdleRPM()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//#define RTF ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_COPY_FFFF888A ^ RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888) & RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_COPY_FFFF888A)
+//#define RTF ((RT_FLAG1_COPY_FFFF888A ^ RT_FLAG1_FFFF8888) & RT_FLAG1_COPY_FFFF888A)
 
 void F500_MAP_Coolant_Calcs()
 {
@@ -794,10 +796,10 @@ void F500_MAP_Coolant_Calcs()
 	}
 	else
 	{	
-		u32 RTF = ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_COPY_FFFF888A ^ RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888) & RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_COPY_FFFF888A);
+		u32 RTF = ((RT_FLAG1_COPY_FFFF888A ^ RT_FLAG1_FFFF8888) & RT_FLAG1_COPY_FFFF888A);
 
 		if (word_FFFF8AE2 != 0 
-			|| ((RTF & 0x80) == 0 && (RTF & 0x20) == 0 && (byte_105C/*0*/ == 0 || (RTF & 8) == 0))
+			|| ((RTF & 0x80) == 0 && (RTF & 0x20) == 0 && (byte_105C/*0*/ == 0 || (RTF & POWER_STEERING) == 0))
 			|| (enrichmentWarmUp >= enrichCoolant && COOLANT_REL_6_FFFF8AC2 == 0 && COOLANT_REL_7_FFFF8AEC == 0))
 		{
 			if (word_FFFF86EA == 0)
@@ -857,12 +859,12 @@ bool F500_sub_10820()
 	bool r13 = ((stored_DTC_5 & 1) || (last_Drive_DTC[5] & 1));
 
 
-	if ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x80) == 0)
+	if ((RT_FLAG1_FFFF8888 & 0x80) == 0)
 	{
 		return false;
 	};
 
-	if ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x20) == 0) // Engine Running
+	if ((RT_FLAG1_FFFF8888 & 0x20) == 0) // Engine Running
 	{
 		return false;
 	};
@@ -872,7 +874,7 @@ bool F500_sub_10820()
 		return false;
 	};
 
-	if ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 4)) // timer_down_FFFF89CE != 0
+	if ((RT_FLAG1_FFFF8888 & 4)) // timer_down_FFFF89CE != 0
 	{
 		return false;
 	};
@@ -882,7 +884,7 @@ bool F500_sub_10820()
 		return true;
 	};
 
-	if ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 8)) // 0: wMUT10_Coolant_Temperature_Scaled <= word_18BA(60)
+	if ((RT_FLAG1_FFFF8888 & POWER_STEERING)) // 0: wMUT10_Coolant_Temperature_Scaled <= word_18BA(60)
 	{
 		return false;
 	};
@@ -990,7 +992,7 @@ void F500_sub_10984()
 
 void F500_sub_10A80()
 {
-	word_FFFF8950 = (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 4) ? word_17B0/*232*/ : t1_unk_17AE/*232*/;
+	word_FFFF8950 = (RT_FLAG1_FFFF8888 & 4) ? word_17B0/*232*/ : t1_unk_17AE/*232*/;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1216,3 +1218,90 @@ void F500_Battery_Calcs_sub_1101A()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+void sub_A374()
+{
+	const u32 r9 = ~0x10;
+	const u32 r8 = ~2;
+	const u32 r2 = 0x200;
+	const u32 r1 = ~0x200;
+
+	__disable_irq();
+
+	u32 r13 = MUT_00_01_FLAGS;
+
+	WBIT(r13, 1, ZRO(bMUTB7, 1));
+
+	WBIT(r13, 2, ZRO(reg_PEDRL, 2));
+
+	WBIT(r13, POWER_STEERING, bMUTB8 & 4);
+
+	WBIT(r13, AC_SWITCH, ZRO(bMUTB8, 1));
+
+	SET(r13, 0x20);
+
+	WBIT(r13, STARTER, ZRO(reg_PEDRL, 4));
+
+	WBIT(r13, 0x80, bMUTBA & 4);
+	
+	WBIT(r13, r2, ZRO(reg_PJDRH, 4));
+
+	WBIT(r13, 0x400, ZRO(word_FFFF8868, 0x20));
+
+	WBIT(r13, 0x800, bMUTB9 & 1);
+
+	WBIT(r13, 0x1000, bMUTB9 & 4);
+
+	WBIT(r13, 0x2000, word_FFFF8868 & 0x40);
+
+	WBIT(r13, 0x4000, ZRO(word_FFFF8868, 0x10));
+
+	WBIT(r13, 0x8000, bMUTB7 & 4);
+
+	MUT_00_01_FLAGS = r13;
+
+	__enable_irq();
+
+	__disable_irq();
+
+	r13 = MUT_03_FLAGS;
+
+	WBIT(r13, 2, bMUTB7 & 2);
+
+	WBIT(r13, 4, ZRO(bMUTB8, 2));
+
+	WBIT(r13, 0x10, word_FFFF8868 & 0x80);
+
+	WBIT(r13, 0x20, reg_PADRH & 0x80);
+
+	WBIT(r13, 0x40, ZRO(word_FFFF8868, 4));
+
+	WBIT(r13, 0x80, ZRO(word_FFFF8868, 1));
+
+	WBIT(r13, 0x200, word_FFFF8868 & 1);
+
+	MUT_03_FLAGS = r13;
+
+	__enable_irq();
+
+	__disable_irq();
+
+	r13 = word_FFFF8896;
+
+	WBIT(r13, 0x10, bMUTB7 & 2);
+
+	WBIT(r13, 0x100, bMUTB7 & 8);
+
+	WBIT(r13, 0x200, bMUTB8 & 8);
+
+	WBIT(r13, 0x400, bMUTB9 & 8);
+
+	WBIT(r13, 0x800, bMUTBA & 8);
+
+	WBIT(r13, 2, reg_PJDRH & 8);
+
+	word_FFFF8896 = r13;
+
+	__enable_irq();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

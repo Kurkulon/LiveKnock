@@ -4,6 +4,141 @@
 #include "types.h"
 
 
+struct Vars
+{
+	u16		_0_											;                                                   
+	u16		_2_											;
+	u16		_4_											;
+	u16		_6_											;
+	u16		_8_											;
+	u16		_10_										;
+	u16		_12_										;
+	u16		_14_										;
+	u16		_16_										;
+	u16		_18_										;
+	u16* _20_word_FFFF929A								;
+	u16* _24_wMUT0F_Oxygen_Feedback_Trim				;
+	u16* _28_wMUT50_Long_Fuel_Trim_Bank_1_COPY			;
+	u16* _32_word_FFFF90DE								;
+	u16* _36_word_FFFF90CE								;
+	u16* _40_word_FFFF90D0								;
+	u16* _44_word_FFFF90CA								;
+	u16* _48_word_FFFF90D2								;
+	u16* _52_word_FFFF90E6								;
+	u16* _56_word_FFFF90EE								;
+	u16* _60_word_FFFF90EA								;
+	u16* _64_word_FFFF90F2								;
+	u16* _68_word_FFFF87E8								;
+	u16* _72_word_FFFF87DC								;
+	u16* _76_word_FFFF871E								;
+	u16* _80_word_FFFF87F8								;
+	u16* _84_word_FFFF8730								;
+	u16* _88_word_FFFF9118								;
+	u16* _92_word_FFFF911C								;
+	u16* _96_word_FFFF8638								;
+	u16* _100_word_FFFF9114								;
+	u16* _104_word_FFFF8728								;
+	u16* _108_word_FFFF872C								;
+	u16* _112_word_FFFF8632								;
+	u16* _116_word_FFFF90E2								;
+	u16* _120_word_FFFF90DA								;
+	u16* _124_word_FFFF910A								;
+	u16* _128_0											;
+	u16* _132_word_FFFF9106								;
+	u16* _136_word_FFFF9102								;
+	u16* _140_word_FFFF81D6								;
+	u16* _144_word_FFFF90F6								;
+	u16* _148_word_FFFF90FE								;
+	u16* _152_word_FFFF90FA								;
+	u16* _156_word_FFFF90C6								;
+	u16* _160_word_FFFF8212								;
+	u16* _164_word_FFFF929E								;
+	u16* _168_word_FFFF92A2								;
+	u16* _172_word_FFFF9120								;
+	u16* _176_word_FFFF9124								;
+	u16* _180_word_FFFF820A								;
+	u16* _184_stored_DTC                                ;             
+	u16* _188_xxx_DTC                                   ;             
+	u16* _192_some_DTC									;
+	u16* _196_current_DTC								;
+	u16* _200_last_Drive_DTC							;
+	u16* _204_word_FFFF81E0                             ;             
+	u16* _208_word_FFFF81E4								;
+	u16* _212_word_FFFF928E								;
+	u16* _216_word_FFFF9296								;
+	u16* _220_word_FFFF87CC								;
+	u16* _224_word_FFFF8DEE								;
+	u16* _228_word_FFFF8DEA								;
+	u16* _232_limHi_O2_Feedback_Trim					;
+	u16* _236_limLo_O2_Feedback_Trim					;
+	u16* _240_wMUT0C_Fuel_Trim_Low						;
+	u16* _244_wMUT0D_Fuel_Trim_Middle					;
+	u16* _248_wMUT18_Open_Loop_Bit_Array                ;             
+	u16* _252_prev_MUT18_Open_Loop_Bit_Array			;
+	u16* _256_word_FFFF922A								;
+	u16* _260_word_FFFF9226								;
+	u16* _264_word_FFFF89EA								;
+	u16* _268_wMUT1E_MAF_RESET_FLAG                     ;             
+	u16* _272_wMUT13_Front_O2_ADC8bit					;
+	u16* _276_wMUT3C_Rear_O2_ADC8bit					;
+	u16* _280_wMUT5E_FUEL_CUT_FLAG						;
+	u16* _284_word_FFFF9128								;
+	u16* _288_word_FFFF9130								;
+	u16* _292_word_FFFF912C								;
+	u16* _296_oxigen_ADC8bit							;
+	u16* _300_word_FFFF92C2								;
+	u16* _304_word_FFFF92FA								;
+	u16* _308_word_FFFF92FE								;
+	u16* _312_word_FFFF9302								;
+	u16* _316_word_FFFF9306								;
+	u16* _320_word_FFFF930A								;
+	u16* _324_word_FFFF930E								;
+	u16* _328_word_FFFF9312								;
+	u16* _332_word_FFFF9316								;
+	u16* _336_word_FFFF931A								;
+	u16* _340_word_FFFF931E								;
+	u16* _344_word_FFFF9322								;
+	u16* _348_word_FFFF9326								;
+	u16* _352_word_FFFF926C								;
+	u16* _356_word_FFFF9292								;
+	u16* _360_word_FFFF92AE								;
+	u16* _364_word_FFFF92A6								;
+	u16* _368_word_FFFF92A8								;
+	u16* _372_word_FFFF92B2								;
+	u16* _376_word_FFFF877A								;
+	u16* _380_word_FFFF820E								;
+	u16* _384_word_FFFF8216								;
+	u16* _388_word_FFFF821A								;
+	u16* _392_word_FFFF821E								;
+	u16* _396_word_FFFF8800                             ;             
+	u16* _400_word_FFFF8722								;
+	u16* _404_word_FFFF823E								;
+	u16* _408_word_FFFF8242								;
+	u16* _412_word_FFFF8734								;
+	u16* _416_word_FFFF87EC								;
+	u16* _420_word_FFFF913A								;
+	u16* _424_bMUTBC									;
+	u16* _428_word_FFFF9142								;
+	u16* _432_word_FFFF913E								;
+	u16* _436_word_FFFF8368								;
+	u16* _440_word_FFFF836C								;
+	u16* _444_word_FFFF8370								;
+	u16* _448_word_FFFF9272								;
+	u16* _452_word_FFFF9274								;
+	u16* _456_word_FFFF9276								;
+	u16* _460_word_FFFF9278								;
+	u16* _464_word_FFFF91F4								;
+	u16* _468_word_FFFF8740								;
+	u16* _472_word_FFFF8744								;
+	u16* _476_word_FFFF9146								;
+	u16* _480_word_FFFF914A								;
+	u16* _484_word_FFFF87F0								;
+	u16* _488_word_FFFF87F4								;
+	u16* _492_word_FFFF87FC								;
+	u16* _496_word_FFFF88C4								;
+
+};
+
 struct EnVars //ENGINE_MAIN_VARIABLES_DIM_off_9198
 {
 	u16* _0_loc_FFFF;
@@ -114,7 +249,7 @@ struct EnVars //ENGINE_MAIN_VARIABLES_DIM_off_9198
 	u16* _420_word_FFFF992A;
 	u16* _424_word_FFFF9976;
 	u16* _428_word_FFFF995C;
-	u16* _432_word_8DB0;
+	Vars* _432_word_8DB0;
 	u16* _436_loc_1FFFF;
 	u16* _440_word_FFFF89F6;
 	u16* _444_word_FFFF89FA;
@@ -302,6 +437,7 @@ struct EnVars //ENGINE_MAIN_VARIABLES_DIM_off_9198
 	u16* _1172_word_FFFF9044;
 		 
 };		 
-		 
-#endif // ENVARS_H__01_08_2017__10_53
-		 
+		
+
+#endif // ENVARS_H__01_08_2017__10_53				
+

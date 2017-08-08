@@ -83,6 +83,13 @@ struct Map3D_W
 #define CLOSED_LOOP_GENERIC		0x80
 #define IDLE					0x1000
 
+
+#define POWER_STEERING			0x08
+#define AC_SWITCH				0x10
+#define STARTER					0x40
+#define SPEED_ADJUST			0x800
+#define FIX_TIMING				0x1000
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #define Tephra ((void(*)(void))0x3ec00)
@@ -285,6 +292,9 @@ struct TM32
 
 #define ONE(v, m) ((v & m) != 0)
 #define ZRO(v, m) ((v & m) == 0)
+
+#define WBIT(v, m, c) { v &= ~m; if (c) v |= m; }
+
 
 #define INCLIM(v) { if (v < 0xFFFF) {v += 1;}; }
 #define DECLIM(v) { if (v != 0) {v -= 1;}; }

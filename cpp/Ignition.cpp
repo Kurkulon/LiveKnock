@@ -312,7 +312,7 @@ static u16 	Barometric_Correction_sub_22084();
 //
 //#define timer_up_useless_IGN_BOOL_FLAG2_FFFF8530	(*(u16*)0xFFFF8530)
 //
-//#define timer_up_FFFF852A							(*(u16*)0xFFFF852A)
+//#define starter_timer_up							(*(u16*)0xFFFF852A)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -465,7 +465,7 @@ static void IG04_Check_Fix_timing_5_degrees()
 
 static bool IG04_Is_Fix_timing_5_degrees()
 {
-	return (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x1800) == 0x1000;
+	return (RT_FLAG1_FFFF8888 & (FIX_TIMING|SPEED_ADJUST)) == FIX_TIMING;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -615,7 +615,7 @@ static bool IG04_KNOCKLOAD_sub_1718E()
 		KNOCK_FLAG_FFFF8C34 &= ~0x1000;
 	};
 
-	if ((wMUT71_Sensor_Error & 8) || (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x80) || (KNOCK_FLAG_FFFF8C34 & 0x1000) == 0)
+	if ((wMUT71_Sensor_Error & 8) || (RT_FLAG1_FFFF8888 & 0x80) || (KNOCK_FLAG_FFFF8C34 & 0x1000) == 0)
 	{
 		KNOCK_FLAG_FFFF8C34 &= ~0x2000;
 	}
@@ -884,7 +884,7 @@ static void IG04_sub_176B6()
 
 static bool IG04_sub_17770()
 {
-	if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x80)
+	if (RT_FLAG1_FFFF8888 & 0x80)
 	{
 		word_FFFF85BA = word_2C96;
 
@@ -910,7 +910,7 @@ static bool IG04_sub_17770()
 		return false;
 	};
 
-	if ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x20) == 0 && byte_1036 != 2)
+	if ((RT_FLAG1_FFFF8888 & 0x20) == 0 && byte_1036 != 2)
 	{
 		return false;
 	};
@@ -1016,7 +1016,7 @@ static void IG04_sub_17A4E()
 
 static bool IG04_sub_17A7E()
 {
-	if ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x80) || (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x20) == 0)
+	if ((RT_FLAG1_FFFF8888 & 0x80) || (RT_FLAG1_FFFF8888 & 0x20) == 0)
 	{
 		return false;
 	};
@@ -1067,12 +1067,12 @@ static void IG04_sub_17B9A()
 
 static bool IG04_sub_17BEC()
 {
-	if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x80)
+	if (RT_FLAG1_FFFF8888 & 0x80)
 	{
 		return false;
 	};
 
-	if ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x20) == 0 && byte_1074 == 0)
+	if ((RT_FLAG1_FFFF8888 & 0x20) == 0 && byte_1074 == 0)
 	{
 		return false;
 	};
@@ -1140,7 +1140,7 @@ static bool IG04_sub_17C9C()
 {
 	TRG(IGN_FLAG9_FFFF8BB6, 2, MUT21_RPM_x125div4, word_17B4, word_17B2);
 
-	if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x80)
+	if (RT_FLAG1_FFFF8888 & 0x80)
 	{
 		return false;
 	};
@@ -1190,7 +1190,7 @@ static void IG04_sub_17D04()
 		if (coolantTempScld_COPY_1 < word_18B2 
 			&& wMUT10_Coolant_Temperature_Scaled < word_18AE 
 			&& (IGN_FLAG9_FFFF8BB6 & 0x4000) == 0 
-			&& (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x20) 
+			&& (RT_FLAG1_FFFF8888 & 0x20) 
 			&& MUT21_RPM_x125div4 < r3 
 			&& load_ECU_Ignintion < r13)
 		{
@@ -1412,7 +1412,7 @@ static u16 IG04_Ign_Temp_Correct(u16 v)
 	{
 		w_1822E_loc3 = 0xff;
 	}
-	else if ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_COPY_FFFF888A ^ RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888) & RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_COPY_FFFF888A & 0x80)
+	else if ((RT_FLAG1_COPY_FFFF888A ^ RT_FLAG1_FFFF8888) & RT_FLAG1_COPY_FFFF888A & 0x80)
 	{
 		w_1822E_loc1 = word_20B0;
 		w_1822E_loc3 = 0;
@@ -1475,12 +1475,12 @@ static u16 IG04_IGNIT_TESTS_183E8(u16 v)
 
 static bool IG04_sub_18464()
 {
-	if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x40)
+	if (RT_FLAG1_FFFF8888 & STARTER)
 	{
 		return false;
 	};
 
-	if (timer_up_FFFF852A < word_1B02)
+	if (starter_timer_up < word_1B02)
 	{
 		return false;
 	};
@@ -1506,7 +1506,7 @@ static u16 IG04_Ignition_Fuel_Timing_Calcs_sub_18494()
 		__enable_irq();
 	};
 
-	if (((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x20) || byte_1075 != 0) && (wMUT1E_MAF_RESET_FLAG & 4))
+	if (((RT_FLAG1_FFFF8888 & 0x20) || byte_1075 != 0) && (wMUT1E_MAF_RESET_FLAG & 4))
 	{
 		u16 r1 = word_17BE + 20;
 
@@ -1543,7 +1543,7 @@ static u16 IG04_sub_1859E()
 	{
 		Map3D_B *t;
 
-		if (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x20)
+		if (RT_FLAG1_FFFF8888 & 0x20)
 		{
 			Table_Lookup_Axis(CEL8_79AE);
 			t = AFRAIRTEMP1_630A;
@@ -1694,7 +1694,7 @@ static u16 IG04_RPM_CORR_sub_18952()
 
 	if (byte_1035 != 0 && cranking_end_timer_up < word_184A && wMUT10_Coolant_Temperature_Scaled >= CTEMPER40_1848 
 
-		&& (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x80))
+		&& (RT_FLAG1_FFFF8888 & 0x80))
 	{
 		u16 r3 = Mul_Fix8_R(Sub_Lim_0(rpm_x125div32_B, word_184C), word_1850);
 
@@ -1723,7 +1723,7 @@ static u16 IG04_sub_18A2E()
 		|| load_ECU_Ignintion > word_1888 
 		|| MUT21_RPM_x125div4 < word_188E 
 		|| MUT21_RPM_x125div4 > word_188C 
-		|| (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x80) == 0)
+		|| (RT_FLAG1_FFFF8888 & 0x80) == 0)
 	{
 		__disable_irq();
 
@@ -1731,9 +1731,9 @@ static u16 IG04_sub_18A2E()
 
 		__enable_irq();
 	}
-	else if ((RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 0x20) 
+	else if ((RT_FLAG1_FFFF8888 & 0x20) 
 			&& wMUT10_Coolant_Temperature_Scaled >= word_1890 
-			&& (RT_AIRCON_DRIVE_NEUTRAL_F20_FLAG1_FFFF8888 & 4)
+			&& (RT_FLAG1_FFFF8888 & 4)
 			&& Sub_Lim_0(RPM_DELTA_FFFF8948, 0x80) >= word_1892)
 	{
 		__disable_irq();
