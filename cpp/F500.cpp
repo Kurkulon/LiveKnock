@@ -874,7 +874,7 @@ bool F500_sub_10820()
 		return false;
 	};
 
-	if ((RT_FLAG1_FFFF8888 & 4)) // timer_down_FFFF89CE != 0
+	if ((RT_FLAG1_FFFF8888 & SPEEDED)) // timer_down_FFFF89CE != 0
 	{
 		return false;
 	};

@@ -84,11 +84,16 @@ struct Map3D_W
 #define IDLE					0x1000
 
 
+// RT_FLAG1_FFFF8888
+
+#define SPEEDED					0x04
 #define POWER_STEERING			0x08
 #define AC_SWITCH				0x10
 #define STARTER					0x40
 #define SPEED_ADJUST			0x800
 #define FIX_TIMING				0x1000
+
+// RPM_FLAGS
 
 #define CRANKING_TIMED			0x2000
 

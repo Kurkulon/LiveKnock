@@ -179,7 +179,7 @@ static void ML02_sub_11300()
 
 static void ML02_sub_11332()
 {
-	if (byte_105B == 0 || (RT_FLAG1_FFFF8888 & 4))
+	if (byte_105B == 0 || (RT_FLAG1_FFFF8888 & SPEEDED))
 	{
 		CLR(LAUNCH_TEST_FLAG_2_FFFF822E, 0x400);
 
@@ -462,7 +462,7 @@ static bool ML02_sub_11B74()
 
 static bool ML02_sub_11D48()
 {
-	if (RT_FLAG1_FFFF8888 & 4)
+	if (RT_FLAG1_FFFF8888 & SPEEDED)
 	{
 		return false;
 	};

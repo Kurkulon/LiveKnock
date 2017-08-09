@@ -1733,7 +1733,7 @@ static u16 IG04_sub_18A2E()
 	}
 	else if ((RT_FLAG1_FFFF8888 & 0x20) 
 			&& wMUT10_Coolant_Temperature_Scaled >= word_1890 
-			&& (RT_FLAG1_FFFF8888 & 4)
+			&& (RT_FLAG1_FFFF8888 & SPEEDED)
 			&& Sub_Lim_0(RPM_DELTA_FFFF8948, 0x80) >= word_1892)
 	{
 		__disable_irq();
