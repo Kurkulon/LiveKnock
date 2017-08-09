@@ -9,6 +9,7 @@
 #include "constbyte.h"
 #include "constword.h"
 #include "ram.h"
+#include "EnVars.h"
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -16,6 +17,8 @@
 #define Get_ADC_Knock				((void(*)(void))0xA92C)
 //#define INJECTOR_RESCALED_sub_26174	((u16(*)(u16))0x26174)
 //#define CRANK75_Knock_sub_24AC0		((void(*)(void))0x24AC0)
+
+#define ENGINE_MAIN_VARIABLES_DIM_off_9198		((EnVars*)0x9198)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -53,8 +56,10 @@ static void SetIgnSparkStartTime(u16 mask, u16 v);
 
 void StartInjectSync(u16 v, u16 mask);
 void StartInjectAsync(u16 v, u16 mask);
+void InjOpenStart(u16 v, u16 mask);
 
 u16 INJECTOR_RESCALED_sub_26174(u16 v);
+u16 atu22_Get_ECNT9A();
 
 static void CRANK75_sub_232A0();
 static void CRANK75_Knock_sub_23F8C();
@@ -72,7 +77,10 @@ static void CRANK5_SetIgnCoilTime_Fin();
 static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2);
 static void CRANK75_sub_260B8();
 static void CRANK_sub_262D0();
+static void CRANK75_sub_2941C();
+static void CRANK75_sub_2B168();
 static u16 sub_2640E(u16 v);
+static void Update_Gen_G_output();
 
 
 static void atu22_IMF2G_event();
@@ -777,14 +785,166 @@ static void CRANK75_sub_232A0()
 
 	// loc_23ABE
 
-	if (IGN_0xA_FFFF8BE8 != 0)
-	{
-		IGN_0xA_FFFF8BE8 -= 1;
-	};
+	DECLIM(IGN_0xA_FFFF8BE8);
 
 	// loc_23ACE
 
+	if (IGN_0xA_FFFF8BE8 == 0 && IGNITION_FINAL2_FFFF8BE6 < 0x80)
+	{
+		IGNITION_FINAL2_FFFF8BE6 += 1;
 
+		IGN_0xA_FFFF8BE8 = word_17C2;
+	};
+
+	DECLIM(timer_Delta_TPS);
+		
+	if (timer_Delta_TPS == 0)
+	{
+		abs_Delta_TPS = 0;
+	};
+
+	// loc_23B0E
+
+	word_FFFF8BF2 = Sub_Lim_0(word_FFFF8BF2, word_1B1A/*8*/);
+
+	DECLIM(word_FFFF8BEC);
+	
+	DECLIM(word_FFFF8BEE);
+
+	if (word_FFFF8BEC == 0 && word_FFFF8BEE == 0)
+	{
+		INCLIM80(word_FFFF8BEA);
+
+		word_FFFF8BEE = word_1898/*1*/;
+	};
+
+	// loc_23B70
+
+	RPM8_FFFF8B02 = RPM8_FFFF8B00;
+	RPM8_FFFF8B00 = 960;
+
+	if ((word_FFFF8ADA += 1) == 0)
+	{
+		word_FFFF8ADA -= 1;
+	};
+
+	if (RPM_FLAGS & 0x800)
+	{
+		u32 r13;
+
+		if (wMUT18_Open_Loop_Bit_Array & 0x40)
+		{
+			u32 r1;
+
+			if (word_FFFF81E0 & 0x100)
+			{
+				r1 = (byte_1053/*0*/ == 1) ? (dec_Oxygen_Trim << 1) : Div_R4_R5__R0(dec_Oxygen_Trim << 7, word_247A/*128*/);
+			}
+			else
+			{
+				r1 = dec_Oxygen_Trim << 2;
+			};
+
+			r13 = Sub_Lim_0(wMUT0F_Oxygen_Feedback_Trim, r1);
+		}
+		else
+		{
+			u32 r1;
+
+			if (word_FFFF81E0 & 0x100)
+			{
+				r1 = (byte_1053/*0*/ == 1) ? (inc_Oxygen_Trim << 1) : Div_R4_R5__R0(inc_Oxygen_Trim << 7, word_247A/*128*/);
+			}
+			else
+			{
+				r1 = inc_Oxygen_Trim << 2;
+			};
+			
+			r13 = Add_Lim_FFFF(wMUT0F_Oxygen_Feedback_Trim, r1);
+		};
+
+		wMUT0F_Oxygen_Feedback_Trim = Lim16(r13, limLo_O2_Feedback_Trim, limHi_O2_Feedback_Trim);
+	};
+
+	// loc_23D48
+
+	CRANK75_sub_260B8();
+
+	if (	(wMUT1E_MAF_RESET_FLAG & CRANKING) 
+		&&	(word_FFFF8A48 & 0x80) 
+		&&	ZRO(word_FFFF8B4E, 0x20)
+		&&	ZRO(word_FFFF89F2, 0x400)
+		&&	ZRO(word_FFFF89F2, 0x800))
+	{
+		CRANK_MAF_MAP_Calcs_sub_250F8(0, 0);
+	};
+
+	// loc_23D98
+
+	if ((RPM_FLAGS & 0x200) && ZRO(RPM_FLAGS, CRANKING_TIMED))
+	{
+		CRANK_MAF_MAP_Calcs_sub_250F8(1, 0);
+	}
+	else if (word_FFFF8B4E & 0x20)
+	{
+		if (injPW_final != 0 && injPW_chnl != 0)
+		{
+			InjOpenStart(injPW_final, injPW_chnl);
+		};
+
+		CLR(word_FFFF8B4E, 0x20);
+
+		CRANK_sub_262D0();
+	};
+
+	// loc_23E34
+
+	word_FFFF8DD4 += crankHT_A >> 3;
+
+	DECLIM(word_FFFF8DD8);
+
+	if (word_FFFF8DD8 == 0)
+	{
+		wMUT90_ECNT9A = atu22_Get_ECNT9A();
+
+		r1 = Mul_Div_R(wMUT90_ECNT9A, 2048, word_FFFF8DD4);
+
+		wMUT91_Timer_Status_Register_9_TSR9_Scaled = r1 = (r1 >= 0xFF) ? 0xFF : r1;
+
+		if (RPM_FLAGS & CRANKING)
+		{
+			fix8_FFFF8DCE = r1 << 8;
+
+			wMUT92_Timer_Status_Register_9_TSR9_Scaled_Checked = r1;
+		}
+		else
+		{
+			wMUT92_Timer_Status_Register_9_TSR9_Scaled_Checked = Div_256_R(fix8_FFFF8DCE = Interpolate_256(fix8_FFFF8DCE, r1 << 8, word_FFFF8DD2));
+		};
+
+		word_FFFF8DD4 = 0;
+		word_FFFF8DD6 = 0;
+		word_FFFF8DD8 = 0;
+	};
+
+	// loc_23EE6
+
+	r1 = 0xFFFF;
+
+	if (wMUT8F < 0xFF)
+	{
+		r1 = DIV_DW_R(Mul16(wMUT8F, crankHT_A), 40000);
+	};
+
+	gen_G_timer = (r1 >= 1) ? r1 : 1;
+
+	SET(KNOCK_FLAG2_FFFF887A, 1);
+
+	Update_Gen_G_output();
+
+	CRANK75_sub_2941C();
+
+	CRANK75_Knock_sub_23F8C();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -795,8 +955,6 @@ static bool CRANK75_sub_24636()
 
 	return r1 >= Mul_Fix8_Lim_FFFF(crankHT_x_4us, word_1792/*0.125*256*/);
 }
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -1786,7 +1944,7 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 			word_FFFF8F30 = 1;
 		};
 
-		if (RPM_FLAGS & 0x2000)
+		if (RPM_FLAGS & CRANKING_TIMED)
 		{
 			r2 = 3;
 
@@ -1796,10 +1954,10 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 
 			if (word_FFFF8BAA == 0)
 			{
-				CLR(RPM_FLAGS, 0x2000);
+				CLR(RPM_FLAGS, CRANKING_TIMED);
 			};
 		}
-		else if (RPM_FLAGS & 0x2000)
+		else if (RPM_FLAGS & CRANKING_TIMED)
 		{
 			r2 = 2;
 
@@ -1809,7 +1967,7 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 
 			if (word_FFFF8BAA == 0)
 			{
-				CLR(RPM_FLAGS, 0x2000);
+				CLR(RPM_FLAGS, CRANKING_TIMED);
 			};
 		}
 		else if ((FUEL_CUT_FLAG_FFFF8A5E & 0x80) && (RPM_FLAGS & CRANKING) && (word_FFFF8AD6 != 0 || ZRO(word_FFFF8F2A, 2)))
@@ -1983,14 +2141,153 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 
 static void CRANK75_sub_260B8()
 {
+	strokeNumber += 1;
 
+	if (strokeNumber >= 4)
+	{
+		strokeNumber = 0;
+	};
+
+	if (word_FFFF8F2A & 1)
+	{
+		SET(word_FFFF8F2A, 6);
+
+		word_FFFF8F2E = 5;
+
+		word_FFFF8F2E -= 1;
+	}
+	else
+	{
+		if (ZRO(word_FFFF8F2A, 4))
+		{
+			strokeNumber = ((camshaft_Shift & 3) - 1) & 3;
+
+			SET(word_FFFF8F2A, 2);
+
+			word_FFFF8F2E = 5;
+		};
+
+		DECLIM(word_FFFF8F2E);
+	};
+	
+	if (word_FFFF8F2E == 0)
+	{
+		CLR(word_FFFF8F2A, 2);
+		SET(word_FFFF8F2A, 4);
+	};
+
+	if (word_FFFF8F2A & 1)
+	{
+		strokeNumber = stroke_FFFF8F22;
+	};
+
+	DECLIM(word_FFFF8DE6);
+
+	if ((camshaft_Shift & 3) == 1)
+	{
+		word_FFFF8DE6 = word_1C22/*8*/;
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 static void CRANK_sub_262D0()
 {
+//	u32 r1 = atu22_Get_DSTR_0x3C00();
 
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void CRANK75_sub_2941C()
+{
+	CRANK75_sub_2B168();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void CRANK75_sub_2B168()
+{
+	CLR(word_FFFF8F7A, 0xC);
+
+	word_FFFF9990 = 0xFFFF;
+
+	u32 r13 = word_FFFF8C62;
+
+	if (MUT21_RPM_x125div4 >= word_182E/*0*/ || wMUT14_Battery_Level_ADC8bit < word_1834/*109*/ || wMUT14_Battery_Level_ADC8bit >= word_1832/*245*/)
+	{
+		return;
+	};
+
+	if (r13 == 0xFF || r13 == 0 || (flags_FFFF8FFC & 8) || ZRO(misfire_word_FFFF8F7C, 0x10) || ZRO(bMUTD3_BitMap4_FCA_Store_FFFF89D8, 0x20))
+	{
+		return;
+	};
+
+	r13 = word_FFFF8C62 & 3;
+
+	if (r13 != 3 && r13 != 0)
+	{
+		return;
+	};
+
+	SET(word_FFFF8F7A, 8);
+
+	r13 = word_FFFF8C62 & 7;
+
+	if (r13 == 7 || r13 == 0)
+	{
+		SET(word_FFFF8F7A, 4);
+	};
+
+	word_FFFF9990 = stroke_FFFF8F22 << 4;
+
+	if (ZRO(word_FFFF8F7A, 0x8000))
+	{
+		SET(word_FFFF8F7A, 0x4000);
+	};
+
+	if (ZRO(word_FFFF8F7A, 0x2000))
+	{
+		SET(word_FFFF8F7A, 0x1000);
+	};
+
+	SET(word_FFFF8F7A, 0xA000);
+
+	u16 **p = &ENGINE_MAIN_VARIABLES_DIM_off_9198->_1064_word_FFFF901E;
+
+	u16 *r2 = p[stroke_FFFF8F22];
+
+	p = &ENGINE_MAIN_VARIABLES_DIM_off_9198->_1144_word_FFFF9036;
+
+	u16 *r1 = p[stroke_FFFF8F22];
+
+	*r2 += 1;
+
+	if (*r2 == 0) { *r2 -= 1; };
+
+	*r1 += 1;
+
+	if (*r1 == 0) { *r1 -= 1; };
+}	
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void Update_Gen_G_output()
+{
+	__disable_irq();
+
+	if (ZRO(KNOCK_FLAG2_FFFF887A, 1))
+	{
+		SET(reg_PFDRL, 0x80);
+	}
+	else
+	{
+		CLR(reg_PFDRL, 0x80);
+	};
+
+	__enable_irq();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -2017,6 +2314,20 @@ void StartInjectSync(u16 v, u16 mask)
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void StartInjectAsync(u16 v, u16 mask)
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+void InjOpenStart(u16 v, u16 mask)
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+u16 atu22_Get_ECNT9A()
 {
 
 }

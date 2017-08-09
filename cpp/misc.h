@@ -90,6 +90,9 @@ struct Map3D_W
 #define SPEED_ADJUST			0x800
 #define FIX_TIMING				0x1000
 
+#define CRANKING_TIMED			0x2000
+
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #define Tephra ((void(*)(void))0x3ec00)
@@ -300,6 +303,7 @@ struct TM32
 
 #define INCLIM(v) { if (v < 0xFFFF) {v += 1;}; }
 #define DECLIM(v) { if (v != 0) {v -= 1;}; }
+#define INCLIM80(v) { if (v < 0x80) {v += 1;}; }
 
 
 #define ABSDIF(a, b) (((a) >= (b)) ? ((a) - (b)) : ((b) - (a)))

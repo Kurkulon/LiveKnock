@@ -71,7 +71,7 @@ compiler_options = $(debug_compiler_options) -NOLOGO -CPu=sh2 -RTnext -ENAble_re
 
 ##################################################################################################
 
-asm_options = -NOLOGO -CPu=sh2
+asm_options = -NOLOGO -CPu=sh4
 
 ##################################################################################################
 
@@ -112,7 +112,7 @@ $(objdir)\LiveKnock.abs : LiveMap.o AltMaps.o Hooks.o LiveKnock.o # Ignition.o c
 $(objdir)\stock.abs : Ignition.o crank.o idle.o F500.o FU03.o ML02.o
 	@echo Linking $^@ ...
 	@copy /Y $[@ $^@
-	@rem optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P_Ignition/39000,P_crank/3C000,B/FFFF8480 -LIBrary=$(libname) -OUtput="$^@" $<
+	@rem optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Binary -start=ROM/0,RAM/FFFF6000,HWREG/FFFFE400,P_Ignition/39000,P_crank/3C000,B/FFFF8480 -LIBrary=$(libname) -OUtput="$^@" $<
 	@echo $(delimiter)	
 
 ##################################################################################################

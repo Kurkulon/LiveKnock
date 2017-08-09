@@ -1039,6 +1039,33 @@ static void FU03_sub_153E4()
 
 static void FU03_sub_1559C()
 {
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void FU03_sub_15740()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void FU03_sub_15870()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void FU03_sub_158AC()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void FU03_sub_159DC()
+{
 	u32 r8 = FU03_STIPWRPMCOR();
 
 	u32 r9 = FU03_sub_15C22();
@@ -1135,34 +1162,6 @@ static void FU03_sub_1559C()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void FU03_sub_15740()
-{
-
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-static void FU03_sub_15870()
-{
-
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-static void FU03_sub_158AC()
-{
-
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-static void FU03_sub_159DC()
-{
-
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 static u16 FU03_STIPWRPMCOR()
 {
 	if (wMUT1E_MAF_RESET_FLAG & STALL)
@@ -1184,7 +1183,10 @@ static u16 FU03_STIPWRPMCOR()
 
 static u16 FU03_sub_15C22()
 {
-//	if (wMUT1E_MAF_RESET_FLAG
+	if (ZRO(wMUT1E_MAF_RESET_FLAG, STALL) || ZRO(RT_FLAG1_FFFF8888, 0x40))
+	{
+		timer_FFFF8798 = word_1534/*38*/;
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1325,11 +1327,11 @@ static void FU03_sub_162D8()
 
 	if ((wMUT1E_MAF_RESET_FLAG & CRANKING) && word_FFFF8BAA != 0)	
 	{
-		SET(RPM_FLAGS, 0x2000);
+		SET(RPM_FLAGS, CRANKING_TIMED);
 	}
 	else
 	{
-		CLR(RPM_FLAGS, 0x2000);
+		CLR(RPM_FLAGS, CRANKING_TIMED);
 	};
 
 	// loc_16538
@@ -1370,7 +1372,7 @@ static void FU03_sub_162D8()
 
 		u32 r11;
 
-		if (ONE(RPM_FLAGS, 0x2000))
+		if (ONE(RPM_FLAGS, CRANKING_TIMED))
 		{
 			__disable_irq();
 
@@ -1403,7 +1405,7 @@ static void FU03_sub_162D8()
 
 	// loc_16612
 
-	if (ONE(RPM_FLAGS, 0x2000) && ONE(word_FFFF8A48, 0x80) && ZRO(word_FFFF89F2, 0x400))
+	if (ONE(RPM_FLAGS, CRANKING_TIMED) && ONE(word_FFFF8A48, 0x80) && ZRO(word_FFFF89F2, 0x400))
 	{
 		// loc_1663A
 
@@ -1444,7 +1446,7 @@ static void FU03_sub_162D8()
 
 			if (word_FFFF8BAA == 0)
 			{
-				CLR(RPM_FLAGS, 0x2000);
+				CLR(RPM_FLAGS, CRANKING_TIMED);
 			};
 
 			StartInjectSync(r1, r2);
@@ -1486,7 +1488,7 @@ static void FU03_sub_16750()
 	}
 	else if (ZRO(wMUT1E_MAF_RESET_FLAG, CRANKING)) 
 	{
-		if ((byte_1071 != 0 && (wMUT1E_MAF_RESET_FLAG & DECELERATION_FUEL_CUT)) || cranking_stall_timer_up >= word_FFFF8BB0)
+		if ((byte_1071/*0*/ != 0 && (wMUT1E_MAF_RESET_FLAG & DECELERATION_FUEL_CUT)) || cranking_stall_timer_up >= word_FFFF8BB0)
 		{
 			CLR(r1, 0x80);
 		};

@@ -1004,7 +1004,7 @@ static bool ML02_sub_130BC(EnVars* ev)
 
 static void ML02_sub_13120()
 {
-
+	u32 r1 = wMUT1E_MAF_RESET_FLAG;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
