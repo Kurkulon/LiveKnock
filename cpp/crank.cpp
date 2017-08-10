@@ -1407,6 +1407,17 @@ static void CRANK75_Knock_sub_24AC0()
 static void CRANK5_sub_24AF0()
 {
 
+
+	// loc_24FDC	
+
+	if ((word_FFFF8A48 & 0x80) && (RPM_FLAGS & 0x200))
+	{
+		CRANK_MAF_MAP_Calcs_sub_250F8(2, 1);
+	}
+	else
+	{
+		CRANK_MAF_MAP_Calcs_sub_250F8(0, 1);
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
