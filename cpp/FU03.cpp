@@ -28,6 +28,7 @@
 #define CEL12_68D0								((Axis*)0x68D0)
 #define CEL11_6892								((Axis*)0x6892)
 #define RPM8_658A								((Axis*)0x658A)
+#define RPM11_798E								((Axis*)0x798E)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -50,6 +51,29 @@
 #define unk066_5856								((Map3D_B *)0x5856)
 #define STIPWRPMCOR2_3492						((Map3D_B *)0x3492)
 #define word_3484								((Map3D_B *)0x3484)
+
+
+#define unk126_62B2								((Map3D_B *)0x62B2)
+#define unk130_62EE								((Map3D_B *)0x62EE)
+#define unk124_6284								((Map3D_B *)0x6284)
+#define unk127_62C0								((Map3D_B *)0x62C0)
+#define unk049_62A0								((Map3D_B *)0x62A0)
+#define unk125_6292								((Map3D_B *)0x6292)
+#define unk129_62DC								((Map3D_B *)0x62DC)
+#define unk128_62CE								((Map3D_B *)0x62CE)
+#define unk122_6260								((Map3D_B *)0x6260)
+#define unk123_6272								((Map3D_B *)0x6272)
+
+#define	tps_rpm11_351C							((Map3D_B *)0x351C)
+#define	unk0522_352E							((Map3D_B *)0x352E)
+#define	unk0523_361E							((Map3D_B *)0x361E)
+#define	unk0524_362C							((Map3D_B *)0x362C)
+#define	unk117_59B0								((Map3D_B *)0x59B0)
+
+#define	asyncAccelCoolantTempAdder				((Map3D_B *)0x3574)
+#define	asyncAccelRPMAdder						((Map3D_B *)0x3582)
+#define	asyncAccelTPSenrichCutoff				((Map3D_B *)0x3562)
+
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -1211,21 +1235,65 @@ static void FU03_InjLatencyUpdate()
 
 static void FU03_sub_15E14()
 {
+	if (RPM_FLAGS & (REVLIM|FUEL_CUT))
+	{
+		__disable_irq();
 
+		bMUTC6_FFFF8A52 = 0;
+		bMUTC5_InjPulseW_8us = 0;
+		MUT_2B_FFFF9996 = 0;
+		wMUT2A_Injector_Pulse_Width_us = 0;
+
+		__enable_irq();
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 static void FU03_sub_15E48()
 {
+	if (wMUT1E_MAF_RESET_FLAG & STALL)
+	{
+		__disable_irq();
 
+		bMUTC6_FFFF8A52 = 0;
+		bMUTC5_InjPulseW_8us = 0;
+
+		word_FFFF8A4E = 0;
+		injPulseWidth_null = 0;
+
+		MUT_2B_FFFF9996 = 0;
+		wMUT2A_Injector_Pulse_Width_us = 0;
+
+		word_FFFF8B88 = 0;
+		word_FFFF8B86 = 0;
+		word_FFFF8B84 = 0;
+		word_FFFF8B82 = 0;
+		word_FFFF8B80 = 0;
+		word_FFFF8B7E = 0;
+		word_FFFF8B7C = 0;
+		word_FFFF8B96 = 0;
+		word_FFFF8B94 = 0;
+		word_FFFF8B92 = 0;
+		word_FFFF8B90 = 0;
+		word_FFFF8B8E = 0;
+		word_FFFF8B8C = 0;
+		word_FFFF8B8A = 0;
+		word_FFFF8B9C = 0;
+		word_FFFF8B9A = 0;
+		word_FFFF8B98 = 0;
+
+		__enable_irq();
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 static void FU03_sub_15F28()
 {
-
+	FU03_sub_15F42();
+	FU03_sub_1611C();
+	FU03_sub_161FC();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1246,14 +1314,30 @@ static void FU03_sub_1611C()
 
 static void FU03_sub_161FC()
 {
+	word_FFFF8B34 = Table_Lookup_byte_2D_3D(tps_rpm11_351C);
+	word_FFFF8B36 = Table_Lookup_byte_2D_3D(unk0522_352E);
 
+	word_FFFF8B20 = Table_Lookup_byte_2D_3D((RT_FLAG1_FFFF8888 & 0x20) ? unk0523_361E : unk0524_362C);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 static void FU03_ASYNHACCELENRICH_sub_1623E()
 {
+	u32 r1 = Table_Lookup_byte_2D_3D(asyncAccelCoolantTempAdder);
 
+	if (wMUT1E_MAF_RESET_FLAG & 0x2000)
+	{
+		r1 = (Async_Disabled) ? Mul_Div_R(r1, word_2146/*32*/, 32) : Mul_Fix7_R(r1, asyncAccelMultCoolantTempAdder/*128*/);
+	};
+
+	r1 += Table_Lookup_byte_2D_3D(asyncAccelRPMAdder);
+
+	ASYNC_ENRICHMENT_FFFF8B42 = Lim_FF(r1);
+
+	word_FFFF8B3E = Lim_FF(Mul_Fix7_R(ASYNC_ENRICHMENT_FFFF8B42, asyncAccelMaxContribution/*60*/));
+
+	ASYNC_INJECTION_FFFF8B44 = Table_Lookup_byte_2D_3D(asyncAccelTPSenrichCutoff);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1628,14 +1712,31 @@ static void FU03_sub_16AA8()
 
 static void FU03_sub_16BFE()
 {
+	if (wMUT1E_MAF_RESET_FLAG & CLOSED_LOOP_GENERIC)
+	{
+		if (Bitmap_Store_A_FFFF89EE & 4)
+		{
+			afr_FFFF8ACE = Sub_Lim_0(afr_FFFF8ACE, word_2546/*13*/);
+		};
 
+		afr_FFFF8ACC = interpolate_r4_r5_r6(AFR_OctanInt, 0x80, afr_FFFF8ACE);
+	}
+	else
+	{
+		afr_FFFF8ACE = 0x80;
+
+		afr_FFFF8ACC = AFR_OctanInt;
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 static void FU03_sub_16C60()
 {
-
+	if (wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING))
+	{
+		word_FFFF86F4 = Table_Lookup_byte_2D_3D(unk117_59B0);
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

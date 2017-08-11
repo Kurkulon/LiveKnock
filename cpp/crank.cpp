@@ -1758,9 +1758,9 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 
 		// loc_257CA
 
-		word_FFFF8A56 = (wMUTC0_bMUT54_Acceleration_Enrichment != 0) ? Lim_FFFF(Mul_DW_Div(dword_FFFF8B14, wMUTC0_bMUT54_Acceleration_Enrichment, 2048)) : 0;
+		ipw_Enrichment = (wMUTC0_bMUT54_Acceleration_Enrichment != 0) ? Lim_FFFF(Mul_DW_Div(dword_FFFF8B14, wMUTC0_bMUT54_Acceleration_Enrichment, 2048)) : 0;
 
-		word_FFFF8A58 = (wMUTC1_bMUT55_Deceleration_Enleanment != 0) ? Mul_Div(wMUTC1_bMUT55_Deceleration_Enleanment, word_FFFF8B18, 2048) : 0;
+		ipw_Enleanment = (wMUTC1_bMUT55_Deceleration_Enleanment != 0) ? Mul_Div(wMUTC1_bMUT55_Deceleration_Enleanment, word_FFFF8B18, 2048) : 0;
 
 		// loc_25826
 
@@ -1771,8 +1771,8 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 
 		if (FLAGS_FFFF8EB0 & 0x80)
 		{
-			word_FFFF8A56 = 0;
-			word_FFFF8A58 = 0;
+			ipw_Enrichment = 0;
+			ipw_Enleanment = 0;
 		};
 
 		if (PEDR_LO_Check_sub_A790() || (RPM_FLAGS & STALL))
@@ -1906,14 +1906,14 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 
 			word_FFFF9956 = ipw = sub_2640E(r0);
 
-			if (word_FFFF8A56 != 0)
+			if (ipw_Enrichment != 0)
 			{
-				ipw = Add_Lim_FFFF(ipw, word_FFFF8A56);
+				ipw = Add_Lim_FFFF(ipw, ipw_Enrichment);
 			};
 
-			if (word_FFFF8A58 != 0)
+			if (ipw_Enleanment != 0)
 			{
-				ipw = Sub_Lim_0(ipw, word_FFFF8A58);
+				ipw = Sub_Lim_0(ipw, ipw_Enleanment);
 
 				if (ipw == 0)
 				{
