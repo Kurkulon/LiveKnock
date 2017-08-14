@@ -67,11 +67,11 @@ delimiter = ____________________________________________________________________
 
 ##################################################################################################
 
-compiler_options = $(debug_compiler_options) -NOLOGO -CPu=sh2 -RTnext -ENAble_register -macsave=0
+compiler_options = $(debug_compiler_options) -NOLOGO -CPu=sh2 -RTnext -ENAble_register -macsave=0 -Goptimize
 
 ##################################################################################################
 
-asm_options = -NOLOGO -CPu=sh4
+asm_options = -NOLOGO -CPu=sh2
 
 ##################################################################################################
 
@@ -103,7 +103,7 @@ $(objdir)\LiveKnock.abs : LiveMap.o AltMaps.o Hooks.o LiveKnock.o # Ignition.o c
 
 .asm.o:
 	@echo Compiling $[. ...
-	@asmsh $(asm_options) -List="$(objdir)\$^&.lst" -OBject="$(objdir)\$^." $[@
+	asmsh $(asm_options) -List="$(objdir)\$^&.lst" -OBject="$(objdir)\$^." $[@
 	@echo $(delimiter)	
 
 ##################################################################################################

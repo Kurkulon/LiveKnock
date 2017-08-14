@@ -23,6 +23,7 @@
 
 #define RPMINGD_32DC					((const byte*)0x32DC)
 #define byte_32EE						((const byte*)0x32EE)
+#define unk113_524E						((const byte*)0x524E)
 
 //#define byte_32F2						(*(const byte*)0x32F2)
 //#define byte_32F3						(*(const byte*)0x32F3)
@@ -1106,7 +1107,185 @@ static void ML02_MAP_Change_Calcs()
 
 static void ML02_sub_12D9C(EnVars* ev)
 {
+	u32 r2 = *ev->_12_wMUT18_Open_Loop_Bit_Array;
+	u32 O2F = *ev->_28_wMUT13_Front_O2_ADC8bit;
+	u16* p = ev->_292_word_FFFF8A12;
 
+	u32 r13 = *p;
+	u32 r9 = r13;
+
+	if (O2F >= word_1700/*26*/)
+	{
+		*p = r13 | 0x40;
+	}
+	else
+	{
+		*p = r13 & ~0x40;
+
+		wMUT0C_Fuel_Trim_Low = word_2902/*20*/;
+	};
+
+	if (ZRO(prev_MUT1E_FLAGS, STALL) && (((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 8) && (*ev->_176_word_FFFF9296 & 4)) || cranking_end_timer_up <= (t1_off_1592*20)))
+	{
+		CLR(r2, 0x2000);
+
+		*ev->_288_word_FFFF8714 = word_2902/*20*/;
+	}
+	else
+	{
+		// loc_12E24
+
+		CLR(r2, 0x98);
+
+		if (O2F >= *ev->_36_wMUT5A)
+		{
+			SET(r2, 0x80);
+		};
+
+		if (O2F >= word_1588/*31*/)
+		{
+			SET(r2, 0x10);
+		};
+
+		if ((wMUTD1_BitMap_FAA & 2) && O2F >= word_1700/*26*/)
+		{
+			SET(r2, 8);
+		};
+
+		// loc_12E60
+
+		if (prev_MUT1E_FLAGS & STALL)
+		{
+			SET(r2, 0x8020);
+
+			if (ZRO(wMUTD1_BitMap_FAA, 2))
+			{
+				SET(r2, 0x4000);
+			};
+
+			CLR(r2, 0x2000);
+
+			*ev->_288_word_FFFF8714 = word_2902/*20*/;
+
+			CLR(*ev->_292_word_FFFF8A12, 0x80);
+		}
+		else
+		{
+			// loc_12E96
+
+			u32 r3 = *ev->_16_prev_MUT18_Open_Loop_Bit_Array ^ r2;
+
+			if ((wMUTD1_BitMap_FAA & 2) || r3 & 0x10)
+			{
+				CLR(r2, 0x4000);
+
+				*ev->_68_timer_FFFF878E = word_1590;
+			}
+			else if (ZRO(*ev->_8_prev_MUT1E_FLAGS, 0x800))
+			{
+				*ev->_68_timer_FFFF878E = word_1590/*255*/;
+			}
+			else if (*ev->_68_timer_FFFF878E == 0)
+			{
+				SET(r2, 0x4000);
+			};
+
+			// loc_12F26
+
+			if ((wMUTD1_BitMap_FAA & 2) && (*ev->_16_prev_MUT18_Open_Loop_Bit_Array & 0x8000))
+			{
+				CLR(r2, 0x8020);
+
+				*ev->_72_timer_FFFF878A = word_1590/*255*/;
+
+				// loc_12FA2
+
+				SET(r2, 0x2000);
+			}
+			else if (r3 & 0x80)
+			{
+				if (ZRO(wMUTD1_BitMap_FAA, 2))
+				{
+					CLR(r2, 0x8000);
+				};
+				
+				// loc_12F5C
+
+				*ev->_72_timer_FFFF878A = word_1590/*255*/;
+
+				CLR(r2, 0x20);
+				SET(r2, 0x2000);
+			}
+			else if (*ev->_8_prev_MUT1E_FLAGS & 0x800)
+			{
+				if (*ev->_16_prev_MUT18_Open_Loop_Bit_Array & 0x20)
+				{
+					*ev->_72_timer_FFFF878A = word_1590/*255*/;
+				};
+
+				// loc_12F8C
+
+				if (*ev->_72_timer_FFFF878A == 0)
+				{
+					SET(r2, 0x20);
+				};
+
+				// loc_12F9A
+
+				CLR(r2, 0x2000);
+			}
+			else
+			{
+				// loc_12FA2
+
+				SET(r2, 0x2000);
+			};
+
+			// loc_12FA6
+
+			r13 = *ev->_292_word_FFFF8A12;
+
+			r9 ^= r13;
+
+			if (ZRO(r9, 0x40) || ((r13 & 0x40) && *ev->_288_word_FFFF8714 == 0))
+			{
+				// loc_12FC4
+
+				SET(*ev->_292_word_FFFF8A12, 0x80);
+			};
+		};
+	};
+
+	// loc_12FCE
+
+	WFLAG(r2, 4, O2F >= *ev->_36_wMUT5A);
+
+	u32 r3 = *ev->_16_prev_MUT18_Open_Loop_Bit_Array ^ r2;
+
+	if (r3 & 4)
+	{
+		*ev->_76_word_FFFF8552 = unk113_524E[word_FFFF8A4A];
+	};
+
+	if (*ev->_76_word_FFFF8552 == 0)
+	{
+		WFLAG(r2, 0x40, r2 & 4);
+	};
+
+	// loc_13020
+
+	*ev->_12_wMUT18_Open_Loop_Bit_Array = r2;
+
+	p = ev->_196_word_FFFF928E;
+
+	if (prev_MUT1E_FLAGS & STALL)
+	{
+		SET(*p, 4);
+	}
+	else if (r3 & 8)
+	{
+		CLR(*p, 4);
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
