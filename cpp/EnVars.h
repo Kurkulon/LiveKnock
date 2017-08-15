@@ -141,7 +141,8 @@ struct Vars
 
 struct EnVars //ENGINE_MAIN_VARIABLES_DIM_off_9198
 {
-	u16* _0_loc_FFFF;
+	u16  _0_;
+	u16  _2_;
 	u16* _4_wMUT1E_MAF_RESET_FLAG;
 	u16* _8_prev_MUT1E_FLAGS;
 	u16* _12_wMUT18_Open_Loop_Bit_Array;

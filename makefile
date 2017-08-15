@@ -103,7 +103,7 @@ $(objdir)\LiveKnock.abs : LiveMap.o AltMaps.o Hooks.o LiveKnock.o # Ignition.o c
 
 .asm.o:
 	@echo Compiling $[. ...
-	asmsh $(asm_options) -List="$(objdir)\$^&.lst" -OBject="$(objdir)\$^." $[@
+	@asmsh $(asm_options) -List="$(objdir)\$^&.lst" -OBject="$(objdir)\$^." $[@
 	@echo $(delimiter)	
 
 ##################################################################################################
