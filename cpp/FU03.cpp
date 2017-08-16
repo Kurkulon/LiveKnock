@@ -106,10 +106,24 @@
 #define AFRTMP_302A								((const byte*)0x302A)
 #define unk137_35AE								((const byte*)0x35AE)
 
-#define off_7B48								((const byte**)0x7B48)
-#define off_7B68								((const byte**)0x7B68)
-#define off_7C88								((const byte**)0x7C88)
-#define off_7CA8								((const byte**)0x7CA8)
+#define    off_7B48								((const byte**)0x7B48)
+#define    off_7B68								((const byte**)0x7B68)
+#define    off_7C88								((const byte**)0x7C88)
+#define    off_7CA8								((const byte**)0x7CA8)
+#define    off_7B88								((const byte**)0x7B88)
+#define    off_7BA8								((const byte**)0x7BA8)
+#define unk131_7BC8								((const byte**)0x7BC8)
+#define unk132_7BE8								((const byte**)0x7BE8)
+#define unk135_7CC8								((const byte**)0x7CC8)
+#define unk136_7CE8								((const byte**)0x7CE8)
+
+
+
+
+
+
+
+
 
 #define word_98E6								((const u16*)0x98E6)
 
@@ -1278,7 +1292,66 @@ static void FU03_sub_15300(Vars *v)
 
 static void FU03_sub_153E4(EnVars* ev)
 {
+	u32 r13, r2;
 
+	if (ZRO(*ev->_4_wMUT1E_MAF_RESET_FLAG, 0x800))
+	{
+		r13 = 0x80;
+	}
+	else
+	{	
+		if ((byte_1065 == 0 && RAM_VAR_1065_FFFF86B2 != 0) || (byte_1065 != 0 && (ZERO_8_IGNITION_FLAGS & 0x2000)))
+		{
+			// loc_1545E
+
+			r2 = r13 = (byte_1065 != 0) ? word_2170 : word_15C4;
+		}
+		else if (wMUT19_Startup_Check_Bits & 0x100)
+		{
+			r2 = r13 = word_15C2;
+		}
+		else if (byte_105D == 0)
+		{
+			void *r4;
+
+			if (RT_FLAG1_FFFF8888 & 0x20)
+			{
+				r4 = (wMUT10_Coolant_Temperature_Scaled >= word_210A) ? off_7B88 : unk131_7BC8;
+			}
+			else
+			{
+				r4 = (wMUT10_Coolant_Temperature_Scaled >= word_210A) ? off_7BA8 : unk132_7BE8;
+			};
+
+			byte *p = (byte*)GET_LOC_DIM_sub_DF6(r4);
+
+			r2 = r13 = p[FU03_sub_14C9A()];
+		}
+		else
+		{
+			u32 i = FU03_sub_14C9A();
+
+			if (ZRO(RT_FLAG1_FFFF8888, 0x20))
+			{
+				i += 10;
+			};
+
+			// loc_154F8
+
+			r2 = ((byte*)GET_LOC_DIM_sub_DF6(unk135_7CC8))[i];
+
+			r13 = ((byte*)GET_LOC_DIM_sub_DF6(unk136_7CE8))[i];
+
+		};
+
+		// loc_15512
+
+		r13 = (*ev->_12_wMUT18_Open_Loop_Bit_Array & 0x40) ? Sub_Lim_0(0x80, r2) : Lim_FF(r13 + 0x80);
+	};
+
+	// loc_1553A
+
+	*ev->_88_wMUT52 = r13;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
