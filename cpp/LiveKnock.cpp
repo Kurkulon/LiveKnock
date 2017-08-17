@@ -8,6 +8,7 @@
 #pragma noregsave(FeedBack_WBO2)
 static void FeedBack_WBO2();
 static void TimeRPM();
+static void FeedBack_WBO2_v2();
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -80,7 +81,7 @@ extern "C" void LiveKnock()
 			//};
 		};
 
-		FeedBack_WBO2();
+		FeedBack_WBO2_v2();
 
 		TimeRPM();
 
@@ -177,6 +178,106 @@ static void TimeRPM()
 		timer += 1;
 	};
 
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma noregsave(FeedBack_WBO2_v2)
+
+static void FeedBack_WBO2_v2()
+{
+//	static u16 timer;
+//	static TM32 tm;
+	static byte pi;
+	const byte LDT = 200;
+	
+
+	if ((wMUT1E_MAF_RESET_FLAG & (DECELERATION_FUEL_CUT|FUEL_CUT|MAP_error)) == 0)
+	{
+		u32	al = axis_ve_LOAD & 0xFF;
+		u32 ar = axis_ve_RPM & 0xFF;
+		u32 ind = ar + al * 19;
+
+		//u32 kl = axis_ve_LOAD >> 8;
+		//u32 kr = axis_ve_RPM >> 8;
+
+		//u32 k00 = (255 - kr) * (255 - kl);
+		//u32 k01 = kr * (255 - kl);
+		//u32 k10 = (255 - kr) * kl;
+		//u32 k11 = kr * kl;
+
+		ve_index = ind;
+
+		if (ind != pi || al >= 11 || ar >= 19)
+		{
+			ve_timer = LDT;
+			pi = ind;
+		}
+		else if (ve_timer == 0)
+		{
+			i32 d = Div_WW(32027, 125 + wMUT3C_Rear_O2_ADC8bit);
+
+			if (d > AFR(18) && d < AFR(9))
+			{
+				d -= wMUT32_Air_To_Fuel_Ratio;
+
+				if (d < -5) d = -5; else if (d > 5) d = 5;
+
+				if (d != 0)
+				{
+					byte kl1 = axis_ve_LOAD >> 8;
+					byte kr1 = axis_ve_RPM >> 8;
+
+					byte kl0 = 255 - kl1;
+					byte kr0 = 255 - kr1;
+
+					if (kl0 != 0)
+					{
+						if (kr0 != 0)
+						{
+							veMapRAM[ind] = Lim16(veMapRAM[ind] + ((u32)(kr0 * kl0 * d)) / 4096, VE16(118), VE16(40));
+						};
+
+						if (kr1 != 0)
+						{
+							veMapRAM[ind+1] = Lim16(veMapRAM[ind+1] + ((u32)(kr1 * kl0 * d)) / 4096, VE16(118), VE16(40));
+						};
+					};
+
+					if (kl1 != 0)
+					{
+						if (kr0 != 0)
+						{
+							veMapRAM[ind+19] = Lim16(veMapRAM[ind+19] + ((u32)(kr0 * kl1 * d)) / 4096, VE16(118), VE16(40));
+						};
+
+						if (kr1 != 0)
+						{
+							veMapRAM[ind+20] = Lim16(veMapRAM[ind+20] + ((u32)(kr1 * kl1 * d)) / 4096, VE16(118), VE16(40));
+						};
+					};
+
+					//u16 &p = veMapRAM[ind];
+
+					//d = Lim32(Div_DW(p * wMUT32_Air_To_Fuel_Ratio, d), VE16(118), VE16(40));
+
+					//fb_VE = d >> 8;
+
+					//if (veMapIndex == 15) { p = d; };
+				};
+			};
+
+			ve_timer = LDT;
+		}
+		else
+		{
+			ve_timer -= 1;
+		};
+	}
+	else
+	{
+		ve_timer = LDT;
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
