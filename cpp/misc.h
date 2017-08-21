@@ -106,6 +106,12 @@ struct Map3D_W
 #define LOAD32					0x08
 #define LOAD64					0x10
 
+// wMUT9A_Ligths_Bit_Array
+
+#define AC_LOAD					1
+#define CHECK_ENGINE			8
+
+
 
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

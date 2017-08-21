@@ -69,6 +69,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cpp\BC06.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\cpp\crank.cpp"
 				>
 			</File>
