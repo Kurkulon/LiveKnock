@@ -49,6 +49,8 @@
 #define RPM27_6960_IDLE						((Axis*)0x6960)
 #define BAR5_66E2							((Axis*)0x66E2)
 
+#define RPM10_67DE							((Axis*)0x67DE)
+#define LOAD9_67FC							((Axis*)0x67FC)
 
 
 
@@ -66,6 +68,7 @@
 #define ICSVADDBARO_3BB4					((Map3D_B*)0x3BB4)
 #define ICSVSTARTUPADD2_3B30				((Map3D_B*)0x3B30)
 #define ICSVSTARTUPADD1_4924				((Map3D_B*)0x4924)
+#define GENCHARG_3D1A						((Map3D_B*)0x3D1A)
 
  
 
@@ -74,6 +77,7 @@
 
 #define sub_21ECC							((u16(*)(u16))0x21ECC)
 #define sub_21EF8							((u16(*)(void))0x21EF8)
+#define sub_21EE4							((bool(*)(void))0x21EE4)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -147,14 +151,14 @@ static u16  AA05_sub_1B89C();
 static u16  AA05_Return_0_1();
 static u16  AA05_sub_1B8CA();
 static void AA05_sub_1B8F2();
-static void AA05_sub_1B934();
+static bool AA05_sub_1B934();
 static void AA05_sub_1BA2C();
-static void AA05_sub_1BAC6();
+static u16 AA05_sub_1BAC6();
 static void AA05_sub_1BAFE();
 static bool AA05_sub_1BB1A();
 static void AA05_sub_1BB96();
 static void AA05_sub_1BC6E();
-static void AA05_sub_1BD34();
+static u16 AA05_sub_1BD34();
 static void AA05_sub_1BD6C();
 static void AA05_sub_1BDA0();
 static void AA05_sub_1BDC6();
@@ -645,6 +649,59 @@ static void AA05_sub_1997C()
 
 static void AA05_GENERATOR_CHARGING_sub_19A2C()
 {
+	wMUTB4_lookup_value = RPM_x_4_096__1 >> 4;
+
+	Table_Lookup_Axis(RPM10_67DE);
+	Table_Lookup_Axis(LOAD9_67FC);
+
+	bMUT8E_Solenoid_Duty = (wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING)) ? 0 : Table_Lookup_byte_2D_3D(GENCHARG_3D1A);
+
+	word_FFFF8DC8 = word_FFFF8DC6;
+
+	u32 r3 = word_FFFF8DC8 * word_1BC6 + word_1BC2;
+	u32 r13 = 0;
+
+	if (word_FFFF8DC8 != 0)
+	{
+		r13 = (word_FFFF8DC8 - 1) * word_1BC6 + word_1BC4;
+	};
+
+	if (bMUT8E_Solenoid_Duty >= r3)
+	{
+		r3 = 0;
+
+		if (bMUT8E_Solenoid_Duty >= word_1BC2)
+		{
+			r3 = 1 + Div_R4_R5__R0(bMUT8E_Solenoid_Duty - word_1BC2, word_1BC6);
+		};
+
+		r13 = r3;
+	}
+	else if (bMUT8E_Solenoid_Duty < r13)
+	{
+		r3 = 0;
+
+		if (bMUT8E_Solenoid_Duty >= word_1BC4)
+		{
+			r3 = 1 + Div_R4_R5__R0(bMUT8E_Solenoid_Duty - word_1BC4, word_1BC6);
+		};
+
+		r13 = r3;
+	}
+	else
+	{
+		r13 = word_FFFF8DC6;
+	};
+
+	// loc_19B5E
+
+	word_FFFF8DC6 = (r13 < word_1BC8) ? r13 : word_1BC8;
+
+	if (sub_21EE4())
+	{
+		word_FFFF8DC8 = 0;
+		word_FFFF8DC6 = 0;
+	};
 
 }
 
@@ -1171,28 +1228,73 @@ static u16 AA05_sub_1B8CA()
 
 static void AA05_sub_1B8F2()
 {
+	if (AA05_sub_1B934())
+	{
+		AA05_sub_1BA2C();
+	};
 
+	if (MUT20_RPM_Idle_x125div16 >= word_1922 && wMUT2E_Vehicle_Speed_Frequency > word_1924)
+	{
+		AA05_sub_192CA();
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void AA05_sub_1B934()
+static bool AA05_sub_1B934()
 {
+	CLR(word_FFFF987E, 0x80);
 
+	return (wMUT23 & 0x10)
+		&& ZRO(wMUT23, 1)
+		&& word_FFFF8CC8 == 0
+		&& ZRO(RT_FLAG1_FFFF8888, POWER_STEERING) 
+		&& word_FFFF86CA == 0
+		&& word_FFFF8CA8 != 0
+		&& word_FFFF8CA8 < word_FFFF8CB0;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 static void AA05_sub_1BA2C()
 {
+	u32 r13 = Sub_Lim_0(word_FFFF8CAA + 0x100, word_FFFF8CA4);
+	
+	r13 = Sub_Lim_0(r13, SHLR8(AA05_sub_1BAC6()));
+	
+	r13 = Lim_FF(r13);
 
+
+	if (ZRO(RT_FLAG1_FFFF8888, AC_SWITCH))
+	{
+		wMUT09 = r13;
+	}
+	else if (byte_102E != 1 || ZRO(RT_FLAG1_FFFF8888, 1))
+	{
+		wMUT0B = r13;
+	}
+	else
+	{
+		word_FFFF8CA0 = r13;
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void AA05_sub_1BAC6()
+static u16 AA05_sub_1BAC6()
 {
-
+	if (ZRO(RT_FLAG1_FFFF8888, AC_SWITCH))
+	{
+		return ufix8_MUT08_Coolant_Temperature;
+	}
+	else if (byte_102E != 1 || ZRO(RT_FLAG1_FFFF8888, 1))
+	{
+		return ufix8_MUT0A_FFFF80BC;
+	}
+	else
+	{
+		return ufix8_RAM_VAR_1936_FFFF80BE;
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1216,28 +1318,80 @@ static bool AA05_sub_1BB1A()
 
 static void AA05_sub_1BB96()
 {
+	u32 r2 = AA05_sub_1BAC6();
 
+	word_FFFF85C0 = word_192C;
+
+	u32 r13 = Sub_Lim_0(word_FFFF8CA4 + SHLR8(r2), 0x80);
+
+	if (word_FFFF8CAA >= r13)
+	{
+		r13 = word_FFFF8CAA - r13;
+
+		r13 = Add_Lim_FFFF(r2, Mul_Lim_FFFF(r13, 5));
+	}
+	else
+	{
+		r13 -= word_FFFF8CAA;
+
+		r13 = Sub_Lim_0(r2, Mul_Lim_FFFF(r13, 5));
+	};
+
+	r13 = Lim16(r13, ufix8_COOLANT_TEMP_CONST_1934, ufix8_COOLANT_TEMP_CONST_1932);
+
+	if (ZRO(RT_FLAG1_FFFF8888, AC_SWITCH))
+	{
+		ufix8_MUT08_Coolant_Temperature = r13;
+	}
+	else if (byte_102E != 1 || ZRO(RT_FLAG1_FFFF8888, 1))
+	{
+		ufix8_MUT0A_FFFF80BC = r13;
+	}
+	else
+	{
+		ufix8_RAM_VAR_1936_FFFF80BE = r13;
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 static void AA05_sub_1BC6E()
 {
+	AA05_sub_1B282();
+	AA05_sub_1AEC6();
+	AA05_sub_1B8F2();
 
+	word_FFFF8CAA = Sub_Lim_0(word_FFFF8CA4 + SHLR8(AA05_sub_1BAC6()) + AA05_sub_1BD34(), 0x100);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void AA05_sub_1BD34()
+static u16 AA05_sub_1BD34()
 {
-
+	if (ZRO(RT_FLAG1_FFFF8888, AC_SWITCH))
+	{
+		return wMUT09;
+	}
+	else if (byte_102E != 1 || ZRO(RT_FLAG1_FFFF8888, 1))
+	{
+		return wMUT0B;
+	}
+	else
+	{
+		return word_FFFF8CA0;
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 static void AA05_sub_1BD6C()
 {
+	if (ZRO(wMUT22, 0xA0))
+	{
+		word_FFFF8CA8 = Lim16(word_FFFF8CA8, 0, word_FFFF8CB0);
+	};
 
+	AA05_sub_1BDC6();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1251,7 +1405,32 @@ static void AA05_sub_1BDA0()
 
 static void AA05_sub_1BDC6()
 {
+	if (u16_Coolant_Temperature > SHLR8(ufix8_COOLANT_TEMP_CONST_1932))
+	{
+		u16_Coolant_Temperature = SHLR8(ufix8_MUT08_Coolant_Temperature);
+	};
 
+
+	if ((RT_FLAG1_FFFF8888 & (AC_SWITCH|POWER_STEERING)) 
+		|| ZRO(wMUT23, 0x10)
+		|| (wMUT23 & 1)
+		|| word_FFFF8CA8 == 0
+		|| word_FFFF8CB6 < word_FFFF8CAA
+		|| (RPM_x_4_096__1 >> 5) < wMUT24_Target_Idle_RPM
+		|| ((RPM_x_4_096__1 >> 5) - wMUT24_Target_Idle_RPM) <= word_1998)
+	{
+		// loc_1BE62
+
+		word_FFFF87AA = word_1996;
+	}
+	else if (word_FFFF87AA == 0)
+	{
+		DECLIM(u16_Coolant_Temperature);
+
+		// loc_1BE62
+
+		word_FFFF87AA = word_1996;
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
