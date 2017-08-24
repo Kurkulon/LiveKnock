@@ -146,9 +146,70 @@ static bool BC06_sub_1C14A()
 {
 	u32 r13 = Bitmap_Store_I_FFFF8CFE;
 	u32 r3 = wMUT17_TPS_ADC8bit;
+	u32 r6 = 1;
 
+	if (byte_1069 != 0 && (RT_FLAG1_FFFF8888 & RT_FLAG1_COPY_FFFF888A & AC_SWITCH) && word_FFFF85E6 == 0)
+	{
+		r6 = 1;
+		word_FFFF860C = word_2248;
+	};
 
+	
+	if (ZRO(RT_FLAG1_FFFF8888 | RT_FLAG1_COPY_FFFF888A, AC_SWITCH) && word_FFFF860C == 0)
+	{
+		r6 = 0;
+		word_FFFF85E6 = word_1A7A;
+	};
 
+	if (((RT_FLAG1_FFFF8888 & RT_FLAG1_COPY_FFFF888A ^ RT_FLAG1_COPY_FFFF888A) & AC_SWITCH) && word_FFFF8704 != 0)
+	{
+		r6 = 0;
+		word_FFFF860C = 0;
+	};
+
+	if (MUT21_RPM_x125div4 < word_1A80)
+	{
+		r6 = 0;
+		word_FFFF85E8 = word_1A7C;
+	};
+
+	// loc_1C1E8
+
+	TRG(r13, 4, wMUT2E_Vehicle_Speed_Frequency, word_1A90, word_1A8E);
+
+	// loc_1C224
+
+	TRG(r13, 2, r3, word_1A8C, word_1A8A);
+
+	// loc_1C24E
+
+	if (byte_1048/*0xF*/ == 0 || (RT_FLAG1_FFFF8888 & 0x20) || ((byte_1048/*0xF*/ & 4) && wMUT11_Intake_Air_Temperature_Scaled > word_20F0))
+	{
+		// loc_1C292
+
+		word_FFFF86D2 = 0;
+	}
+	else if (ZRO(r13, 4) && ((Bitmap_Store_I_FFFF8CFE ^ r13) & r13 & 2))
+	{
+		word_FFFF86D2 = word_1A92;
+	};
+
+	// loc_1C298
+
+	TRG(r13, 1, r3, word_1A84, word_1A82);
+
+	// loc_1C2C2
+
+	if ((ZRO(byte_1048, 8) && (RT_FLAG1_FFFF8888 & 0x20))
+		|| ZRO(r13, 1) 
+		|| (ZRO(byte_1048, 2) && word_FFFF86D2 != 0))
+	{
+		word_FFFF86D0 = 0;
+	}
+	else if (ZRO(Bitmap_Store_I_FFFF8CFE, 1))
+	{
+		word_FFFF86D0 = word_1A7E;
+	};
 
 	// loc_1C37A
 
@@ -210,8 +271,15 @@ static bool BC06_sub_1C14A()
 
 	// loc_1C4F2
 
+	if ((r13 & 0x4000) || ZRO(r13, 0x2000) ||  ZRO(r13, 0x1000) || word_FFFF85E6 != 0)
+	{
+		word_FFFF85E4 = word_2C82;
+	};
 
-
+	
+	return r6 != 0 
+		&& ((FLAGS_FFFF8EB0 & 0x80) || (word_FFFF85E6 == 0 && word_FFFF85E8 == 0 && word_FFFF86D0 == 0 && word_FFFF86D2 == 0 && word_FFFF8704 == 0)) 
+		&& word_FFFF85E4 != 0;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
