@@ -587,7 +587,7 @@ void F500_sub_10188()
 
 	wMUT15_Barometric_Pressure = Barometric_FFFF8024;
 
-	FUEL_BEFORE_ENRICHMENT_aka_Temp1_FFFF8ABC = 0x80;
+	air_Density = 0x80;
 
 	TPS_MAP_Addition =	Table_Lookup_byte_2D_3D(TPS_2D_3ED6);
 	MAP_Addition =		Table_Lookup_byte_2D_3D(MAP_2D_3EE8);

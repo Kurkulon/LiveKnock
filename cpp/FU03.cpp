@@ -1512,7 +1512,7 @@ static void FU03_sub_158AC()
 
 	u32 r0 = Mult_R4_65536(wMUT35_Limp_Home_Fuel_Throttle_Position_Based * t1_unk_1516);
 
-	r0 = Mul_DW_Div(r0, FUEL_BEFORE_ENRICHMENT_aka_Temp1_FFFF8ABC * k_InAirTemp, 0x8000);
+	r0 = Mul_DW_Div(r0, air_Density * k_InAirTemp, 0x8000);
 	
 	r0 = Mul32_Fix8(r0, enrichmentWarmUp);
 
@@ -1779,7 +1779,7 @@ static void FU03_sub_15F42()
 
 		r8 = Mul_R4_R5w_Div_128_Round_R0(r0, r8) >> 1;
 
-		r8 = Mul_R4_R5w_Div_R6w_Round_R0(r8, Table_Lookup_byte_2D_3D(unk080_34E8) * FUEL_BEFORE_ENRICHMENT_aka_Temp1_FFFF8ABC, 0x4000);
+		r8 = Mul_R4_R5w_Div_R6w_Round_R0(r8, Table_Lookup_byte_2D_3D(unk080_34E8) * air_Density, 0x4000);
 
 		r2 *= word_1630/*16*/;
 
@@ -1829,7 +1829,7 @@ static void FU03_sub_1611C()
 
 		r2 = Mul_R4_R5w_Div_128_Round_R0(r0, r2) >> 1;
 
-		r2 = Mul_DW_Div(r2, Table_Lookup_byte_2D_3D(unk085_35E0) * FUEL_BEFORE_ENRICHMENT_aka_Temp1_FFFF8ABC, 0x4000);
+		r2 = Mul_DW_Div(r2, Table_Lookup_byte_2D_3D(unk085_35E0) * air_Density, 0x4000);
 
 		r0 = Table_Lookup_byte_2D_3D(unk084_35F2);
 
