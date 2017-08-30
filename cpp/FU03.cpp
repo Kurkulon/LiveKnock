@@ -852,7 +852,7 @@ static void FU03_sub_149E0(EnVars* ev)
 
 	u32 r2 = 0x80;
 
-	if ((ZERO_8_IGNITION_FLAGS & 0x20) == 0)
+	if (ZRO(ZERO_8_IGNITION_FLAGS, 0x20))
 	{
 		Table_Lookup_Axis(BAR5_6D66);
 
@@ -871,8 +871,46 @@ static void FU03_sub_149E0(EnVars* ev)
 
 	r0 = Mul32_Fix7(r0, *ev->_80_wMUT32_Air_To_Fuel_Ratio);
 
-	*ev->_84_bMUTC7 = Div_65536_R(r0);
+	*ev->_84_bMUTC7 = bMUTC7 = Div_65536_R(r0);
 }
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#ifdef _DEBUG
+
+static void EVO_sub_150A0(EnVars* ev) //FU03_sub_149E0(EnVars* ev)
+{
+	u32 r8 = 0x4000;
+
+	u32 r0 = Mult_R4_65536(word_FFFF8AAC);
+
+	r0 = Mul_DW_Div(r0, k_InAirTemp * air_Density, 0x4000);
+
+	u32 r2 = Mul32_Fix7(r0, word_FFFF8AD8);
+
+	r0 = Mul_Div_R(enrichmentWarmUp * word_FFFF8AEC, (word_FFFF8AEA << 1) + 0x80, 0x4000);
+
+	if (r0 <= 0x80)
+	{
+		r0 = Mul_Div_R(0x80, 0x80, word_FFFF8ABA);
+	}
+	else
+	{
+		r0 = Mul_Div_R(word_FFFF8AEC << 7, (word_FFFF8AEA << 1) + 0x80, 0x4000);
+	};
+
+	r0 = Mul32_Fix7(r2, r0);
+
+	r0 = Mul32_Fix7(r0, word_FFFF8AE0);
+
+	Mul_DW_Div(r0, Add_Lim_FFFF(MUT_1A8, 0x180), 0x200);
+
+	r0 = Mul32_Fix7(r0, *ev->_80_wMUT32_Air_To_Fuel_Ratio);
+
+	*ev->_84_bMUTC7 = bMUTC7 = Div_65536_R(r0);
+}
+
+#endif
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

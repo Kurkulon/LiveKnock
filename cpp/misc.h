@@ -87,7 +87,7 @@ struct Map3D_W
 
 // RT_FLAG1_FFFF8888
 
-#define SPEEDED					0x04
+#define RACING					0x04
 #define POWER_STEERING			0x08
 #define AC_SWITCH				0x10
 #define STARTER					0x40

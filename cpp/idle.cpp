@@ -1216,7 +1216,7 @@ static u16 AA05_sub_1B8CA()
 {
 	u32 r13 = 0;
 
-	if (byte_102D != 0 && (RT_FLAG1_FFFF8888 & (0x400|AC_SWITCH|SPEEDED)) == (0x400|SPEEDED))
+	if (byte_102D != 0 && (RT_FLAG1_FFFF8888 & (0x400|AC_SWITCH|RACING)) == (0x400|RACING))
 	{
 		r13 = word_19EC;
 	};
