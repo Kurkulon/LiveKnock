@@ -15,7 +15,12 @@
 
 
 #define Get_ADC_Knock				((void(*)(void))0xA92C)
-//#define INJECTOR_RESCALED_sub_26174	((u16(*)(u16))0x26174)
+#define atu22_Get_DSTR_0x3C00		((u16(*)(void))0xC850)
+#define Reset_IRQ0F					((u16(*)(void))0xC258)
+
+
+
+
 //#define CRANK75_Knock_sub_24AC0		((void(*)(void))0x24AC0)
 
 #define ENGINE_MAIN_VARIABLES_DIM_off_9198		((EnVars*)0x9198)
@@ -309,7 +314,37 @@ static u16 Get_2E_2F_2G_status()
 
 static void CRANK5_root_sub_DC18(u16 osbr, u32 icr)
 {
+	if ((osbr - crankPrevOSBR2_A) >= 162 || timer_up_FFFF8522 >= 40)
+	{
+		if (timer_up_FFFF8522 >= 39)
+		{
+			crank_dt_ICR0AH_B = 0xFFFFFFFF;
 
+			crankHT_B = 0xFFFF;
+		}
+		else
+		{
+			crankHT_B = osbr - crankPrev_OSBR2_B;
+
+			crank_dt_ICR0AH_B = icr - dword_FFFF9ABC;
+		};
+
+		crankPrev_OSBR2_B = osbr;
+
+		dword_FFFF9ABC = icr;
+
+		timer_up_FFFF8524 = 0;
+
+		__enable_irq();
+
+		CRANK5_sub_24AF0();
+
+		word_FFFF8870 = reg_TCNT2A - ici0A_TCNT2A;
+
+		SET(crank_Flags, 1);
+	};
+
+	__enable_irq();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -2204,9 +2239,32 @@ static void CRANK75_sub_260B8()
 
 static void CRANK_sub_262D0()
 {
-//	u32 r1 = atu22_Get_DSTR_0x3C00();
+	u32 r1 = atu22_Get_DSTR_0x3C00();
 
+	u32 r13 = Reset_IRQ0F();
 
+	if ((word_FFFF8DF2 ^ r1) & word_FFFF8DF2 & word_FFFF8DF4)
+	{
+		if (r13 != 0)
+		{
+			CLR(wMUT72_Knock_Present, 2);
+
+			word_FFFF8DF4 <<= 1;
+		}	
+		else
+		{
+			SET(wMUT72_Knock_Present, 2);
+
+			word_FFFF922E = word_FFFF8DF4;
+		};
+	};
+
+	if (ZRO(word_FFFF8DF4, 0xF))
+	{
+		word_FFFF8DF4 = 1;
+	};
+
+	word_FFFF8DF2 = r1;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -2333,14 +2391,45 @@ void StartInjectAsync(u16 v, u16 mask)
 
 void InjOpenStart(u16 v, u16 mask)
 {
+	__disable_irq();
 
+	if (v != 0)
+	{
+		u32 r13 = 0xFFFFFFFF + v;
+
+		if (mask & 1) 	{	reg_DCNT8K = r13; 	};
+		if (mask & 2) 	{	reg_DCNT8L = r13; 	};
+		if (mask & 4) 	{	reg_DCNT8M = r13; 	};
+		if (mask & 8) 	{	reg_DCNT8N = r13; 	};
+		if (mask & 16) 	{	reg_DCNT8O = r13; 	};
+		if (mask & 32) 	{	reg_DCNT8P = r13; 	};
+
+		SET(reg_DSTR, (mask & 63) << 10);
+	};
+	
+	__enable_irq();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 u16 atu22_Get_ECNT9A()
 {
+	__disable_irq();
 
+	u32 r1 = reg_ECNT9A;
+
+	reg_ECNT9A = 0;
+
+	if (reg_TSR9 & 1)
+	{
+		r1 = 0xFF;
+
+		CLR(reg_TSR9, 1);
+	};
+
+	__enable_irq();
+
+	return r1;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
