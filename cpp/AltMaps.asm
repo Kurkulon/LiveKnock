@@ -392,4 +392,83 @@ _veMapArray:
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+
+	.SECTION P_D7A, CODE, LOCATE=H'D7A
+
+	.EXPORT	_Interpolate
+	
+_Interpolate:                                                                                    
+                                                                                                
+                                extu.w  r4, r4                                                  
+                                extu.w  r5, r5                                                  
+                                extu.w  r6, r6                                                  
+
+                                mov.l   #h'FF, r0                                               
+                                cmp/hi  r0, r6                                                  
+                                bf      loc_D9C                                                 
+
+                                bra     loc_DBC                                                 
+                                mov     r5, r0                                                  
+
+; ---------------------------------------------------------------------------
+
+loc_D9C:                                                                                        
+                                sub     r4, r5                                                  
+
+								mulu	r5, r6
+								sts		macl, r0
+								
+								shlr8	r0
+								
+								add		r4, r0
+loc_DBC:                                                                                        
+                                rts                                                             
+                                nop                                                             
+
+                                .DATAB.W 19, H'FFFF                                                            
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+	.SECTION P_B16, CODE, LOCATE=H'B16
+
+	.EXPORT	_interpolate_r4_r5_r6
+	
+; R0 = R5 + (R4*R6 - R5*R6) / 255; R6 = [0 ... 255]
+
+; R0 = R5 + (R4 - R5) * (R6 * 257 + 1) / 65536; R6 = [0 ... 255]
+
+_interpolate_r4_r5_r6:                                                                           
+                                                                                                
+                                extu.w  r4, r4                                                  
+                                extu.w  r5, r5                                                  
+                                extu.w  r6, r6                                                  
+                                mov.w	#255, r0                                               
+                                cmp/hi  r0, r6                                                 
+                                bf      loc_B26                                                 
+
+                                mov     r0, r6                                                 
+
+loc_B26:                                                                                        
+                                sub     r5, r4                                                  
+
+                                add		#2, r0		; r0 = 257      
+                                                                          
+                                mulu    r6, r0  
+                                sts     macl, r0	; r0 = r6*257
+                                
+                                add		#1, r0
+                                
+                                mulu    r4, r0		                                             
+                                sts     macl, r0                                                
+
+                                shlr16  r0  
+
+                                rts                                                             
+                                add     r5, r0                                                  
+
+;                                .DATAB.W 19, H'FFFF                                                            
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 	.END

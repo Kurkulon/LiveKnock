@@ -281,6 +281,42 @@ static void FeedBack_WBO2_v2()
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+u16 Interpolate(u16 v1, u16 v2, u16 i)
+{
+	bool r11 = false;
+
+	if (i == 0)
+	{
+		return v1;
+	};
+
+	u32 r0 = 0xFF;
+
+	if (i > r0)
+	{
+		return v2;
+	};
+
+
+	if (v1 > v2)
+	{
+		v2 = v1 - v2;
+		r11 = true;
+	}
+	else
+	{
+		v2 -= v1;
+	};
+
+	r0 = Mul_Div_R(v2, i, 255);
+
+	if (r11) r0 = -r0;
+
+	return v1 + r0;
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 /*
 static void FeedBack_O2R()
 {

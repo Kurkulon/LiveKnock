@@ -51,7 +51,6 @@
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static bool CRANK_CheckCamshaft_sub_A7C0();
 
 static void CRANK5_root_sub_DC18(u16 osbr, u32 icr);
 static void CRANK75_root_sub_DB40(u16 osbr, u32 icr);
@@ -66,24 +65,45 @@ void InjOpenStart(u16 v, u16 mask);
 u16 INJECTOR_RESCALED_sub_26174(u16 v);
 u16 atu22_Get_ECNT9A();
 
-static void CRANK75_sub_232A0();
-static void CRANK75_Knock_sub_23F8C();
-static bool CRANK75_sub_24636();
 
-static void CRANK75_sub_2467E();
-static void CRANK75_MainUpdateTiming();
+
+
 static u16 CRANK75_FiltrCrankHT_2494E(u16 v1, u16 v2);
 static u16 CRANK75_Get_IgnCoilTime(u16 v);
+static void CRANK75_Knock_sub_23F8C();
 static void CRANK75_Knock_sub_24AC0();
+static void CRANK75_MainUpdateTiming();
+static void CRANK75_sub_232A0();
+static bool CRANK75_sub_24636();
+static void CRANK75_sub_2467E();
+static void CRANK75_sub_260B8();
+static void CRANK75_sub_2941C();
+static void CRANK75_sub_2B168();
+
+
+static bool CRANK_CheckCamshaft_sub_A7C0();
+static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2);
+static void CRANK_sub_262D0();
+
+
+static void CRANK5_SetIgnCoilTime_Fin();
 static void CRANK5_sub_24AF0();
 static void CRANK5_sub_2504A();
 static void CRANK5_sub_2506E();
-static void CRANK5_SetIgnCoilTime_Fin();
-static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2);
-static void CRANK75_sub_260B8();
-static void CRANK_sub_262D0();
-static void CRANK75_sub_2941C();
-static void CRANK75_sub_2B168();
+static void CRANK5_sub_21A04();
+static void CRANK5_sub_29438();
+static void CRANK5_sub_29558();
+static void CRANK5_sub_29750();
+static void CRANK5_sub_2A684();
+static void CRANK5_sub_2AAA2();
+static void CRANK5_sub_2AC5C();
+static void CRANK5_sub_2AEE4();
+static void CRANK5_sub_C990(u16 v);
+
+
+
+
+
 static u16 sub_2640E(u16 v);
 static void Update_Gen_G_output();
 
@@ -96,6 +116,8 @@ static bool Check_PEDRL_1();
 
 static void Ign_handler(u16 v);
 static u16 Get_2E_2F_2G_status();
+
+static void Pulse_TIO2_E_F_G_out_1(u16 mask);
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -308,6 +330,13 @@ static u16 Get_2E_2F_2G_status()
 	__enable_irq();
 
 	return (~(r1 >> 4)) & 7;
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void Pulse_TIO2_E_F_G_out_1(u16 mask)
+{
+
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1441,7 +1470,224 @@ static void CRANK75_Knock_sub_24AC0()
 
 static void CRANK5_sub_24AF0()
 {
+//	u32 r8 = 0x8000;
 
+	__disable_irq();
+
+	camshaft_Shift <<= 1;
+
+	if (CRANK_CheckCamshaft_sub_A7C0())
+	{
+		SET(camshaft_Shift, 1);
+	};
+
+	u32 r13 = word_FFFF8C16 = crankHT_B;
+
+
+	if (timer_FFFF8594 == 0 || (r13 & 0x8000))
+	{
+		word_FFFF8C5C = 0;
+
+		// loc_24B50
+
+		CRANK5_sub_2504A();
+		CRANK5_SetIgnCoilTime_Fin();
+	}
+	else if (ZRO(word_FFFF8C5C, 2))
+	{
+		// loc_24B50
+
+		CRANK5_sub_2504A();
+		CRANK5_SetIgnCoilTime_Fin();
+	}
+	else
+	{
+		// loc_24B5C
+
+		u32 r1 = word_FFFF8C24;
+
+		if (r1 != 0)
+		{
+			if (Get_2E_2F_2G_status() & timerMask_1_2E_2F)
+			{
+				// loc_24B7E
+
+				do
+				{
+					u32 r13 = Get_2E_2F_2G_status() & timerMask_1_2E_2F;
+				}
+				while (r13 != timerMask_1_2E_2F && r13 != 0);
+
+				if (state_FFFF8C60 != 0
+					&& ((word_FFFF8C5E & 1) || ABSDIF(timerValue_1_2E_2F - crankPrev_OSBR2_B, r1) > crankHT_x_512us))
+				{
+					CRANK5_sub_2506E();
+				};
+			}
+			else
+			{
+				// loc_24C30
+
+				if (state_FFFF8C60 == 2)
+				{
+					u32 r2 = crankPrev_OSBR2_B + r1 - ignCoilTime_Fin - crankHT_x_512us;
+
+					if ((r2 - reg_TCNT2A) & 0x8000)
+					{
+						r2 = reg_TCNT2A;
+
+						Pulse_TIO2_E_F_G_out_1(timerMask_1_2E_2F);
+
+						ignCoilChargeStartTime_x4us = r2;
+
+						CRANK5_sub_2506E();
+					}
+					else
+					{
+						// loc_24C80
+
+						SetIgnCoilChargeStartTime(timerMask_1_2E_2F, r2);
+
+						ignCoilChargeStartTime_x4us = r2;
+					
+						if (((word_FFFF8C5E & 1) || ABSDIF(timerValue_1_2E_2F - crankPrev_OSBR2_B, r1) > crankHT_x_512us))
+						{
+							timerValue_1_2E_2F = r1 + crankPrev_OSBR2_B;
+						};
+					};
+				};
+			};
+		};
+
+		// loc_24CD0
+
+		if (ZRO(word_FFFF8F2A, 1) || ZRO(word_FFFF8F2A, 0x10)
+			|| (ZRO(word_FFFF8C5C, 0x40/*Fix timing*/) && timingAdvInternal1 < 200 && (Get_2E_2F_2G_status() & timerMask_1_2E_2F) && state_FFFF8C60 != 0))
+		{
+			// loc_24D0A
+
+			CRANK5_sub_2504A();
+		};
+
+
+		// loc_24D0E
+
+		CRANK5_SetIgnCoilTime_Fin();
+
+		u32 r2 = Mul_Fix8_Lim_FFFF(156, word_FFFF8C16) + crankPrev_OSBR2_B + word_FFFF8C22 - ignCoilTime_Fin;
+
+		r1 = timerValue_1_2E_2F + word_179C/*250*/;
+
+		if ((r2 - r1) & 0x8000)
+		{
+			r2 = r1;
+		};
+
+		// loc_24D54
+
+		if (Get_2E_2F_2G_status() & timerMask_1_2E_2F)
+		{
+			if (state_FFFF8C60 != 0)
+			{
+				timerValue_0_2E_2F = r2;
+			};
+		}
+		else
+		{
+			if (state_FFFF8C60 != 2)
+			{
+				state_FFFF8C60 = 0;
+
+				SetIgnCoilChargeStartTime(timerMask_0_2E_2F, r2);
+			};
+			
+			timerValue_0_2E_2F = r2;
+		};
+	};
+
+	// loc_24DBE
+
+	CLR(word_FFFF8C5E, 1);
+
+	SET(word_FFFF8BBA, 0x80);
+
+	if (wMUTD1_BitMap_FAA & 0x80/*Enable High Oct Ign Map Lookup and other*/)
+	{
+		CRANK5_sub_C990(25 + ((timerValue_1_2E_2F - crankPrev_OSBR2_B) & 0x8000) ? crankPrev_OSBR2_B : timerValue_1_2E_2F);
+	};
+	
+	// loc_24DFE
+
+	__enable_irq();
+
+	if (timer_down_TXFLAG3_FFFF8574 == 0 || timer_FFFF8592 == 0)
+	{
+		word_FFFF8F2A = 0;
+
+		SET(camshaft_Shift, ~1);
+
+		word_FFFF8F28 = (camshaft_Shift & 1) ? 1 : 0;
+	};
+
+	// loc_24E3C
+
+	u32 r1 = word_177A/*24*/;
+
+	if (Check_PEDRL_4())
+	{
+		r1 <<= 1;
+	};
+
+	if (ZRO(wMUTD1_BitMap_FAA, 8) || (word_FFFF80FA & 0x80) || word_FFFF8EBA != 0 || (FLAGS_FFFF8EB0 & 0x80))
+	{
+		timer_FFFF8592 = r1;
+	};
+	
+	// loc_24EE8
+
+
+	if (RT_FLAG1_FFFF8888 & 0x80)
+	{
+		if (crank5_FFFF8A36 != 0)
+		{
+			crank5_FFFF8A36 -= 1;
+
+			if (crank5_FFFF8A36 == 0)
+			{
+				SET(RPM_FLAGS, 0x4000);
+			};
+		};
+	}
+	else if (ZRO(RT_FLAG1_FFFF8888, 0x20))
+	{
+		crank5_FFFF8A36 = word_155E/*16*/;
+	}
+	else if (SPEED_FLAGS & 4)
+	{
+		crank5_FFFF8A36 = word_155C/*16*/;
+	}
+	else
+	{
+		crank5_FFFF8A36 = word_1560/*16*/;
+	};
+
+	// loc_24F58
+
+	if (ZRO(RPM_FLAGS, DECELERATION_FUEL_CUT))
+	{
+		DECLIM(word_FFFF8AC0);	
+	};
+
+	DECLIM(word_FFFF8BF4);	
+
+	DECLIM(word_FFFF8BF6);	
+
+	if (word_FFFF8BF4 == 0 && word_FFFF8BF6 == 0 && word_FFFF8BFA != 0)
+	{
+		word_FFFF8BFA = Sub_Lim_0(word_FFFF8BFA, word_FFFF8BFE);
+
+		word_FFFF8BF6 = (byte_1077/*0*/ != 0) ? word_FFFF8C8E : word_246C/*1*/;
+	};
 
 	// loc_24FDC	
 
@@ -1453,6 +1699,25 @@ static void CRANK5_sub_24AF0()
 	{
 		CRANK_MAF_MAP_Calcs_sub_250F8(0, 1);
 	};
+
+	stroke_FFFF8F26 = strokeNumber;
+
+	CRANK5_sub_29438();
+
+	if (word_FFFF89F2 & 1)
+	{
+		SET(word_FFFF89F2, 2);
+	}
+	else
+	{
+		SET(word_FFFF89F2, 1);
+
+		curMaxMAP = 0;
+
+		word_FFFF8556 = word_1764/*20*/;
+	};
+
+	CRANK5_sub_21A04();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -2532,3 +2797,67 @@ static u16 sub_2640E(u16 v)
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void CRANK5_sub_21A04()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void CRANK5_sub_29438()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void CRANK5_sub_29558()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void CRANK5_sub_29750()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void CRANK5_sub_2A684()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void CRANK5_sub_2AAA2()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void CRANK5_sub_2AC5C()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void CRANK5_sub_2AEE4()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void CRANK5_sub_C990(u16 v)
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
