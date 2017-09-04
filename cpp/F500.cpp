@@ -1127,7 +1127,7 @@ void F500_sub_10E10()
 
 void F500_MAP_Hz_Calc_sub_10E54()
 {
-	u32 r1 = SPEED_PULSES_FFFF89C4;
+	u32 r1 = SPEED_PULSES_FFFF89C4; // 2496 us
 
 	u32 r13 = Div_WW(2260, r1);
 
