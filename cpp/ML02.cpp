@@ -386,17 +386,17 @@ static void ML02_sub_11910()
 {
 	u32 r13 = 0;
 
-	if (VEHICLE_SPEED_0_FFFF8A3C < word_1A50)
+	if (VEHICLE_SPEED_0_FFFF8A3C < word_1A50/*0*/)
 	{
 		r13 = 0x40;
 	};
 
-	if (VEHICLE_SPEED_0_FFFF8A3C < word_1A4E)
+	if (VEHICLE_SPEED_0_FFFF8A3C < word_1A4E/*0*/)
 	{
 		r13 |= 0x20;
 	};
 
-	if (VEHICLE_SPEED_0_FFFF8A3C < word_1A4C)
+	if (VEHICLE_SPEED_0_FFFF8A3C < word_1A4C/*3958*/)
 	{
 		r13 |= 0x10;
 	};

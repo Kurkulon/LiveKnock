@@ -1133,6 +1133,12 @@ void F500_MAP_Hz_Calc_sub_10E54()
 
 	wMUT2E_Vehicle_Speed_Frequency = (r13 < 254) ? r13 : 254;
 
+	// 37184 - 1 gear
+	// 20160 - 2 gear
+	// 13905 - 3 gear
+	// 10105 - 4 gear
+	// 8324 - 5 gear
+
 	VEHICLE_SPEED_0_FFFF8A3C = Lim_FFFF((rpm_x125div32_B * r1) >> 2);
 
 	if (timer_down_TXFLAG3_FFFF8574 == 0)

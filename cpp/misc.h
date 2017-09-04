@@ -83,6 +83,7 @@ struct Map3D_W
 #define CLOSED_LOOP_GENERIC		0x80
 #define IDLE					0x1000
 #define CRANKING_TIMED			0x2000
+#define TIMING_KNOCKDOWN		0x8000
 
 
 // RT_FLAG1_FFFF8888

@@ -38,7 +38,7 @@ static bool IG04_sub_17770();
 static void IG04_sub_178D0();
 static void IG04_sub_179B0();
 
-static bool	IG04_sub_179C4(); // no call
+//static bool	IG04_sub_179C4(); // no call
 
 static void IG04_sub_17A3A();
 static void IG04_sub_17A4E();
@@ -75,28 +75,12 @@ static void IG04_sub_18D84();
 
 static u16 	IG04_sub_21DCE(u16 v);
 
-static u16 	Barometric_Correction_sub_22084();
+//static u16 	Barometric_Correction_sub_22084();
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 #define IGN_TEST_FLAG_0_F32					(*(const byte*)0xF32)
-
-#define byte_1034							(*(const byte*)0x1034)
-#define byte_1035							(*(const byte*)0x1035)
-#define byte_1036							(*(const byte*)0x1036)
-#define byte_1037							(*(const byte*)0x1037)
-#define IGN_TEST_FLAG_1044					(*(const byte*)0x1044)
-#define byte_1052							(*(const byte*)0x1052)
-#define byte_105A							(*(const byte*)0x105A)
-#define byte_1060							(*(const byte*)0x1060)
-#define byte_1064							(*(const byte*)0x1064)
-#define byte_1074							(*(const byte*)0x1074)
-#define byte_1075							(*(const byte*)0x1075)
-#define byte_1077							(*(const byte*)0x1077)
-
-//#define byte_3A44							(*(const byte*)0x3A44)
-//#define byte_3A64							(*(const byte*)0x3A64)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -106,213 +90,9 @@ static u16 	Barometric_Correction_sub_22084();
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//#define asyncAccelMinTPS_Delta				(*(const u16*)0x169A)
-//
-//#define t1_unk_1758							(*(const u16*)0x1758)
-//
-//#define word_178A							(*(const u16*)0x178A)
-//#define fixTimingValue						(*(const u16*)0x178C)
-//#define word_17A0							(*(const u16*)0x17A0)
-//
-//#define word_17A8							(*(const u16*)0x17A8)
-//#define word_17AA							(*(const u16*)0x17AA)
-//
-//#define word_17B2							(*(const u16*)0x17B2)
-//#define word_17B4							(*(const u16*)0x17B4)
-//#define word_17B6							(*(const u16*)0x17B6)
-//#define word_17B8							(*(const u16*)0x17B8)
-//#define word_17BA							(*(const u16*)0x17BA)
-//#define word_17BC							(*(const u16*)0x17BC)
-//#define word_17BE							(*(const u16*)0x17BE)
-//#define word_17C0							(*(const u16*)0x17C0)
-//#define word_17C2							(*(const u16*)0x17C2)
-//#define word_17C4							(*(const u16*)0x17C4)
-//#define word_17C6							(*(const u16*)0x17C6)
-//#define word_17C8							(*(const u16*)0x17C8)
-//#define word_17CA							(*(const u16*)0x17CA)
-//
-//#define knockAdder_TripleGain				(*(const u16*)0x17D8)
-//#define knockAdder_SingleGain				(*(const u16*)0x17DA)
-//#define const_24							(*(const u16*)0x17DC)
-//
-//#define word_17E4							(*(const u16*)0x17E4)
-//#define t1_knock_control_accel_delta_17E6	(*(const u16*)0x17E6)
-//#define word_17F2							(*(const u16*)0x17F2)
-//#define word_17F4							(*(const u16*)0x17F4)
-//#define minCoolTempOctanUpdate				(*(const u16*)0x17FC)
-//#define minKnockLim							(*(const u16*)0x17FE)
-//#define maxKnockLim							(*(const u16*)0x1800)
-//#define word_1802							(*(const u16*)0x1802)
-//#define word_1804							(*(const u16*)0x1804)
-//#define word_1810							(*(const u16*)0x1810)
-//#define word_1812							(*(const u16*)0x1812)
-//#define word_1814							(*(const u16*)0x1814)
-//#define word_1816							(*(const u16*)0x1816)
-//#define word_1818							(*(const u16*)0x1818)
-//#define word_181A							(*(const u16*)0x181A)
-//#define word_181C							(*(const u16*)0x181C)
-//
-//
-//#define word_1836							(*(const u16*)0x1836)
-//#define word_1838							(*(const u16*)0x1838)
-//#define word_183A							(*(const u16*)0x183A)
-//#define word_183C							(*(const u16*)0x183C)
-//#define word_183E							(*(const u16*)0x183E)
-//#define word_1840							(*(const u16*)0x1840)
-//#define word_1842     						(*(const u16*)0x1842)
-//#define word_1844     						(*(const u16*)0x1844)
-//#define word_1846     						(*(const u16*)0x1846)
-//#define CTEMPER40_1848						(*(const u16*)0x1848)
-//#define word_184A     						(*(const u16*)0x184A)
-//#define word_184C     						(*(const u16*)0x184C)
-//#define word_184E     						(*(const u16*)0x184E)
-//#define word_1850     						(*(const u16*)0x1850)
-//#define word_1852							(*(const u16*)0x1852)
-//#define word_1854     						(*(const u16*)0x1854)
-//#define CTEMPER39_1856						(*(const u16*)0x1856)
-//#define CTEMPER38_1858						(*(const u16*)0x1858)
-//#define word_185A     						(*(const u16*)0x185A)
-//#define word_185C     						(*(const u16*)0x185C)
-//#define word_1868     						(*(const u16*)0x1868)
-//#define word_186A     						(*(const u16*)0x186A)
-//#define word_186C     						(*(const u16*)0x186C)
-//#define word_186E     						(*(const u16*)0x186E)
-//#define word_1870     						(*(const u16*)0x1870)
-//#define word_1872     						(*(const u16*)0x1872)
-//#define word_1874     						(*(const u16*)0x1874)
-//#define word_1876     						(*(const u16*)0x1876)
-//#define word_1878     						(*(const u16*)0x1878)
-//#define word_187C     						(*(const u16*)0x187C)
-//#define word_187E     						(*(const u16*)0x187E)
-//#define word_1880     						(*(const u16*)0x1880)
-//#define word_1882     						(*(const u16*)0x1882)
-//#define word_1884     						(*(const u16*)0x1884)
-//#define word_1886     						(*(const u16*)0x1886)
-//#define word_1888							(*(const u16*)0x1888)
-//#define word_188A							(*(const u16*)0x188A)
-//#define word_188C							(*(const u16*)0x188C)
-//#define word_188E							(*(const u16*)0x188E)
-//#define word_1890							(*(const u16*)0x1890)
-//#define word_1892							(*(const u16*)0x1892)
-//#define word_1894							(*(const u16*)0x1894)
-//#define word_1896							(*(const u16*)0x1896)
-//
-//
-//#define word_18A6							(*(const u16*)0x18A6)
-//#define word_18A8							(*(const u16*)0x18A8)
-//#define word_18AA							(*(const u16*)0x18AA)
-//#define word_18AC							(*(const u16*)0x18AC)
-//#define word_18AE							(*(const u16*)0x18AE)
-//
-//#define word_18B0							(*(const u16*)0x18B0)
-//#define word_18B2							(*(const u16*)0x18B2)
-//#define word_18B4							(*(const u16*)0x18B4)
-//
-//#define word_1A54							(*(const u16*)0x1A54)
-//#define word_1B02							(*(const u16*)0x1B02)
-//#define t1_1B08								(*(const u16*)0x1B08)
-//#define word_1B0A							(*(const u16*)0x1B0A)
-//
-//#define word_1C26							(*(const u16*)0x1C26)
-//#define word_1C28							(*(const u16*)0x1C28)
-//#define word_1C2A							(*(const u16*)0x1C2A)
-//
-//#define word_207A							(*(const u16*)0x207A)
-//#define word_207C							(*(const u16*)0x207C)
-//
-//#define word_20B0							(*(const u16*)0x20B0)
-//#define word_20B2							(*(const u16*)0x20B2)
-//#define word_20B4							(*(const u16*)0x20B4)
-//
-//#define word_2196							(*(const u16*)0x2196)
-//#define word_2198							(*(const u16*)0x2198)
-//
-//#define word_21A0							(*(const u16*)0x21A0)
-//
-//#define word_2336							(*(const u16*)0x2336)
-//#define word_2338							(*(const u16*)0x2338)
-//#define word_233A							(*(const u16*)0x233A)
-//#define word_233C							(*(const u16*)0x233C)
-//#define word_233E							(*(const u16*)0x233E)
-//#define word_2340							(*(const u16*)0x2340)
-//#define word_2342							(*(const u16*)0x2342)
-//#define word_2344							(*(const u16*)0x2344)
-//#define word_2346							(*(const u16*)0x2346)
-//#define word_2348							(*(const u16*)0x2348)
-//#define word_234A							(*(const u16*)0x234A)
-//
-//#define word_24F8							(*(const u16*)0x24F8)
-//#define word_24FA							(*(const u16*)0x24FA)
-//
-//#define word_2502							(*(const u16*)0x2502)
-//#define word_2504							(*(const u16*)0x2504)
-//#define word_2506							(*(const u16*)0x2506)
-//#define word_2508							(*(const u16*)0x2508)
-//
-//#define word_262A							(*(const u16*)0x262A)
-//#define word_262C							(*(const u16*)0x262C)
-//
-//#define word_2B64							(*(const u16*)0x2B64)
-//
-//
-//#define word_2C96							(*(const u16*)0x2C96)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//#define KNOCK_REL_1_FFFF8C4C						(*(u16*)0xFFFF8C4C)
-//#define word_FFFF9942								(*(u16*)0xFFFF9942)
-//#define load_ECU_Ignintion							(*(u16*)0xFFFF895A)
-//#define IGN_FLAG9_FFFF8BB6							(*(u16*)0xFFFF8BB6)
-//#define octaneNum									(*(u16*)0xFFFF80B6)
-//#define FLAGS_FFFF8EB0								(*(u16*)0xFFFF8EB0)
-//#define KNOCK_VAR2_FFFF8C3E							(*(u16*)0xFFFF8C3E)
-//#define KNOCK_VAR1_bMUTC9_FFFF8C3C					(*(u16*)0xFFFF8C3C)
-//#define KNOCK_BASE_FFFF8C3A							(*(u16*)0xFFFF8C3A)
-//#define KNOCK_FLAG2_FFFF887A						(*(u16*)0xFFFF887A)
-//#define KNOCK_FLAG_FFFF8C34							(*(u16*)0xFFFF8C34)
-//#define KNOCK_PRECOUNT_MAX_FFFF8C4A					(*(u16*)0xFFFF8C4A)
-//#define cranking_end_timer_up						(*(u16*)0xFFFF8528)
-//#define word_FFFF855E								(*(u16*)0xFFFF855E)
-//#define coolTempCorrectedIgnTiming					(*(u16*)0xFFFF8BC6)
-//#define timer_Knock									(*(u16*)0xFFFF85B4)
-//#define BOOSTCHECK2_FFFF8A0E						(*(u16*)0xFFFF8A0E)
-//#define VEHICLE_SPEED_0_FFFF8A3C					(*(u16*)0xFFFF8A3C)
-//#define word_FFFF8BF4								(*(u16*)0xFFFF8BF4)
-//#define word_FFFF8BF6								(*(u16*)0xFFFF8BF6)
-//#define word_FFFF8BF8								(*(u16*)0xFFFF8BF8)
-//#define word_FFFF8BFA								(*(u16*)0xFFFF8BFA)
-//#define word_FFFF8BFC								(*(u16*)0xFFFF8BFC)
-//#define word_FFFF8BFE								(*(u16*)0xFFFF8BFE)
-//
-//#define word_FFFF8D9E								(*(u16*)0xFFFF8D9E)
-//#define word_FFFF8DA0								(*(u16*)0xFFFF8DA0)
-//
-//#define word_FFFF8C8C								(*(u16*)0xFFFF8C8C)
-//#define word_FFFF8C8E								(*(u16*)0xFFFF8C8E)
-//#define word_FFFF8C90								(*(u16*)0xFFFF8C90)
-//#define IGN_MULT_FLAG_FFFF8DBC						(*(u16*)0xFFFF8DBC)
-//#define Some_IGN_RES_FFFF8BD2						(*(u16*)0xFFFF8BD2)
-//#define IGN_CORR_RPM_FFFF8BD4						(*(u16*)0xFFFF8BD4)
-//#define IGNITION_FINAL3_FFFF8C0C					(*(u16*)0xFFFF8C0C)
-//#define word_FFFF8C0A								(*(u16*)0xFFFF8C0A)
-//#define word_FFFF8BCE								(*(u16*)0xFFFF8BCE)
-//#define IGN_FLAG1_FFFF85B8							(*(u16*)0xFFFF85B8)
-//#define IGNP_FFFF8C06								(*(u16*)0xFFFF8C06)
-//#define IGN_PAR2_FFFF8BF0							(*(u16*)0xFFFF8BF0)
-//#define Bitmap_Store_A_FFFF89EE						(*(u16*)0xFFFF89EE)
-//#define word_FFFF8BCC								(*(u16*)0xFFFF8BCC)
-//#define IGNITION_FINAL2_FFFF8BE6					(*(u16*)0xFFFF8BE6)
-//#define IGN_0xA_FFFF8BE8							(*(u16*)0xFFFF8BE8)
-//#define IGN_BARO_COMP_FFFF8BD6						(*(u16*)0xFFFF8BD6)
-//#define word_FFFF8BEA								(*(u16*)0xFFFF8BEA)
-//#define word_FFFF8BEC								(*(u16*)0xFFFF8BEC)
-//#define word_FFFF85BA								(*(u16*)0xFFFF85BA)
-//#define word_FFFF8BB8								(*(u16*)0xFFFF85B8)
-//#define word_FFFF8BD0								(*(u16*)0xFFFF8BD0)
-//
-//#define timer_up_useless_IGN_BOOL_FLAG2_FFFF8530	(*(u16*)0xFFFF8530)
-//
-//#define starter_timer_up							(*(u16*)0xFFFF852A)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -437,28 +217,14 @@ static void IG04_Set_Load_ECU_Ignintion()
 
 static void IG04_Check_Ign_16F1A()
 {
-	if (Query_byte_2D_3D_Table(arr_Load_2D_RPM11) >= load_ECU_Ignintion)
-	{
-		IGN_FLAG9_FFFF8BB6 |= 0x40;
-	}
-	else
-	{
-		IGN_FLAG9_FFFF8BB6 &= ~0x40;
-	};
+	WFLAG(IGN_FLAG9_FFFF8BB6, 0x40, Query_byte_2D_3D_Table(arr_Load_2D_RPM11) >= load_ECU_Ignintion);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 static void IG04_Check_Fix_timing_5_degrees()
 {
-	if (IG04_Is_Fix_timing_5_degrees())
-	{
-		IGN_FLAG9_FFFF8BB6 |= 0x80;
-	}
-	else
-	{
-		IGN_FLAG9_FFFF8BB6 &= ~0x80;
-	};
+	WFLAG(IGN_FLAG9_FFFF8BB6, 0x80, IG04_Is_Fix_timing_5_degrees());
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -540,8 +306,6 @@ static void IG04_sub_1702A()
 
 		__enable_irq();
 	};
-
-
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -606,23 +370,9 @@ static void IG04_sub_1714C()
 
 static bool IG04_KNOCKLOAD_sub_1718E()
 {
-	if (wMUT1C_ECU_Load >= Table_Lookup_byte_2D_3D(KNOCKLOAD_3A6E))
-	{
-		KNOCK_FLAG_FFFF8C34 |= 0x1000;
-	}
-	else
-	{
-		KNOCK_FLAG_FFFF8C34 &= ~0x1000;
-	};
+	WFLAG(KNOCK_FLAG_FFFF8C34, 0x1000, wMUT1C_ECU_Load >= Table_Lookup_byte_2D_3D(KNOCKLOAD_3A6E));
 
-	if ((wMUT71_Sensor_Error & 8) || (RT_FLAG1_FFFF8888 & 0x80) || (KNOCK_FLAG_FFFF8C34 & 0x1000) == 0)
-	{
-		KNOCK_FLAG_FFFF8C34 &= ~0x2000;
-	}
-	else
-	{
-		KNOCK_FLAG_FFFF8C34 |= 0x2000;
-	};
+	WFLAG(KNOCK_FLAG_FFFF8C34, 0x2000, !((wMUT71_Sensor_Error & 8) || (RT_FLAG1_FFFF8888 & 0x80) || (KNOCK_FLAG_FFFF8C34 & 0x1000) == 0));
 
 	if (wMUT71_Sensor_Error & 8)
 	{
@@ -651,14 +401,7 @@ static bool IG04_KNOCKLOAD_sub_1718E()
 
 static void IG04_sub_1726C()
 {
-	if (IG04_sub_1729C())
-	{
-		KNOCK_FLAG_FFFF8C34 |= 0x400;
-	}
-	else
-	{
-		KNOCK_FLAG_FFFF8C34 &= ~0x400;
-	};
+	WFLAG(KNOCK_FLAG_FFFF8C34, 0x400, IG04_sub_1729C());
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -676,28 +419,11 @@ static void IG04_sub_172D6()
 {
 	KNOCK_PRECOUNT_MAX_FFFF8C4A = word_1818;
 
-
 	TRG(KNOCK_FLAG_FFFF8C34, 0x800, MUT21_RPM_x125div4, word_1816, word_1814);
 
+	KNOCK_REL_1_FFFF8C4C = (KNOCK_FLAG_FFFF8C34 & 0x800) ? word_1810 : word_1812;
 
-	if (KNOCK_FLAG_FFFF8C34 & 0x800)
-	{	
-		KNOCK_REL_1_FFFF8C4C = word_1810;
-	}
-	else
-	{
-		KNOCK_REL_1_FFFF8C4C = word_1812;
-	};
-
-	if (MUT21_RPM_x125div4 >= word_181C && MUT21_RPM_x125div4 <= word_181A)
-	{
-		SET(KNOCK_FLAG_FFFF8C34, 0x200);
-	}
-	else
-	{
-		CLR(KNOCK_FLAG_FFFF8C34, 0x200);
-	};
-
+	WFLAG(KNOCK_FLAG_FFFF8C34, 0x200, MUT21_RPM_x125div4 >= word_181C && MUT21_RPM_x125div4 <= word_181A);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -739,10 +465,7 @@ static void IG04_OctaneNumKnockUpdate()
 		}
 		else
 		{
-			if (octaneNum > 0)
-			{
-				octaneNum -= 1;
-			};
+			DECLIM(octaneNum);
 
 			timer_Knock = word_1804;
 		};
@@ -795,7 +518,7 @@ static void IG04_Update_MUT27_Octane_Number()
 
 static void IG04_Update_MUT6F_Knock_Acceleration()
 {
-	if (RPM_DELTA_FFFF8948 >= 0x80 && (RPM_DELTA_FFFF8948 - 0x80) >= word_17E4)
+	if (RPM_DELTA_FFFF8948 >= 0x80 && (RPM_DELTA_FFFF8948 - 0x80) >= word_17E4/**/)
 	{
 		__disable_irq();
 
@@ -821,7 +544,7 @@ static void IG04_sub_17684()
 
 	IG04_sub_17C6E();
 
-	if (byte_1064 != 0)
+	if (byte_1064/*0*/ != 0)
 	{
 		IG04_sub_17D04();
 	};
@@ -847,18 +570,18 @@ static void IG04_sub_176B6()
 	}
 	else
 	{
-		if (byte_1036 != 0 && IG04_sub_17770())
+		if (byte_1036/*1*/ != 0 && IG04_sub_17770())
 		{
 			SET(IGN_FLAG9_FFFF8BB6, 4);
 
-			if (byte_1077 != 0)
+			if (byte_1077/*0*/ != 0)
 			{
 				IG04_sub_18D84();
 			};
 
 			__disable_irq();
 
-			if (byte_1077 == 0)
+			if (byte_1077/*0*/ == 0)
 			{
 				Table_Lookup_Axis(RPM8_6570);
 
@@ -886,7 +609,7 @@ static bool IG04_sub_17770()
 {
 	if (RT_FLAG1_FFFF8888 & 0x80)
 	{
-		word_FFFF85BA = word_2C96;
+		word_FFFF85BA = word_2C96/*255*/;
 
 		SET(word_FFFF8BB8, 2);
 	}
@@ -900,32 +623,32 @@ static bool IG04_sub_17770()
 	};
 
 
-	if (wMUT73_TPS_Open_Delta <= word_186A)
+	if (wMUT73_TPS_Open_Delta <= word_186A/*2*/)
 	{
 		return false;
 	};
 
-	if (load_ECU_Ignintion > word_1870)
+	if (load_ECU_Ignintion > word_1870/*54*/)
 	{
 		return false;
 	};
 
-	if ((RT_FLAG1_FFFF8888 & 0x20) == 0 && byte_1036 != 2)
+	if ((RT_FLAG1_FFFF8888 & 0x20) == 0 && byte_1036/*1*/ != 2)
 	{
 		return false;
 	};
 	
-	if (wMUT10_Coolant_Temperature_Scaled < word_186C)
+	if (wMUT10_Coolant_Temperature_Scaled < word_186C/*104*/)
 	{
 		return false;
 	};
 
-	if (wMUT2E_Vehicle_Speed_Frequency < word_186E)
+	if (wMUT2E_Vehicle_Speed_Frequency < word_186E/*60*/)
 	{
 		return false;
 	};
 
-	if (MUT21_RPM_x125div4 < word_1872 || MUT21_RPM_x125div4 > word_1874)
+	if (MUT21_RPM_x125div4 < word_1872/*29*/ || MUT21_RPM_x125div4 > word_1874/*160*/)
 	{
 		return false;
 	};
@@ -937,7 +660,7 @@ static bool IG04_sub_17770()
 
 	u16 r1 = VEHICLE_SPEED_0_FFFF8A3C;
 
-	if (r1 >= word_1876 || r1 <= word_1878)
+	if (r1 >= word_1876/*1808*/ || r1 <= word_1878/*603*/)
 	{
 		return false;
 	};
@@ -953,7 +676,7 @@ static void IG04_sub_178D0()
 	{
 		u16 r1;
 
-		if (byte_1077 != 0)
+		if (byte_1077/*0*/ != 0)
 		{
 			r1 = word_FFFF8C90;
 		}
@@ -986,10 +709,10 @@ static void IG04_sub_179B0()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static bool IG04_sub_179C4()
-{
-	return false;
-}
+//static bool IG04_sub_179C4()
+//{
+//	return false;
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -1002,14 +725,7 @@ static void IG04_sub_17A3A()
 
 static void IG04_sub_17A4E()
 {
-	if (IG04_sub_17A7E())
-	{
-		SET(BOOSTCHECK2_FFFF8A0E, 0x1000);
-	}
-	else
-	{
-		CLR(BOOSTCHECK2_FFFF8A0E, 0x1000);
-	};
+	WFLAG(BOOSTCHECK2_FFFF8A0E, 0x1000, IG04_sub_17A7E());
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1021,27 +737,27 @@ static bool IG04_sub_17A7E()
 		return false;
 	};
 
-	if (MUT21_RPM_x125div4 <= word_2338 || MUT21_RPM_x125div4 > word_2336)
+	if (MUT21_RPM_x125div4 <= word_2338/*28*/ || MUT21_RPM_x125div4 > word_2336/*48*/)
 	{
 		return false;
 	};
 
-	if (wMUT2E_Vehicle_Speed_Frequency < word_2346)
+	if (wMUT2E_Vehicle_Speed_Frequency < word_2346/*10*/)
 	{
 		return false;
 	};
 
-	if (wMUT10_Coolant_Temperature_Scaled <= word_233E)
+	if (wMUT10_Coolant_Temperature_Scaled <= word_233E/*90*/)
 	{
 		return false;
 	};
 
-	if (VEHICLE_SPEED_0_FFFF8A3C > word_233C || VEHICLE_SPEED_0_FFFF8A3C < word_233A)
+	if (VEHICLE_SPEED_0_FFFF8A3C > word_233C/*7234*/ || VEHICLE_SPEED_0_FFFF8A3C < word_233A/*2261*/)
 	{
 		return false;
 	};
 
-	if (load_ECU_Ignintion <= word_234A || load_ECU_Ignintion > word_2348)
+	if (load_ECU_Ignintion <= word_234A/*54*/ || load_ECU_Ignintion > word_2348/*135*/)
 	{
 		return false;
 	};
@@ -1053,14 +769,7 @@ static bool IG04_sub_17A7E()
 
 static void IG04_sub_17B9A()
 {
-	if ((wMUTD1_BitMap_FAA & 0x400) && IG04_sub_17BEC()) // timing knockdown on light acceleration and less than 3000rpm
-	{
-		SET(wMUT1E_MAF_RESET_FLAG, 0x8000);
-	}
-	else
-	{
-		CLR(wMUT1E_MAF_RESET_FLAG, 0x8000);
-	};
+	WFLAG(wMUT1E_MAF_RESET_FLAG, TIMING_KNOCKDOWN, (wMUTD1_BitMap_FAA & 0x400) && IG04_sub_17BEC()); // timing knockdown on light acceleration and less than 3000rpm
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1072,27 +781,27 @@ static bool IG04_sub_17BEC()
 		return false;
 	};
 
-	if ((RT_FLAG1_FFFF8888 & 0x20) == 0 && byte_1074 == 0)
+	if ((RT_FLAG1_FFFF8888 & 0x20) == 0 && byte_1074/*0*/ == 0)
 	{
 		return false;
 	};
 
-	if (MUT21_RPM_x125div4 >= word_1838)
+	if (MUT21_RPM_x125div4 >= word_1838/*128*/)
 	{
 		return false;
 	};
 
-	if (MUT21_RPM_x125div4 <= word_183A)
+	if (MUT21_RPM_x125div4 <= word_183A/*0*/)
 	{
 		return false;
 	};
 
-	if (wMUT10_Coolant_Temperature_Scaled <= word_1840)
+	if (wMUT10_Coolant_Temperature_Scaled <= word_1840/*40*/)
 	{
 		return false;
 	};
 
-	if (wMUT2E_Vehicle_Speed_Frequency <= word_1A54)
+	if (wMUT2E_Vehicle_Speed_Frequency <= word_1A54/*10*/)
 	{
 		return false;
 	};
@@ -1107,12 +816,12 @@ static bool IG04_sub_17BEC()
 		return false;
 	};
 
-	if (VEHICLE_SPEED_0_FFFF8A3C >= word_183C)
+	if (VEHICLE_SPEED_0_FFFF8A3C >= word_183C/*3288*/)
 	{
 		return false;
 	};
 
-	if (VEHICLE_SPEED_0_FFFF8A3C <= word_183E)
+	if (VEHICLE_SPEED_0_FFFF8A3C <= word_183E/*0*/)
 	{
 		return false;
 	};
@@ -1124,21 +833,14 @@ static bool IG04_sub_17BEC()
 
 static void IG04_sub_17C6E()
 {
-	if (IG04_sub_17C9C())
-	{
-		SET(IGN_FLAG9_FFFF8BB6, 0x10);
-	}
-	else
-	{
-		CLR(IGN_FLAG9_FFFF8BB6, 0x10);
-	};
+	WFLAG(IGN_FLAG9_FFFF8BB6, 0x10, IG04_sub_17C9C())
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 static bool IG04_sub_17C9C()
 {
-	TRG(IGN_FLAG9_FFFF8BB6, 2, MUT21_RPM_x125div4, word_17B4, word_17B2);
+	TRG(IGN_FLAG9_FFFF8BB6, 2, MUT21_RPM_x125div4, word_17B4/*58*/, word_17B2/*64*/);
 
 	if (RT_FLAG1_FFFF8888 & 0x80)
 	{
@@ -1167,39 +869,32 @@ static bool IG04_sub_17C9C()
 
 static void IG04_sub_17D04()
 {
-	if (byte_1064 != 0 && (wMUT1E_MAF_RESET_FLAG & STALL) == 0)
+	if (byte_1064/*0*/ != 0 && (wMUT1E_MAF_RESET_FLAG & STALL) == 0)
 	{
 		u16 r3, r13;
 
 		if (IGN_FLAG9_FFFF8BB6 & 0x2000)
 		{
-			r3 = word_18A6;
-			r13 = word_18AA;
+			r3 = word_18A6/*64*/;
+			r13 = word_18AA/*137*/;
 		}
 		else
 		{
-			r3 = word_18A8;
-			r13 = word_18AC;
+			r3 = word_18A8/*58*/;
+			r13 = word_18AC/*88*/;
 		};
 
-		if (wMUT2E_Vehicle_Speed_Frequency >= word_18B4)
+		if (wMUT2E_Vehicle_Speed_Frequency >= word_18B4/*12*/)
 		{
 			SET(IGN_FLAG9_FFFF8BB6, 0x4000);
 		};
 
-		if (coolantTempScld_COPY_1 < word_18B2 
-			&& wMUT10_Coolant_Temperature_Scaled < word_18AE 
+		WFLAG(IGN_FLAG9_FFFF8BB6, 0x2000, coolantTempScld_COPY_1 < word_18B2/*39*/ 
+			&& wMUT10_Coolant_Temperature_Scaled < word_18AE/*115*/ 
 			&& (IGN_FLAG9_FFFF8BB6 & 0x4000) == 0 
 			&& (RT_FLAG1_FFFF8888 & 0x20) 
 			&& MUT21_RPM_x125div4 < r3 
-			&& load_ECU_Ignintion < r13)
-		{
-			SET(IGN_FLAG9_FFFF8BB6, 0x2000);
-		}
-		else
-		{
-			CLR(IGN_FLAG9_FFFF8BB6, 0x2000);
-		};
+			&& load_ECU_Ignintion < r13);
 	}
 	else
 	{
@@ -1215,7 +910,7 @@ static void IG04_Update_MUT04_Timing_Advance_Interpolated()
 
 	u16 tAdv = wMUT33_Corrected_Timing_Advance;
 
-	if (IGN_FLAG9_FFFF8BB6 & 0x2000 && tAdv >= (word_18B0+20))
+	if (IGN_FLAG9_FFFF8BB6 & 0x2000 && tAdv >= (word_18B0/*10*/+20))
 	{
 		tAdv = word_18B0 + 20;
 	};
@@ -1224,7 +919,7 @@ static void IG04_Update_MUT04_Timing_Advance_Interpolated()
 
 	u16 r13;
 
-	if (byte_1052 != 0)
+	if (byte_1052/*1*/ != 0)
 	{
 		r13 = IG04_sub_18570();
 
@@ -1264,13 +959,13 @@ static void IG04_Update_MUT04_Timing_Advance_Interpolated()
 
 	r2 = r2 + IG04_sub_1876E() - 0x80;
 
-	r2 = r2 + Barometric_Correction_sub_22084() - 0x80;
+//	r2 = r2 + Barometric_Correction_sub_22084() - 0x80;
 
 	tAdv = r2 + IG04_RPM_CORR_sub_18952() - 0x80;
 
 	if (Some_IGN_RES_FFFF8BD2 < 0x80)
 	{
-		r2 = word_17B8 + 0x8000;
+		r2 = word_17B8/*0*/ + 0x8000;
 
 		if (tAdv < r2) { tAdv = r2; };
 	};
@@ -1283,9 +978,9 @@ static void IG04_Update_MUT04_Timing_Advance_Interpolated()
 
 	if (IGN_CORR_RPM_FFFF8BD4 != 0x80)
 	{
-		if (tAdv < word_1852)
+		if (tAdv < word_1852/*0*/)
 		{
-			tAdv = word_1852;
+			tAdv = word_1852/*0*/;
 		};
 	};
 
@@ -1399,10 +1094,10 @@ static u16 	IG04_GetLoad_sub_1821E()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#define w_1822E_loc1		(*(u16*)0xFFFF86F6)
-#define w_1822E_loc2		(*(u16*)0xFFFF86BE)
-#define w_1822E_loc3		(*(u16*)0xFFFF8C88)
-#define w_1822E_loc4		(*(u16*)0xFFFF8C8A)
+//#define w_1822E_loc1		(*(u16*)0xFFFF86F6)
+//#define w_1822E_loc2		(*(u16*)0xFFFF86BE)
+//#define w_1822E_loc3		(*(u16*)0xFFFF8C88)
+//#define w_1822E_loc4		(*(u16*)0xFFFF8C8A)
 
 
 static u16 IG04_Ign_Temp_Correct(u16 v)
@@ -1414,17 +1109,17 @@ static u16 IG04_Ign_Temp_Correct(u16 v)
 	}
 	else if ((RT_FLAG1_COPY_FFFF888A ^ RT_FLAG1_FFFF8888) & RT_FLAG1_COPY_FFFF888A & 0x80)
 	{
-		w_1822E_loc1 = word_20B0;
+		w_1822E_loc1 = word_20B0/*20*/;
 		w_1822E_loc3 = 0;
 	}
 	else if (w_1822E_loc1 != 0)
 	{
-		w_1822E_loc2 = word_20B4 * 2;
+		w_1822E_loc2 = word_20B4/*1*/ * 2;
 	}
 	else if (w_1822E_loc2 == 0)
 	{
-		w_1822E_loc2 = word_20B4 * 2;
-		w_1822E_loc3 = Lim_FF(w_1822E_loc3 + word_20B2);
+		w_1822E_loc2 = word_20B4/*1*/ * 2;
+		w_1822E_loc3 = Lim_FF(w_1822E_loc3 + word_20B2/*13*/);
 	};
 
 	w_1822E_loc4 = 0;
@@ -1437,9 +1132,9 @@ static u16 IG04_Ign_Temp_Correct(u16 v)
 	{
 		Table_Lookup_Axis(CEL8_6914);
 
-		u16 r3 = Table_Lookup_byte_2D_3D((byte_105A != 0 && INTAKE_AIR_TEMPERATURE_COPY_FFFF88BA < word_207A && coolantTempScld_COPY_1 < word_207C) ? LOWTRMTEMPCOOL_3A30 : LOWTRMTEMPCOOL_3A30);
+		u16 r3 = Table_Lookup_byte_2D_3D((byte_105A/*0*/ != 0 && INTAKE_AIR_TEMPERATURE_COPY_FFFF88BA < word_207A/*22*/ && coolantTempScld_COPY_1 < word_207C/*25*/) ? LOWTRMTEMPCOOL_3A30 : LOWTRMTEMPCOOL_3A30);
 
-		r13 = (byte_1060 != 0 && r3 >= w_1822E_loc3) ? w_1822E_loc3 : r3;
+		r13 = (byte_1060/*0*/ != 0 && r3 >= w_1822E_loc3) ? w_1822E_loc3 : r3;
 	};
 
 	r13 = interpolate_r4_r5_r6(ignition_FFFF8BC4, v, r13);
@@ -1460,7 +1155,7 @@ static u16 IG04_IGNIT_TESTS_183E8(u16 v)
 
 	if (IGN_TEST_FLAG_1044 && IG04_sub_18464() && r >= 20)
 	{
-		 r = 20 + Mul_Fix7_R(r - 20, (IGN_MULT_FLAG_FFFF8DBC & 0x40) ? t1_1B08 : word_1B0A);
+		 r = 20 + Mul_Fix7_R(r - 20, (IGN_MULT_FLAG_FFFF8DBC & 0x40) ? t1_1B08/*0*/ : word_1B0A/*64*/);
 	};
 
 	if (r >= v)
@@ -1506,7 +1201,7 @@ static u16 IG04_Ignition_Fuel_Timing_Calcs_sub_18494()
 		__enable_irq();
 	};
 
-	if (((RT_FLAG1_FFFF8888 & 0x20) || byte_1075 != 0) && (wMUT1E_MAF_RESET_FLAG & 4))
+	if (((RT_FLAG1_FFFF8888 & 0x20) || byte_1075/*0*/ != 0) && (wMUT1E_MAF_RESET_FLAG & DECELERATION_FUEL_CUT))
 	{
 		u16 r1 = word_17BE + 20;
 
@@ -1588,7 +1283,7 @@ static u16 IG04_Airtemp_Ignition_Compensation_sub_185FC()
 		r1 = Sub_Lim_0(r1, word_1868);
 	};
 
-	if (byte_1034 != 0 && load_ECU_Ignintion >= word_1854 && wMUT10_Coolant_Temperature_Scaled >= CTEMPER38_1858)
+	if (byte_1034/*0*/ != 0 && load_ECU_Ignintion >= word_1854 && wMUT10_Coolant_Temperature_Scaled >= CTEMPER38_1858)
 	{
 		r1 = Sub_Lim_0(r1, (wMUT10_Coolant_Temperature_Scaled >= CTEMPER39_1856) ? word_185A : word_185C);
 	};
@@ -1606,20 +1301,7 @@ static u16 IG04_Airtemp_Ignition_Compensation_sub_185FC()
 
 static bool IG04_sub_18728()
 {
-	if (IGN_FLAG9_FFFF8BB6 & 0x8000)
-	{
-		if (MUT21_RPM_x125div4 <= word_2196)
-		{
-			CLR(IGN_FLAG9_FFFF8BB6, 0x8000);
-		};
-	}
-	else
-	{
-		if (MUT21_RPM_x125div4 > word_2198)
-		{
-			SET(IGN_FLAG9_FFFF8BB6, 0x8000);
-		};
-	};
+	TRG(IGN_FLAG9_FFFF8BB6, 0x8000, MUT21_RPM_x125div4, word_2196/*70(2187)*/, word_2198/*70(2187)*/);
 
 	return false;
 }
@@ -1672,7 +1354,7 @@ static u16 IG04_sub_1876E()
 				r1 = Sub_Lim_0(0x80, Mul_Fix8_R(word_2344, r2));
 			};
 		}
-		else if (wMUT1E_MAF_RESET_FLAG & 0x8000) // timing knockdown on light acceleration and less than 3000rpm
+		else if (wMUT1E_MAF_RESET_FLAG & TIMING_KNOCKDOWN) // timing knockdown on light acceleration and less than 3000rpm
 		{
 			u16 r2 = Sub_Lim_0(rpm_x125div32_B, ((RPM_x_4_096__2 >> 3) + 1) >> 1);
 
@@ -1692,7 +1374,7 @@ static u16 IG04_RPM_CORR_sub_18952()
 {
 	u16 r13 = 0x80;
 
-	if (byte_1035 != 0 && cranking_end_timer_up < word_184A && wMUT10_Coolant_Temperature_Scaled >= CTEMPER40_1848 
+	if (byte_1035/*1*/ != 0 && cranking_end_timer_up < word_184A && wMUT10_Coolant_Temperature_Scaled >= CTEMPER40_1848 
 
 		&& (RT_FLAG1_FFFF8888 & 0x80))
 	{
@@ -1717,7 +1399,7 @@ static u16 IG04_SET0x80IGNPAR2_sub_18A1C()
 
 static u16 IG04_sub_18A2E()
 {
-	if ( byte_1037 == 0 
+	if ( byte_1037/*0*/ == 0 
 		|| (wMUT1E_MAF_RESET_FLAG & STALL)
 		|| load_ECU_Ignintion < word_188A 
 		|| load_ECU_Ignintion > word_1888 
@@ -1890,10 +1572,10 @@ static u16 IG04_sub_21DCE(u16 v)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static u16 Barometric_Correction_sub_22084()
-{
-	return IGN_BARO_COMP_FFFF8BD6 = Sub_Lim_0(0x80, 0);
-}
+//static u16 Barometric_Correction_sub_22084()
+//{
+//	return IGN_BARO_COMP_FFFF8BD6 = Sub_Lim_0(0x80, 0);
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
