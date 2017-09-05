@@ -74,30 +74,70 @@ struct Map3D_W
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+// wMUT1E_MAF_RESET_FLAG
+
 #define CRANKING				0x01 
 #define MAP_error				0x02
 #define DECELERATION_FUEL_CUT	0x04
 #define FUEL_CUT				0x08
 #define STALL					0x10
 #define REVLIM					0x20
+#define MUT1E_6_bit				0x40
 #define CLOSED_LOOP_GENERIC		0x80
+#define MUT1E_8_bit				0x100
+#define MUT1E_9_bit				0x200
+#define MUT1E_10_bit			0x400
+#define MUT1E_11_bit			0x800
 #define IDLE					0x1000
 #define CRANKING_TIMED			0x2000
+#define MUT1E_14_bit			0x4000
 #define TIMING_KNOCKDOWN		0x8000
 
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 // RT_FLAG1_FFFF8888
 
+#define RT_0_bit				0x01
+#define RT_1_bit				0x02
 #define RACING					0x04
 #define POWER_STEERING			0x08
 #define AC_SWITCH				0x10
+#define RT_5_ALWAYS_1			0x20
 #define STARTER					0x40
+#define RT_7_bit				0x80
+#define RT_8_bit				0x100
+#define RT_9_bit				0x200
+#define RT_10_bit				0x400
 #define SPEED_ADJUST			0x800
 #define FIX_TIMING				0x1000
+#define RT_13_bit				0x2000
+#define RT_14_bit				0x4000
+#define RT_15_bit				0x8000
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 // RPM_FLAGS
 
+#define RPM_0_CRANKING				0x01 
+#define RPM_1_MAP_error				0x02
+#define RPM_2_DECELERATION_FUEL_CUT	0x04
+#define RPM_3_FUEL_CUT				0x08
+#define RPM_4_STALL					0x10
+#define RPM_5_REVLIM				0x20
+#define RPM_6_bit					0x40
+#define RPM_7_CLOSED_LOOP_GENERIC	0x80
+#define RPM_8_bit					0x100
+#define RPM_9_bit					0x200
+#define RPM_10_bit					0x400
+#define RPM_11_bit					0x800
+#define RPM_12_bit					0x1000
+#define RPM_13_bit					0x2000
+#define RPM_14_bit					0x4000
+#define RPM_15_bit					0x8000
 
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 // RPM_FLAGS_FFFF8A00
 
@@ -107,10 +147,33 @@ struct Map3D_W
 #define LOAD32					0x08
 #define LOAD64					0x10
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 // wMUT9A_Ligths_Bit_Array
 
 #define AC_LOAD					1
 #define CHECK_ENGINE			8
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// wMUT71_Sensor_Error
+
+#define MUT71_0_COOLANT									0x01 
+#define MUT71_1_IAT										0x02
+#define MUT71_2_BARO									0x04
+#define MUT71_3_MAP										0x08
+#define MUT71_4_bit										0x10
+#define MUT71_5_ALTERNATOR								0x20
+#define MUT71_6_TPS										0x40
+#define MUT71_7_bit										0x80
+#define MUT71_8_FUEL_TANK_PRESSURE						0x100
+#define MUT71_9_bit										0x200
+#define MUT71_10_MDP	/*Manifold Diff Pressure*/		0x400
+#define MUT71_11_bit									0x800
+#define MUT71_12_bit									0x1000
+#define MUT71_13_bit									0x2000
+#define MUT71_14_bit									0x4000
+#define MUT71_15_bit									0x8000
 
 
 

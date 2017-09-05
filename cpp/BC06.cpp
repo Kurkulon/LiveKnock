@@ -183,7 +183,7 @@ static bool BC06_sub_1C14A()
 
 	// loc_1C24E
 
-	if (byte_1048/*0xF*/ == 0 || (RT_FLAG1_FFFF8888 & 0x20) || ((byte_1048/*0xF*/ & 4) && wMUT11_Intake_Air_Temperature_Scaled > word_20F0))
+	if (byte_1048/*0xF*/ == 0 || (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) || ((byte_1048/*0xF*/ & 4) && wMUT11_Intake_Air_Temperature_Scaled > word_20F0))
 	{
 		// loc_1C292
 
@@ -200,7 +200,7 @@ static bool BC06_sub_1C14A()
 
 	// loc_1C2C2
 
-	if ((ZRO(byte_1048, 8) && (RT_FLAG1_FFFF8888 & 0x20))
+	if ((ZRO(byte_1048, 8) && (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1))
 		|| ZRO(r13, 1) 
 		|| (ZRO(byte_1048, 2) && word_FFFF86D2 != 0))
 	{
@@ -224,7 +224,7 @@ static bool BC06_sub_1C14A()
 	// loc_1C3C2
 
 	if ((RT_FLAG1_FFFF8888 & AC_SWITCH) 
-		&& ZRO(RT_FLAG1_FFFF8888, 0x80)
+		&& ZRO(RT_FLAG1_FFFF8888, RT_7_bit)
 		&& (wMUT12_Coolant_Temperature_Min_81 >= word_267C || (MUT21_RPM_x125div4 >= word_2C7E && wMUT11_Intake_Air_Temperature_Scaled >= word_2C80)))
 	{
 		if ((wMUT9A_Ligths_Bit_Array & AC_LOAD) || (word_FFFF8A10 & 8))

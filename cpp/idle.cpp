@@ -227,7 +227,7 @@ static void AA05_sub_19260()
 {
 	word_FFFF8CDC = wMUT0D_Fuel_Trim_Middle;
 
-	if ((RT_FLAG1_FFFF8888 & 0x80) == 0)
+	if ((RT_FLAG1_FFFF8888 & RT_7_bit) == 0)
 	{
 		word_FFFF85D8 = word_194C/*20*/;
 	};
@@ -258,7 +258,7 @@ static void AA05_sub_192CA()
 {
 	u32 r3, r13;
 
-	if (RT_FLAG1_FFFF8888 & 0x20) // Engine Running
+	if (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) // Engine Running
 	{
 		r3 = word_1926;
 		r13 = word_1928;
@@ -280,7 +280,7 @@ static void AA05_IDLE_sub_192FC()
 {
 	u16 r1;
 
-	if (RT_FLAG1_FFFF8888 & 0x20) // Engine Running
+	if (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) // Engine Running
 	{
 		if (SPEED_FLAGS & 4)
 		{
@@ -291,7 +291,7 @@ static void AA05_IDLE_sub_192FC()
 			r1 = Table_Lookup_byte_2D_3D(IDLERPMNS_485E);
 		};
 
-		if ((RT_FLAG1_FFFF8888 & 0x4000) && r1 < word_19E6)
+		if ((RT_FLAG1_FFFF8888 & RT_14_bit) && r1 < word_19E6)
 		{
 			r1 = word_19E6;
 		};
@@ -309,9 +309,9 @@ static void AA05_IDLE_sub_192FC()
 	{
 		u16 r13;
 
-		if (RT_FLAG1_FFFF8888 & 0x20) 
+		if (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) 
 		{
-			if (RT_FLAG1_FFFF8888 & 1) 
+			if (RT_FLAG1_FFFF8888 & RT_0_bit) 
 			{
 				r13 = word_18C2;
 			}
@@ -322,7 +322,7 @@ static void AA05_IDLE_sub_192FC()
 		}
 		else
 		{
-			if (RT_FLAG1_FFFF8888 & 1) 
+			if (RT_FLAG1_FFFF8888 & RT_0_bit) 
 			{
 				r13 = word_18C4;
 			}
@@ -374,13 +374,13 @@ static void AA05_sub_1945C()
 
 	word_FFFF86C2 = (wMUT11_Intake_Air_Temperature_Scaled > word_1A20) ? word_1A24 * 80 : 0;
 
-	if (word_FFFF86C2 != 0 && (RT_FLAG1_FFFF8888 & 0x20))
+	if (word_FFFF86C2 != 0 && (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1))
 	{
 		u16 r1 = 0;
 
 		if (RT_FLAG1_FFFF8888 & AC_SWITCH)
 		{		
-			if (byte_102E == 2 && (RT_FLAG1_FFFF8888 & 1))
+			if (byte_102E == 2 && (RT_FLAG1_FFFF8888 & RT_0_bit))
 			{
 				r1 = word_18C2 + Mul_Div_R(word_FFFF86C2, word_1A22, word_1A24 * 80);
 			};
@@ -427,7 +427,7 @@ static void AA05_sub_195A2()
 			CLR(wMUT23, 0x400);
 		};
 
-		if (RTF & 8)
+		if (RTF & POWER_STEERING)
 		{
 			if (wMUT23 & 0x400)
 			{
@@ -445,7 +445,7 @@ static void AA05_sub_195A2()
 		{
 			SET(wMUT23, 0x1000);
 
-			r13 = (RT_FLAG1_FFFF8888 & 0x20/*Engine Running*/) ? word_18D0 : word_18D2;
+			r13 = (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1/*Engine Running*/) ? word_18D0 : word_18D2;
 
 			if (r13 > word_FFFF854A)
 			{
@@ -466,7 +466,7 @@ static void AA05_sub_195A2()
 		{
 			r13 = word_FFFF8CD2;
 		}
-		else if ((RT_FLAG1_FFFF8888 & 20) == 0)
+		else if ((RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) == 0)
 		{
 			r13 = word_18CA/*33*/;
 		}
@@ -479,7 +479,7 @@ static void AA05_sub_195A2()
 		{
 			if ((wMUT23 & 0x1800) == 0x1000)
 			{
-				if (RT_FLAG1_FFFF8888 & 0x20)
+				if (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1)
 				{
 					word_FFFF85D0 = word_18DA/*6*/;
 				}
@@ -498,7 +498,7 @@ static void AA05_sub_195A2()
 
 		if (wMUT23 & 0x800)
 		{
-			u32 r3 = (RT_FLAG1_FFFF8888 & 0x20) ? word_18D4/*7*/ : word_18D6/*7*/;
+			u32 r3 = (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) ? word_18D4/*7*/ : word_18D6/*7*/;
 			
 			if (r13 < r3)
 			{
@@ -842,7 +842,7 @@ static void AA05_sub_1A476()
 {
 	Table_Lookup_Axis(BAR5_66E2);
 
-	word_FFFF8CCE = Table_Lookup_byte_2D_3D((RT_FLAG1_FFFF8888 & 0x20) ? ICSVADDBARO_3BB4 : ICSVADDBARO_3BB4);
+	word_FFFF8CCE = Table_Lookup_byte_2D_3D((RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) ? ICSVADDBARO_3BB4 : ICSVADDBARO_3BB4);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -969,7 +969,7 @@ static void AA05_sub_1ABA4()
 
 static bool AA05_sub_1ABEC()
 {
-	if ((wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING)) || (wMUT22 & 0xB8) || (RT_FLAG1_FFFF8888 & 0x24 ) != 0x20 || (RT_FLAG1_FFFF8888 & 0x1800 ) != 0x1800)
+	if ((wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING)) || (wMUT22 & 0xB8) || (RT_FLAG1_FFFF8888 & (RT_5_ALWAYS_1|RACING) ) != RT_5_ALWAYS_1 || (RT_FLAG1_FFFF8888 & (SPEED_ADJUST|FIX_TIMING)) != (SPEED_ADJUST|FIX_TIMING))
 	{
 		tm100_FFFF85C6 = word_1A02;
 	};
@@ -1047,7 +1047,7 @@ static void AA05_sub_1AF30()
 
 static u16 AA05_sub_1B0BC()
 {
-	return (RT_FLAG1_FFFF8888 & 0x20) ? word_1910 : word_1912;
+	return (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) ? word_1910 : word_1912;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1130,7 +1130,7 @@ static u16 AA05_sub_1B652()
 
 	if (RT_FLAG1_FFFF8888 & AC_SWITCH)
 	{
-		r13 = (RT_FLAG1_FFFF8888 & 1) ? word_19AA : word_19A8;
+		r13 = (RT_FLAG1_FFFF8888 & RT_0_bit) ? word_19AA : word_19A8;
 	};
 
 	return r13;
@@ -1216,7 +1216,7 @@ static u16 AA05_sub_1B8CA()
 {
 	u32 r13 = 0;
 
-	if (byte_102D != 0 && (RT_FLAG1_FFFF8888 & (0x400|AC_SWITCH|RACING)) == (0x400|RACING))
+	if (byte_102D != 0 && (RT_FLAG1_FFFF8888 & (RT_10_bit|AC_SWITCH|RACING)) == (RT_10_bit|RACING))
 	{
 		r13 = word_19EC;
 	};
@@ -1269,7 +1269,7 @@ static void AA05_sub_1BA2C()
 	{
 		wMUT09 = r13;
 	}
-	else if (byte_102E != 1 || ZRO(RT_FLAG1_FFFF8888, 1))
+	else if (byte_102E != 1 || ZRO(RT_FLAG1_FFFF8888, RT_0_bit))
 	{
 		wMUT0B = r13;
 	}
@@ -1287,7 +1287,7 @@ static u16 AA05_sub_1BAC6()
 	{
 		return ufix8_MUT08_Coolant_Temperature;
 	}
-	else if (byte_102E != 1 || ZRO(RT_FLAG1_FFFF8888, 1))
+	else if (byte_102E != 1 || ZRO(RT_FLAG1_FFFF8888, RT_0_bit))
 	{
 		return ufix8_MUT0A_FFFF80BC;
 	}
@@ -1343,7 +1343,7 @@ static void AA05_sub_1BB96()
 	{
 		ufix8_MUT08_Coolant_Temperature = r13;
 	}
-	else if (byte_102E != 1 || ZRO(RT_FLAG1_FFFF8888, 1))
+	else if (byte_102E != 1 || ZRO(RT_FLAG1_FFFF8888, RT_0_bit))
 	{
 		ufix8_MUT0A_FFFF80BC = r13;
 	}
@@ -1372,7 +1372,7 @@ static u16 AA05_sub_1BD34()
 	{
 		return wMUT09;
 	}
-	else if (byte_102E != 1 || ZRO(RT_FLAG1_FFFF8888, 1))
+	else if (byte_102E != 1 || ZRO(RT_FLAG1_FFFF8888, RT_0_bit))
 	{
 		return wMUT0B;
 	}

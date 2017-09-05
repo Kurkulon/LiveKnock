@@ -230,7 +230,7 @@ static bool ML02_sub_113C6()
 {
 	TRG(wMUT19_Startup_Check_Bits, 0x800, wMUT2E_Vehicle_Speed_Frequency, word_19B2/*255*/, word_19B0/*255*/);
 
-	return (wMUT19_Startup_Check_Bits & 0x800) && (RT_FLAG1_FFFF8888 & 0x8000) && (portA_state & 0x1000) && (RT_FLAG1_FFFF8888 & 0x20);
+	return (wMUT19_Startup_Check_Bits & 0x800) && (RT_FLAG1_FFFF8888 & RT_15_bit) && (portA_state & 0x1000) && (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -251,7 +251,7 @@ static void ML02_sub_114B4()
 
 static bool ML02_sub_114E2()
 {
-	return (RT_FLAG1_FFFF8888 & 2) 
+	return (RT_FLAG1_FFFF8888 & RT_1_bit) 
 		&& ZRO(wMUT1E_MAF_RESET_FLAG, STALL|CRANKING) 
 		&& MUT21_RPM_x125div4 < word_182E/*0*/ 
 		&& wMUT14_Battery_Level_ADC8bit > word_1834 
@@ -269,7 +269,7 @@ static void ML02_sub_11528()
 		r13 = 1;
 	};
 
-	if (ZRO(RT_FLAG1_FFFF8888, 0x20))
+	if (ZRO(RT_FLAG1_FFFF8888, RT_5_ALWAYS_1))
 	{
 		r13 +=2;
 	};
@@ -290,7 +290,7 @@ static void ML02_sub_11570()
 {
 	u32 r13 = 0;
 
-	if (RT_FLAG1_FFFF8888 & 0x20)
+	if (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1)
 	{
 		TRG(RPM_FLAGS_FFFF8A00, RPM1125, 	MUT21_RPM_x125div4, word_1608/*34*/, word_160A/*37*/); // 1125 
 		TRG(RPM_FLAGS_FFFF8A00, RPM1250, 	MUT21_RPM_x125div4, word_160C/*38*/, word_160E/*41*/); // 1250
@@ -312,7 +312,7 @@ static void ML02_sub_11570()
 	// loc_11814
 
 
-	if (ZRO(RT_FLAG1_FFFF8888, 0x80) || (RPM_FLAGS_FFFF8A00 & RPM1125))
+	if (ZRO(RT_FLAG1_FFFF8888, RT_7_bit) || (RPM_FLAGS_FFFF8A00 & RPM1125))
 	{
 		r13 = 1;
 	
@@ -386,17 +386,17 @@ static void ML02_sub_11910()
 {
 	u32 r13 = 0;
 
-	if (VEHICLE_SPEED_0_FFFF8A3C < word_1A50/*0*/)
+	if (transmission_state < word_1A50/*0*/)
 	{
 		r13 = 0x40;
 	};
 
-	if (VEHICLE_SPEED_0_FFFF8A3C < word_1A4E/*0*/)
+	if (transmission_state < word_1A4E/*0*/)
 	{
 		r13 |= 0x20;
 	};
 
-	if (VEHICLE_SPEED_0_FFFF8A3C < word_1A4C/*3958*/)
+	if (transmission_state < word_1A4C/*3958*/)
 	{
 		r13 |= 0x10;
 	};
@@ -420,7 +420,7 @@ static bool ML02_Return_0()
 
 static bool ML02_sub_119DC()
 {
-	if (ZRO(RT_FLAG1_FFFF8888, 0x20) || wMUT73_TPS_Open_Delta >= word_1A58 || rpm_x125div32_B >= (rpm_1A5C/*192*/<<2) 
+	if (ZRO(RT_FLAG1_FFFF8888, RT_5_ALWAYS_1) || wMUT73_TPS_Open_Delta >= word_1A58 || rpm_x125div32_B >= (rpm_1A5C/*192*/<<2) 
 		|| wMUT2E_Vehicle_Speed_Frequency >= word_1A54/*10*/ || (SPEED_FLAGS & 0x40) || wMUT1C_ECU_Load >= word_1A5A/*255*/)
 	{
 		timer_FFFF858E = word_1A56/*80*/;
@@ -514,9 +514,9 @@ static bool ML02_sub_11B74()
 
 	bool r8 = false;
 
-	if (((open_Loop_disable/*1*/ != 2 && (RT_FLAG1_FFFF8888 & 0xB0) == 0x80) || (open_Loop_disable == 2 && (RT_FLAG1_FFFF8888 & 0x90) == 0x80)) && MUT21_RPM_x125div4 > r2)
+	if (((open_Loop_disable/*1*/ != 2 && (RT_FLAG1_FFFF8888 & (RT_7_bit|RT_5_ALWAYS_1|AC_SWITCH)) == RT_7_bit) || (open_Loop_disable == 2 && (RT_FLAG1_FFFF8888 & (RT_7_bit|AC_SWITCH)) == RT_7_bit)) && MUT21_RPM_x125div4 > r2)
 	{
-		if (ZRO(RT_FLAG1_COPY_FFFF888A, 0x80))
+		if (ZRO(RT_FLAG1_COPY_FFFF888A, RT_7_bit))
 		{
 			SET(FUEL_CUT_FLAG_FFFF8A5E, 0x20);
 		};
@@ -569,7 +569,7 @@ static bool ML02_sub_11DBA()
 		word_FFFF85FC = word_1B9C/*20*/;
 	};
 
-	return (ZRO(byte_103C/*7*/, 2) || (RT_FLAG1_FFFF8888 & 0x80)) 
+	return (ZRO(byte_103C/*7*/, 2) || (RT_FLAG1_FFFF8888 & RT_7_bit)) 
 		&& (wMUT1E_MAF_RESET_FLAG & DECELERATION_FUEL_CUT) 
 		&& MUT21_RPM_x125div4 >= word_1B98/*64(2000)*/;
 }
@@ -603,9 +603,9 @@ static void ML02_sub_11EE8()
 {
 	TRG(word_FFFF8A10, 2, wMUT2F_Vehicle_Speed, word_FFFF947A, word_FFFF947C);
 
-	if (byte_107E/*0*/ != 0 && (RT_FLAG1_FFFF8888 & 0x20) 
-		&& ZRO(wMUT71_Sensor_Error, 0x11) 
-		&& (RT_FLAG1_FFFF8888 & 4) 
+	if (byte_107E/*0*/ != 0 && (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) 
+		&& ZRO(wMUT71_Sensor_Error, MUT71_4_bit|MUT71_0_COOLANT) 
+		&& (RT_FLAG1_FFFF8888 & RACING) 
 		&& ZRO(word_FFFF8A10, 2)
 		&& wMUT10_Coolant_Temperature_Scaled < word_2724/*0*/)
 	{
@@ -701,7 +701,7 @@ static bool ML02_Check_CRANKING()
 		{
 			rpm = word_2180/*15(468)*/;
 
-			if ((prev_MUT1E_FLAGS & 1) == 0)
+			if ((prev_MUT1E_FLAGS & CRANKING) == 0)
 			{
 				rpm = word_217E/*13(406)*/;
 			};
@@ -713,7 +713,7 @@ static bool ML02_Check_CRANKING()
 		}
 		else
 		{
-			if ((prev_MUT1E_FLAGS & 1) == 0)
+			if ((prev_MUT1E_FLAGS & CRANKING) == 0)
 			{
 				rpm = word_1526/*13(406)*/;
 			};
@@ -727,7 +727,7 @@ static bool ML02_Check_CRANKING()
 
 		res = (MUT21_RPM_x125div4 < rpm);
 
-		if ((prev_MUT1E_FLAGS & 1) && !res)
+		if ((prev_MUT1E_FLAGS & CRANKING) && !res)
 		{
 			coolant_temp_FFFF8038 = wMUT10_Coolant_Temperature_Scaled;
 		};
@@ -849,12 +849,12 @@ static u16 ML02_Get_Idle_RPM_lim_123E0()
 	
 	u32 r1 = 0;
 
-	if (ZRO(RT_FLAG1_FFFF8888, 0x80))
+	if (ZRO(RT_FLAG1_FFFF8888, RT_7_bit))
 	{
 		timer_FFFF8788 = word_1562/*1*/;
 	};
 
-	if (ZRO(RT_FLAG1_FFFF8888, 0x20))
+	if (ZRO(RT_FLAG1_FFFF8888, RT_5_ALWAYS_1))
 	{
 		r1 = 4;
 	}
@@ -868,9 +868,9 @@ static u16 ML02_Get_Idle_RPM_lim_123E0()
 		r1 += 6;
 	};
 
-	if ((wMUT23 & 0x20) || timer_FFFF8788 != 0 || ZRO(RPM_FLAGS, 0x4000))
+	if ((wMUT23 & 0x20) || timer_FFFF8788 != 0 || ZRO(RPM_FLAGS, RPM_14_bit))
 	{
-		if (prev_MUT1E_FLAGS & 4)
+		if (prev_MUT1E_FLAGS & DECELERATION_FUEL_CUT)
 		{
 			r1 += 1;
 		};
@@ -879,11 +879,11 @@ static u16 ML02_Get_Idle_RPM_lim_123E0()
 	{
 		__disable_irq();
 
-		CLR(RPM_FLAGS, 0x4000);
+		CLR(RPM_FLAGS, RPM_14_bit);
 
 		__enable_irq();
 
-		if (ZRO(RT_FLAG1_FFFF8888, 0x20) || (prev_MUT1E_FLAGS & 4))
+		if (ZRO(RT_FLAG1_FFFF8888, RT_5_ALWAYS_1) || (prev_MUT1E_FLAGS & DECELERATION_FUEL_CUT))
 		{
 			r1 += 1;
 		};
@@ -919,9 +919,9 @@ static bool ML02_sub_124AE(u16 rpm)
 		r13 = word_1570/*35*/;
 	};
 
-	return (byte_102F == 0 || (RT_FLAG1_FFFF8888 & 4)) 
+	return (byte_102F == 0 || (RT_FLAG1_FFFF8888 & RACING)) 
 		&& ZRO(wMUT19_Startup_Check_Bits, 0x40) 
-		&& ZRO(wMUT71_Sensor_Error, 8) 
+		&& ZRO(wMUT71_Sensor_Error, MUT71_3_MAP) 
 		&& MUT21_RPM_x125div4 > rpm 
 		&& timer_down_FFFF86B4 == 0;
 }
@@ -934,7 +934,7 @@ static bool ML02_sub_1262C(u16 rpm)
 		&& ZRO(wMUT19_Startup_Check_Bits, 0x40) 
 		&& cranking_end_timer_up >= (word_155A * 20)
 		&& ZRO(wMUT23, 0x20)
-		&& (RT_FLAG1_COPY_FFFF888A & RT_FLAG1_FFFF8888 & 0x80)
+		&& (RT_FLAG1_COPY_FFFF888A & RT_FLAG1_FFFF8888 & RT_7_bit)
 		&& crank5_FFFF8A36 == 0;
 }
 
@@ -942,14 +942,7 @@ static bool ML02_sub_1262C(u16 rpm)
 
 static void ML02_sub_1268C()
 {
-	if (wMUT71_Sensor_Error & 8) // MAP fault
-	{
-		SET(wMUT1E_MAF_RESET_FLAG, MAP_error);
-	}
-	else
-	{
-		CLR(wMUT1E_MAF_RESET_FLAG, MAP_error);
-	};
+	WFLAG(wMUT1E_MAF_RESET_FLAG, MAP_error, wMUT71_Sensor_Error & MUT71_3_MAP); // MAP fault
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1056,7 +1049,7 @@ static void ML02_Open_andor_Closed_Loop_Fuel_Calcs()
 		{
 			// loc_12A0C
 
-			if (wMUT71_Sensor_Error & 0x200)
+			if (wMUT71_Sensor_Error & MUT71_9_bit)
 			{
 				r3 = Sub_Lim_0(r2, MINTEMPCLOSEDLOOP_159C/*8*/);
 			}
@@ -1071,7 +1064,7 @@ static void ML02_Open_andor_Closed_Loop_Fuel_Calcs()
 
 				if (RAM_VAR_15A2_FFFF8A38 != 0)
 				{
-					if (RT_FLAG1_FFFF8888 & 0x20)
+					if (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1)
 					{
 						Table_Lookup_Axis(RPM14_79C8);
 
@@ -1103,7 +1096,7 @@ static void ML02_Open_Loop_Calc()
 {
 	Table_Lookup_Axis(RPM13_64CC);
 
-	u32 r13 = Table_Lookup_byte_2D_3D((RT_FLAG1_FFFF8888 & 0x20) ? OPENLOOPLOV_332E : OPENLOOPHIV_3342);
+	u32 r13 = Table_Lookup_byte_2D_3D((RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) ? OPENLOOPLOV_332E : OPENLOOPHIV_3342);
 
 	TRG(wMUT18_Open_Loop_Bit_Array, 0x100, wMUT8A_TPS_Corrected, Sub_Lim_0(r13, Open_Loop_TPS_FallBack_Const/*13*/), r13)
 }
@@ -1117,12 +1110,12 @@ static bool ML02_sub_12BC0()
 		return true;
 	};
 
-	if (ZRO(wMUT71_Sensor_Error, 0x200) && (wMUT18_Open_Loop_Bit_Array & 0x100))
+	if (ZRO(wMUT71_Sensor_Error, MUT71_9_bit) && (wMUT18_Open_Loop_Bit_Array & 0x100))
 	{
 		return true;
 	};
 
-	if ((wMUT1E_MAF_RESET_FLAG & (STALL|FUEL_CUT|MAP_error|CRANKING)) || (RPM_FLAGS & REVLIM))
+	if ((wMUT1E_MAF_RESET_FLAG & (STALL|FUEL_CUT|MAP_error|CRANKING)) || (RPM_FLAGS & RPM_5_REVLIM))
 	{
 		return true;
 	};
@@ -1537,7 +1530,7 @@ static void ML02_sub_133BC()
 {
 	u32 r1 = 0;
 
-	if (coolantTempScld_COPY_1 < word_16DC && wMUT10_Coolant_Temperature_Scaled < word_15DA)
+	if (coolantTempDuringCranking < word_16DC && wMUT10_Coolant_Temperature_Scaled < word_15DA)
 	{
 		r1 = 0x40;
 	};
@@ -1597,7 +1590,7 @@ static void ML02_sub_133BC()
 
 	CLR(wMUT5F, 0x80);
 
-	if (wMUT1E_MAF_RESET_FLAG & 0x800)
+	if (wMUT1E_MAF_RESET_FLAG & MUT1E_11_bit)
 	{
 		word_FFFF86AE = word_1704/*40*/;
 	};
