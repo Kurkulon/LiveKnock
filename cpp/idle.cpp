@@ -282,7 +282,7 @@ static void AA05_IDLE_sub_192FC()
 
 	if (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) // Engine Running
 	{
-		if (SPEED_FLAGS & 4)
+		if (SPEED_FLAGS & SPD_2_ALWAYS_0)
 		{
 			r1 = Query_byte_2D_3D_Table(IDLERPMDRV_7A08);
 		}
@@ -391,7 +391,7 @@ static void AA05_sub_1945C()
 
 			u16 r2 = CEL8_6DA0 - 1;
 
-			Map3D_B *p = (SPEED_FLAGS & 4) ? (Map3D_B*)GET_LOC_DIM_sub_DF6(IDLERPMDRV_7A08) : IDLERPMNS_485E;
+			Map3D_B *p = (SPEED_FLAGS & SPD_2_ALWAYS_0) ? (Map3D_B*)GET_LOC_DIM_sub_DF6(IDLERPMDRV_7A08) : IDLERPMNS_485E;
 
 			r1 += p->m2d.data[r2];
 		};
@@ -1026,7 +1026,7 @@ static void AA05_sub_1AE76()
 
 static void AA05_sub_1AE90()
 {
-	word_FFFF8CA4 = Table_Lookup_byte_2D_3D((SPEED_FLAGS & 4) ? ICSVSTARTUPADD2_3B30 : ICSVSTARTUPADD1_4924) + word_FFFF8CCE + word_FFFF8CE0;
+	word_FFFF8CA4 = Table_Lookup_byte_2D_3D((SPEED_FLAGS & SPD_2_ALWAYS_0) ? ICSVSTARTUPADD2_3B30 : ICSVSTARTUPADD1_4924) + word_FFFF8CCE + word_FFFF8CE0;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

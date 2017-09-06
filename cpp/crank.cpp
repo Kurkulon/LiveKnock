@@ -813,14 +813,7 @@ static void CRANK75_sub_232A0()
 
 		injectors_mask_FFFF8C72 = r13;
 
-		if ((r13 & 0xF) == 0xF)
-		{
-			CLR(word_FFFF8BBA, 1);
-		}
-		else
-		{
-			SET(word_FFFF8BBA, 1);
-		};
+		WFLAG(word_FFFF8BBA, 1, (r13 & 0xF) != 0xF)
 	};
 
 	// loc_239F4
@@ -895,7 +888,7 @@ static void CRANK75_sub_232A0()
 		word_FFFF8ADA -= 1;
 	};
 
-	if (RPM_FLAGS & RPM_11_bit)
+	if (RPM_FLAGS & RPM_11_MUT1E_11_bit)
 	{
 		u32 r13;
 
@@ -948,7 +941,7 @@ static void CRANK75_sub_232A0()
 
 	// loc_23D98
 
-	if ((RPM_FLAGS & RPM_9_bit) && ZRO(RPM_FLAGS, CRANKING_TIMED))
+	if ((RPM_FLAGS & RPM_9_bit) && ZRO(RPM_FLAGS, RPM_13_CRANKING_SYNC_INJECT))
 	{
 		CRANK_MAF_MAP_Calcs_sub_250F8(1, 0);
 	}
@@ -1767,7 +1760,7 @@ static void CRANK5_sub_24AF0()
 	{
 		crank5_FFFF8A36 = word_155E/*16*/;
 	}
-	else if (SPEED_FLAGS & 4)
+	else if (SPEED_FLAGS & SPD_2_ALWAYS_0)
 	{
 		crank5_FFFF8A36 = word_155C/*16*/;
 	}
@@ -2265,7 +2258,7 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 		}
 		else if (RPM_FLAGS & RPM_0_CRANKING)
 		{
-			ipw = word_FFFF8AFE;
+			ipw = ipw_crank_DuringCranking;
 
 			word_FFFF8B88 = ipw;
 			word_FFFF8B86 = ipw; 
@@ -2360,32 +2353,32 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 			word_FFFF8F30 = 1;
 		};
 
-		if (RPM_FLAGS & RPM_13_bit)
+		if (RPM_FLAGS & RPM_13_CRANKING_SYNC_INJECT)
 		{
 			r2 = 3;
 
-			ipw = word_FFFF8BAE;
+			ipw = ipw_crank_DuringCrankingSync;
 
-			DECLIM(word_FFFF8BAA);
+			DECLIM(timer_CrankingInjectSync);
 
-			if (word_FFFF8BAA == 0)
+			if (timer_CrankingInjectSync == 0)
 			{
-				CLR(RPM_FLAGS, RPM_13_bit);
+				CLR(RPM_FLAGS, RPM_13_CRANKING_SYNC_INJECT);
 			};
 		}
-		else if (RPM_FLAGS & RPM_13_bit)
-		{
-			r2 = 2;
+		//else if (RPM_FLAGS & RPM_13_CRANKING_SYNC_INJECT)
+		//{
+		//	r2 = 2;
 
-			ipw = word_FFFF8BAE;
+		//	ipw = ipw_crank_DuringCrankingSync;
 
-			DECLIM(word_FFFF8BAA)
+		//	DECLIM(timer_CrankingInjectSync)
 
-			if (word_FFFF8BAA == 0)
-			{
-				CLR(RPM_FLAGS, RPM_13_bit);
-			};
-		}
+		//	if (timer_CrankingInjectSync == 0)
+		//	{
+		//		CLR(RPM_FLAGS, RPM_13_CRANKING_SYNC_INJECT);
+		//	};
+		//}
 		else if ((FUEL_CUT_FLAG_FFFF8A5E & 0x80) && (RPM_FLAGS & RPM_0_CRANKING) && (word_FFFF8AD6 != 0 || ZRO(word_FFFF8F2A, 2)))
 		{
 			r2 = 0;

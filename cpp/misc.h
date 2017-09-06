@@ -81,7 +81,7 @@ struct Map3D_W
 #define DECELERATION_FUEL_CUT	0x04
 #define FUEL_CUT				0x08
 #define STALL					0x10
-#define REVLIM					0x20
+#define MUT1E_5_ALWAYS_1		0x20
 #define MUT1E_6_bit				0x40
 #define CLOSED_LOOP_GENERIC		0x80
 #define MUT1E_8_bit				0x100
@@ -119,22 +119,22 @@ struct Map3D_W
 
 // RPM_FLAGS
 
-#define RPM_0_CRANKING				0x01 
-#define RPM_1_MAP_error				0x02
-#define RPM_2_DECELERATION_FUEL_CUT	0x04
-#define RPM_3_FUEL_CUT				0x08
-#define RPM_4_STALL					0x10
-#define RPM_5_REVLIM				0x20
-#define RPM_6_bit					0x40
-#define RPM_7_CLOSED_LOOP_GENERIC	0x80
-#define RPM_8_bit					0x100
-#define RPM_9_bit					0x200
-#define RPM_10_bit					0x400
-#define RPM_11_bit					0x800
-#define RPM_12_bit					0x1000
-#define RPM_13_bit					0x2000
-#define RPM_14_bit					0x4000
-#define RPM_15_bit					0x8000
+#define RPM_0_CRANKING					0x01 
+#define RPM_1_MAP_error					0x02
+#define RPM_2_DECELERATION_FUEL_CUT		0x04
+#define RPM_3_FUEL_CUT					0x08
+#define RPM_4_STALL						0x10
+#define RPM_5_REVLIM					0x20
+#define RPM_6_bit						0x40
+#define RPM_7_CLOSED_LOOP_GENERIC		0x80
+#define RPM_8_bit						0x100
+#define RPM_9_bit						0x200
+#define RPM_10_bit						0x400
+#define RPM_11_MUT1E_11_bit				0x800
+#define RPM_12_bit						0x1000
+#define RPM_13_CRANKING_SYNC_INJECT		0x2000
+#define RPM_14_bit						0x4000
+#define RPM_15_bit						0x8000
 
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -175,6 +175,26 @@ struct Map3D_W
 #define MUT71_14_bit									0x4000
 #define MUT71_15_bit									0x8000
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// SPEED_FLAGS
+
+#define SPD_0_01 					0x01 
+#define SPD_1_02					0x02
+#define SPD_2_ALWAYS_0				0x04
+#define SPD_3_08					0x08
+#define SPD_4_10					0x10
+#define SPD_5_20					0x20
+#define SPD_6_40					0x40
+#define SPD_7_80					0x80
+#define SPD_8_100					0x100
+#define SPD_9_200					0x200
+#define SPD_10_400					0x400
+#define SPD_11_800					0x800
+#define SPD_12_1000					0x1000
+#define SPD_13_2000					0x2000
+#define SPD_14_4000					0x4000
+#define SPD_15_8000					0x8000
 
 
 

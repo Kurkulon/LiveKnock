@@ -378,7 +378,7 @@ void F500_sub_FD34()
 
 	if (timer_up_FFFF852C > 4)
 	{
-		SET(SPEED_FLAGS, 0x100);
+		SET(SPEED_FLAGS, SPD_8_100);
 	};
 
 	if (timer_down_TXFLAG3_FFFF8574 != 0)
@@ -1093,13 +1093,13 @@ void F500_MAP_Hz_Calc_sub_10E54()
 
 	if (timer_down_TXFLAG3_FFFF8574 == 0)
 	{
-		CLR(SPEED_FLAGS, 8);
+		CLR(SPEED_FLAGS, SPD_3_08);
 	}
 	else
 	{
 		if (wMUT2E_Vehicle_Speed_Frequency >= word_1D7E/*20*/)
 		{
-			SET(SPEED_FLAGS, 8);
+			SET(SPEED_FLAGS, SPD_3_08);
 		};
 	};
 }
