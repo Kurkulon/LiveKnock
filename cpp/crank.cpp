@@ -932,7 +932,7 @@ static void CRANK75_sub_232A0()
 
 	if (	(wMUT1E_MAF_RESET_FLAG & CRANKING) 
 		&&	(word_FFFF8A48 & 0x80) 
-		&&	ZRO(word_FFFF8B4E, 0x20)
+		&&	ZRO(word_FFFF8B4E, INJ_5_SYNC_INJECT)
 		&&	ZRO(word_FFFF89F2, 0x400)
 		&&	ZRO(word_FFFF89F2, 0x800))
 	{
@@ -945,14 +945,14 @@ static void CRANK75_sub_232A0()
 	{
 		CRANK_MAF_MAP_Calcs_sub_250F8(1, 0);
 	}
-	else if (word_FFFF8B4E & 0x20)
+	else if (word_FFFF8B4E & INJ_5_SYNC_INJECT)
 	{
 		if (injPW_final != 0 && injPW_chnl != 0)
 		{
 			InjOpenStart(injPW_final, injPW_chnl);
 		};
 
-		CLR(word_FFFF8B4E, 0x20);
+		CLR(word_FFFF8B4E, INJ_5_SYNC_INJECT);
 
 		CRANK_sub_262D0();
 	};
@@ -2400,10 +2400,7 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 
 		// loc_25DCE
 
-		if (word_FFFF8AD6 != 0)
-		{
-			word_FFFF8AD6 -= 1;
-		};
+		DECLIM(word_FFFF8AD6);
 
 		word_FFFF8A4E = ipw;
 	};
@@ -2440,19 +2437,19 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 
 		if (r2 == 1)
 		{
-			if (ZRO(word_FFFF8B4E, 0x80))
+			if (ZRO(word_FFFF8B4E, INJ_7_80))
 			{
 				// loc_25F98
 
 				r2 = word_98D4[strokeNumber+1];
 
-				if (word_FFFF8B4E & 0x40)
+				if (word_FFFF8B4E & INJ_6_40)
 				{
 					r2 |= word_98D4[strokeNumber];
 				};
 
 			}
-			else if (ZRO(word_FFFF8B4E, 0x40))
+			else if (ZRO(word_FFFF8B4E, INJ_6_40))
 			{
 				r2 = 0;
 			}
@@ -2467,7 +2464,7 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 					r13 = Sub_Lim_0(strokeNumber, 1);
 				};
 
-				if ((wMUT1E_MAF_RESET_FLAG & CRANKING) && (word_FFFF8A48 & 0x80) && ZRO(word_FFFF8B4E, 0x20) && ZRO(word_FFFF89F2, 0x400) && ZRO(word_FFFF89F2, 0x800))
+				if ((wMUT1E_MAF_RESET_FLAG & CRANKING) && (word_FFFF8A48 & 0x80) && ZRO(word_FFFF8B4E, INJ_5_SYNC_INJECT) && ZRO(word_FFFF89F2, 0x400) && ZRO(word_FFFF89F2, 0x800))
 				{
 					SET(word_FFFF89F2, 0x800);
 
@@ -2502,7 +2499,7 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 
 		// loc_26004
 
-		CLR(word_FFFF8B4E, 0x40);
+		CLR(word_FFFF8B4E, INJ_6_40);
 
 		if ((word_FFFF8A48 & 0x80) && v1 == 0)
 		{

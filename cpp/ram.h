@@ -578,7 +578,7 @@
 #define      wMUT14_Battery_Level_ADC8bit   							(*(u16*)0xFFFF88E6)                                                        
 #define      wMUT17_TPS_ADC8bit             							(*(u16*)0xFFFF88E8)                                                        
 #define      wMUT8A_TPS_Corrected           							(*(u16*)0xFFFF88EA)                                                        
-#define      word_FFFF88EC                  							(*(u16*)0xFFFF88EC)                                                        
+#define      prev_TPS_Corrected                  							(*(u16*)0xFFFF88EC)                                                        
 #define      prev_TPS_1                     							(*(u16*)0xFFFF88EE)                                                        
 #define      prev_TPS_2                     							(*(u16*)0xFFFF88F0)                                                        
 #define      prev_TPS_3                     							(*(u16*)0xFFFF88F2)                                                        

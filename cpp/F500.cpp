@@ -195,24 +195,24 @@ void F500_sub_F834()
 {
 	const u32 r9 = 0x100;
 
-	u32 r1 = MUT_00_01_FLAGS;
+	u32 rtf = MUT_00_01_FLAGS;
 	u32 r2 = MUT_03_FLAGS;
 
 	u32 r8 = word_FFFF8896;
 
 	if (byte_102D == 0)
 	{
-		CLR(r1, 0x4400);
+		CLR(rtf, RT_14_bit|RT_10_bit);
 	};
 
 	if ((byte_1046 & 2) == 0)
 	{
-		SET(r1, 0x1000);
+		SET(rtf, FIX_TIMING);
 	};
 
 	if (byte_102A == 0)
 	{
-		CLR(r1, 0x200);
+		CLR(rtf, RT_9_bit);
 	};
 
 	if (byte_1041 == 0)
@@ -222,12 +222,12 @@ void F500_sub_F834()
 
 	if ((wMUT1E_MAF_RESET_FLAG & (CRANKING|STALL)) || starter_timer_up < word_18B6/*20*/)
 	{
-		SET(r1, 0x20);
+		SET(rtf, RT_5_ALWAYS_1);
 	};
 
 	if (wMUT10_Coolant_Temperature_Scaled <= word_18BA)
 	{
-		CLR(r1, POWER_STEERING);
+		CLR(rtf, POWER_STEERING);
 	};
 
 
@@ -236,14 +236,14 @@ void F500_sub_F834()
 
 	if ((wMUT1E_MAF_RESET_FLAG & (CRANKING|STALL)) || cranking_end_timer_up < word_18B8 || (word_FFFF8D60 & 0x100))
 	{
-		CLR(r1, AC_SWITCH);
+		CLR(rtf, AC_SWITCH);
 	};
 
 	CLR(word_FFFF8CE4, 0x8000);
 
 	if (byte_102E == 2)
 	{
-		if ((r1 & AC_SWITCH) && (cranking_end_timer_up < (word_19F6 * 20)))
+		if ((rtf & AC_SWITCH) && (cranking_end_timer_up < (word_19F6 * 20)))
 		{
 			SET(r2, r9);
 		}
@@ -251,7 +251,7 @@ void F500_sub_F834()
 		{
 			CLR(r2, 0x100);
 
-			if ((r1 & AC_SWITCH) && (r1 & 1))
+			if ((rtf & AC_SWITCH) && (rtf & RT_0_bit))
 			{
 				SET(r2, r9);
 			};
@@ -271,54 +271,54 @@ void F500_sub_F834()
 		TRG(wMUT19_Startup_Check_Bits, 0x2000, r13, word_2110, word_210E);
 
 
-		if ((r1 & 0x11) == 0x11)
+		if ((rtf & (AC_SWITCH|RT_0_bit)) == (AC_SWITCH|RT_0_bit))
 		{
 			if (wMUT11_Intake_Air_Temperature_Scaled > word_19F8 || (IATONOFF_105E != 0 && (wMUT19_Startup_Check_Bits & 0x2000)) 
 				|| timer_FFFF8784 == 0 || wMUT10_Coolant_Temperature_Scaled < word_19FA || cranking_end_timer_up < (word_19F4*20))
 			{
-				CLR(r1, 1);
+				CLR(rtf, RT_0_bit);
 			};
 		};
 	};
 
-	if ((bMUTD2_FBA_MAF_MAP_FLAG & 0x10) == 0 && ((r1 & AC_SWITCH) == 0 || byte_102E == 0))
+	if ((bMUTD2_FBA_MAF_MAP_FLAG & 0x10) == 0 && ((rtf & AC_SWITCH) == 0 || byte_102E == 0))
 	{
-		CLR(r1, 1);
+		CLR(rtf, RT_0_bit);
 		CLR(r2, 0x100);
 		CLR(r8, 0x3000);
 	};
 
 	if (byte_102B != 0)
 	{
-		CLR(r1, 0x1000);
+		CLR(rtf, FIX_TIMING);
 	};
 
 	if (MUT_CMD_0 & 1) // MUT_D9 Fix timing at 5 degrees
 	{
-		SET(r1, FIX_TIMING);
-		CLR(r1, SPEED_ADJUST);
+		SET(rtf, FIX_TIMING);
+		CLR(rtf, SPEED_ADJUST);
 	};
 
 	if (MUT_CMD_1 & 0x40) // MUT_C3 SAS (Speed Adjusting Screw)
 	{
-		SET(r1, FIX_TIMING|SPEED_ADJUST);
+		SET(rtf, FIX_TIMING|SPEED_ADJUST);
 	};
 
-	CLR(r1, 4);
+	CLR(rtf, RACING);
 
 	if (timer_down_FFFF89CE != 0)
 	{
-		SET(r1, 4);
+		SET(rtf, RACING);
 	};
 
 	if (bMUTD2_FBA_MAF_MAP_FLAG & 8) // AYC/ACD
 	{
 		if ((wMUT40_Stored_Faults_Lo & 8) || (wMUT44_Stored_Faults_Lo_2 & 0xEF)) {};
 
-		WFLAG(r1, 0x80, NVRAM_FFFF802C & 1);
+		WFLAG(rtf, RT_7_bit, NVRAM_FFFF802C & 1);
 	};
 
-	RT_FLAG1_FFFF8888 = r1;
+	RT_FLAG1_FFFF8888 = rtf;
 
 	word_FFFF8890 = r2;
 

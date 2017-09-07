@@ -196,6 +196,26 @@ struct Map3D_W
 #define SPD_14_4000					0x4000
 #define SPD_15_8000					0x8000
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// word_FFFF8B4E Inject fuel
+
+#define INJ_0_01 					0x01 
+#define INJ_1_02					0x02
+#define INJ_2_04					0x04
+#define INJ_3_08					0x08
+#define INJ_4_10					0x10
+#define INJ_5_SYNC_INJECT			0x20
+#define INJ_6_40					0x40
+#define INJ_7_80					0x80
+#define INJ_8_100					0x100
+#define INJ_9_200					0x200
+#define INJ_10_400					0x400
+#define INJ_11_800					0x800
+#define INJ_12_1000					0x1000
+#define INJ_13_2000					0x2000
+#define INJ_14_4000					0x4000
+#define INJ_15_8000					0x8000
 
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

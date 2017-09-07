@@ -535,7 +535,7 @@ static u16 FU03_sub_142DC()
 
 static void FU03_sub_14300()
 {
-	word_FFFF8AB0 = Mul_Div_R(word_1502, GET_FROM_MASSIVE_byte(AFRTMP_302A) * INJSZ_150C, 0x8000);
+	word_FFFF8AB0 = Mul_Div_R(word_1502/*867*/, GET_FROM_MASSIVE_byte(AFRTMP_302A)/*131*/ * INJSZ_150C, 0x8000);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -671,7 +671,7 @@ static void FU03_sub_144E0()
 				r3 = 8;
 			};
 
-			r1 = unk137_35AE[r3];
+			r1 = unk137_35AE[r3]; // 128,128,128,128,128,166,166,166,166
 		};
 	};
 
@@ -854,12 +854,11 @@ static void FU03_sub_149E0(EnVars* ev)
 
 	if (ZRO(ZERO_8_IGNITION_FLAGS, 0x20))
 	{
-		Table_Lookup_Axis(BAR5_6D66);
-
-		r2 = Table_Lookup_byte_2D_3D(unk034_3EFA);
+		Table_Lookup_Axis(BAR5_6D66);				// 125,141,157,173,189
+		r2 = Table_Lookup_byte_2D_3D(unk034_3EFA);	// 151,142,140,136,130
 	};
 
-	u32 r0 = Mul32_Fix8(r8, Add_Lim_FFFF(wMUT31_Volumetric_Efficiency, word_1524));
+	u32 r0 = Mul32_Fix8(r8, Add_Lim_FFFF(wMUT31_Volumetric_Efficiency, word_1524/*48*/));
 
 	r0 = Mul_DW_Div(r0, k_InAirTemp * r2, 0x4000);
 
@@ -2103,8 +2102,8 @@ static void FU03_sub_16750()
 {
 	__disable_irq();
 
-	SET(word_FFFF8B4E, 0x80);
-	CLR(word_FFFF8B4E, 0x40);
+	SET(word_FFFF8B4E, INJ_7_80);
+	CLR(word_FFFF8B4E, INJ_6_40);
 
 	__enable_irq();
 
@@ -2112,7 +2111,7 @@ static void FU03_sub_16750()
 
 	if (wMUT1E_MAF_RESET_FLAG & STALL)
 	{
-		if (wMUT10_Coolant_Temperature_Scaled <= word_1720)
+		if (wMUT10_Coolant_Temperature_Scaled <= word_1720/*0*/)
 		{
 			SET(r1, 0x80);
 
