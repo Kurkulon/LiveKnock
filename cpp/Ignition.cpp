@@ -238,7 +238,7 @@ static bool IG04_Is_Fix_timing_5_degrees()
 
 static void IG04_sub_16FA6()
 {
-	if (wMUTD1_BitMap_FAA & 0x80)
+	if (wMUTD1_BitMap_FAA & FAA_7_HIGH_IGN)
 	{
 		IG04_sub_1700A();
 
@@ -769,7 +769,7 @@ static bool IG04_sub_17A7E()
 
 static void IG04_sub_17B9A()
 {
-	WFLAG(wMUT1E_MAF_RESET_FLAG, TIMING_KNOCKDOWN, (wMUTD1_BitMap_FAA & 0x400) && IG04_sub_17BEC()); // timing knockdown on light acceleration and less than 3000rpm
+	WFLAG(wMUT1E_MAF_RESET_FLAG, TIMING_KNOCKDOWN, (wMUTD1_BitMap_FAA & FAA_10_KNOCK_LIGHT) && IG04_sub_17BEC()); // timing knockdown on light acceleration and less than 3000rpm
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1038,7 +1038,7 @@ static u16 IG04_Update_OctanEgrIgnTiming()
 		egrLowOctIgn = loIgn;
 	};
 
-	if (wMUTD1_BitMap_FAA & 0x80)
+	if (wMUTD1_BitMap_FAA & FAA_7_HIGH_IGN)
 	{
 		hiIgn = Query_byte_2D_3D_Table((Map3D_B**)HighIgn_7C48);
 
@@ -1118,7 +1118,7 @@ static u16 IG04_Ign_Temp_Correct(u16 v)
 	u16 r13 = 0;
 
 	if (w_1822E_loc4 == 0
-		&& (wMUTD1_BitMap_FAA & 0x200) // Enable Warmup Ign Retard
+		&& (wMUTD1_BitMap_FAA & FAA_9_WARMUP_RETARD) // Enable Warmup Ign Retard
 		&& cranking_end_timer_up >= word_1836)
 	{
 		Table_Lookup_Axis(CEL8_6914);
@@ -1476,7 +1476,7 @@ static void IG04_sub_18C86()
 	{
 		word_FFFF8C0A = (wMUT10_Coolant_Temperature_Scaled > word_24F8) ? 0xFF : 0;
 	}
-	else if (Bitmap_Store_A_FFFF89EE & 2)
+	else if (timeEvents & EVT_1_50ms)
 	{
 		word_FFFF8C0A = Add_Lim_FFFF(word_FFFF8C0A, word_24FA);
 

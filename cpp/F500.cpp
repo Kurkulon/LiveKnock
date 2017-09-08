@@ -473,7 +473,7 @@ void F500_Coolant_Calc1_sub_FF2C()
 	{
 		COOLANT_TEMPERATURE_2BYTE_FFFF88A8 = r1;
 	}
-	else if (Bitmap_Store_A_FFFF89EE & 8)
+	else if (timeEvents & EVT_3_500ms)
 	{
 		r1 = Lim16(r1, Sub_Lim_0(COOLANT_TEMPERATURE_2BYTE_FFFF88A8, 12), COOLANT_TEMPERATURE_2BYTE_FFFF88A8 + 4);
 
@@ -561,7 +561,7 @@ void F500_sub_10188()
 
 void F500_sub_10220()
 {
-	if (Bitmap_Store_A_FFFF89EE & 1)
+	if (timeEvents & EVT_0_25ms)
 	{
 		F500_O22_Manipulations_sub_1023C(ENGINE_MAIN_VARIABLES_DIM_off_9198);
 	};
@@ -631,7 +631,7 @@ void F500_TPS_sub_103DA()
 
 	__enable_irq();
 
-	if (Bitmap_Store_A_FFFF89EE & 1)
+	if (timeEvents & EVT_0_25ms)
 	{
 		word_FFFF8904 = Sub_Lim_0(prev_TPS_sub_103DA, wMUT17_TPS_ADC8bit);
 
@@ -761,7 +761,7 @@ void F500_MAP_Coolant_Calcs()
 		{
 			if (tm_10ms_FFFF86EA == 0)
 			{
-				if (fuelTrim_FFFF8AE4 > 0x80 && (Bitmap_Store_A_FFFF89EE & 2))
+				if (fuelTrim_FFFF8AE4 > 0x80 && (timeEvents & EVT_1_50ms))
 				{
 					fuelTrim_FFFF8AE4 = Sub_Lim_0(fuelTrim_FFFF8AE4, t1_unk_20A8/*6*/);
 				};
@@ -779,7 +779,7 @@ void F500_MAP_Coolant_Calcs()
 
 		if (fuelTrim_FFFF8AE4 < 0x80) { fuelTrim_FFFF8AE4 = 0x80; };
 
-		if (F500_sub_10820() && fuelTrim_FFFF8AE4 == 0x80 && (Bitmap_Store_A_FFFF89EE & 2))
+		if (F500_sub_10820() && fuelTrim_FFFF8AE4 == 0x80 && (timeEvents & EVT_1_50ms))
 		{
 			word_FFFF8AE2 = Sub_Lim_0(word_FFFF8AE2, t1_unk_20AE/*6*/);
 		}
@@ -929,7 +929,7 @@ void F500_sub_10984()
 	{
 		dif_rpm_x125div32_AB = Lim_FF(Sub_Lim_0(rpm_x125div32_A, rpm_x125div32_B));
 
-		if (Bitmap_Store_A_FFFF89EE & 4)
+		if (timeEvents & EVT_2_100ms)
 		{
 			return;
 		};
@@ -1108,7 +1108,7 @@ void F500_MAP_Hz_Calc_sub_10E54()
 
 void F500_sub_10F08()
 {
-	if (wMUTD1_BitMap_FAA & 2)
+	if (wMUTD1_BitMap_FAA & FAA_1_REAR_O2)
 	{
 		wMUT5A = word_FFFF8A20;
 		wMUT5B_Rear_02_Voltage = word_FFFF8A22;
@@ -1127,33 +1127,33 @@ void F500_Countdown_Timers_sub_10F5C()
 {
 	__disable_irq();
 
-	CLR(Bitmap_Store_A_FFFF89EE, 0x1FF);
+	CLR(timeEvents, 0x1FF);
 
-	Bitmap_Store_A_FFFF89EE |= (Bitmap_Store_B_FFFF89F0 & 0x1FF);
+	timeEvents |= (huge_timeEvents & 0x1FF);
 
-	CLR(Bitmap_Store_B_FFFF89F0, 0x1FF);
+	CLR(huge_timeEvents, 0x1FF);
 
 	__enable_irq();
 
-	if (Bitmap_Store_A_FFFF89EE & 1)
+	if (timeEvents & EVT_0_25ms)
 	{
 		mem_incr(&cranking_end_timer_up, &timer_up_FFFF8548);
 		mem_decr(&timer_down_TXFLAG3_FFFF8574, &word_FFFF86A0);
 	};
 
-	if (Bitmap_Store_A_FFFF89EE & 1)
+	if (timeEvents & EVT_0_25ms)
 	{
 		mem_incr(&timer_up_FFFF8548, &timer_up_FFFF8548);
 		mem_decr(&word_FFFF86A0, &bMUTDD);
 	};
 
-	if (Bitmap_Store_A_FFFF89EE & 4)
+	if (timeEvents & EVT_2_100ms)
 	{
 		mem_incr(&timer_up_FFFF8548, &timer_up_FFFF8548);
 		mem_decr(&bMUTDD, &timer_FFFF8784);
 	};
 
-	if (Bitmap_Store_A_FFFF89EE & 8)
+	if (timeEvents & EVT_3_500ms)
 	{
 		mem_incr(&timer_up_FFFF8548, &word_FFFF8550);
 		mem_decr(&timer_FFFF8784, &word_FFFF8834);

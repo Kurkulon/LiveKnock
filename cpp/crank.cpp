@@ -818,7 +818,7 @@ static void CRANK75_sub_232A0()
 
 	// loc_239F4
 
-	if (ZRO(wMUTD1_BitMap_FAA, 8) || (word_FFFF80FA & 0x80) || word_FFFF8EBA != 0 || (FLAGS_FFFF8EB0 & 0x80))
+	if (ZRO(wMUTD1_BitMap_FAA, FAA_3_IMMO) || (word_FFFF80FA & 0x80) || word_FFFF8EBA != 0 || (FLAGS_FFFF8EB0 & 0x80))
 	{
 		timer_FFFF8594 = 51;
 	};
@@ -1043,7 +1043,7 @@ void CRANK75_Knock_sub_23F8C()
 {
 	const u32 r8 = 0x8000;
 
-	if ((wMUTD1_BitMap_FAA & 0x80) == 0) // 0x80 - Enable High Oct Ign Map Lookup and other
+	if ((wMUTD1_BitMap_FAA & FAA_7_HIGH_IGN) == 0) // 0x80 - Enable High Oct Ign Map Lookup and other
 	{
 		return;
 	};
@@ -1709,7 +1709,7 @@ static void CRANK5_sub_24AF0()
 
 	SET(word_FFFF8BBA, 0x80);
 
-	if (wMUTD1_BitMap_FAA & 0x80/*Enable High Oct Ign Map Lookup and other*/)
+	if (wMUTD1_BitMap_FAA & FAA_7_HIGH_IGN/*Enable High Oct Ign Map Lookup and other*/)
 	{
 		CRANK5_sub_C990(25 + ((timerValue_1_2E_2F - crankPrev_OSBR2_B) & 0x8000) ? crankPrev_OSBR2_B : timerValue_1_2E_2F);
 	};
@@ -1736,7 +1736,7 @@ static void CRANK5_sub_24AF0()
 		r1 <<= 1;
 	};
 
-	if (ZRO(wMUTD1_BitMap_FAA, 8) || (word_FFFF80FA & 0x80) || word_FFFF8EBA != 0 || (FLAGS_FFFF8EB0 & 0x80))
+	if (ZRO(wMUTD1_BitMap_FAA, FAA_3_IMMO) || (word_FFFF80FA & 0x80) || word_FFFF8EBA != 0 || (FLAGS_FFFF8EB0 & 0x80))
 	{
 		timer_FFFF8592 = r1;
 	};

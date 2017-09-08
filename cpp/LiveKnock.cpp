@@ -35,11 +35,11 @@ extern "C" void LiveKnock()
 
 	if (openLoop)
 	{
-		CLR(wMUTD1_BitMap_FAA, 0x10); // Closed loop
+		CLR(wMUTD1_BitMap_FAA, FAA_4_CLOSED_LOOP); // Closed loop
 	}
 	else
 	{
-		wMUTD1_BitMap_FAA |= Periphery_FAA & 0x10; // Closed loop
+		wMUTD1_BitMap_FAA |= Periphery_FAA & FAA_4_CLOSED_LOOP; // Closed loop
 	};
 
 	CLR(bMUTD3_BitMap4_FCA_Store_FFFF89D8, 0x800); // Disable Front/Rear O2 heater check: clear bit 11 address 0xFCA 

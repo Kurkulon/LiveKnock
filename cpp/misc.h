@@ -217,6 +217,51 @@ struct Map3D_W
 #define INJ_14_4000					0x4000
 #define INJ_15_8000					0x8000
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// wMUTD1_BitMap_FAA
+
+#define FAA_0_01 					0x01 
+#define FAA_1_REAR_O2				0x02
+#define FAA_2_REAR_O2_B2			0x04
+#define FAA_3_IMMO					0x08
+#define FAA_4_CLOSED_LOOP			0x10
+#define FAA_5_20					0x20
+#define FAA_6_40					0x40
+#define FAA_7_HIGH_IGN				0x80
+#define FAA_8_100					0x100
+#define FAA_9_WARMUP_RETARD			0x200
+#define FAA_10_KNOCK_LIGHT			0x400
+#define FAA_11_IGN_ADV				0x800
+#define FAA_12_EVAP					0x1000
+#define FAA_13_2000					0x2000
+#define FAA_14_HEATER_O2			0x4000
+#define FAA_15_8000					0x8000
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// timeEvents
+// huge_timeEvents
+
+#define EVT_0_25ms 					0x01 
+#define EVT_1_50ms					0x02
+#define EVT_2_100ms					0x04
+#define EVT_3_500ms					0x08
+#define EVT_4_1s					0x10
+#define EVT_5_2s					0x20
+#define EVT_6_200ms					0x40
+#define EVT_7_40ms					0x80
+#define EVT_8_100					0x100
+#define EVT_9_200					0x200
+#define EVT_10_400					0x400
+#define EVT_11_800					0x800
+#define EVT_12_1000					0x1000
+#define EVT_13_2000					0x2000
+#define EVT_14_4000					0x4000
+#define EVT_15_8000					0x8000
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -238,6 +283,7 @@ struct Map3D_W
 #define sub_21E14										((u16(*)(u16))0x21E14)
 #define SHLR8											((byte(*)(u32))0x864)
 #define Mult_R4_65536									((u32(*)(u16))0x876)
+#define SwapBytes16										((u16(*)(u16))0x8B8)
 
 #define Add_Lim_FFFF									((u32(*)(u16,u16))0x500)
 #define Add_Lim_FFFFFFFF								((u32(*)(u32,u32))0x51C)
@@ -431,6 +477,7 @@ struct TM32
 #define INCLIM(v) { if (v < 0xFFFF) {v += 1;}; }
 #define DECLIM(v) { if (v != 0) {v -= 1;}; }
 #define INCLIM80(v) { if (v < 0x80) {v += 1;}; }
+#define INC32(v) { if ((v+=1) == 0) {v -= 1;}; }
 
 
 #define ABSDIF(a, b) (((a) >= (b)) ? ((a) - (b)) : ((b) - (a)))
