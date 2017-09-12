@@ -479,8 +479,8 @@ struct TM32
 #define INCLIM80(v) { if (v < 0x80) {v += 1;}; }
 #define INC32(v) { if ((v+=1) == 0) {v -= 1;}; }
 
-
-#define ABSDIF(a, b) (((a) >= (b)) ? ((a) - (b)) : ((b) - (a)))
+//#define ABSDIF(a, b) (((a) >= (b)) ? ((a) - (b)) : ((b) - (a)))
+inline u32 ABSDIF(u32 a, u32 b) { return (a >= b) ? (a - b) : (b - a); }
 
 #define TRG(f, m, v, l, h) { if (f & m) { if (v <= l) { CLR(f, m);	}; } else {	if (v > h) { SET(f, m);	};};}
 
