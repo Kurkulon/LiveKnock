@@ -22,6 +22,7 @@
 #define sub_21ACC					((u16(*)(u16))0x21ACC)
 #define sub_21B50					((u16(*)(u16))0x21B50)
 
+#define COM_MUT2B_sub_895C			((void(*)(u16))0x895C)
 
 
 //#define CRANK75_Knock_sub_24AC0		((void(*)(void))0x24AC0)
@@ -78,7 +79,7 @@ static void CRANK75_Knock_sub_24AC0();
 static void CRANK75_MainUpdateTiming();
 static void CRANK75_sub_232A0();
 static bool CRANK75_sub_24636();
-static void CRANK75_sub_2467E();
+static void CRANK75_sub_2467E(u16 v);
 static void CRANK75_sub_260B8();
 static void CRANK75_sub_2941C();
 static void CRANK75_sub_2B168();
@@ -95,7 +96,7 @@ static void CRANK5_sub_2504A();
 static void CRANK5_sub_2506E();
 static void CRANK5_sub_21A04();
 static void CRANK5_sub_29438();
-static void CRANK5_sub_29558();
+static void CRANK5_sub_29558(u16 v1, u16 v2);
 static void CRANK5_sub_29750();
 static void CRANK5_sub_2A684();
 static void CRANK5_sub_2AAA2();
@@ -121,6 +122,7 @@ static void Ign_handler(u16 v);
 static u16 Get_2E_2F_2G_status();
 
 static void Pulse_TIO2_E_F_G_out_1(u16 mask);
+static void sub_BED8(u16 mask);
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -339,7 +341,84 @@ static u16 Get_2E_2F_2G_status()
 
 static void Pulse_TIO2_E_F_G_out_1(u16 mask)
 {
+	__disable_irq();
 
+	if (mask & 1)
+	{
+		reg_GR2E = reg_TCNT2A + 2;
+
+		CLR(reg_TSR2A, 0x10);
+
+		reg_TIOR2C = reg_TIOR2C & 0xF8 | 1;
+
+		while(ZRO(reg_TSR2A, 0x10)) ;
+	};
+
+	if (mask & 2)
+	{
+		reg_GR2F = reg_TCNT2A + 2;
+
+		CLR(reg_TSR2A, 0x20);
+
+		reg_TIOR2C = reg_TIOR2C & 0x8F | 0x10;
+
+		while(ZRO(reg_TSR2A, 0x20)) ;
+	};
+
+	if (mask & 4)
+	{
+		reg_GR2G = reg_TCNT2A + 2;
+
+		CLR(reg_TSR2A, 0x40);
+
+		reg_TIOR2D = reg_TIOR2D & 0xF8 | 1;
+
+		while(ZRO(reg_TSR2A, 0x40)) ;
+	};
+
+	__enable_irq();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void sub_BED8(u16 mask)
+{
+	__disable_irq();
+
+	if (mask & 1)
+	{
+		reg_GR2E = reg_TCNT2A + 2;
+
+		CLR(reg_TSR2A, 0x10);
+
+		reg_TIOR2C = reg_TIOR2C & 0xF8 | 2;
+
+		while(ZRO(reg_TSR2A, 0x10)) ;
+	};
+
+	if (mask & 2)
+	{
+		reg_GR2F = reg_TCNT2A + 2;
+
+		CLR(reg_TSR2A, 0x20);
+
+		reg_TIOR2C = reg_TIOR2C & 0x8F | 0x20;
+
+		while(ZRO(reg_TSR2A, 0x20)) ;
+	};
+
+	if (mask & 4)
+	{
+		reg_GR2G = reg_TCNT2A + 2;
+
+		CLR(reg_TSR2A, 0x40);
+
+		reg_TIOR2D = reg_TIOR2D & 0xF8 | 2;
+
+		while(ZRO(reg_TSR2A, 0x40)) ;
+	};
+
+	__enable_irq();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -596,13 +675,13 @@ static void CRANK75_sub_232A0()
 
 	CLR(word_FFFF8C5E, 1);
 	
-	u32 r4;
+//	u32 r4;
 
 	if (timer_FFFF8594 == 0)
 	{
 		word_FFFF8C5C = 0;
 
-		r4 = 0;
+		CRANK75_sub_2467E(0);
 	}
 	else
 	{
@@ -621,19 +700,19 @@ static void CRANK75_sub_232A0()
 		{
 			word_FFFF8C5C = 0;
 
-			r4 = 1;
+			CRANK75_sub_2467E(1);
 		}
 		else if ((word_FFFF8C5C & 2) == 0)
 		{
 			if (CRANK75_sub_24636())
 			{
 				word_FFFF8C5C = 0;
-				r4 = 1;
+				CRANK75_sub_2467E(1);
 			}
 			else
 			{
 				word_FFFF8C5C = 1;
-				r4 = 1;
+				CRANK75_sub_2467E(1);
 			};
 		}
 		else
@@ -643,7 +722,7 @@ static void CRANK75_sub_232A0()
 			if ((r8 > 6250 && timingAdvInternal1 <= 202 && !CRANK75_sub_24636()) || (r2 & r9) || r2 < 326)
 			{
 				word_FFFF8C5C = 0;
-				r4 = 1;
+				CRANK75_sub_2467E(1);
 			}
 			else
 			{
@@ -1014,6 +1093,23 @@ static bool CRANK75_sub_24636()
 	u32 r1 = (crankHT_x_4us >= crankHT_x_4us_2) ? (crankHT_x_4us - crankHT_x_4us_2) : (crankHT_x_4us_2 - crankHT_x_4us);
 
 	return r1 >= Mul_Fix8_Lim_FFFF(crankHT_x_4us, word_1792/*0.125*256*/);
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void CRANK75_sub_2467E(u16 v)
+{
+	if (v == 1)
+	{
+		filtred_crankHT_x_4us = crankHT_x_4us;
+		Pulse_TIO2_E_F_G_out_1(timerMask_1_2E_2F);
+	};
+
+	state_FFFF8C60 = 0;
+	word_FFFF8C24 = 0;
+	timingAdvInternal1 = 202;
+	timingAdvInternal2 = 202;
+	timingAdvScaled = 160;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1545,23 +1641,81 @@ static void CRANK75_MainUpdateTiming()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static u16 CRANK75_FiltrCrankHT_2494E(u16 v1, u16 v2)
+static u16 CRANK75_FiltrCrankHT_2494E(u16 r1, u16 r2)
 {
-	return 0;
+	if (ZRO(word_FFFF8C5C, 1) || ZRO(word_FFFF8C5C, 2) || (word_FFFF8C5C & 0x20) || r1 >= 7500)
+	{
+		return r1;
+	};
+
+	u32 r8 = r1 >> 6;
+
+	if (r1 >= r2)
+	{
+		// loc_249BE
+
+		u32 r13 = r1 - r2;
+
+		if (r13 >= r8)
+		{
+			r1 = Add_Lim_FFFF(r1, Mul_R4_R5_Div_128_Into_R0(r13 - r8, word_1790/*128*/));
+		};
+	}
+	else
+	{
+		u32 r13 = r2 - r1;
+
+		if (r13 < r8)
+		{
+			r1 = Sub_Lim_0(r1, Mul_R4_R5_Div_128_Into_R0(r13 - r8, word_178E/*128*/));;
+		};
+	};
+
+	return r1;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static u16 CRANK75_Get_IgnCoilTime(u16 v)
+static u16 CRANK75_Get_IgnCoilTime(u16 r1)
 {
-	return 0;
+	u32 r2;
+
+	if ((word_FFFF8C5C & 0x0C) == 0x0C)
+	{
+		r2 = ignCoilTime_Fin;
+	}
+	else if (r1 < 4400)
+	{
+		r2 = ignCoilTime_1;
+	}
+	else
+	{
+		r2 = (r1 - 4400) >> 4;
+
+		if (timingAdvInternal1 > 202)
+		{
+			u32 r13 = Mul_Div(timingAdvInternal1 - 198, r1, 0x400);
+
+			r2 = MIN(r13, 0x100);
+		};
+
+		r2 += ignCoilTime_1;
+	};
+
+	return r2;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 static void CRANK75_Knock_sub_24AC0()
 {
-
+	word_FFFF8C52 = KNOCK_PRECOUNT_MAX_FFFF8C4A;
+	bMUTCE_KNOCK_PRECOUNT_2_FFFF8C50 = KNOCK_PRECOUNT_MAX_FFFF8C4A;
+	bMUTCD_KNOCK_PRECOUNT_1_FFFF8C4E = KNOCK_PRECOUNT_MAX_FFFF8C4A;
+	knock_null_FFFF8C58 = 0x8000;
+	bMUTCC_KNOCK_UB_FFFF8C56 = 0x8000;
+	bMUTCB_KNOCK_U_FFF8C54 = 0x8000;
+	KNOCK_REL_compare_to_10_FFFF8C5A = 0;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1822,8 +1976,10 @@ static void CRANK5_sub_24AF0()
 
 static void CRANK5_sub_2504A()
 {
-
-}
+	sub_BED8(0xFF);
+	state_FFFF8C60 = 0;
+	timerValue_1_2E_2F = reg_TCNT2A;
+}	
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -1847,7 +2003,7 @@ static void CRANK5_sub_2506E()
 
 static void CRANK5_SetIgnCoilTime_Fin()
 {
-
+	ignCoilTime_Fin = MIN(Mul_R4_R5_Div_128_Into_R0(crankHT_B, ignCoilTime_3), ignCoilTime_1);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -2723,28 +2879,88 @@ static void Update_Gen_G_output()
 
 static void SetIgnCoilChargeStartTime(u16 mask, u16 v)
 {
+	__disable_irq();
 
+	u32 r13 = v;
+
+	v -= reg_TCNT2A + 2;
+
+	if (v & 0x8000)
+	{
+		r13 = reg_TCNT2A + 2;
+	};
+
+	if (mask & 1) { reg_GR2E = r13; CLR(reg_TSR2A, 0x10); reg_TIOR2C = reg_TIOR2C & 0xF8 | 1; };
+	if (mask & 2) { reg_GR2F = r13; CLR(reg_TSR2A, 0x20); reg_TIOR2C = reg_TIOR2C & 0x8F | 0x10; };
+	if (mask & 4) { reg_GR2G = r13; CLR(reg_TSR2A, 0x40); reg_TIOR2D = reg_TIOR2D & 0xF8 | 1; };
+
+	__enable_irq();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 static void SetIgnSparkStartTime(u16 mask, u16 v)
 {
+	__disable_irq();
 
+	u32 r13 = v;
+
+	v -= reg_TCNT2A + 2;
+
+	if (v & 0x8000)
+	{
+		r13 = reg_TCNT2A + 2;
+	};
+
+	if (mask & 1) { reg_GR2E = r13; CLR(reg_TSR2A, 0x10); reg_TIOR2C = reg_TIOR2C & 0xF8 | 2; };
+	if (mask & 2) { reg_GR2F = r13; CLR(reg_TSR2A, 0x20); reg_TIOR2C = reg_TIOR2C & 0x8F | 0x20; };
+	if (mask & 4) { reg_GR2G = r13; CLR(reg_TSR2A, 0x40); reg_TIOR2D = reg_TIOR2D & 0xF8 | 2; };
+
+	__enable_irq();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void StartInjectSync(u16 v, u16 mask)
 {
+	u32 r13 = mask & 0xF;
 
+	r13 &= enInjMask;
+
+	r13 &= injectors_mask_FFFF8C72;
+
+	if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x30) // Random Misfire Detected
+	{
+		r13 &= injectors_misfire_mask;
+	};
+
+	SET(word_FFFF8B4E, 0x20);
+
+	injPW_final = v;
+	injPW_chnl = r13;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 void StartInjectAsync(u16 v, u16 mask)
 {
+	u32 r13 = mask & 0xF;
 
+	r13 &= enInjMask;
+
+	r13 &= injectors_mask_FFFF8C72;
+
+	if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x30) // Random Misfire Detected
+	{
+		r13 &= injectors_misfire_mask;
+	};
+
+	if (v != 0 && r13 != 0)
+	{
+		InjOpenStart(v, r13);
+	};
+
+	CLR(word_FFFF8B4E, 0x20);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -2895,21 +3111,132 @@ static u16 sub_2640E(u16 v)
 
 static void CRANK5_sub_21A04()
 {
+	u32 r13 = recieve_buffer_1_2;
 
+	if ((HIGHBAUDFLAG_FFFF93D8 & 1) && (r13 & 1) && (r13 & 0x20))
+	{
+		COM_MUT2B_sub_895C(0);
+	};
+
+	r13 = word_FFFF9A5E;
+
+	if ((HIGHBAUDFLAG_FFFF93D8 & 2) && (r13 & 1) && (r13 & 0x20))
+	{
+		COM_MUT2B_sub_895C(1);
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 static void CRANK5_sub_29438()
 {
+	CRANK5_sub_29558(Div_DW(crank_dt_ICR0AH_B, 4), 0);
 
+	CRANK5_sub_29750();
+
+	CRANK5_sub_2AC5C();
+
+	if (byte_1056/*0*/ != 0)
+	{
+		CRANK5_sub_2AEE4();
+	};
+
+	DECLIM(bMUTDE);
+
+	DECLIM(bMUTE0);
+
+	DECLIM(misfire_word_FFFF9072);
+	DECLIM(misfire_word_FFFF8FE4);
+	DECLIM(misfire_word_FFFF8FE6);
+	DECLIM(word_FFFF8FE8);
+	DECLIM(misfire_word_FFFF8FEA);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void CRANK5_sub_29558()
+static void CRANK5_sub_29558(u16 v1, u16 v2)
 {
+	null_crank_dt_ICR0AH_B_div_4_6 = null_crank_dt_ICR0AH_B_div_4_5;
+	null_crank_dt_ICR0AH_B_div_4_5 = null_crank_dt_ICR0AH_B_div_4_4;
+	null_crank_dt_ICR0AH_B_div_4_4 = null_crank_dt_ICR0AH_B_div_4_3;
+	null_crank_dt_ICR0AH_B_div_4_3 = null_crank_dt_ICR0AH_B_div_4_2;
 
+	null_crank_dt_ICR0AH_B_div_4_2 = crank_dt_ICR0AH_B_div_4;
+
+	crank_dt_ICR0AH_B_div_4 = v1;
+
+	misfire_word_FFFF8FE2 = misfire_word_FFFF8FE0;
+	misfire_word_FFFF8FE0 = misfire_word_FFFF8FDE;
+	misfire_word_FFFF8FDE = misfire_word_FFFF8FDC;
+	misfire_word_FFFF8FDC = misfire_word_FFFF8FDA;
+	misfire_word_FFFF8FDA = misfire_word_FFFF8FD8;
+	misfire_word_FFFF8FD8 = misfire_word_FFFF8FD6;
+	misfire_word_FFFF8FD6 = misfire_word_FFFF8FD4;
+	misfire_word_FFFF8FD4 = word_FFFF8FD2;
+	word_FFFF8FD2 = v2;
+
+
+	u16 r13 = (byte_1056/*0*/ != 0 && (flags_FFFF8FFC & 0x80)) ? word_FFFF8FD2 : crank_dt_ICR0AH_B_div_4;
+
+	word_FFFF8F60 = Div_DW(0x8000000, r13);
+
+	u16 r2 = word_FFFF8F62;
+
+	u32 **p = (byte_1056/*0*/ != 0 && (flags_FFFF8FFC & 0x80)) ? &ENGINE_MAIN_VARIABLES_DIM_off_9198->_952_dword_FFFF8124 : &ENGINE_MAIN_VARIABLES_DIM_off_9198->_872_bMUTD9;
+
+	r13 = Div_65536_R(*p[stroke_FFFF8F22]);
+
+	word_FFFF8F62 = Mul_Div(word_FFFF8F60, r13, 0x8000);
+
+	misfire_word_FFFF8F6C = misfire_word_FFFF8F6A;
+	misfire_word_FFFF8F6A = misfire_word_FFFF8F68;
+	misfire_word_FFFF8F68 = misfire_word_FFFF8F66;
+	misfire_word_FFFF8F66 = bMUTD6;
+
+	r13 = word_FFFF8F62;
+
+	bool r1;
+
+	if (r1 = (r13 >= r2))
+	{
+		r13 -= r2;
+	}
+	else
+	{
+		r13 = r2 - r13;
+	};
+
+	if (r13 >= 0x7FFF)
+	{
+		r13 = 0x7FFF;
+	};
+
+	word_FFFF9992 = r13 = Div_DW(Mul32_Fix8(r13, word_FFFF8F60), misfire_word_FFFF8F78);
+
+	if (r1 || r13 == 0)
+	{
+		bMUTD6 = (r13 < word_1CCC) ? r13 : word_1CCC;
+	}
+	else
+	{
+		r13 = -r13;
+
+		bMUTD6 = (r13 >= word_1CCA) ? r13 : word_1CCA;
+	};
+
+	misfire_word_FFFF8F72 = misfire_word_FFFF8F70;
+	misfire_word_FFFF8F70 = bMUTD7;
+
+	r13 = bMUTD6 - misfire_word_FFFF8F68;
+
+	if (r13 & 0x8000)
+	{
+		bMUTD7 = (r13 >= word_1CCA) ? r13 : word_1CCA;
+	}
+	else
+	{
+		bMUTD7 = (r13 < word_1CCC) ? r13 : word_1CCC;
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -2928,9 +3255,37 @@ static void CRANK5_sub_2A684()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void CRANK5_sub_2AAA2()
+static void CRANK5_sub_2AAA2(u16 v)
 {
+	if (v & 1)
+	{
+		word_FFFF9000 = word_1C8A;
 
+		word_FFFF9000 = 0;
+		word_FFFF9014 = 0;
+		word_FFFF9012 = 0;
+		word_FFFF9010 = 0;
+		word_FFFF901A = 0;
+		word_FFFF9018 = 0;
+		word_FFFF9016 = 0;
+		word_FFFF9020 = 0;
+		word_FFFF901E = 0;
+		word_FFFF901C = 0;
+		word_FFFF9026 = 0;
+		word_FFFF9024 = 0;
+		word_FFFF9022 = 0;
+
+		if (byte_1026/*0*/ != 0)
+		{
+			word_FFFF9332 = 0;
+			word_FFFF9334 = 0;
+			word_FFFF9336 = 0;
+			word_FFFF9338 = 0;
+		};
+
+		CLR(word_FFFF8F7A, 0x80);
+		SET(word_FFFF900C, 0x40);
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

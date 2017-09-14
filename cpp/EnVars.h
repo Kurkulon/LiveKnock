@@ -360,10 +360,10 @@ struct EnVars //ENGINE_MAIN_VARIABLES_DIM_off_9198
 	u16* _860_word_FFFF997C;
 	u16* _864_word_FFFF995E;
 	u16* _868_off_8FA4;
-	u16* _872_bMUTD9;
-	u16* _876_bMUTD8;
-	u16* _880_bMUTD9;
-	u16* _884_bMUTD8;
+	u32* _872_bMUTD9;
+	u32* _876_bMUTD8;
+	u32* _880_bMUTD9;
+	u32* _884_bMUTD8;
 	u32* _888_dword_FFFF8F40;
 	u32* _892_dword_FFFF8F3C;
 	u32* _896_dword_FFFF8F40;
