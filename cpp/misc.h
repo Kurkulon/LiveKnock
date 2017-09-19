@@ -38,7 +38,7 @@ struct Map3D_B
 	{
 		struct
 		{
-			i8 data[8];
+			u8 data[8];
 		} m2d;
 
 		struct
@@ -48,7 +48,7 @@ struct Map3D_B
 
 			byte rowLen;
 
-			i8 data[3];
+			u8 data[3];
 		} m3d;
 	};
 };
