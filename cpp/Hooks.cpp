@@ -7,6 +7,12 @@
 #include "ram.h"
 #include "misc.h"
 
+#define CEL7_692E							((Axis*)0x692E)
+
+#define CORFUELAIR_33A6						((Map3D_B *)0x33A6)
+
+#define F500_Update_Air_Temp_Scaled	((void(*)(void))0x1014A)
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 inline u16 Lookup_HiIgnMap()
@@ -51,6 +57,14 @@ extern "C" void FU03_HI_LO_Octan()
 	Table_Lookup_Axis(LOAD9_676C);
 
 	AFR_OctanInt = (fixAFR) ? AFR(14.7) : interpolate_r4_r5_r6(Table_Lookup_byte_2D_3D(HIGHOKTF_7A88[hiFuelMapIndex&7]), Query_byte_2D_3D_Table(LowOctFMp_7AA8), wMUT27_Octane_Number);
+
+														//	8,  33,  49,  63,  78,  96, 125				
+	k_InAirTemp = Table_Lookup_byte_2D_3D(&kAirMapRAM);	// 143, 136, 132, 128, 125, 122, 118
+															//			, 1.252, 1.192, 
+
+	//EVO
+	//   8,  33,  49,  63,  78,  96, 125, 155
+	// 158, 143, 135, 129, 122, 115, 106, 106
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

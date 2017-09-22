@@ -67,7 +67,7 @@ delimiter = ____________________________________________________________________
 
 ##################################################################################################
 
-compiler_options = $(debug_compiler_options) -NOLOGO -CPu=sh2 -RTnext -ENAble_register -macsave=0 -Goptimize
+compiler_options = $(debug_compiler_options) -NOLOGO -CPu=sh2 -RTnext -ENAble_register -macsave=0
 
 ##################################################################################################
 

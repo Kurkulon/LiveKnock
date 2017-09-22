@@ -464,7 +464,7 @@ void F500_Coolant_Calc1_sub_FF2C()
 
 	u32 r2 = map_Coolant_Temp_Scaling->data[map_Coolant_Temp_Scaling->len - 1 - t1_unk_1C08];
 
-	if (wMUT71_Sensor_Error & (0x10|MUT71_0_COOLANT))
+	if (wMUT71_Sensor_Error & (MUT71_4_bit|MUT71_0_COOLANT))
 	{
 		r1 = map_Coolant_Temp_Scaling->data[map_Coolant_Temp_Scaling->len - 1 - coolTemp_sensor_err_val];
 	};
@@ -523,8 +523,13 @@ void F500_Update_IAT_Sensor()
 	F500_Update_Air_Temp_Scaled();
 	
 	Table_Lookup_Axis(CEL7_692E);
-													
-	k_InAirTemp = Table_Lookup_byte_2D_3D(CORFUELAIR_33A6);
+														//		 8,  33,  49,  63,  78,  96, 125				
+	k_InAirTemp = Table_Lookup_byte_2D_3D(CORFUELAIR_33A6);	// 143, 136, 132, 128, 125, 122, 118
+															//			, 1.252, 1.192, 
+
+	//EVO
+	//   8,  33,  49,  63,  78,  96, 125, 155
+	// 158, 143, 135, 129, 122, 115, 106, 106
 
 	if (timer_down_TXFLAG3_FFFF8574 == 0 && (SPEED_FLAGS & 0x400))
 	{
@@ -779,17 +784,20 @@ void F500_MAP_Coolant_Calcs()
 
 		if (fuelTrim_FFFF8AE4 < 0x80) { fuelTrim_FFFF8AE4 = 0x80; };
 
-		if (F500_sub_10820() && fuelTrim_FFFF8AE4 == 0x80 && (timeEvents & EVT_1_50ms))
+		if (F500_sub_10820() && fuelTrim_FFFF8AE4 == 0x80)
 		{
-			word_FFFF8AE2 = Sub_Lim_0(word_FFFF8AE2, t1_unk_20AE/*6*/);
+			if (timeEvents & EVT_1_50ms)
+			{
+				word_FFFF8AE2 = Sub_Lim_0(word_FFFF8AE2, t1_unk_20AE/*6*/);
+			};
 		}
 		else
 		{
 			word_FFFF8AE2 = 0xFF;
 		};
 	};
-
-	enrichCoolant = interpolate_r4_r5_r6(enrichCoolant, Table_Lookup_byte_2D_3D(AIRTEMPCOMPAFR1_45D8), word_FFFF8AE2);
+																													//cool -32, -18, -10,  -8,   7,  20,  34,  50,  77, 82
+	enrichCoolant = interpolate_r4_r5_r6(enrichCoolant, Table_Lookup_byte_2D_3D(AIRTEMPCOMPAFR1_45D8), word_FFFF8AE2); //  189, 178, 169, 166, 158, 141, 137, 133, 128, 128
 
 	if ((wMUT1E_MAF_RESET_FLAG & MAP_error) == 0)
 	{

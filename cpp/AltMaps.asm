@@ -46,20 +46,22 @@ IG04_GetLoadCorrectedDeltaTPS					.EQU	H'181DC
 RPM21_6788_IGN									.EQU	H'6788
 Table_Lookup_Axis								.EQU	H'CC6
 LOAD12_67BC_IGN									.EQU	H'67BC
-RT_FLAG1_FFFF8888		.EQU	H'FFFF8888
+RT_FLAG1_FFFF8888								.EQU	H'FFFF8888
 LowIgn_7C68										.EQU	H'7C68
 Query_byte_2D_3D_Table							.EQU	H'DE0
 LOWOCTIGNEGR_7AC8								.EQU	H'7AC8
 ZERO_8_IGNITION_FLAGS							.EQU	H'FFFF8A0C
 HIOCTIGNEGR_38CA								.EQU	H'38CA
-Add_Lim_FFFF							.EQU	H'500
+Add_Lim_FFFF									.EQU	H'500
 egrLowOctIgn									.EQU	H'FFFF8BC0
 egrHighOctIgn									.EQU	H'FFFF8BC2
 interpolate_r4_r5_r6							.EQU	H'B16
 octanEgrIgnTiming								.EQU	H'FFFF8BC8
-Sub_Lim_0								.EQU	H'F0C
-Lim_FF									.EQU	H'590
+Sub_Lim_0										.EQU	H'F0C
+Lim_FF											.EQU	H'590
 ignition_FFFF8BC4								.EQU	H'FFFF8BC4
+axisIndex_10_CoolTempSc							.EQU	H'FFFF8848
+axisIndex_7_InAirTemp							.EQU	H'FFFF8852
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	.SECTION    B_FFFF851C,DATA, LOCATE=H'FFFF851C
@@ -134,6 +136,19 @@ _frameCount:		.RES.L      1					;	.EQU H'FFFF8462
 	.SECTION C_19454, CODE, LOCATE=H'19454
 	
 		.DATA.L		_Hook_ForcedIdleRPM                                    
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+;k_InAirTemp
+
+	.SECTION C_1011C, CODE, LOCATE=H'1011C
+	
+			nop   	                                                        
+			nop   	                                                        
+			nop   	                                                        
+			nop   	                                                        
+			nop   	                                                        
+			nop   	                                                        
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -311,7 +326,50 @@ rpmTimeRAM .EQU rpmTimeData + RAM - ROM
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	.EXPORT		_hiFuelMapRAM, _hiIgnMapRAM, _veMapRAM, _rpmTimeRAM
+			.align 4
+
+			.DATA.W		H'FFFF
+			
+enrichCoolantMap:           
+
+			.DATA.B 2                                                    
+			.DATA.B 0                   
+                                                                            
+            .DATA.L axisIndex_10_CoolTempSc
+            
+enrichCoolantMapData:
+            
+            .DATA.B  189, 178, 169, 166, 158, 141, 137, 133, 128, 128
+
+enrichCoolantMapRAM		.EQU enrichCoolantMap + RAM - ROM
+enrichCoolantMapDataRAM .EQU enrichCoolantMapData + RAM - ROM
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+			.align 4
+
+			.DATA.W		H'FFFF
+
+kAirMap:
+			.DATA.W 	H'300                                                   
+			.DATA.L 	_axis_fu_RPM
+			.DATA.L 	axisIndex_7_InAirTemp
+			.DATA.B 	14
+kAirMapData:
+			.DATA.B 	157, 157, 157, 157, 157, 157, 157, 157, 157, 157, 157, 157, 157, 157
+			.DATA.B 	142, 142, 142, 142, 142, 142, 142, 142, 142, 142, 142, 142, 142, 142
+			.DATA.B 	134, 134, 134, 134, 134, 134, 134, 134, 134, 134, 134, 134, 134, 134
+			.DATA.B 	128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128
+			.DATA.B 	122, 122, 122, 122, 122, 122, 122, 122, 122, 122, 122, 122, 122, 122
+			.DATA.B 	115, 115, 115, 115, 115, 115, 115, 115, 115, 115, 115, 115, 115, 115
+			.DATA.B 	106, 106, 106, 106, 106, 106, 106, 106, 106, 106, 106, 106, 106, 106
+			
+kAirMapRAM		.EQU kAirMap + RAM - ROM
+kAirMapDataRAM	.EQU kAirMapData + RAM - ROM
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	.EXPORT		_hiFuelMapRAM, _hiIgnMapRAM, _veMapRAM, _rpmTimeRAM, _enrichCoolantMapRAM, _kAirMapRAM
 
 	.SECTION    sec_hiFuelMapRAM,	DATA, LOCATE=hiFuelMapRAM
 	
@@ -328,6 +386,18 @@ _veMapRAM:			.RES.B      1
 	.SECTION    sec_rpmTimeRAM,		DATA, LOCATE=rpmTimeRAM
 
 _rpmTimeRAM:		.RES.B      1
+
+	.SECTION    sec_enrichCoolantMapRAM, DATA, LOCATE=enrichCoolantMapRAM
+
+_enrichCoolantMapRAM:		.RES.w      5
+							.RES.B      1
+_enrichCoolantMapDataRAM:	.RES.B      1
+
+	.SECTION    sec_kAirMapRAM,		DATA, LOCATE=kAirMapRAM
+
+_kAirMapRAM:		.RES.w      5
+					.RES.B      1
+_kAirMapDataRAM:	.RES.B      1
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

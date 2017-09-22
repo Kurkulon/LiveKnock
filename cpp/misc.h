@@ -424,6 +424,9 @@ extern u16	veMapRAM[];
 extern u16	rpmTimeRAM[];
 extern const u16 hiIgnMapData[];
 
+extern Map3D_B enrichCoolantMapRAM;
+extern Map3D_B kAirMapRAM;
+
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 struct TM32
