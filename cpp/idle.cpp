@@ -61,6 +61,7 @@
 #define IDLERPMDRV_7A08						((Map3D_B**)0x7A08)
 #define IDLERPMNEYT_7A28					((Map3D_B**)0x7A28)
 #define IDLERPMNEYTACOFF_7A48				((Map3D_B**)0x7A48)
+#define unk0067ICSVACOFFDRV1_7A68			((Map3D_B**)0x7A68)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -145,7 +146,7 @@ static void AA05_sub_1B178();
 static void AA05_sub_1B196();
 static void AA05_sub_1B260();
 static void AA05_sub_1B282();
-static void AA05_sub_1B470();
+static u16 AA05_sub_1B470();
 static u16 AA05_sub_1B4C2();
 static bool AA05_sub_1B588();
 static u16  AA05_sub_1B652();
@@ -1110,9 +1111,24 @@ static void AA05_sub_1B282()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void AA05_sub_1B470()
+static u16 AA05_sub_1B470()
 {
+	u32 r13;
 
+	if (ZRO(RT_FLAG1_FFFF8888, RT_5_ALWAYS_1))
+	{
+		r13 = Query_byte_2D_3D_Table(unk0067ICSVACOFFDRV1_7A68);
+	}
+	else if (SPEED_FLAGS & SPD_2_ALWAYS_0)
+	{
+		r13 = Query_byte_2D_3D_Table(IDLERPMNEYTACOFF_7A48);
+	}
+	else
+	{
+		r13 = Table_Lookup_byte_2D_3D(ICSVACOFFDRV_3ADC);
+	};
+
+	return word_FFFF8CC0 = r13 + word_FFFF8CE0;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1501,6 +1517,8 @@ static void AA05_sub_1BD6C()
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// no call
 
 static void AA05_sub_1BDA0()
 {
