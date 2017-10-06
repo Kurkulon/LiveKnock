@@ -484,6 +484,7 @@ struct TM32
 
 //#define MIN(a,b) (((a) < (b)) ? (a) : (b))
 inline u32 MIN(u32 a, u32 b) { return (a < b) ? a : b; }
+inline u32 MAX(u32 a, u32 b) { return (a >= b) ? a : b; }
 
 //#define ABSDIF(a, b) (((a) >= (b)) ? ((a) - (b)) : ((b) - (a)))
 inline u32 ABSDIF(u32 a, u32 b) { return (a >= b) ? (a - b) : (b - a); }
