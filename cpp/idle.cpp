@@ -210,14 +210,52 @@ static u16 sub_220B4();
 
 static void SysInit_NVRAM_18F80()
 {
+	ufix8_RAM_VAR_1936_FFFF80BE = word_1936/*0x8D00*/;
 
+	ufix8_MUT0A_FFFF80BC = word_1936/*0x8D00*/;
+	ufix8_MUT08_Coolant_Temperature = word_1936/*0x8D00*/;
+	wMUT22 = 0x80;
+
+	wMUT16_ISC_Steps = SwapBytes16(0);
+
+	word_FFFF825C = ufix8_MUT08_Coolant_Temperature;
+	word_FFFF825E = ufix8_MUT0A_FFFF80BC;
+	word_FFFF8260 = ufix8_RAM_VAR_1936_FFFF80BE;
+	word_FFFF8262 = word_FFFF80C0;
+	word_FFFF8264 = word_FFFF80C2;
+	word_FFFF8266 = word_FFFF80C4;
+	word_FFFF825A = 0;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 static void SysInit_sub_19014()
 {
+	if (wMUT22 & 0xA0)
+	{
+		POTEPINS1011_FFFF80C8 = 3;
+		wMUT16_ISC_Steps = SwapBytes16(0);
+		wMUT22 = 0x80;
+	}
+	else
+	{
+		if (wMUT16_ISC_Steps == some_iscstep_const_1982)
+		{
+			POTEPINS1011_FFFF80C8 = 3;
+		};
 
+		wMUT22 = 0x40;
+	};
+
+	word_FFFF86C4 = 1;
+
+	u16_Coolant_Temperature = SHLR8(ufix8_MUT08_Coolant_Temperature);
+
+	SET(u16_FLAGS_FFFF8C96, 1);
+
+	AA05_Init_sub_19E2A();
+
+	word_FFFF854A = 0xFFFF;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

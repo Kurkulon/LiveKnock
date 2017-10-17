@@ -19,46 +19,38 @@
 
 #define ENGINE_MAIN_VARIABLES_DIM_off_9198		((EnVars*)0x9198)
 
+#define sub_21F4E			((u16(*)(u16))0x21F4E)
 
-//#define CEL8_685C							((Axis*)0x685C)
-//#define CEL9_6876							((Axis*)0x6876)
-//#define CEL10_68B2							((Axis*)0x68B2)
-//#define CEL12_68D0							((Axis*)0x68D0)
-//#define CEL8_6D98							((Axis*)0x6D98)
-//#define CEL9_75BA							((Axis*)0x75BA)
-//#define BAR5_6D66							((Axis*)0x6D66)
-//#define LOAD9_65C0							((Axis*)0x65C0)
-//#define RPM11_64AC							((Axis*)0x64AC)
-//#define LOAD9_65F8							((Axis*)0x65F8)
-//#define mapInletAirTemp_Scaling				((Axis*)0x9B82)
-//#define CEL7_692E							((Axis*)0x692E)
-//#define map_Coolant_Temp_Scaling			((Axis*)0x99A8)
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-//#define AFRRPM_4C1A							((Map3D_B *)0x4C1A)
-//#define AIRTEMPCOMPAFR1_33C4				((Map3D_B *)0x33C4)
-//#define AIRTEMPCOMPAFR1_45D8				((Map3D_B *)0x45D8)
-//#define LOADAFR_33B4						((Map3D_B *)0x33B4)
-//#define TPS_2D_3ED6							((Map3D_B *)0x3ED6)
-//#define MAP_2D_3EE8							((Map3D_B *)0x3EE8)
-//#define byte_9B00							((Map3D_B *)0x9B00)
-//#define CORFUELAIR_33A6						((Map3D_B *)0x33A6)
-//#define COOLTEMSCAL_98FA					((Map3D_B *)0x98FA)
+
+#define RPM9_6AB4							((Axis*)0x6AB4)
+
+
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+#define unk018_3D90							((Map3D_B *)0x3D90)
+
+
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 static void SysInit_sub_1BEFE();
 static void BC06_root_sub_1BF7A();
 static void BC06_sub_1C0BC();
-static void BC06_sub_1C0EA();
+static bool BC06_sub_1C0EA();
 static void BC06_sub_1C11C();
 static bool BC06_sub_1C14A();
 static void BC06_sub_1C5EC();
 static void BC06_sub_1C68A();
-static void BC06_sub_1C8C4();
-static void BC06_sub_1CACC();
+static bool BC06_sub_1C8C4();
+static bool BC06_sub_1CACC();
 static void BC06_sub_1CAFE();
-static void BC06_sub_1CB66();
+static u16 BC06_sub_1CB66();
 static void BC06_sub_1CB88();
 static void BC06_sub_1CDE6();
 static void BC06_sub_1CED4();
@@ -116,21 +108,48 @@ static void SysInit_sub_1BEFE()
 
 static void BC06_root_sub_1BF7A()
 {
+	BC06_sub_1C0BC();
+	BC06_sub_1C11C();
+	BC06_sub_1C5EC();
 
+	if (byte_1040 != 0)
+	{
+		BC06_sub_1D42C();
+	};
+
+	BC06_sub_1D628();
+	BC06_EGR_sub_1D6D0();
+	BC06_sub_1DC08();
+	BC06_sub_1E0EC();
+	BC06_sub_1E22C();
+	BC06_sub_1E240();
+	BC06_Nop8();
+	BC06_sub_1E260();
+	BC06_sub_1E2A8();
+	BC06_Nop9();
+	BC06_sub_1E3FC();
+	BC06_sub_1E42C();
+	BC06_sub_1E5B0();
+	BC06_sub_1EB0C();
+
+	if(bMUTD2_FBA_MAF_MAP_FLAG & 0x40)
+	{
+		BC06_sub_1D49E();
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 static void BC06_sub_1C0BC()
 {
-
+	WFLAG(wMUT9A_Ligths_Bit_Array, 0x80, BC06_sub_1C0EA());
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void BC06_sub_1C0EA()
+static bool BC06_sub_1C0EA()
 {
-
+	return ZRO(wMUT1E_MAF_RESET_FLAG, STALL) || (MUT_CMD_0 & 2);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -153,7 +172,6 @@ static bool BC06_sub_1C14A()
 		r6 = 1;
 		word_FFFF860C = word_2248/*20*/;
 	};
-
 	
 	if (ZRO(RT_FLAG1_FFFF8888 | RT_FLAG1_COPY_FFFF888A, AC_SWITCH) && word_FFFF860C == 0)
 	{
@@ -286,28 +304,116 @@ static bool BC06_sub_1C14A()
 
 static void BC06_sub_1C5EC()
 {
+	word_FFFF8D24 = wMUT4A_Purge_Control_Duty;
 
+	if (wMUTD1_BitMap_FAA & FAA_12_EVAP)
+	{
+		BC06_sub_1C68A();
+		BC06_sub_1CAFE();
+
+		u32 r1 = BC06_sub_1CB66();
+
+		if ((wMUT1E_MAF_RESET_FLAG & STALL) && ((MUT_CMD_0 & 4) || (MUT_CMD_1 & 8)))
+		{
+			r1 = 0xFF;
+		};
+
+		if (ZRO(flags_FFFF92C0, 1))
+		{
+			u32 r2 = r1 = sub_21F4E(r1);
+
+			__disable_irq();
+
+			wMUT4A_Purge_Control_Duty = MIN(r1, 0xFF);
+
+			word_FFFF8D20 = word_FFFF8D1E;
+
+			__enable_irq();
+		};
+	}
+	else
+	{
+		wMUT4A_Purge_Control_Duty = 0;
+	};
+
+	word_FFFF87C0 = 0;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 static void BC06_sub_1C68A()
 {
+	u32 r1 = 0;
 
+	TRG(word_FFFF8D1E, 8, MUT21_RPM_x125div4, word_1A72, word_1A70);
+
+	TRG(word_FFFF8D1E, 2, wMUT1C_ECU_Load, word_1A6C, word_1A6A);
+
+	Table_Lookup_Axis(RPM9_6AB4);
+
+	u32 r13 = Table_Lookup_byte_2D_3D(unk018_3D90);
+
+	TRG(word_FFFF8D1E, 4, ECU_Load_1, Mul_Fix8_Lim_FFFF(r13, word_1A6E), r13);
+	
+	CLR(word_FFFF8D1E, 0x800);
+
+	if (ZRO(wMUT1E_MAF_RESET_FLAG, FUEL_CUT))
+	{
+		word_FFFF8600 = word_1DA0;
+	};
+
+	if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x2000)
+	{
+		WFLAG(Bitmap_Store_I_FFFF8CFE, 0x20, (Bitmap_Store_I_FFFF8CFE & 0x40));
+
+		WFLAG(Bitmap_Store_I_FFFF8CFE, 0x40, (Bitmap_Store_F_FFFF91B0 & 8) && (word_FFFF89E8 & 0xEF));
+	}
+	else
+	{
+		CLR(Bitmap_Store_I_FFFF8CFE, 0x60);
+	};
+
+	if (BC06_sub_1C8C4())
+	{
+		r1 = 0x20;
+	}
+	else if (BC06_sub_1CACC())
+	{
+		r1 = 0x40;
+	};
+
+	word_FFFF8D1E = word_FFFF8D1E & ~0x60 | (r1 & 0x60);
+
+	WFLAG(word_FFFF8D1E, 0x1000, (word_FFFF8D1E & 0x840) == 0x840 && ZRO(wMUT1E_MAF_RESET_FLAG, CLOSED_LOOP_GENERIC));
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void BC06_sub_1C8C4()
+static bool BC06_sub_1C8C4()
 {
+	u32 r1 = (coolantTempDuringCranking >= word_1DB0) ? word_1DB2 : word_1DB4;
 
+	r1 *= 80;
+
+	u32 r2 = wMUT1E_MAF_RESET_FLAG & MUT1E_11_bit;
+
+	WFLAG(word_FFFF8D1E, 0x4000, wMUT0F_Oxygen_Feedback_Trim <= R4_Mult_256_ZeroExtendWord_Into_R0_sub_870(word_1DB6));
+
+	WFLAG(word_FFFF8D1E, 0x2000, r2 != 0 && timer_FFFF878A < Sub_Lim_0(word_1590, word_1DBE));
+
+	// loc_1C9B2
+
+
+
+
+	return true;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void BC06_sub_1CACC()
+static bool BC06_sub_1CACC()
 {
-
+	return true;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -319,9 +425,9 @@ static void BC06_sub_1CAFE()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void BC06_sub_1CB66()
+static u16 BC06_sub_1CB66()
 {
-
+	return 0;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
