@@ -21,6 +21,8 @@
 
 #define sub_21F4E			((u16(*)(u16))0x21F4E)
 
+#define OBD_P0031_P0032_P0037_P0038_sub_2EF5A	((u16(*)(void))0x2EF5A)
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
@@ -47,6 +49,7 @@
 #define OPLOOPTROTT1_3D06					((Map3D_B *)0x3D06)
 #define OPLOOPTROTT2_45F8					((Map3D_B *)0x45F8)
 
+#define unk023_58C6							((Map3D_B *)0x58C6)
 
 
 
@@ -97,7 +100,7 @@ static void BC06_sub_1E2D0();
 static void BC06_sub_1E3FC();
 static void BC06_sub_1E42C();
 static void BC06_sub_1E5B0();
-static void BC06_sub_1E772();
+static bool BC06_sub_1E772();
 static bool BC06_Open_Loop_Throttle_sub_1E87A();
 static u16 BC06_sub_1E92E(EnVars* ev, u16 r1);
 static void BC06_sub_1EB0C();
@@ -804,7 +807,69 @@ static void BC06_Nop9()
 
 static void BC06_sub_1E2D0()
 {
+	u32 r13 = 0;
 
+	if (IGN_TEST_FLAG_1044 != 0)
+	{
+		// loc_1E2E2
+
+		r13 = IGN_MULT_FLAG_FFFF8DBC & 4;
+
+		u32 r3 = word_FFFF8890 & 2;
+
+		if ((word_FFFF8C98 & 0x80) && ZRO(IGN_MULT_FLAG_FFFF8DBC, 4))
+		{
+			if (wMUT10_Coolant_Temperature_Scaled >= word_1AFE)
+			{
+				SET(r13, 1);
+
+				if (r3 != 0)
+				{
+					SET(r13, 0x82);
+
+					if (word_FFFF8890 & 4)
+					{
+						SET(r13, 0x40);
+					};
+				};
+			}
+			else if (wMUT10_Coolant_Temperature_Scaled >= word_1F52)
+			{
+				SET(r13, 0x10);
+			};
+		};
+
+		// loc_1E33A
+
+		if ((wMUT1E_MAF_RESET_FLAG & STALL) || (RT_FLAG1_FFFF8888 & STARTER) || r3 == 0)
+		{
+			word_FFFF85EE = word_1B00;
+		};
+
+		// loc_1E358
+
+		if ((r13 & 0x80) && word_FFFF85EE == 0)
+		{
+			SET(r13, 4);
+			CLR(r13, 0x13);
+		};
+
+		// loc_1E36E
+		
+		if (timer_down_TXFLAG3_FFFF8574 == 0)
+		{
+			CLR(r13, 4);
+		};
+
+		if (load_ECU_Ignintion > word_1B04 || MUT21_RPM_x125div4 > word_1B06)
+		{
+			SET(r13, 0x20);
+		};
+	};
+
+	// loc_1E396
+
+	IGN_MULT_FLAG_FFFF8DBC = IGN_MULT_FLAG_FFFF8DBC & ~0xF7 | (r13 & 0xF7);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -819,21 +884,280 @@ static void BC06_sub_1E3FC()
 
 static void BC06_sub_1E42C()
 {
+	u32 r13 = 0;
+	u32 r3 = 0;
 
+	if ((wMUT40_Stored_Faults_Lo & 0xEE) || (wMUT41_Stored_Faults_Hi & 0xCA) || (wMUT42_Stored_Faults_Lo_1 & 1))
+	{
+		r13 = 0x80;
+	};
+
+	if (RT_FLAG1_FFFF8888 & RT_7_bit)
+	{
+		SET(r13, 0x40);
+		r3 = 0x40;
+	};
+
+	if (IGN_MULT_FLAG_FFFF8DBC & 2)
+	{
+		SET(r13, 0x20);
+		SET(r3,  0x20);
+	};
+
+	if (IGN_MULT_FLAG_FFFF8DBC & 1)
+	{
+		SET(r13, 0x10);
+		SET(r3,  0x10);
+	};
+
+	if (RT_FLAG1_FFFF8888 & RT_1_bit)
+	{
+		SET(r13, 4);
+		SET(r3,  4);
+	};
+
+	if (word_FFFF8D80 & 0xF)
+	{
+		SET(r13, 2);
+		SET(r3,  2);
+	};
+
+	if (wMUT1E_MAF_RESET_FLAG & IDLE)
+	{
+		SET(r13, 1);
+	};
+
+	word_FFFF8D86 = r13;
+	word_FFFF8D8A = r3;
+
+	r13 = word_1AFA | word_1AFC;
+
+	if (wMUTD0_BitMap1 & 0xC)
+	{
+		SET(r13, 2);
+	}
+	else if (wMUTD0_BitMap1 & 2)
+	{
+		SET(r13, 1);
+	}
+	else if (ZRO(wMUTD0_BitMap1, 1) || (wMUTD0_BitMap1 & 0x20))
+	{
+		SET(r13, 3);
+	};
+
+	// loc_1E4E8
+
+	flags_FFFF8D8C = r13;
+
+	r13 = 0x80;
+
+	if (word_FFFF8D74 & 0xC0)
+	{
+		r13 = 0xC0;
+	};
+
+	if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 1) && (wMUT10_Coolant_Temperature_Scaled >= word_1F52 || (wMUT71_Sensor_Error & MUT71_0_COOLANT)))
+	{
+		SET(r13, 4);
+	};
+
+	word_FFFF8D90 = r13;
+
+	word_FFFF8966 = ECU_Load_1;
+
+	WFLAG(word_FFFF93D2, 0x800, MUT_00_01_FLAGS & 0x10);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 static void BC06_sub_1E5B0()
 {
+	u32 r9 = 0;
+	u32 r1 = 0;
+	u32 r2 = 0;
 
+	u32 r14_8 = 0;
+	u32 r8 = 0;
+
+	if (wMUTD1_BitMap_FAA & FAA_14_HEATER_O2)
+	{
+		u32 r13 = BC06_sub_1E92E(ENGINE_MAIN_VARIABLES_DIM_off_9198, 0);
+
+		if (r13 == 1)
+		{
+			r1 = 0x80;
+		}
+		else if (r13 == 2)
+		{
+			r1 = word_20BC;
+		};
+
+		// loc_1E5FC
+
+		if (r1 >= 0x80)
+		{
+			r9 = 0x100;
+		};
+
+		if (BC06_Open_Loop_Throttle_sub_1E87A())
+		{
+			SET(r9, 0xC00);
+
+			r8 = 0x80;
+			r2 = 0x80;
+		};
+
+		// loc_1E618
+
+		if (wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING))
+		{
+			Table_Lookup_Axis(CEL8_7100);
+
+			word_FFFF87C2 = Table_Lookup_byte_2D_3D(unk023_58C6);
+		};
+
+		if (ZRO(MUT_CMD_0, 0x2000))
+		{
+			if ((wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING)) || word_FFFF87C2 != 0)
+			{
+				if ((word_FFFF9150 & 4) || OBD_P0031_P0032_P0037_P0038_sub_2EF5A() == 0)
+				{
+					r8 = 0;
+					r2 = 0;
+
+					CLR(r9, 0xC00);
+				};
+			};
+		};
+
+		// loc_1E66A
+
+		if (ZRO(word_FFFF9150, 1))
+		{
+			if (word_FFFF9150 & 0x300)
+			{
+				r1 = 0x80;
+			}
+			else if (word_FFFF9150 & 0x400)
+			{
+				r1 = 0;
+			};
+		};
+
+		// loc_1E6A0
+
+		if (ZRO(word_FFFF9150, 4))
+		{
+			if (word_FFFF9150 & 0x300)
+			{
+				r2 = 0x80;
+			}
+			else if (word_FFFF9150 & 0x400)
+			{
+				r2 = 0;
+			};
+		};
+
+		// loc_1E6C4
+
+		if (ZRO(word_FFFF9150, 2))
+		{
+			if (word_FFFF9150 & 0x300)
+			{
+				r14_8 = 0x80;
+			}
+			else if (word_FFFF9150 & 0x400)
+			{
+				r14_8 = 0;
+			};
+		};
+
+		// loc_1E6EC
+
+		if (ZRO(word_FFFF9150, 8))
+		{
+			if (word_FFFF9150 & 0x300)
+			{
+				r8 = 0x80;
+			}
+			else if (word_FFFF9150 & 0x400)
+			{
+				r8 = 0;
+			};
+		};
+
+		// loc_1E710
+
+		if (FLAGS_FFFF8EB0 & 0x80)
+		{
+			if (r1 != 0)
+			{
+				r1 = 0x80;
+			};
+
+			if (r2 != 0)
+			{
+				r2 = 0x80;
+			};
+
+			if (r14_8 != 0)
+			{
+				r14_8 = 0x80;
+			};
+
+			if (r8 != 0)
+			{
+				r8 = 0x80;
+			};
+		};
+	};
+
+	// loc_1E73C
+
+	wMUT9A_Ligths_Bit_Array = wMUT9A_Ligths_Bit_Array & ~0xF00 | (r9 & 0xF00);
+
+	O2F_Heater_Duty = r1;
+	O2R_Heater_Duty = r2;
+
+	word_FFFF8D1A = r14_8;
+	word_FFFF8D1C = r8;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void BC06_sub_1E772()
+static bool BC06_sub_1E772()
 {
+	u32 r2 = word_1B5C;
 
+	Table_Lookup_Axis(RPM13_64CC);
+
+	u32 r1 = Table_Lookup_byte_2D_3D(OPLOOPTROTT1_3D06);
+
+	if (ZRO(wMUT9A_Ligths_Bit_Array, 0x300))
+	{
+		r1 = Sub_Lim_0(r1, bc06_word_1B60);
+
+		r2 = word_1B5E;
+	};
+
+	if ((wMUT1E_MAF_RESET_FLAG & STALL) && (MUT_CMD_0 & 0x2000))
+	{
+		return true;
+	};
+
+	if ((wMUT1E_MAF_RESET_FLAG & STALL) || (wMUT71_Sensor_Error & MUT71_3_MAP))
+	{
+		return false;
+	};
+
+	if ((wMUT1E_MAF_RESET_FLAG & CRANKING) || cranking_end_timer_up <= word_1B5A * 20 || (wMUT1E_MAF_RESET_FLAG & DECELERATION_FUEL_CUT) || wMUT1C_ECU_Load <= r1 || wMUT10_Coolant_Temperature_Scaled < r2)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -855,21 +1179,21 @@ static bool BC06_Open_Loop_Throttle_sub_1E87A()
 
 	if ((wMUT1E_MAF_RESET_FLAG & STALL) && (MUT_CMD_0 & 0x2000))
 	{
-		return 1;
+		return true;
 	};
 
 	if ((wMUT1E_MAF_RESET_FLAG & STALL) || (wMUT71_Sensor_Error & MUT71_3_MAP))
 	{
-		return 0;
+		return false;
 	};
 
 	if ((wMUT1E_MAF_RESET_FLAG & CRANKING) || cranking_end_timer_up <= word_1B5A * 20 || (wMUT1E_MAF_RESET_FLAG & DECELERATION_FUEL_CUT) || wMUT1C_ECU_Load <= r1 || wMUT10_Coolant_Temperature_Scaled < r2)
 	{
-		return 1;
+		return true;
 	}
 	else
 	{
-		return 0;
+		return false;
 	};
 }
 
