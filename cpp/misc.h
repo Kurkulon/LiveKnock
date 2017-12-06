@@ -11,6 +11,8 @@ struct IndexResult
 {
 	byte interpolator;
 	byte index;
+
+	operator u16() {return *(u16*)&interpolator;}
 };
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

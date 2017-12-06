@@ -494,7 +494,7 @@
 #define      wMUTB4_lookup_value            							(*(u16*)0xFFFF8836)                                                        
 #define      word_FFFF8838                  							(*(u16*)0xFFFF8838)                                                        
 #define      word_FFFF883A                  							(*(u16*)0xFFFF883A)                                                        
-#define      lookup_axis_result             							(*(u16*)0xFFFF883C)                                                
+#define      lookup_axis_result             							(*(IndexResult*)0xFFFF883C)                                                
 #define      LOADRPM_FFFF883E               							(*(u16*)0xFFFF883E)                                                        
 #define      RPM11_FFFF8840                 							(*(u16*)0xFFFF8840)                                                
 #define      LOAD9_FFFF8842                 							(*(u16*)0xFFFF8842)                                                        
