@@ -420,6 +420,7 @@ extern byte fb_VE;
 extern byte forcedIdleRPM;	
 extern u32 frameCount;
 extern u16 timeRPM;	
+extern byte no_knock_retard;	
 
 extern byte hiFuelMapRAM[];
 extern u16	hiIgnMapRAM[];

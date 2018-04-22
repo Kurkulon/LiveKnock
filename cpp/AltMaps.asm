@@ -14,7 +14,7 @@ _forcedIdleRPM:		.RES.B      1
 
 	.ALIGN 2	
 	
-	.EXPORT		_axis_ig_RPM, _axis_ig_LOAD, _axis_fu_RPM, _axis_fu_LOAD, _axis_ve_RPM, _axis_ve_LOAD, _ve_index, _fb_VE, _ve_timer, _timeRPM
+	.EXPORT		_axis_ig_RPM, _axis_ig_LOAD, _axis_fu_RPM, _axis_fu_LOAD, _axis_ve_RPM, _axis_ve_LOAD, _ve_index, _fb_VE, _ve_timer, _timeRPM, _no_knock_retard
 
 _axis_ig_RPM:		.RES.W      1					
 _axis_ig_LOAD:		.RES.W      1					
@@ -25,7 +25,7 @@ _axis_ve_LOAD:		.RES.W      1
 _fb_VE				.RES.B      1					
 _ve_index:			.RES.B      1					
 _ve_timer:			.RES.B      1					
-					.RES.B      1					
+_no_knock_retard:	.RES.B      1					
 _timeRPM:			.RES.W      1					
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -136,6 +136,21 @@ _frameCount:		.RES.L      1					;	.EQU H'FFFF8462
 	.SECTION C_19454, CODE, LOCATE=H'19454
 	
 		.DATA.L		_Hook_ForcedIdleRPM                                    
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	.SECTION P_21AAA, CODE, LOCATE=H'21AAA
+
+			MOV.L	#_no_knock_retard, R0  ; _no_knock_retard
+			MOV.B   @R0, R0     ; no_knock_retard
+			TST     R0, R0
+			BT		P_21AAA_loc1
+			MOV     #0, R4      ; H'00000000
+
+P_21AAA_loc1:
+
+			rts	
+			mov     r4, r0                           
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
