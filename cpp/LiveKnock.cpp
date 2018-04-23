@@ -31,6 +31,7 @@ extern "C" void LiveKnock()
 		fixAFR = false;
 		openLoop = true;
 		forcedIdleRPM = 0;
+		no_knock_retard = 0;
 	};
 
 	if (openLoop)
@@ -40,6 +41,10 @@ extern "C" void LiveKnock()
 	else
 	{
 		wMUTD1_BitMap_FAA |= Periphery_FAA & FAA_4_CLOSED_LOOP; // Closed loop
+
+		wMUT0C_Fuel_Trim_Low = 0x80;   
+		wMUT0D_Fuel_Trim_Middle = 0x80;
+		wMUT0E_Fuel_Trim_High = 0x80;
 	};
 
 	CLR(bMUTD3_BitMap4_FCA_Store_FFFF89D8, 0x800); // Disable Front/Rear O2 heater check: clear bit 11 address 0xFCA 
