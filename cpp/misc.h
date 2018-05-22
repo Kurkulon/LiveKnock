@@ -314,6 +314,7 @@ struct Map3D_W
 #define mem_decr										((void(*)(void*,void*))0x53E)
 #define memsetz											((void(*)(void*,void*))0x52C)
 
+#define Interpolate										((u16(*)(u16,u16,u16))0xD7A)
 #define interpolate_r4_r5_r6							((u16(*)(u16,u16,u16))0xB16)
 #define Lim16											((u32(*)(u16, u16 max, u16 min))0x5A8)
 #define Lim32											((u32(*)(u32 v, u32 max, u32 min))0x5B0)
@@ -430,6 +431,9 @@ extern const u16 hiIgnMapData[];
 
 extern Map3D_B enrichCoolantMapRAM;
 extern Map3D_B kAirMapRAM;
+
+extern "C" u16 Interpolate_my(u16,u16,u16);
+extern "C" u16 interpolate_r4_r5_r6_my(u16,u16,u16);
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

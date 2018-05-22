@@ -1,6 +1,12 @@
 
 	.INCLUDE "cpp\def.inc"
 
+;DEF_ENRICH_COOL_AIR_MAPS:	.DEFINE		"1"
+;TEST_INTERPOLATE:			.DEFINE		"1"
+;DEF_NO_KNOCK_RETARD:		.DEFINE		"1"
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 	.SECTION    B_ALTMAPS, DATA, LOCATE=H'FFFF8420
 	
 	.EXPORT		_hiIgnMapIndex, _hiFuelMapIndex, _veMapIndex, _fixAFR, _openLoop, _forcedIdleRPM
@@ -139,6 +145,8 @@ _frameCount:		.RES.L      1					;	.EQU H'FFFF8462
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+	.AIFDEF	DEF_NO_KNOCK_RETARD
+	
 	.SECTION P_21AAA, CODE, LOCATE=H'21AAA
 
 			MOV.L	#_no_knock_retard, R0  ; _no_knock_retard
@@ -152,7 +160,11 @@ P_21AAA_loc1:
 			rts	
 			mov     r4, r0                           
 
+	.AENDI
+	
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	.AIFDEF	DEF_ENRICH_COOL_AIR_MAPS
 
 ;k_InAirTemp
 
@@ -165,6 +177,8 @@ P_21AAA_loc1:
 			nop   	                                                        
 			nop   	                                                        
 
+	.AENDI
+	
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	.SECTION C_6746, DATA, LOCATE=H'6748
@@ -341,6 +355,9 @@ rpmTimeRAM .EQU rpmTimeData + RAM - ROM
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+	.AIFDEF DEF_ENRICH_COOL_AIR_MAPS
+
+
 			.align 4
 
 			.DATA.W		H'FFFF
@@ -382,9 +399,11 @@ kAirMapData:
 kAirMapRAM		.EQU kAirMap + RAM - ROM
 kAirMapDataRAM	.EQU kAirMapData + RAM - ROM
 
+	.AENDI
+	
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	.EXPORT		_hiFuelMapRAM, _hiIgnMapRAM, _veMapRAM, _rpmTimeRAM, _enrichCoolantMapRAM, _kAirMapRAM
+	.EXPORT		_hiFuelMapRAM, _hiIgnMapRAM, _veMapRAM, _rpmTimeRAM
 
 	.SECTION    sec_hiFuelMapRAM,	DATA, LOCATE=hiFuelMapRAM
 	
@@ -402,6 +421,12 @@ _veMapRAM:			.RES.B      1
 
 _rpmTimeRAM:		.RES.B      1
 
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	.AIFDEF DEF_ENRICH_COOL_AIR_MAPS
+	
+	.EXPORT		_enrichCoolantMapRAM, _kAirMapRAM
+
 	.SECTION    sec_enrichCoolantMapRAM, DATA, LOCATE=enrichCoolantMapRAM
 
 _enrichCoolantMapRAM:		.RES.w      5
@@ -414,6 +439,8 @@ _kAirMapRAM:		.RES.w      5
 					.RES.B      1
 _kAirMapDataRAM:	.RES.B      1
 
+	.AENDI
+	
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 ;ROM:0001421A 00C     mov.l   #HIGHOKTF_7A88, r4                                      ; Move Immediate Long Data
@@ -477,83 +504,131 @@ _veMapArray:
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+;TEST_INTERPOLATE:	.DEFINE		"1"
+
+	.AIFDEF TEST_INTERPOLATE
 
 	.SECTION P_D7A, CODE, LOCATE=H'D7A
+;	.SECTION P, CODE
 
-	.EXPORT	_Interpolate
+	.EXPORT	_Interpolate_my
+
+; R0 = R4 + ((R5 - R4) * R6 + 127) / 255; R6 = [0 ... 255]
 	
-_Interpolate:                                                                                    
+_Interpolate_my:                                                                                    
                                                                                                 
-                                extu.w  r4, r4                                                  
-                                extu.w  r5, r5                                                  
-                                extu.w  r6, r6                                                  
+								extu.w  r6, r6                                                  
+								mov		#-1, r0                                               
+								extu.w  r5, r5
+								extu.b	r0, r0
+								cmp/hs  r0, r6                                                 
+								bf      loc_D9C
 
-                                mov.l   #h'FF, r0                                               
-                                cmp/hi  r0, r6                                                  
-                                bf      loc_D9C                                                 
-
-                                bra     loc_DBC                                                 
-                                mov     r5, r0                                                  
-
-; ---------------------------------------------------------------------------
+								rts
+								mov     r5, r0                                                 
 
 loc_D9C:                                                                                        
-                                sub     r4, r5                                                  
+								extu.w  r4, r4  
 
-								mulu	r5, r6
-								sts		macl, r0
+								add		#2, r0		; r0 = 257      
+
+								sub     r4, r5
+
+								mulu    r6, r0  
+								shll	r6
+								sts     macl, r0	; r0 = r6*257
+
+								shlr8	r6
+								add		r6, r0
+
+								shll16	r4
+
+								mov		#64, r6		;mov.l	#32768, r6
 								
-								shlr8	r0
+								mul.l	r5, r0	
 								
+								shll	r6
+								
+								sts     macl, r0   
+								
+								shll8	r6
+
 								add		r4, r0
-loc_DBC:                                                                                        
-                                rts                                                             
-                                nop                                                             
+								add		r6, r0
 
-                                .DATAB.W 19, H'FFFF                                                            
+								rts                                                             
+								shlr16  r0  
+
+ ;                               .DATAB.W 19, H'FFFF                                                            
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
 	.SECTION P_B16, CODE, LOCATE=H'B16
+;	.SECTION P, CODE
 
-	.EXPORT	_interpolate_r4_r5_r6
+	.EXPORT	_interpolate_r4_r5_r6_my
 	
 ; R0 = R5 + (R4*R6 - R5*R6) / 255; R6 = [0 ... 255]
 
 ; R0 = R5 + (R4 - R5) * (R6 * 257 + 1) / 65536; R6 = [0 ... 255]
 
-_interpolate_r4_r5_r6:                                                                           
+_interpolate_r4_r5_r6_my:                                                                           
                                                                                                 
-                                extu.w  r4, r4                                                  
-                                extu.w  r5, r5                                                  
-                                extu.w  r6, r6                                                  
-                                mov.w	#255, r0                                               
-                                cmp/hi  r0, r6                                                 
-                                bf      loc_B26                                                 
+								extu.w  r6, r6                                                  
+								mov		#-1, r0                                               
+								extu.w  r5, r5
+								extu.b	r0, r0
+								cmp/hs  r0, r6                                                 
+								bf      loc_B26
 
-                                mov     r0, r6                                                 
+								rts
+								mov     r4, r0                                                 
 
 loc_B26:                                                                                        
-                                sub     r5, r4                                                  
+								extu.w  r4, r4  
 
-                                add		#2, r0		; r0 = 257      
-                                                                          
-                                mulu    r6, r0  
-                                sts     macl, r0	; r0 = r6*257
-                                
-                                add		#1, r0
-                                
-                                mulu    r4, r0		                                             
-                                sts     macl, r0                                                
+								add		#2, r0		; r0 = 257      
 
-                                shlr16  r0  
+								sub     r5, r4
 
-                                rts                                                             
-                                add     r5, r0                                                  
+								mulu    r6, r0  
+								shll	r6
+								sts     macl, r0	; r0 = r6*257
+
+								shlr8	r6
+								add		r6, r0
+
+								shll16	r5
+
+								mov		#64, r6		;mov.l	#32768, r6
+								
+								mul.l	r4, r0	
+								
+								shll	r6
+								
+								sts     macl, r0   
+								
+								shll8	r6
+
+								add		r5, r0
+;								add		r6, r0
+
+								rts                                                             
+								shlr16  r0  
 
 ;                                .DATAB.W 19, H'FFFF                                                            
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	.IMPORT	_Test_Interpolate
+	
+	.SECTION C_9CC8, DATA, LOCATE=H'9CC8
+
+		.DATA.L		_Test_Interpolate                                    
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	.AENDI
 
 	.END

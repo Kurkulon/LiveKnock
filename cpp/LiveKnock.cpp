@@ -11,6 +11,40 @@ static void TimeRPM();
 static void FeedBack_WBO2_v2();
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+/*
+#pragma noregsave(Test_Interpolate)
+
+extern "C" void Test_Interpolate()
+{
+	Interpolate(65534, 0, 254);
+	Interpolate(65534, 0, 1);
+
+	Interpolate_my(65534, 0, 254);
+	Interpolate_my(65534, 0, 1);
+
+	interpolate_r4_r5_r6(65534, 0, 254);
+	interpolate_r4_r5_r6(65534, 0, 1);
+
+	interpolate_r4_r5_r6_my(65534, 0, 254);
+	interpolate_r4_r5_r6_my(65534, 0, 1);
+
+	interpolate_r4_r5_r6_my(0, 65534, 254);
+	interpolate_r4_r5_r6_my(0, 65534, 1);
+
+
+
+
+
+//	interpolate_r4_r5_r6(10, 20, 255);
+//	interpolate_r4_r5_r6(10, 20, 0);
+
+
+//	Interpolate_my(0, 65535, 255);
+
+//	Interpolate_my(65535, 0, 255);
+}
+*/
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #pragma noregsave(LiveKnock)
 
@@ -31,7 +65,7 @@ extern "C" void LiveKnock()
 		fixAFR = false;
 		openLoop = true;
 		forcedIdleRPM = 0;
-		no_knock_retard = 0;
+//		no_knock_retard = 0;
 	};
 
 	if (openLoop)
@@ -42,12 +76,12 @@ extern "C" void LiveKnock()
 	{
 		wMUTD1_BitMap_FAA |= Periphery_FAA & FAA_4_CLOSED_LOOP; // Closed loop
 
-		wMUT0C_Fuel_Trim_Low = 0x80;   
+//		wMUT0C_Fuel_Trim_Low = 0x80;   
 		wMUT0D_Fuel_Trim_Middle = 0x80;
 		wMUT0E_Fuel_Trim_High = 0x80;
 	};
 
-	CLR(bMUTD3_BitMap4_FCA_Store_FFFF89D8, 0x800); // Disable Front/Rear O2 heater check: clear bit 11 address 0xFCA 
+	CLR(bMUTD3_BitMap4_FCA_Store_FFFF89D8, 0x808); // Disable Front/Rear O2 heater check: clear bit 11 address 0xFCA 
 
 	__enable_irq();
 
@@ -86,7 +120,7 @@ extern "C" void LiveKnock()
 			//};
 		};
 
-		FeedBack_WBO2_v2();
+	//	FeedBack_WBO2();
 
 		TimeRPM();
 
@@ -286,7 +320,28 @@ static void FeedBack_WBO2_v2()
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+/*
+u16 Interpolate_B16(u16 v1, u16 v2, u16 i)
+{
+	if (i >= 255)
+	{
+		return v2;
+	};
 
+	u32 r0 = i * 257 + (i >> 7);
+
+	u32 r4 = (u32)v1 - (u32)v2;
+
+	r0 *= r4;
+
+	r0 += (u32)v2 << 16;
+	r0 += 32768;
+
+	return r0 >> 16;
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+/*
 u16 Interpolate(u16 v1, u16 v2, u16 i)
 {
 	bool r11 = false;
@@ -320,7 +375,7 @@ u16 Interpolate(u16 v1, u16 v2, u16 i)
 
 	return v1 + r0;
 }
-
+*/
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 /*
 static void FeedBack_O2R()

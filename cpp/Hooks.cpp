@@ -59,7 +59,7 @@ extern "C" void FU03_HI_LO_Octan()
 	AFR_OctanInt = (fixAFR) ? AFR(14.7) : interpolate_r4_r5_r6(Table_Lookup_byte_2D_3D(HIGHOKTF_7A88[hiFuelMapIndex&7]), Query_byte_2D_3D_Table(LowOctFMp_7AA8), wMUT27_Octane_Number);
 
 														//	8,  33,  49,  63,  78,  96, 125				
-	k_InAirTemp = Table_Lookup_byte_2D_3D(&kAirMapRAM);	// 143, 136, 132, 128, 125, 122, 118
+	//k_InAirTemp = Table_Lookup_byte_2D_3D(&kAirMapRAM);	// 143, 136, 132, 128, 125, 122, 118
 															//			, 1.252, 1.192, 
 
 	//EVO
