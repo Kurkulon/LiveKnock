@@ -3,7 +3,7 @@
 
 ;DEF_ENRICH_COOL_AIR_MAPS:	.DEFINE		"1"
 ;TEST_INTERPOLATE:			.DEFINE		"1"
-;DEF_NO_KNOCK_RETARD:		.DEFINE		"1"
+DEF_NO_KNOCK_RETARD:		.DEFINE		"1"
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

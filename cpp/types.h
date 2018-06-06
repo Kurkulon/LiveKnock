@@ -37,6 +37,8 @@ inline float ABS(float v) { *((u32*)&v) &= 0x7FFFFFFF; return v; }
 inline bool fIsValid(float v) { return (((u16*)&v)[2] & 0x7F80) != 0x7F80; }
 inline bool dIsValid(float v) { return (((u32*)&v)[2] & 0x7FF0) != 0x7FF0; }
 
+#define GD(adr, t, i) (*(((t*)adr)+i))
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 union DataCRC
 {
