@@ -2,8 +2,8 @@
 	.INCLUDE "cpp\def.inc"
 
 ;DEF_ENRICH_COOL_AIR_MAPS:	.DEFINE		"1"
-;TEST_INTERPOLATE:			.DEFINE		"1"
-DEF_NO_KNOCK_RETARD:		.DEFINE		"1"
+TEST_INTERPOLATE:			.DEFINE		"1"
+;DEF_NO_KNOCK_RETARD:		.DEFINE		"1"
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -621,11 +621,11 @@ loc_B26:
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	.IMPORT	_Test_Interpolate
+;	.IMPORT	_Test_Interpolate
 	
-	.SECTION C_9CC8, DATA, LOCATE=H'9CC8
+;	.SECTION C_9CC8, DATA, LOCATE=H'9CC8
 
-		.DATA.L		_Test_Interpolate                                    
+;		.DATA.L		_Test_Interpolate                                    
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

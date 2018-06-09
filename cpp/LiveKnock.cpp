@@ -329,13 +329,13 @@ static void FeedBack_O2F()
 //	static u16 timer;
 //	static TM32 tm;
 //	static byte pi;
-	const byte LDT = 10;
+	const byte LDT = 5;
 
-	if (veMapIndex == 15)
+	if (veMapIndex == 15 && wMUT4A_Purge_Control_Duty == 0 && (wMUT1E_MAF_RESET_FLAG & (DECELERATION_FUEL_CUT|FUEL_CUT|MAP_error)) == 0)
 	{
 		if (ve_timer == 0)
 		{
-			i16 d = (byte)wMUT0F_Oxygen_Feedback_Trim - 128;
+			i16 d = ((u32)wMUT0F_Oxygen_Feedback_Trim >> 8) - 128;
 
 			if (d != 0)
 			{
