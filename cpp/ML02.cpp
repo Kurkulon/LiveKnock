@@ -1002,7 +1002,7 @@ static void ML02_Open_And_Closed_Loop_Calcs()
 	ML02_Open_andor_Closed_Loop_Fuel_Calcs();
 	ML02_Open_Loop_Calc();
 
-	WFLAG(wMUT18_Open_Loop_Bit_Array, 0x1000, ML02_sub_12BC0());
+	WFLAG(wMUT18_Open_Loop_Bit_Array, MUT18_12_1000, ML02_sub_12BC0());
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1024,11 +1024,11 @@ static void ML02_Open_andor_Closed_Loop_Fuel_Calcs()
 
 	u32 r3 = Sub_Lim_0(r1, MINTEMPCLOSEDLOOP_159C);
 
-	TRG(wMUT18_Open_Loop_Bit_Array, 0x200, load, r3, r2);
+	TRG(wMUT18_Open_Loop_Bit_Array, MUT18_9_200, load, r3, r2);
 
 	if (byte_1031/*1*/ != 0)
 	{
-		if (wMUT18_Open_Loop_Bit_Array & 1)
+		if (wMUT18_Open_Loop_Bit_Array & MUT18_0_01)
 		{
 			r1 = r3;
 		};
@@ -1091,7 +1091,7 @@ static void ML02_Open_andor_Closed_Loop_Fuel_Calcs()
 
 	// loc_12A8E
 
-	TRG(wMUT18_Open_Loop_Bit_Array, 1, load, r3, r2);
+	TRG(wMUT18_Open_Loop_Bit_Array, MUT18_0_01, load, r3, r2);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1102,19 +1102,19 @@ static void ML02_Open_Loop_Calc()
 
 	u32 r13 = Table_Lookup_byte_2D_3D((RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) ? OPENLOOPLOV_332E : OPENLOOPHIV_3342);
 
-	TRG(wMUT18_Open_Loop_Bit_Array, 0x100, wMUT8A_TPS_Corrected, Sub_Lim_0(r13, Open_Loop_TPS_FallBack_Const/*13*/), r13)
+	TRG(wMUT18_Open_Loop_Bit_Array, MUT18_8_100, wMUT8A_TPS_Corrected, Sub_Lim_0(r13, Open_Loop_TPS_FallBack_Const/*13*/), r13)
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 static bool ML02_sub_12BC0()
 {
-	if (ZRO(wMUTD1_BitMap_FAA, FAA_4_CLOSED_LOOP) || (wMUT18_Open_Loop_Bit_Array & 1))
+	if (ZRO(wMUTD1_BitMap_FAA, FAA_4_CLOSED_LOOP) || (wMUT18_Open_Loop_Bit_Array & MUT18_0_01))
 	{
 		return true;
 	};
 
-	if (ZRO(wMUT71_Sensor_Error, MUT71_9_bit) && (wMUT18_Open_Loop_Bit_Array & 0x100))
+	if (ZRO(wMUT71_Sensor_Error, MUT71_9_bit) && (wMUT18_Open_Loop_Bit_Array & MUT18_8_100))
 	{
 		return true;
 	};
@@ -1141,14 +1141,14 @@ static bool ML02_sub_12BC0()
 
 static void ML02_Closed_Loop_Error()
 {
-	WFLAG(wMUT18_Open_Loop_Bit_Array, 2, ML02_Open_Closed_Loop_Some_Check());
+	WFLAG(wMUT18_Open_Loop_Bit_Array, MUT18_1_02, ML02_Open_Closed_Loop_Some_Check());
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 static bool ML02_Open_Closed_Loop_Some_Check()
 {
-	return ZRO(wMUT18_Open_Loop_Bit_Array, 0x1000) && (wMUT19_Startup_Check_Bits & 0x80);
+	return ZRO(wMUT18_Open_Loop_Bit_Array, MUT18_12_1000) && (wMUT19_Startup_Check_Bits & 0x80);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1202,7 +1202,7 @@ static void ML02_sub_12D9C(EnVars* ev)
 
 	if (ZRO(prev_MUT1E_FLAGS, STALL) && (((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 8) && (*ev->_176_word_FFFF9296 & 4)) || cranking_end_timer_up <= (t1_off_1592*20)))
 	{
-		CLR(r2, 0x2000);
+		CLR(r2, MUT18_13_2000);
 
 		*ev->_288_word_FFFF8714 = word_2902/*20*/;
 	}
@@ -1210,35 +1210,35 @@ static void ML02_sub_12D9C(EnVars* ev)
 	{
 		// loc_12E24
 
-		CLR(r2, 0x98);
+		CLR(r2, MUT18_7_80|MUT18_4_10|MUT18_3_08);
 
 		if (O2F >= *ev->_36_wMUT5A)
 		{
-			SET(r2, 0x80);
+			SET(r2, MUT18_7_80);
 		};
 
 		if (O2F >= word_1588/*31*/)
 		{
-			SET(r2, 0x10);
+			SET(r2, MUT18_4_10);
 		};
 
 		if ((wMUTD1_BitMap_FAA & FAA_1_REAR_O2) && O2F >= word_1700/*26*/)
 		{
-			SET(r2, 8);
+			SET(r2, MUT18_3_08);
 		};
 
 		// loc_12E60
 
 		if (prev_MUT1E_FLAGS & STALL)
 		{
-			SET(r2, 0x8020);
+			SET(r2, MUT18_15_8000|MUT18_5_20);
 
 			if (ZRO(wMUTD1_BitMap_FAA, FAA_1_REAR_O2))
 			{
-				SET(r2, 0x4000);
+				SET(r2, MUT18_14_4000);
 			};
 
-			CLR(r2, 0x2000);
+			CLR(r2, MUT18_13_2000);
 
 			*ev->_288_word_FFFF8714 = word_2902/*20*/;
 
@@ -1250,50 +1250,50 @@ static void ML02_sub_12D9C(EnVars* ev)
 
 			u32 r3 = *ev->_16_prev_MUT18_Open_Loop_Bit_Array ^ r2;
 
-			if ((wMUTD1_BitMap_FAA & FAA_1_REAR_O2) || r3 & 0x10)
+			if ((wMUTD1_BitMap_FAA & FAA_1_REAR_O2) || r3 & MUT18_4_10)
 			{
-				CLR(r2, 0x4000);
+				CLR(r2, MUT18_14_4000);
 
 				*ev->_68_timer_FFFF878E = word_1590;
 			}
-			else if (ZRO(*ev->_8_prev_MUT1E_FLAGS, 0x800))
+			else if (ZRO(*ev->_8_prev_MUT1E_FLAGS, MUT1E_11_bit))
 			{
 				*ev->_68_timer_FFFF878E = word_1590/*255*/;
 			}
 			else if (*ev->_68_timer_FFFF878E == 0)
 			{
-				SET(r2, 0x4000);
+				SET(r2, MUT18_14_4000);
 			};
 
 			// loc_12F26
 
-			if ((wMUTD1_BitMap_FAA & FAA_1_REAR_O2) && (*ev->_16_prev_MUT18_Open_Loop_Bit_Array & 0x8000))
+			if ((wMUTD1_BitMap_FAA & FAA_1_REAR_O2) && (*ev->_16_prev_MUT18_Open_Loop_Bit_Array & MUT18_15_8000))
 			{
-				CLR(r2, 0x8020);
+				CLR(r2, MUT18_15_8000|MUT18_5_20);
 
 				*ev->_72_timer_FFFF878A = word_1590/*255*/;
 
 				// loc_12FA2
 
-				SET(r2, 0x2000);
+				SET(r2, MUT18_13_2000);
 			}
-			else if (r3 & 0x80)
+			else if (r3 & MUT18_7_80)
 			{
 				if (ZRO(wMUTD1_BitMap_FAA, FAA_1_REAR_O2))
 				{
-					CLR(r2, 0x8000);
+					CLR(r2, MUT18_15_8000);
 				};
 				
 				// loc_12F5C
 
 				*ev->_72_timer_FFFF878A = word_1590/*255*/;
 
-				CLR(r2, 0x20);
-				SET(r2, 0x2000);
+				CLR(r2, MUT18_5_20);
+				SET(r2, MUT18_13_2000);
 			}
-			else if (*ev->_8_prev_MUT1E_FLAGS & 0x800)
+			else if (*ev->_8_prev_MUT1E_FLAGS & MUT1E_11_bit)
 			{
-				if (*ev->_16_prev_MUT18_Open_Loop_Bit_Array & 0x20)
+				if (*ev->_16_prev_MUT18_Open_Loop_Bit_Array & MUT18_5_20)
 				{
 					*ev->_72_timer_FFFF878A = word_1590/*255*/;
 				};
@@ -1302,18 +1302,18 @@ static void ML02_sub_12D9C(EnVars* ev)
 
 				if (*ev->_72_timer_FFFF878A == 0)
 				{
-					SET(r2, 0x20);
+					SET(r2, MUT18_5_20);
 				};
 
 				// loc_12F9A
 
-				CLR(r2, 0x2000);
+				CLR(r2, MUT18_13_2000);
 			}
 			else
 			{
 				// loc_12FA2
 
-				SET(r2, 0x2000);
+				SET(r2, MUT18_13_2000);
 			};
 
 			// loc_12FA6
@@ -1333,18 +1333,18 @@ static void ML02_sub_12D9C(EnVars* ev)
 
 	// loc_12FCE
 
-	WFLAG(r2, 4, O2F >= *ev->_36_wMUT5A);
+	WFLAG(r2, MUT18_2_04, O2F >= *ev->_36_wMUT5A);
 
 	u32 r3 = *ev->_16_prev_MUT18_Open_Loop_Bit_Array ^ r2;
 
-	if (r3 & 4)
+	if (r3 & MUT18_2_04)
 	{
 		*ev->_76_word_FFFF8552 = unk113_524E[word_FFFF8A4A];
 	};
 
 	if (*ev->_76_word_FFFF8552 == 0)
 	{
-		WFLAG(r2, 0x40, r2 & 4);
+		WFLAG(r2, MUT18_6_40, r2 & MUT18_2_04);
 	};
 
 	// loc_13020
@@ -1357,7 +1357,7 @@ static void ML02_sub_12D9C(EnVars* ev)
 	{
 		SET(*p, 4);
 	}
-	else if (r3 & 8)
+	else if (r3 & MUT18_3_08)
 	{
 		CLR(*p, 4);
 	};
@@ -1367,14 +1367,14 @@ static void ML02_sub_12D9C(EnVars* ev)
 
 static void ML02_sub_13088(EnVars* ev)
 {
-	WFLAG(*ev->_4_wMUT1E_MAF_RESET_FLAG, 0x800, ML02_sub_130BC(ev));
+	WFLAG(*ev->_4_wMUT1E_MAF_RESET_FLAG, MUT1E_11_bit, ML02_sub_130BC(ev));
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 static bool ML02_sub_130BC(EnVars* ev)
 {
-	if (ZRO(wMUT18_Open_Loop_Bit_Array, 2) || (*ev->_12_wMUT18_Open_Loop_Bit_Array & 0x20) || wMUT10_Coolant_Temperature_Scaled < Closed_Loop_Min_Engine_Temp/*47*/)
+	if (ZRO(wMUT18_Open_Loop_Bit_Array, MUT18_1_02) || (*ev->_12_wMUT18_Open_Loop_Bit_Array & MUT18_5_20) || wMUT10_Coolant_Temperature_Scaled < Closed_Loop_Min_Engine_Temp/*47*/)
 	{
 		return false;
 	};
@@ -1457,7 +1457,7 @@ static void ML02_sub_13120()
 	{
 		CLR(r1, MUT1E_11_bit|CLOSED_LOOP_GENERIC);
 		CLR(r2, 0x800);
-		SET(wMUT18_Open_Loop_Bit_Array, 0x1000);
+		SET(wMUT18_Open_Loop_Bit_Array, MUT18_12_1000);
 	};
 
 	wMUT1E_MAF_RESET_FLAG = r1;

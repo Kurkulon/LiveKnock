@@ -130,7 +130,7 @@ struct Map3D_W
 #define RPM_6_bit						0x40
 #define RPM_7_CLOSED_LOOP_GENERIC		0x80
 #define RPM_8_bit						0x100
-#define RPM_9_bit						0x200
+#define RPM_9_wtf_cranking						0x200
 #define RPM_10_bit						0x400
 #define RPM_11_MUT1E_11_bit				0x800
 #define RPM_12_bit						0x1000
@@ -239,6 +239,27 @@ struct Map3D_W
 #define FAA_13_2000					0x2000
 #define FAA_14_HEATER_O2			0x4000
 #define FAA_15_8000					0x8000
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// wMUT18_Open_Loop_Bit_Array
+
+#define MUT18_0_01 				0x01	// Load > TableLookUp(OPLOPLOAD2_632C)
+#define MUT18_1_02				0x02	// !(wMUT18_Open_Loop_Bit_Array & 0x1000) && (wMUT19_Startup_Check_Bits & 0x80)
+#define MUT18_2_04				0x04	// O2F >= wMUT5A (0.5v)
+#define MUT18_3_08				0x08	// (wMUTD1_BitMap_FAA & FAA_1_REAR_O2) && O2F >= word_1700 (0.5v)
+#define MUT18_4_10				0x10	// O2F >= word_1588 (0.6v)
+#define MUT18_5_20				0x20
+#define MUT18_6_40				0x40	// O2F >= wMUT5A (0.5v) timered by word_FFFF8552 (20ms);; 1 - Dec O2_FeedBack_Trim; 0 - Inc
+#define MUT18_7_80				0x80	// O2F >= wMUT5A (0.5v)
+#define MUT18_8_100				0x100	// wMUT8A_TPS_Corrected > TableLookUp(OPENLOOPLOV_332E)
+#define MUT18_9_200				0x200	// Load > TableLookUp(OPLOPLOAD1_6318)
+#define MUT18_10_400			0x400
+#define MUT18_11_800			0x800
+#define MUT18_12_1000			0x1000	//  Open loop; ML02_sub_12BC0()
+#define MUT18_13_2000			0x2000
+#define MUT18_14_4000			0x4000
+#define MUT18_15_8000			0x8000
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

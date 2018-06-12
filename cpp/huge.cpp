@@ -1436,30 +1436,30 @@ static void Huge_50_Hz()
 		r3 = 0;
 	};
 
-	word_FFFF8B38 = asyncAccelMulTPS_Delta[r3];
+	word_FFFF8B38 = asyncAccelMulTPS_Delta[r3];// 32, 32, 48, 64, 81, 96,111,129,145
 
 	if (r6)
 	{
 		if (r13 >= word_166E/*2*/)
 		{
-			word_FFFF86B8 = 0;
+			fall_TPS_timer = 0;
 		};
 
 		if (r13 >= word_1686/*2*/)
 		{
-			word_FFFF86BA = word_168A/*120*/;
+			rise_TPS_timer = word_168A/*120*/;
 		};
 	}
 	else
 	{
 		if (r13 >= word_166C/*6*/)
 		{
-			word_FFFF86B8 = word_1670;
+			fall_TPS_timer = word_1670/*0*/;
 		};
 
 		if (r13 >= word_1688/*2*/)
 		{
-			word_FFFF86BA = 0;
+			rise_TPS_timer = 0;
 		};
 	};
 }

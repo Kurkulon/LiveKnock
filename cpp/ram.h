@@ -224,9 +224,15 @@
 #define      word_FFFF8386                  							(*(u16*)0xFFFF8386)                                                        
 #define      NVRAM_CheckWord_3              							(*(u16*)0xFFFF8388)                                                        
 #define      NVRAM_CheckWord_4              							(*(u16*)0xFFFF838A)                                                        
+
+// 200 Hz  FFFF8528 - FFFF8526
+
 #define      timer_up_FFFF8520              							(*(u16*)0xFFFF8520)                                                        
 #define      timer_up_FFFF8522              							(*(u16*)0xFFFF8522)                                                        
 #define      timer_up_FFFF8524              							(*(u16*)0xFFFF8524)                                                        
+
+// Count up timers FFFF8528-FFFF8548 25ms
+
 #define      cranking_end_timer_up          							(*(u16*)0xFFFF8528)                                                        
 #define      starter_timer_up              								(*(u16*)0xFFFF852A)                                                        
 #define      timer_up_FFFF852C              							(*(u16*)0xFFFF852C)                                                        
@@ -238,8 +244,14 @@
 #define      timer_up_FFFF8544              							(*(u16*)0xFFFF8544)                                                        
 #define      timer_up_FFFF8546              							(*(u16*)0xFFFF8546)                                                        
 #define      timer_up_FFFF8548              							(*(u16*)0xFFFF8548)                                                        
+
+//  Count up timers FFFF854A-FFFF854E; 500ms
+
 #define      word_FFFF854A                  							(*(u16*)0xFFFF854A)                                                        
 #define      word_FFFF854E                  							(*(u16*)0xFFFF854E)                                                        
+
+//  Count down timers FFFF8550-FFFF8574; 200 Hz
+
 #define      word_FFFF8550                  							(*(u16*)0xFFFF8550)                                                        
 #define      word_FFFF8552                  							(*(u16*)0xFFFF8552)                                                        
 #define      word_FFFF8554                  							(*(u16*)0xFFFF8554)                                                        
@@ -253,6 +265,9 @@
 #define      word_FFFF8568                  							(*(u16*)0xFFFF8568)                                                        
 #define      word_FFFF856A                  							(*(u16*)0xFFFF856A)                                                        
 #define      word_FFFF8572                  							(*(u16*)0xFFFF8572)                                                        
+
+//  Count down timers FFFF8574-FFFF86A0 25ms
+
 #define      timer_down_TXFLAG3_FFFF8574    							(*(u16*)0xFFFF8574)                                                        
 #define      timer_FFFF8576                 							(*(u16*)0xFFFF8576)                                                        
 #define      timer_FFFF8578                 							(*(u16*)0xFFFF8578)                                                        
@@ -329,6 +344,9 @@
 #define      word_FFFF8660                  							(*(u16*)0xFFFF8660)                                                        
 #define      word_FFFF8668                  							(*(u16*)0xFFFF8668)                                                        
 #define      word_FFFF866A                  							(*(u16*)0xFFFF866A)                                                        
+
+//  Count down timers FFFF86A0-FFFF86DE 25ms
+
 #define      word_FFFF86A0                  							(*(u16*)0xFFFF86A0)                                                        
 #define      word_FFFF86A4                  							(*(u16*)0xFFFF86A4)                                                        
 #define      word_FFFF86AC                  							(*(u16*)0xFFFF86AC)                                                        
@@ -337,8 +355,8 @@
 #define      RAM_VAR_1065_FFFF86B2          							(*(u16*)0xFFFF86B2)                                                        
 #define      timer_down_FFFF86B4                  						(*(u16*)0xFFFF86B4)                                                        
 #define      word_FFFF86B6                  							(*(u16*)0xFFFF86B6)                                                        
-#define      word_FFFF86B8                  							(*(u16*)0xFFFF86B8)                                                        
-#define      word_FFFF86BA                  							(*(u16*)0xFFFF86BA)                                                        
+#define      fall_TPS_timer                  							(*(u16*)0xFFFF86B8)                                                        
+#define      rise_TPS_timer   /*rise TPS timer*/ 						(*(u16*)0xFFFF86BA)                                                        
 #define      w_1822E_loc2                   							(*(u16*)0xFFFF86BE)                                                        
 #define      word_FFFF86C2                  							(*(u16*)0xFFFF86C2)                                                        
 #define      word_FFFF86C4                  							(*(u16*)0xFFFF86C4)                                                        
@@ -353,6 +371,10 @@
 #define      word_FFFF86D8                  							(*(u16*)0xFFFF86D8)                                                        
 #define      timer_down_sub_207F0           							(*(u16*)0xFFFF86DA)                                                        
 #define      word_FFFF86DC                  							(*(u16*)0xFFFF86DC)                                                        
+
+
+// Count down timers FFFF86E0-FFFF8782 100ms
+
 #define      bMUTDD                         							(*(u16*)0xFFFF86E0)                                                        
 #define      bMUTDF                         							(*(u16*)0xFFFF86E2)                                                        
 #define      misfire_timer_FFFF86E6         							(*(u16*)0xFFFF86E6)                                                        
@@ -416,6 +438,9 @@
 #define      word_FFFF877E                  							(*(u16*)0xFFFF877E)                                                        
 #define      word_FFFF8780                  							(*(u16*)0xFFFF8780)                                                        
 #define      word_FFFF8782                  							(*(u16*)0xFFFF8782)                                                        
+
+//  Countdown timers FFFF8784 - FFFF8832 500ms
+
 #define      timer_FFFF8784                 							(*(u16*)0xFFFF8784)                                                        
 #define      timer_FFFF8786                 							(*(u16*)0xFFFF8786)                                                        
 #define      timer_FFFF8788                 							(*(u16*)0xFFFF8788)                                                        
@@ -644,9 +669,9 @@
 #define      TPS_MAP_Addition               							(*(u16*)0xFFFF8980)                                                        
 #define      word_FFFF8982                  							(*(u16*)0xFFFF8982)                                                        
 #define      word_FFFF8984                  							(*(u16*)0xFFFF8984)                                                        
-#define      manifold_FFFF8988                  						(*(u16*)0xFFFF8988)                                                        
+#define      crank_cur_map                  						(*(u16*)0xFFFF8988)                                                        
 #define      word_FFFF898C                  							(*(u16*)0xFFFF898C)                                                        
-#define      manifold_FFFF898E                  						(*(u16*)0xFFFF898E)                                                        
+#define      crank_prev_4_cycle_map                  						(*(u16*)0xFFFF898E)                                                        
 #define      wMUT56_MAX_MAP_FALL_CHANGE     							(*(u16*)0xFFFF89A0)                                                        
 #define      MAX_MAP_FALL_CHANGE            							(*(u16*)0xFFFF89A2)                                                        
 #define      wMUT57_MAX_MAP_RISE_CHANGE     							(*(u16*)0xFFFF89A4)                                                        
@@ -775,8 +800,8 @@
 #define      wMUT32_Air_To_Fuel_Ratio       							(*(u16*)0xFFFF8AC6)                                                        
 #define      wMUT4B                         							(*(u16*)0xFFFF8AC8)                                                        
 #define      AFR_OctanInt                   							(*(u16*)0xFFFF8ACA)                                                        
-#define      afr_FFFF8ACC                   							(*(u16*)0xFFFF8ACC)                                                        
-#define      afr_FFFF8ACE                   							(*(u16*)0xFFFF8ACE)                                                        
+#define      afr_closed_loop                   							(*(u16*)0xFFFF8ACC)                                                        
+#define      afr_closed_loop_interpolator                   							(*(u16*)0xFFFF8ACE)                                                        
 #define      word_FFFF8AD0                  							(*(u16*)0xFFFF8AD0)                                                        
 #define      word_FFFF8AD6                  							(*(u16*)0xFFFF8AD6)                                                        
 #define      AFR_CONST_FFFF8AD8           								(*(u16*)0xFFFF8AD8)                                                        
@@ -844,20 +869,20 @@
 #define      word_FFFF8B76                  							(*(u16*)0xFFFF8B76)                                                        
 #define      word_FFFF8B78                  							(*(u16*)0xFFFF8B78)                                                        
 #define      word_FFFF8B7A                  							(*(u16*)0xFFFF8B7A)                                                        
-#define      word_FFFF8B7C                  							(*(u16*)0xFFFF8B7C)                                                        
-#define      word_FFFF8B7E                  							(*(u16*)0xFFFF8B7E)                                                        
-#define      word_FFFF8B80                  							(*(u16*)0xFFFF8B80)                                                        
-#define      word_FFFF8B82                  							(*(u16*)0xFFFF8B82)                                                        
-#define      word_FFFF8B84                  							(*(u16*)0xFFFF8B84)                                                        
-#define      word_FFFF8B86                  							(*(u16*)0xFFFF8B86)                                                        
-#define      word_FFFF8B88                  							(*(u16*)0xFFFF8B88)                                                        
-#define      word_FFFF8B8A                  							(*(u16*)0xFFFF8B8A)                                                        
-#define      word_FFFF8B8C                  							(*(u16*)0xFFFF8B8C)                                                        
-#define      word_FFFF8B8E                  							(*(u16*)0xFFFF8B8E)                                                        
-#define      word_FFFF8B90                  							(*(u16*)0xFFFF8B90)                                                        
-#define      word_FFFF8B92                  							(*(u16*)0xFFFF8B92)                                                        
-#define      word_FFFF8B94                  							(*(u16*)0xFFFF8B94)                                                        
-#define      word_FFFF8B96                  							(*(u16*)0xFFFF8B96)                                                        
+#define      word_FFFF8B7C                  							((u16*)0xFFFF8B7C)                                                        
+//#define      word_FFFF8B7E                  							(*(u16*)0xFFFF8B7E)                                                        
+//#define      word_FFFF8B80                  							(*(u16*)0xFFFF8B80)                                                        
+//#define      word_FFFF8B82                  							(*(u16*)0xFFFF8B82)                                                        
+//#define      word_FFFF8B84                  							(*(u16*)0xFFFF8B84)                                                        
+//#define      word_FFFF8B86                  							(*(u16*)0xFFFF8B86)                                                        
+//#define      word_FFFF8B88                  							(*(u16*)0xFFFF8B88)                                                        
+#define      word_FFFF8B8A                  							((u16*)0xFFFF8B8A)                                                        
+//#define      word_FFFF8B8C                  							(*(u16*)0xFFFF8B8C)                                                        
+//#define      word_FFFF8B8E                  							(*(u16*)0xFFFF8B8E)                                                        
+//#define      word_FFFF8B90                  							(*(u16*)0xFFFF8B90)                                                        
+//#define      word_FFFF8B92                  							(*(u16*)0xFFFF8B92)                                                        
+//#define      word_FFFF8B94                  							(*(u16*)0xFFFF8B94)                                                        
+//#define      word_FFFF8B96                  							(*(u16*)0xFFFF8B96)                                                        
 #define      word_FFFF8B98                  							(*(u16*)0xFFFF8B98)                                                        
 #define      word_FFFF8B9A                  							(*(u16*)0xFFFF8B9A)                                                        
 #define      word_FFFF8B9C                  							(*(u16*)0xFFFF8B9C)                                                        
@@ -1699,7 +1724,7 @@
 #define      word_FFFF9950                  							(*(u16*)0xFFFF9950)                                                        
 #define      word_FFFF9952                  							(*(u16*)0xFFFF9952)                                                        
 #define      word_FFFF9954                  							(*(u16*)0xFFFF9954)                                                        
-#define      word_FFFF9956                  							(*(u16*)0xFFFF9956)                                                        
+#define      ipw_FFFF9956                  							(*(u16*)0xFFFF9956)                                                        
 #define      word_FFFF995A                  							(*(u16*)0xFFFF995A)                                                        
 #define      word_FFFF995C                  							(*(u16*)0xFFFF995C)                                                        
 #define      word_FFFF995E                  							(*(u16*)0xFFFF995E)                                                        
