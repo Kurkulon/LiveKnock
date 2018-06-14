@@ -1249,11 +1249,11 @@ void CRANK75_Knock_sub_23F8C()
 
 		if (KNOCK_FLAG_FFFF8C34 & 0x80)
 		{
-			wMUT26_Knock_Retard = t1_knock_control_ign_retard_faulty_sensor_17E8;
+			wMUT26_Knock_Retard = t1_knock_control_ign_retard_faulty_sensor_17E8/*0*/;
 		}
 		else
 		{
-			wMUT26_Knock_Retard = t1_knock_control_ign_retard_faulty_sensor_17EA;
+			wMUT26_Knock_Retard = t1_knock_control_ign_retard_faulty_sensor_17EA/*0*/;
 		};
 
 		CRANK75_Knock_sub_24AC0();
@@ -1268,11 +1268,11 @@ void CRANK75_Knock_sub_23F8C()
 		{
 			if (KNOCK_FLAG_FFFF8C34 & 0x80)
 			{
-				r1 = t1_knock_control__17CC;
+				r1 = t1_knock_control__17CC/*32*/;
 			}
 			else
 			{
-				r1 = t1_knock_control__17CE;
+				r1 = t1_knock_control__17CE/*16*/;
 			};
 
 			r1 = 1 + Mul_Div_R(KNOCK_BASE_MINUS_ADC_FFFF8C40, r1, KNOCK_BASE_FFFF8C3A << 3);
@@ -1290,11 +1290,11 @@ void CRANK75_Knock_sub_23F8C()
 
 		// loc_2421E:                                                                                      ; CODE XREF: CRANK75_Knock_sub_23F8C+230j
 
-		if (KNOCK_FLAG_FFFF8C34 & 0x200)
+		if (KNOCK_FLAG_FFFF8C34 & 0x200) // RPM > 500
 		{
 			bMUTCD_KNOCK_PRECOUNT_1_FFFF8C4E += 1;
 
-			if (bMUTCD_KNOCK_PRECOUNT_1_FFFF8C4E >= KNOCK_PRECOUNT_MAX_FFFF8C4A)
+			if (bMUTCD_KNOCK_PRECOUNT_1_FFFF8C4E >= KNOCK_PRECOUNT_MAX_FFFF8C4A/*180*/)
 			{
 				bMUTCD_KNOCK_PRECOUNT_1_FFFF8C4E = KNOCK_PRECOUNT_MAX_FFFF8C4A;
 
@@ -1303,7 +1303,7 @@ void CRANK75_Knock_sub_23F8C()
 
 			bMUTCE_KNOCK_PRECOUNT_2_FFFF8C50 += 1;
 
-			if (bMUTCE_KNOCK_PRECOUNT_2_FFFF8C50 >= KNOCK_PRECOUNT_MAX_FFFF8C4A)
+			if (bMUTCE_KNOCK_PRECOUNT_2_FFFF8C50 >= KNOCK_PRECOUNT_MAX_FFFF8C4A/*180*/)
 			{
 				bMUTCE_KNOCK_PRECOUNT_2_FFFF8C50 = KNOCK_PRECOUNT_MAX_FFFF8C4A;
 
@@ -1313,9 +1313,9 @@ void CRANK75_Knock_sub_23F8C()
 			KNOCK_REL_compare_to_10_FFFF8C5A <<= 1;
 
 
-			if (r1 >= t1_unk_180E)
+			if (r1 >= t1_unk_180E/*1*/)
 			{
-				if (r1 <= KNOCK_REL_1_FFFF8C4C)
+				if (r1 <= KNOCK_REL_1_FFFF8C4C/*3*/)
 				{
 					KNOCK_REL_compare_to_10_FFFF8C5A |= 1;
 
@@ -1325,44 +1325,34 @@ void CRANK75_Knock_sub_23F8C()
 
 						r1 = 0;
 					}
-					else
+					else if (bMUTCC_KNOCK_UB_FFFF8C56 == strokeNumber)
 					{
-						if (bMUTCC_KNOCK_UB_FFFF8C56 == strokeNumber)
+						bMUTCE_KNOCK_PRECOUNT_2_FFFF8C50 = 0;
+
+						r1 = 0;
+					}
+					else if (KNOCK_PRECOUNT_1033/*0*/ == 0 || (KNOCK_REL_compare_to_10_FFFF8C5A & 0x10))
+					{
+						if (r8 == bMUTCB_KNOCK_U_FFF8C54)
 						{
+							bMUTCB_KNOCK_U_FFF8C54 = strokeNumber;
+
+							bMUTCD_KNOCK_PRECOUNT_1_FFFF8C4E = 0;
+
+							if (KNOCK_PRECOUNT_1033 != 0)
+							{
+								r1 = 0;
+							};
+						}
+						else if (bMUTCC_KNOCK_UB_FFFF8C56 == r8)
+						{
+							bMUTCC_KNOCK_UB_FFFF8C56 = strokeNumber;
+
 							bMUTCE_KNOCK_PRECOUNT_2_FFFF8C50 = 0;
 
-							r1 = 0;
-						}
-						else
-						{
-							if (KNOCK_PRECOUNT_1033 == 0 || (KNOCK_REL_compare_to_10_FFFF8C5A & 0x10))
+							if (KNOCK_PRECOUNT_1033 != 0)
 							{
-								if (r8 == bMUTCB_KNOCK_U_FFF8C54)
-								{
-									bMUTCB_KNOCK_U_FFF8C54 = strokeNumber;
-
-									bMUTCD_KNOCK_PRECOUNT_1_FFFF8C4E = 0;
-
-									if (KNOCK_PRECOUNT_1033 != 0)
-
-									{
-										r1 = 0;
-									};
-								}
-								else
-								{
-									if (bMUTCC_KNOCK_UB_FFFF8C56 == r8)
-									{
-										bMUTCC_KNOCK_UB_FFFF8C56 = strokeNumber;
-
-										bMUTCE_KNOCK_PRECOUNT_2_FFFF8C50 = 0;
-
-										if (KNOCK_PRECOUNT_1033 != 0)
-										{
-											r1 = 0;
-										};
-									};
-								};
+								r1 = 0;
 							};
 						};
 					};
@@ -1471,6 +1461,8 @@ void CRANK75_Knock_sub_23F8C()
 	};
 
 	//++++++++++++++++++++++++++++++++++++++++++++++
+
+	// KNOCK_VAR1_bMUTC9_FFFF8C3C = KNOCK_VAR1_bMUTC9_FFFF8C3C * (r2 / 65536) + r1;
 
 	r1 <<= 16;
 

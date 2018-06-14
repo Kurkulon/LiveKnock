@@ -164,7 +164,7 @@ static void IG04_Init_knock_sub_16DB2()
 	KNOCK_VAR2_FFFF8C3E = t;
 	KNOCK_VAR1_bMUTC9_FFFF8C3C = t;
 
-	KNOCK_BASE_FFFF8C3A = knockAdder_TripleGain;
+	KNOCK_BASE_FFFF8C3A = knockAdder_TripleGain/*5*/;
 
 	KNOCK_FLAG2_FFFF887A &= ~2;
 
@@ -174,9 +174,9 @@ static void IG04_Init_knock_sub_16DB2()
 
 	Knock_Output_Calc_sub_AC96();
 
-	KNOCK_PRECOUNT_MAX_FFFF8C4A = word_1818;
+	KNOCK_PRECOUNT_MAX_FFFF8C4A = word_1818/*180*/;
 
-	KNOCK_REL_1_FFFF8C4C = word_1812;
+	KNOCK_REL_1_FFFF8C4C = word_1812/*3*/;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -417,24 +417,24 @@ static bool IG04_sub_1729C()
 
 static void IG04_sub_172D6()
 {
-	KNOCK_PRECOUNT_MAX_FFFF8C4A = word_1818;
+	KNOCK_PRECOUNT_MAX_FFFF8C4A = word_1818/*180*/;
 
-	TRG(KNOCK_FLAG_FFFF8C34, 0x800, MUT21_RPM_x125div4, word_1816, word_1814);
+	TRG(KNOCK_FLAG_FFFF8C34, 0x800, MUT21_RPM_x125div4, word_1816/*96(3000)*/, word_1814/*106(3312)*/);
 
-	KNOCK_REL_1_FFFF8C4C = (KNOCK_FLAG_FFFF8C34 & 0x800) ? word_1810 : word_1812;
+	KNOCK_REL_1_FFFF8C4C = (KNOCK_FLAG_FFFF8C34 & 0x800) ? word_1810/*4*/ : word_1812/*3*/;
 
-	WFLAG(KNOCK_FLAG_FFFF8C34, 0x200, MUT21_RPM_x125div4 >= word_181C && MUT21_RPM_x125div4 <= word_181A);
+	WFLAG(KNOCK_FLAG_FFFF8C34, 0x200, MUT21_RPM_x125div4 >= word_181C/*16(500)*/ && MUT21_RPM_x125div4 <= word_181A/*255*/);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 static void IG04_sub_173F2()
 {
-	TRG(KNOCK_FLAG_FFFF8C34, 0x100, MUT21_RPM_x125div4, word_17F2, word_17F4);
+	TRG(KNOCK_FLAG_FFFF8C34, 0x100, MUT21_RPM_x125div4, word_17F2/*151(4718)*/, word_17F4/*160(5000)*/);
 
-	TRG(KNOCK_FLAG_FFFF8C34, 0x10, MUT21_RPM_x125div4, word_2504, word_2502);
+	TRG(KNOCK_FLAG_FFFF8C34, 0x10, MUT21_RPM_x125div4, word_2504/*64(2000)*/, word_2502/*74(2312)*/);
 
-	TRG(KNOCK_FLAG_FFFF8C34, 1, MUT21_RPM_x125div4, word_2508, word_2506);
+	TRG(KNOCK_FLAG_FFFF8C34, 1, MUT21_RPM_x125div4, word_2508/*96(3000)*/, word_2506/*106(3312)*/);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

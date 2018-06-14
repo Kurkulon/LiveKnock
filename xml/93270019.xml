@@ -15,39 +15,39 @@
 
 	<include>lancer9base</include>
 
-	<table name="VE 16bit Map" address="382a2" category="AltMode" type="3D" swapxy="true" scaling="VE16">
+	<table name="VE 16bit Map" category="AltMode" address="382a2" type="3D" swapxy="true" scaling="VE16">
 		<table name="Load" address="6d28" type="X Axis" elements="11" scaling="Load"/>
 		<table name="RPM" address="6cf8" type="Y Axis" elements="19" scaling="RPM"/>
 	</table>
 
-  <table name="High Octane Ignition Map 16bit" address="3809a" category="AltMode" type="3D" swapxy="true" scaling="Timing16">
-    <table name="Load" type="X Axis" elements="12" scaling="Load" address="67c6"/>
-    <table name="RPM" type="Y Axis" elements="21" scaling="RPM" address="6792"/>
-  </table>
+	<table name="High Octane Ignition Map 16bit" category="AltMode" address="3809a" type="3D" swapxy="true" scaling="Timing16">
+		<table name="Load" address="67c6" type="X Axis" elements="12" scaling="Load"/>
+		<table name="RPM" address="6792" type="Y Axis" elements="21" scaling="RPM"/>
+	</table>
 
-  <table name="High Octane Fuel Map" address="3800d" category="AltMode" type="3D" swapxy="true" scaling="AFR">
-    <table name="Load" address="6776" type="X Axis" elements="9" scaling="Load"/>
-    <table name="RPM" address="6750" type="Y Axis" elements="14" scaling="RPM"/>
-  </table>
+	<table name="High Octane Fuel Map" category="AltMode" address="3800d" type="3D" swapxy="true" scaling="AFR">
+		<table name="Load" address="6776" type="X Axis" elements="9" scaling="Load"/>
+		<table name="RPM" address="6750" type="Y Axis" elements="14" scaling="RPM"/>
+	</table>
 
-  <table name="AFR-RPM reach lim" category="Fuel" address="32cc" type="2D" level="1" scaling="AFR">
+	<table name="AFR-RPM reach lim" category="Fuel" address="32cc" type="2D" level="1" scaling="AFR">
 		<table name="RPM" address="6d46" type="Y Axis" elements="15" scaling="RPMStatLimit"/>
 	</table>
 
 	<table name="OBD-II Codes" address="96b0">
 	</table>
 
-	<table name="VE2Map_DRIVE_EGR_IA_ON" address="3119">
-    <table name="Load" address="6d28"/>
-    <table name="RPM" address="6cf8"/>
-  </table>
-
-	<table name="VE3Map_NEUTRAL_EGR_IA_ON" address="31f5">
+	<table name="VE1Map_NO_EGR_IA" address="303d">
 		<table name="Load" address="6d28"/>
 		<table name="RPM" address="6cf8"/>
 	</table>
 
-	<table name="VE1Map_NO_EGR_IA" address="303d">
+	<table name="VE2Map_DRIVE_EGR_IA_ON" address="3119">
+		<table name="Load" address="6d28"/>
+		<table name="RPM" address="6cf8"/>
+	</table>
+
+	<table name="VE3Map_NEUTRAL_EGR_IA_ON" address="31f5">
 		<table name="Load" address="6d28"/>
 		<table name="RPM" address="6cf8"/>
 	</table>
