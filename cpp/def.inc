@@ -114,7 +114,7 @@ wMUT6B_Knock_Base:											.EQU H'FFFF998A
 wMUT6C_Knock_Sum_Addition:									.EQU H'FFFF9986 
 wMUT6D_Knock_Change:										.EQU H'FFFF998C 
 wMUT6E_Knock_Dynamics:										.EQU H'FFFF8C46 
-wMUT6F_Knock_Acceleration:									.EQU H'FFFF85B6 
+wMUT6F_Knock_Accel_timer:									.EQU H'FFFF85B6 
 wMUT70_Array_of_Serial_Receive_Data_Register_2_RDR2_Values:	.EQU H'FFFF8D96 
 wMUT71_Sensor_Error:										.EQU H'FFFF89E2 
 wMUT72_Knock_Present:										.EQU H'FFFF89E6 

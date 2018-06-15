@@ -29,7 +29,9 @@
 #define sub_D4E4							((bool(*)(void))0xD4E4)
 #define Pulse_TIO2_E_F_G_out_1				((void(*)(u16))0xBE1C)
 
-#define Update_Gen_G_output					((void(*)(void))0xAD06)
+extern void Update_Gen_G_output();
+
+//#define Update_Gen_G_output					((void(*)(void))0xAD06)
 //#define MUT98_sub_329C6						((void(*)(void))0x329C6)
 #define IMMO_sub_2212E						((void(*)(void))0x2212E)
 #define COM_MUT_sub_207F0					((void(*)(void))0x207F0)
@@ -377,7 +379,7 @@ static void HUGE_Method_801_6_Hz()
 
 	__disable_irq();
 
-	WFLAG(KNOCK_FLAG2_FFFF887A, 1, gen_G_timer != 0);
+	WFLAG(KNOCK_FLAG2_FFFF887A, KNOCK_F2_01, gen_G_timer != 0);
 
 	Update_Gen_G_output();
 
@@ -771,12 +773,12 @@ inline void Huge_200_Knock()
 
 		u32 r13 = knockSum_decay_timer/*160*/;
 
-		if (wMUT6F_Knock_Acceleration != 0)
+		if (wMUT6F_Knock_Accel_timer != 0)
 		{
-			r13 = t1_knock_control_advance_time_17E0;
+			r13 = t1_knock_control_advance_time_17E0/*70*/;
 		};
 
-		if (ZRO(KNOCK_FLAG_FFFF8C34, 0x80))
+		if (ZRO(KNOCK_FLAG_FFFF8C34, KNOCK_F1_80))
 		{
 			r13 = 2;
 		};
@@ -1210,26 +1212,31 @@ static void Huge_100_Hz()
 	{
 		__disable_irq();
 
-		u32 r0 = Mul16(KNOCK_VAR2_FFFF8C3E, 7);
-		
-		KNOCK_VAR2_FFFF8C3E = DIV_DW_R(r0 + KNOCK_VAR1_bMUTC9_FFFF8C3C, 8);
+		// knock_filtered_x256 += (wMUTC9_knock_ADC_proc_filtered - knock_filtered_x256) / 8;
+		// knock_filtered_x256 = (knock_filtered_x256 * 7 + wMUTC9_knock_ADC_proc_filtered) / 8;
 
-		u32 r1 = (KNOCK_FLAG2_FFFF887A & 2) ? knockAdder_SingleGain/*3*/ : knockAdder_TripleGain/*5*/;
+		u32 r0 = Mul16(knock_filtered_x256, 7);
+		
+		knock_filtered_x256 = DIV_DW_R(r0 + wMUTC9_knock_ADC_proc_filtered, 8);
+
+		u32 r1 = (KNOCK_FLAG2_FFFF887A & KNOCK_GAIN_3) ? knockAdder_SingleGain/*3*/ : knockAdder_TripleGain/*5*/;
 
 		r1 = sub_21A72(r1);
 
-		u32 r13 = knockMul_lowRPM/*15*/;
+		u32 r13 = knockMul_lowRPM/*15(1.875)*/;
 
-		if (KNOCK_FLAG_FFFF8C34 & 0x10)
+		if (KNOCK_FLAG_FFFF8C34 & KNOCK_RPM_LOW)
 		{
-			r13 = (KNOCK_FLAG_FFFF8C34 & 1) ? knockMul_midRPM : knockMul_highRPM;
+			r13 = (KNOCK_FLAG_FFFF8C34 & KNOCK_RPM_MID) ? knockMul_midRPM/*19(2.375)*/ : knockMul_highRPM/*16(2.0)*/;
 		};
 
-		r0 = Mul16(KNOCK_VAR2_FFFF8C3E, sub_21A52(r13) << 5);
+		// knock_filtered_x256 * r13 * 32 / 65536 + r1
+
+		r0 = Mul16(knock_filtered_x256, sub_21A52(r13) << 5);
 		
 		r0 = Div_65536_R(r0) + r1;
 
-		KNOCK_BASE_FFFF8C3A = Lim16(r0, 0xFF, 1);
+		knock_base_final = Lim16(r0, 0xFF, 1);
 
 		__enable_irq();
 	};
@@ -1267,10 +1274,10 @@ static void Huge_100_Hz()
 
 	if (r13 >= t1_knock_control_accel_delta_17E2/*51*/)
 	{
-		wMUT6F_Knock_Acceleration = t1_knock_control_accel_delta_17E6/*40*/;
+		wMUT6F_Knock_Accel_timer = t1_knock_control_accel_delta_17E6/*40*/;
 	};
 
-	if (ZRO(IGN_FLAG9_FFFF8BB6, 0x40) && r13 >= t1_some_load_17A2/*5*/ && r13 >= abs_Delta_TPS)
+	if (ZRO(IGN_FLAG9_FFFF8BB6, IGN_F9_40) && r13 >= t1_some_load_17A2/*5*/ && r13 >= abs_Delta_TPS)
 	{
 		abs_Delta_TPS = r13;
 

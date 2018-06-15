@@ -902,7 +902,7 @@ void F500_sub_108AA()
 	
 	dif_rpm_x125div32_AB = 0;
 	
-	RPM_DELTA_FFFF8948 = 128;
+	RPM_DELTA_per_100ms = 128;
 	
 	null_RPM_x125div256 = 0;
 }
@@ -937,17 +937,17 @@ void F500_sub_10984()
 	{
 		dif_rpm_x125div32_AB = Lim_FF(Sub_Lim_0(rpm_x125div32_A, rpm_x125div32_B));
 
-		if (timeEvents & EVT_2_100ms)
+		if (ZRO(timeEvents, EVT_2_100ms))
 		{
 			return;
 		};
 
-		RPM_DELTA_FFFF8948 = Lim_FF(Sub_Lim_0(MUT21_RPM_x125div4 + 128, prev_RPM_x125div4));
+		RPM_DELTA_per_100ms = Lim_FF(Sub_Lim_0(MUT21_RPM_x125div4 + 128, prev_RPM_x125div4));
 	}
 	else
 	{
 		dif_rpm_x125div32_AB = 0;
-		RPM_DELTA_FFFF8948 = 128;
+		RPM_DELTA_per_100ms = 128;
 	};
 
 	prev_RPM_x125div4 = MUT21_RPM_x125div4;

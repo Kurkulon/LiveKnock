@@ -284,7 +284,55 @@ struct Map3D_W
 #define EVT_15_8000					0x8000
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// KNOCK_FLAG2_FFFF887A
+
+#define KNOCK_F2_01					0x01
+#define KNOCK_GAIN_3				0x02
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// KNOCK_FLAG_FFFF8C34
+
+#define KNOCK_RPM_MID				0x01 // RPM > 3000
+//#define KNOCK_F1_02					0x02
+//#define KNOCK_F1_04					0x04
+//#define KNOCK_F1_08					0x08
+#define KNOCK_RPM_LOW				0x10 // RPM > 2000
+//#define KNOCK_F1_20					0x20
+#define KNOCK_RETARD_ENABLED		0x40
+#define KNOCK_F1_80					0x80
+#define KNOCK_RPM_HI				0x100
+#define KNOCK_F1_200				0x200
+#define KNOCK_FAULT_CHECK			0x400
+#define KNOCK_F1_800				0x800
+#define KNOCK_F1_1000				0x1000
+#define KNOCK_F1_2000				0x2000
+#define KNOCK_F1_4000				0x4000
+#define KNOCK_F1_8000				0x8000
+
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// IGN_FLAG9_FFFF8BB6
+
+#define IGN_F9_01					0x01
+#define IGN_F9_02					0x02
+#define IGN_F9_04					0x04
+#define IGN_F9_08					0x08
+#define IGN_F9_10					0x10
+#define IGN_F9_20					0x20
+#define IGN_F9_40					0x40
+#define IGN_F9_FIX5					0x80
+#define IGN_F9_100					0x100
+#define IGN_F9_200					0x200
+#define IGN_F9_400					0x400
+#define IGN_F9_800					0x800
+#define IGN_F9_1000					0x1000
+#define IGN_F9_2000					0x2000
+#define IGN_F9_4000					0x4000
+#define IGN_F9_8000					0x8000
+
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

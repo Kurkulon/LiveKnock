@@ -239,11 +239,11 @@ static void ML02_sub_114B4()
 {
 	if (ML02_sub_114E2())
 	{
-		SET(IGN_FLAG9_FFFF8BB6, 1);
+		SET(IGN_FLAG9_FFFF8BB6, IGN_F9_01);
 	}
 	else
 	{
-		CLR(IGN_FLAG9_FFFF8BB6, 1);
+		CLR(IGN_FLAG9_FFFF8BB6, IGN_F9_01);
 	};
 }
 

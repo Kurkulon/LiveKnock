@@ -639,7 +639,7 @@ static void CRANK75_sub_232A0()
 
 	u32 r2 = ((word_FFFF8C5C & 5) << 1) | 0x35;
 
-	if (IGN_FLAG9_FFFF8BB6 & 0x80) // Fix timing at 5 degrees;
+	if (IGN_FLAG9_FFFF8BB6 & IGN_F9_FIX5) // Fix timing at 5 degrees;
 	{
 		SET(r2, 0x40);
 	};
@@ -837,7 +837,7 @@ static void CRANK75_sub_232A0()
 
 	/*u32*/ r1 = word_FFFF8C62 & 0xF;
 
-	if (ZRO(IGN_FLAG9_FFFF8BB6, 1) || r1 == 0 || r1 == 0xF || ZRO(word_FFFF8F2A, 1))
+	if (ZRO(IGN_FLAG9_FFFF8BB6, IGN_F9_01) || r1 == 0 || r1 == 0xF || ZRO(word_FFFF8F2A, 1))
 	{
 		// loc_23932
 
@@ -1077,7 +1077,7 @@ static void CRANK75_sub_232A0()
 
 	gen_G_timer = (r1 >= 1) ? r1 : 1;
 
-	SET(KNOCK_FLAG2_FFFF887A, 1);
+	SET(KNOCK_FLAG2_FFFF887A, KNOCK_F2_01);
 
 	Update_Gen_G_output();
 
@@ -1175,8 +1175,8 @@ void CRANK75_Knock_sub_23F8C()
 
 	r1 = r2;
 
-	if ((KNOCK_FLAG_FFFF8C34 & 0x400) // 0x400 - (MUT21_RPM_x125div4 >= word_1C28(2000))&&(wMUT1C_ECU_Load >= word_1C26(55kPa))
-		&& (KNOCK_FLAG1_FFFF8C36 & 1) == 0)
+	if ((KNOCK_FLAG_FFFF8C34 & KNOCK_FAULT_CHECK) // 0x400 - (MUT21_RPM_x125div4 >= word_1C28(2000))&&(wMUT1C_ECU_Load >= word_1C26(55kPa))
+		&& (KNOCK_FLAG1_FFFF8C36 & KNOCK_RPM_MID) == 0)
 	{
 		u32 r13, r3;
 
@@ -1189,13 +1189,13 @@ void CRANK75_Knock_sub_23F8C()
 			r13 = r1 -= wMUT6A_Knock_ADC_Processed;
 		};
 
-		if (KNOCK_FLAG2_FFFF887A & 2)
+		if (KNOCK_FLAG2_FFFF887A & KNOCK_GAIN_3)
 		{
-			r3 = t1_knock_signal_change_check_1C2E;
+			r3 = t1_knock_signal_change_check_1C2E/*3*/;
 		}
 		else
 		{
-			r3 = t1_knock_signal_change_check_1C2C;
+			r3 = t1_knock_signal_change_check_1C2C/*3*/;
 		};
 
 		if (r13 >= r3)
@@ -1231,12 +1231,12 @@ void CRANK75_Knock_sub_23F8C()
 
 	Timer_Counter_Related_sub_C928();
 
-	KNOCK_BASE_MINUS_ADC_FFFF8C40 = Sub_Lim_0(wMUT6A_Knock_ADC_Processed, KNOCK_BASE_FFFF8C3A);
+	KNOCK_BASE_MINUS_ADC_FFFF8C40 = Sub_Lim_0(wMUT6A_Knock_ADC_Processed, knock_base_final);
 
 
 
 
-	if ((KNOCK_FLAG_FFFF8C34 & 0x40) == 0) // 0x40 - enabled knock retard; IG04_Check_17074()
+	if ((KNOCK_FLAG_FFFF8C34 & KNOCK_RETARD_ENABLED) == 0) // 0x40 - enabled knock retard; IG04_Check_17074()
 	{
 		wMUT26_Knock_Retard = 0;
 
@@ -1247,7 +1247,7 @@ void CRANK75_Knock_sub_23F8C()
 	else if (wMUT72_Knock_Present & 1) // 1 - ? Knock sensor fault; (wMUT6E_Knock_Dynamics >= word_1C30)
 	{
 
-		if (KNOCK_FLAG_FFFF8C34 & 0x80)
+		if (KNOCK_FLAG_FFFF8C34 & KNOCK_F1_80)
 		{
 			wMUT26_Knock_Retard = t1_knock_control_ign_retard_faulty_sensor_17E8/*0*/;
 		}
@@ -1266,7 +1266,7 @@ void CRANK75_Knock_sub_23F8C()
 
 		if (KNOCK_BASE_MINUS_ADC_FFFF8C40 != 0)
 		{
-			if (KNOCK_FLAG_FFFF8C34 & 0x80)
+			if (KNOCK_FLAG_FFFF8C34 & KNOCK_F1_80)
 			{
 				r1 = t1_knock_control__17CC/*32*/;
 			}
@@ -1275,7 +1275,7 @@ void CRANK75_Knock_sub_23F8C()
 				r1 = t1_knock_control__17CE/*16*/;
 			};
 
-			r1 = 1 + Mul_Div_R(KNOCK_BASE_MINUS_ADC_FFFF8C40, r1, KNOCK_BASE_FFFF8C3A << 3);
+			r1 = 1 + Mul_Div_R(KNOCK_BASE_MINUS_ADC_FFFF8C40, r1, knock_base_final << 3);
 
 			if (r1 >= 0xFF)
 			{
@@ -1290,7 +1290,7 @@ void CRANK75_Knock_sub_23F8C()
 
 		// loc_2421E:                                                                                      ; CODE XREF: CRANK75_Knock_sub_23F8C+230j
 
-		if (KNOCK_FLAG_FFFF8C34 & 0x200) // RPM > 500
+		if (KNOCK_FLAG_FFFF8C34 & KNOCK_F1_200) // RPM > 500
 		{
 			bMUTCD_KNOCK_PRECOUNT_1_FFFF8C4E += 1;
 
@@ -1370,13 +1370,13 @@ void CRANK75_Knock_sub_23F8C()
 
 		u32 r13;
 
-		if (KNOCK_FLAG_FFFF8C34 & 0x80)
+		if (KNOCK_FLAG_FFFF8C34 & KNOCK_F1_80)
 		{
-			r13 = t1_knock_control__17D0;
+			r13 = t1_knock_control__17D0/*8*/;
 		}
 		else
 		{
-			r13 = t1_knock_control__17D2;
+			r13 = t1_knock_control__17D2/*255*/;
 		};
 
 		if (r1 > r13)
@@ -1403,11 +1403,11 @@ void CRANK75_Knock_sub_23F8C()
 
 	wMUT6C_Knock_Sum_Addition = r1;
 
-	bMUTCA_KNOCK_VAR22_FFFF9988 = KNOCK_VAR2_FFFF8C3E;
+	knock_filtered_x256_copy = knock_filtered_x256;
 
-	wMUT6B_Knock_Base = KNOCK_BASE_FFFF8C3A;
+	wMUT6B_Knock_Base = knock_base_final;
 
-	if (wMUT6A_Knock_ADC_Processed >= (KNOCK_VAR2_FFFF8C3E>>8))
+	if (wMUT6A_Knock_ADC_Processed >= (knock_filtered_x256>>8))
 	{
 		if (KNOCK_DYNAMICS2_FFFF8C48 < 0xFFFF)
 		{
@@ -1421,7 +1421,7 @@ void CRANK75_Knock_sub_23F8C()
 
 	r2 = 0x20;
 
-	if (wMUT6F_Knock_Acceleration != 0)
+	if (wMUT6F_Knock_Accel_timer != 0)
 	{
 		r2 = 0xF000;
 		r1 = wMUT6A_Knock_ADC_Processed << 4;
@@ -1432,11 +1432,11 @@ void CRANK75_Knock_sub_23F8C()
 		{
 			r2 = 0x100;
 		}
-		else if (KNOCK_DYNAMICS2_FFFF8C48 >= t1_knock_dynamics_1820)
+		else if (KNOCK_DYNAMICS2_FFFF8C48 >= t1_knock_dynamics_1820/*6*/)
 		{
 			r2 = 0x10;
 		}
-		else if ((KNOCK_VAR2_FFFF8C3E >> 8) != 0 && ((KNOCK_VAR2_FFFF8C3E >> 8) * t1_knock_multiplier_1822 <= (wMUT6A_Knock_ADC_Processed << 3)))
+		else if ((knock_filtered_x256 >> 8) != 0 && ((knock_filtered_x256 >> 8) * t1_knock_multiplier_1822/*16*/ <= (wMUT6A_Knock_ADC_Processed << 3)))
 		{
 			r2 = 0x100;
 		};
@@ -1462,26 +1462,26 @@ void CRANK75_Knock_sub_23F8C()
 
 	//++++++++++++++++++++++++++++++++++++++++++++++
 
-	// KNOCK_VAR1_bMUTC9_FFFF8C3C = KNOCK_VAR1_bMUTC9_FFFF8C3C * (r2 / 65536) + r1;
+	// wMUTC9_knock_ADC_proc_filtered = wMUTC9_knock_ADC_proc_filtered * (r2 / 65536) + r1;
 
 	r1 <<= 16;
 
-	KNOCK_VAR1_bMUTC9_FFFF8C3C = Div_65536_R(Add_Lim_FFFFFFFF(KNOCK_VAR1_bMUTC9_FFFF8C3C * r2, r1));
+	wMUTC9_knock_ADC_proc_filtered = Div_65536_R(Add_Lim_FFFFFFFF(wMUTC9_knock_ADC_proc_filtered * r2, r1));
 
-	if ((KNOCK_FLAG2_FFFF887A & 2) == 0)
+	if ((KNOCK_FLAG2_FFFF887A & KNOCK_GAIN_3) == 0)
 	{
-		if (KNOCK_BASE_FFFF8C3A >= t1_knock_base_compare_17EE)
+		if (knock_base_final >= t1_knock_base_compare_17EE/*143*/)
 		{
-			KNOCK_FLAG1_FFFF8C36 |= 0x10;
+			KNOCK_FLAG1_FFFF8C36 |= KNOCK_RPM_LOW;
 
 			KNOCK_RPM_FFFF8C74 = MUT21_RPM_x125div4;
 		};
 	}
 	else
 	{
-		if (MUT21_RPM_x125div4 < Sub_Lim_0(KNOCK_RPM_FFFF8C74, t1_knock_rpm_17F0) || KNOCK_BASE_FFFF8C3A < t1_knock_base_compare_17EC)
+		if (MUT21_RPM_x125div4 < Sub_Lim_0(KNOCK_RPM_FFFF8C74, t1_knock_rpm_17F0/*10(312)*/) || knock_base_final < t1_knock_base_compare_17EC/*26*/)
 		{
-			KNOCK_FLAG1_FFFF8C36 &= ~0x10;
+			KNOCK_FLAG1_FFFF8C36 &= ~KNOCK_RPM_LOW;
 		};
 	};
 
@@ -1489,35 +1489,35 @@ void CRANK75_Knock_sub_23F8C()
 
 	KNOCK_FLAG1_FFFF8C36 &= ~1;
 
-	if (((KNOCK_FLAG1_FFFF8C36 & 0x10) && (FLAGS_FFFF8EB0 & 0x80) == 0) || ((FLAGS_FFFF8EB0 & 0x80) && (KNOCK_FLAG_FFFF8C34 & 0x100)))
+	if (((KNOCK_FLAG1_FFFF8C36 & KNOCK_RPM_LOW) && (FLAGS_FFFF8EB0 & 0x80) == 0) || ((FLAGS_FFFF8EB0 & 0x80) && (KNOCK_FLAG_FFFF8C34 & KNOCK_RPM_HI)))
 	{
-		if ((KNOCK_FLAG2_FFFF887A & 2) == 0)
+		if ((KNOCK_FLAG2_FFFF887A & KNOCK_GAIN_3) == 0)
 		{
-			KNOCK_VAR1_bMUTC9_FFFF8C3C /= 3;
+			wMUTC9_knock_ADC_proc_filtered /= 3;
 
-			KNOCK_VAR2_FFFF8C3E /= 3;
+			knock_filtered_x256 /= 3;
 
-			KNOCK_BASE_FFFF8C3A = Lim16(KNOCK_BASE_FFFF8C3A/3, 1, 0xFF);
+			knock_base_final = Lim16(knock_base_final/3, 1, 0xFF);
 
 			KNOCK_FLAG1_FFFF8C36 |= 1;
 		};
 
-		KNOCK_FLAG2_FFFF887A |= 2;
+		SET(KNOCK_FLAG2_FFFF887A, KNOCK_GAIN_3);
 	}
 	else
 	{
-		if ((KNOCK_FLAG2_FFFF887A & 2) != 0)
+		if ((KNOCK_FLAG2_FFFF887A & KNOCK_GAIN_3) != 0)
 		{
-			KNOCK_VAR1_bMUTC9_FFFF8C3C *= 3;
+			wMUTC9_knock_ADC_proc_filtered *= 3;
 
-			KNOCK_VAR2_FFFF8C3E *= 3;
+			knock_filtered_x256 *= 3;
 
-			KNOCK_BASE_FFFF8C3A = Lim16(KNOCK_BASE_FFFF8C3A*3, 1, 0xFF);
+			knock_base_final = Lim16(knock_base_final*3, 1, 0xFF);
 
 			KNOCK_FLAG1_FFFF8C36 |= 1;
 		};
 
-		KNOCK_FLAG2_FFFF887A &= ~2;
+		CLR(KNOCK_FLAG2_FFFF887A, KNOCK_GAIN_3);
 	};
 
 }
@@ -1533,7 +1533,7 @@ static void CRANK75_MainUpdateTiming()
 
 	u32 r2 = word_FFFF8BCA;
 
-	if ((IGN_FLAG9_FFFF8BB6 & 4) || word_FFFF8BF4 != 0 || word_FFFF8BFA != 0)
+	if ((IGN_FLAG9_FFFF8BB6 & IGN_F9_04) || word_FFFF8BF4 != 0 || word_FFFF8BFA != 0)
 	{
 		r2 += word_FFFF8BFA;
 
@@ -1558,9 +1558,9 @@ static void CRANK75_MainUpdateTiming()
 	r2 += sub_21AAA(wMUT26_Knock_Retard);
 
 
-	if ((IGN_FLAG9_FFFF8BB6 & 8) && (word_FFFF8F2A & 1))
+	if ((IGN_FLAG9_FFFF8BB6 & IGN_F9_08) && (word_FFFF8F2A & 1))
 	{
-		if (IGN_FLAG9_FFFF8BB6 & 0x20)
+		if (IGN_FLAG9_FFFF8BB6 & IGN_F9_20)
 		{
 			r2 += array_OctanNum[stroke_FFFF8F22];
 		}
@@ -2856,7 +2856,7 @@ static void Update_Gen_G_output()
 {
 	__disable_irq();
 
-	if (ZRO(KNOCK_FLAG2_FFFF887A, 1))
+	if (ZRO(KNOCK_FLAG2_FFFF887A, KNOCK_F2_01))
 	{
 		SET(reg_PFDRL, 0x80);
 	}
