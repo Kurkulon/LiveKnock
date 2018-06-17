@@ -467,7 +467,7 @@ static bool BC06_sub_1C8C4()
 
 	if (open_Loop_disable != 0 && byte_1063 != 0)
 	{
-		if ((FUEL_CUT_FLAG_FFFF8A5E & 0x40) || timer_FFFF8596 != 0)
+		if ((FUEL_CUT_FLAG_FFFF8A5E & FCF_40) || timer_FFFF8596 != 0)
 		{
 			return true;
 		};
@@ -685,7 +685,7 @@ static u16 BC06_EGR_HI_LO()
 
 		r13 = Mul_Fix7_R(Table_Lookup_byte_2D_3D(r1), 0x80);
 
-		if ((FUEL_CUT_FLAG_FFFF8A5E & 0x200) && word_FFFF85FC == 0 && ZRO(byte_103C, 4))
+		if ((FUEL_CUT_FLAG_FFFF8A5E & FCF_200) && word_FFFF85FC == 0 && ZRO(byte_103C, 4))
 		{
 			r13 = Table_Lookup_byte_2D_3D(word_3E72);
 		};

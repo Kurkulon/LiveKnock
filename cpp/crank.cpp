@@ -2008,7 +2008,7 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 	{
 		// async_25DE6
 
-		if (ONE(FUEL_CUT_FLAG_FFFF8A5E, 0x80) && ONE(RPM_FLAGS, RPM_0_CRANKING) && (word_FFFF8AD6 != 0 || ZRO(word_FFFF8F2A, 2)))
+		if (ONE(FUEL_CUT_FLAG_FFFF8A5E, FCF_80) && ONE(RPM_FLAGS, RPM_0_CRANKING) && (word_FFFF8AD6 != 0 || ZRO(word_FFFF8F2A, 2)))
 		{
 			// loc_25E06
 
@@ -2213,7 +2213,7 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 			wMUTC0_bMUT54_Acceleration_Enrichment = 0;
 			wMUTC1_bMUT55_Deceleration_Enleanment = 0;
 		}
-		else if (PEDR_LO_Check_sub_A790() || (RPM_FLAGS & (RPM_5_REVLIM|RPM_3_FUEL_CUT)) || (FUEL_CUT_FLAG_FFFF8A5E & 0x40))
+		else if (PEDR_LO_Check_sub_A790() || (RPM_FLAGS & (RPM_5_REVLIM|RPM_3_FUEL_CUT)) || (FUEL_CUT_FLAG_FFFF8A5E & FCF_40))
 		{
 			wMUTC0_bMUT54_Acceleration_Enrichment = 0;
 		}
@@ -2471,7 +2471,7 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 
 		// loc_25BCC
 
-		if (FUEL_CUT_FLAG_FFFF8A5E & 0x40)
+		if (FUEL_CUT_FLAG_FFFF8A5E & FCF_40)
 		{
 			if (byte_35B7[word_FFFF8AD0] == 0)
 			{
@@ -2528,7 +2528,7 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 		//		CLR(RPM_FLAGS, RPM_13_CRANKING_SYNC_INJECT);
 		//	};
 		//}
-		else if ((FUEL_CUT_FLAG_FFFF8A5E & 0x80) && (RPM_FLAGS & RPM_0_CRANKING) && (word_FFFF8AD6 != 0 || ZRO(word_FFFF8F2A, 2)))
+		else if ((FUEL_CUT_FLAG_FFFF8A5E & FCF_80) && (RPM_FLAGS & RPM_0_CRANKING) && (word_FFFF8AD6 != 0 || ZRO(word_FFFF8F2A, 2)))
 		{
 			r2 = 0;
 		}
@@ -2927,7 +2927,7 @@ void StartInjectSync(u16 v, u16 mask)
 		r13 &= injectors_misfire_mask;
 	};
 
-	SET(word_FFFF8B4E, 0x20);
+	SET(word_FFFF8B4E, INJ_5_SYNC_INJECT);
 
 	injPW_final = v;
 	injPW_chnl = r13;
@@ -2953,7 +2953,7 @@ void StartInjectAsync(u16 v, u16 mask)
 		InjOpenStart(v, r13);
 	};
 
-	CLR(word_FFFF8B4E, 0x20);
+	CLR(word_FFFF8B4E, INJ_5_SYNC_INJECT);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

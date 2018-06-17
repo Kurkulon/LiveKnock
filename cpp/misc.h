@@ -333,6 +333,27 @@ struct Map3D_W
 #define IGN_F9_4000					0x4000
 #define IGN_F9_8000					0x8000
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// FUEL_CUT_FLAG_FFFF8A5E
+
+#define FCF_01					0x01
+#define FCF_02					0x02
+#define FCF_04					0x04
+#define FCF_08					0x08
+#define FCF_10					0x10
+#define FCF_20					0x20
+#define FCF_40					0x40
+#define FCF_80					0x80
+#define FCF_100					0x100
+#define FCF_200					0x200
+#define FCF_400					0x400
+#define FCF_800					0x800
+#define FCF_1000				0x1000
+#define FCF_2000				0x2000
+#define FCF_4000				0x4000
+#define FCF_8000				0x8000
+
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

@@ -484,13 +484,13 @@ static void ML02_sub_11B36()
 {
 	if (open_Loop_disable && ML02_sub_11B74())
 	{
-		SET(FUEL_CUT_FLAG_FFFF8A5E, 0x40);
+		SET(FUEL_CUT_FLAG_FFFF8A5E, FCF_40);
 
 		timer_FFFF8596 = word_173A/*80*/;
 	}
 	else
 	{
-		CLR(FUEL_CUT_FLAG_FFFF8A5E, 0x40);
+		CLR(FUEL_CUT_FLAG_FFFF8A5E, FCF_40);
 	};
 }
 
@@ -498,7 +498,7 @@ static void ML02_sub_11B36()
 
 static bool ML02_sub_11B74()
 {
-	TRG(FUEL_CUT_FLAG_FFFF8A5E, 0x10, wMUT1C_ECU_Load, word_1736/*0*/, word_1734/*1*/);
+	TRG(FUEL_CUT_FLAG_FFFF8A5E, FCF_10, wMUT1C_ECU_Load, word_1736/*0*/, word_1734/*1*/);
 
 	u32 r0 = Table_Lookup_byte_2D_3D(unk007_32E0);
 
@@ -520,17 +520,17 @@ static bool ML02_sub_11B74()
 	{
 		if (ZRO(RT_FLAG1_COPY_FFFF888A, RT_7_bit))
 		{
-			SET(FUEL_CUT_FLAG_FFFF8A5E, 0x20);
+			SET(FUEL_CUT_FLAG_FFFF8A5E, FCF_20);
 		};
 
-		if (ZRO(FUEL_CUT_FLAG_FFFF8A5E, 0x10) && cranking_end_timer_up >= (word_1738/*20*/ * 20) && MUT21_RPM_x125div4 <= r1 && (FUEL_CUT_FLAG_FFFF8A5E & 0x20))
+		if (ZRO(FUEL_CUT_FLAG_FFFF8A5E, FCF_10) && cranking_end_timer_up >= (word_1738/*20*/ * 20) && MUT21_RPM_x125div4 <= r1 && (FUEL_CUT_FLAG_FFFF8A5E & FCF_20))
 		{
 			r8 = true;
 		};
 	}
 	else
 	{
-		CLR(FUEL_CUT_FLAG_FFFF8A5E, 0x20);
+		CLR(FUEL_CUT_FLAG_FFFF8A5E, FCF_20);
 	};
 
 	return r8;
@@ -552,14 +552,7 @@ static bool ML02_sub_11D48()
 
 static void ML02_sub_11D82()
 {
-	if ((byte_103C/*7*/ & 1) && ML02_sub_11DBA())
-	{
-		SET(FUEL_CUT_FLAG_FFFF8A5E, 0x200);
-	}
-	else
-	{
-		CLR(FUEL_CUT_FLAG_FFFF8A5E, 0x200);
-	};
+	WFLAG(FUEL_CUT_FLAG_FFFF8A5E, FCF_200, (byte_103C/*7*/ & 1) && ML02_sub_11DBA());
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -637,35 +630,21 @@ static void ML02_sub_11F88()
 
 static void ML02_sub_11FD8()
 {
-	if (ML02_Check_STALL())
-	{
-		SET(wMUT1E_MAF_RESET_FLAG, STALL);
-	}
-	else
-	{
-		CLR(wMUT1E_MAF_RESET_FLAG, STALL);
-	};
+	WFLAG(wMUT1E_MAF_RESET_FLAG, STALL, ML02_Check_STALL());
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 static bool ML02_Check_STALL()
 {
-	return ZRO(prev_MUT1E_FLAGS, 0x20) || (timer_FFFF8592 == 0) || (timer_down_TXFLAG3_FFFF8574 == 0);
+	return ZRO(prev_MUT1E_FLAGS, MUT1E_5_ALWAYS_1) || (timer_FFFF8592 == 0) || (timer_down_TXFLAG3_FFFF8574 == 0);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 static void ML02_Check_12030()
 {
-	if (ML02_Check_CRANKING())
-	{
-		SET(wMUT1E_MAF_RESET_FLAG, CRANKING);
-	}
-	else
-	{
-		CLR(wMUT1E_MAF_RESET_FLAG, CRANKING);
-	};
+	WFLAG(wMUT1E_MAF_RESET_FLAG, CRANKING, ML02_Check_CRANKING());
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -676,24 +655,10 @@ static bool ML02_Check_CRANKING()
 
 	if (prev_MUT1E_FLAGS & STALL)
 	{
-		if (wMUT10_Coolant_Temperature_Scaled <= word_1530/*50(10)*/)
-		{
-			FUEL_CUT_FLAG_FFFF8A5E |= 0x2000;
-		}
-		else
-		{
-			FUEL_CUT_FLAG_FFFF8A5E &= ~0x2000;
-		};
+		WFLAG(FUEL_CUT_FLAG_FFFF8A5E, FCF_2000, wMUT10_Coolant_Temperature_Scaled <= word_1530/*50(10)*/);
 	};
 
-	if (wMUT10_Coolant_Temperature_Scaled < word_1556/*22(-18)*/)
-	{
-		FUEL_CUT_FLAG_FFFF8A5E |= 0x1000;
-	}
-	else
-	{
-		FUEL_CUT_FLAG_FFFF8A5E &= ~0x1000;
-	};
+	WFLAG(FUEL_CUT_FLAG_FFFF8A5E, FCF_1000, wMUT10_Coolant_Temperature_Scaled < word_1556/*22(-18)*/);
 
 	if (RT_FLAG1_FFFF8888 & STARTER)
 	{
@@ -708,7 +673,7 @@ static bool ML02_Check_CRANKING()
 				rpm = word_217E/*13(406)*/;
 			};
 
-			if (FUEL_CUT_FLAG_FFFF8A5E & 0x2000)
+			if (FUEL_CUT_FLAG_FFFF8A5E & FCF_2000)
 			{
 				rpm += word_2182/*3(93)*/;
 			};
@@ -720,7 +685,7 @@ static bool ML02_Check_CRANKING()
 				rpm = word_1526/*13(406)*/;
 			};
 
-			if (FUEL_CUT_FLAG_FFFF8A5E & 0x2000)
+			if (FUEL_CUT_FLAG_FFFF8A5E & FCF_2000)
 			{
 				rpm += word_152E/*3(93)*/;
 			};
@@ -1124,7 +1089,7 @@ static bool ML02_sub_12BC0()
 		return true;
 	};
 
-	if ((word_FFFF8BBA & 1) || (wMUT19_Startup_Check_Bits & 0x400) || timer_FFFF8792 != 0 || (FUEL_CUT_FLAG_FFFF8A5E & 0x100))
+	if ((word_FFFF8BBA & 1) || (wMUT19_Startup_Check_Bits & 0x400) || timer_FFFF8792 != 0 || (FUEL_CUT_FLAG_FFFF8A5E & FCF_100))
 	{
 		return true;
 	};

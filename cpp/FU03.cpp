@@ -206,6 +206,121 @@ static void FU03_sub_16C60();
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+static void Fuel_calcs()
+{
+	//FU03_sub_13DCA();
+
+	if (MUT21_RPM_x125div4 <= word_1A42/*64(2000)*/ || wMUT1C_ECU_Load <= word_1A40/*88(44)*/ || wMUT10_Coolant_Temperature_Scaled <= word_1A44/*151(111)*/ || wMUT11_Intake_Air_Temperature_Scaled <= word_1A46/*90(50)*/)
+	{
+		timer_FFFF879A = word_1A48/*5(2500ms)*/ << 1;
+	};
+
+	//FU03_Check_13E12();
+
+	WFLAG(FUEL_CUT_FLAG_FFFF8A5E, FCF_400, (wMUTD1_BitMap_FAA & FAA_4_CLOSED_LOOP) == 0 && FU03_Check_13E4A());
+
+	//FU03_Check_13EAE();
+
+	WFLAG(FUEL_CUT_FLAG_FFFF8A5E, FCF_800, (bMUTD2_FBA_MAF_MAP_FLAG & 1) && FU03_sub_13EE6());
+
+	FU03_Coolant_Air_Calcs_sub_14088(ENGINE_MAIN_VARIABLES_DIM_off_9198);
+
+	//FU03_sub_14108();
+
+	WFLAG(FUEL_CUT_FLAG_FFFF8A5E, FCF_100, FU03_sub_14138());
+
+	//FU03_sub_14174();
+
+	WFLAG(FUEL_CUT_FLAG_FFFF8A5E, FCF_4000, (wMUTD1_BitMap_FAA & FAA_7_HIGH_IGN) && wMUT1C_ECU_Load >= word_180C/*80*/ && MUT21_RPM_x125div4 >= word_180A/*128*/);
+
+	FU03_HI_LO_Octan();
+
+	// FU03_sub_14300()
+
+	word_FFFF8AB0 = word_1502/*867*/ * GET_FROM_MASSIVE_byte(AFRTMP_302A)/*131*/ * INJSZ_150C / 0x8000; // 406
+
+	FU03_sub_14380();
+
+	FU03_sub_144E0();
+
+	// FU03_sub_14610();
+
+	word_FFFF8AF0 = 0x80;
+
+	// FU03_VE_map_sub_14620();
+
+	wMUT31_Volumetric_Efficiency = Table_Lookup_byte_2D_3D(VE1Map_3032);
+
+	FU03_Fuel_Knock_Reaction(ENGINE_MAIN_VARIABLES_DIM_off_9198);
+
+	// FU03_sub_149E0(EnVars* ev)
+
+	TRG(ZERO_8_IGNITION_FLAGS, 0x20, wMUT15_Barometric_Pressure, word_1772/*189(94.5)*/, Add_Lim_FFFF(word_1772/*189(94.5)*/, word_1774/*3*/));
+
+	u32 r2 = 0x80;
+
+	if (ZRO(ZERO_8_IGNITION_FLAGS, 0x20))
+	{
+		Table_Lookup_Axis(BAR5_6D66);				// 125,141,157,173,189
+		r2 = Table_Lookup_byte_2D_3D(unk034_3EFA);	// 151,142,140,136,130
+	};
+
+	u32 r0 = word_FFFF8AB0/*406*/ * 65536 * (wMUT31_Volumetric_Efficiency/*210(82)*/ + word_1524/*48(18.75)*/) / 128; // 26815488
+
+	r0 = r0 * k_InAirTemp/*128*/ * r2/*128*/ / 0x4000; // 26815488
+
+	r0 = r0 * fuelTrim_FFFF8ADC/*128*/ * enrichmentWarmUp/*128*/ / 0x4000; // 26815488
+
+	r0 = r0 * (word_FFFF8AEE/*0*/ * 2 + 0x80) / 128;  // 26815488
+
+	r0 = r0 * fuelTrim_FFFF8AE4/*128*/ / 128; // 26815488
+
+	r0 = r0 * wMUT32_Air_To_Fuel_Ratio/*150(12.5)*/ / 128; // 31424400 
+
+	bMUTC7 = r0 / 65536; // 479
+
+	wMUT58_AFR_CT_Adder = Lim_FF(Mul_Div_R(wMUT32_Air_To_Fuel_Ratio * enrichmentWarmUp, (word_FFFF8AEE << 1) + 0x80, 0x4000));
+
+
+	FU03_sub_16BFE();
+
+	FU03_sub_14B7E();
+
+	//FU03_sub_14CBC();
+
+	if (FU03_sub_14CDC())
+	{
+		timer_FFFF85A2 = word_15EA;
+	};
+
+	FU03_sub_14F14(ENGINE_MAIN_VARIABLES_DIM_off_9198);
+	FU03_sub_Oxygen_Feedback_Trim(ENGINE_MAIN_VARIABLES_DIM_off_9198);
+
+	FU03_sub_15300(ENGINE_MAIN_VARIABLES_DIM_off_9198->_432_word_8DB0);
+
+	FU03_sub_153E4(ENGINE_MAIN_VARIABLES_DIM_off_9198);
+	FU03_sub_1559C(ENGINE_MAIN_VARIABLES_DIM_off_9198);
+
+
+	FU03_InjPulseWidthLimpHome();
+
+	FU03_sub_159DC();
+	FU03_InjLatencyUpdate();
+	FU03_sub_15E14();
+	FU03_sub_15E48();
+	FU03_sub_15F28();
+	FU03_ASYNHACCELENRICH_sub_1623E();
+	FU03_sub_16750();
+	FU03_Cranking_Inject();
+	FU03_sub_167EC();
+	FU03_O2_B1_B2_sub_16958();
+	FU03_sub_16AA8();
+	FU03_sub_16C60();
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 static void SysInit_NVRAM_Trims()
 {
 	FU03_Init_Trims();
@@ -337,7 +452,7 @@ static void FU03_sub_13DCA()
 {
 	if (MUT21_RPM_x125div4 <= word_1A42/*64(2000)*/ || wMUT1C_ECU_Load <= word_1A40/*88(44)*/ || wMUT10_Coolant_Temperature_Scaled <= word_1A44/*151(111)*/ || wMUT11_Intake_Air_Temperature_Scaled <= word_1A46/*90(50)*/)
 	{
-		timer_FFFF879A = word_1A48 << 1;
+		timer_FFFF879A = word_1A48/*5(2500ms)*/ << 1;
 	};
 }
 
@@ -345,14 +460,7 @@ static void FU03_sub_13DCA()
 
 static void FU03_Check_13E12()
 {
-	if ((wMUTD1_BitMap_FAA & FAA_4_CLOSED_LOOP) == 0 && FU03_Check_13E4A())
-	{
-		SET(FUEL_CUT_FLAG_FFFF8A5E, 0x400);
-	}
-	else
-	{
-		CLR(FUEL_CUT_FLAG_FFFF8A5E, 0x400);
-	};
+	WFLAG(FUEL_CUT_FLAG_FFFF8A5E, FCF_400, (wMUTD1_BitMap_FAA & FAA_4_CLOSED_LOOP) == 0 && FU03_Check_13E4A());
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -368,14 +476,7 @@ static bool FU03_Check_13E4A()
 
 static void FU03_Check_13EAE()
 {
-	if ((bMUTD2_FBA_MAF_MAP_FLAG & 1) && FU03_sub_13EE6())
-	{
-		SET(FUEL_CUT_FLAG_FFFF8A5E, 0x800);
-	}
-	else
-	{
-		CLR(FUEL_CUT_FLAG_FFFF8A5E, 0x800);
-	};
+	WFLAG(FUEL_CUT_FLAG_FFFF8A5E, FCF_800, (bMUTD2_FBA_MAF_MAP_FLAG & 1) && FU03_sub_13EE6());
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -437,18 +538,11 @@ static void FU03_Coolant_Air_Calcs_sub_14088(EnVars* ev)
 
 	if (byte_104E == 0 || (wMUT1E_MAF_RESET_FLAG & STALL) || (*ev->_4_wMUT1E_MAF_RESET_FLAG & MUT1E_11_bit) || ((wMUTD1_BitMap_FAA & FAA_4_CLOSED_LOOP) == 0 && cranking_end_timer_up >= (word_1A1E * 20)))
 	{
-		CLR(r13, 8);
+		CLR(r13, FCF_08);
 	}
 	else if (wMUT1E_MAF_RESET_FLAG & CRANKING) 
 	{
-		if (wMUT10_Coolant_Temperature_Scaled > t1_unk_some_Coolant_Temp_1A16 && wMUT11_Intake_Air_Temperature_Scaled > t1_unk_some_Air_Temperature_1A18)
-		{
-			SET(r13, 8);
-		}
-		else
-		{
-			CLR(r13, 8);
-		};
+		WFLAG(r13, FCF_08, wMUT10_Coolant_Temperature_Scaled > t1_unk_some_Coolant_Temp_1A16 && wMUT11_Intake_Air_Temperature_Scaled > t1_unk_some_Air_Temperature_1A18);
 	};
 
 	*ev->_20_FUEL_CUT_FLAG_FFFF8A5E = r13;
@@ -458,14 +552,7 @@ static void FU03_Coolant_Air_Calcs_sub_14088(EnVars* ev)
 
 static void FU03_sub_14108()
 {
-	if (FU03_sub_14138())
-	{
-		SET(FUEL_CUT_FLAG_FFFF8A5E, 0x100);
-	}
-	else
-	{
-		CLR(FUEL_CUT_FLAG_FFFF8A5E, 0x100);
-	};
+	WFLAG(FUEL_CUT_FLAG_FFFF8A5E, FCF_100, FU03_sub_14138());
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -474,7 +561,7 @@ static bool FU03_sub_14138()
 {
 	u32 r13 = word_16CE/*255*/;
 
-	if (FUEL_CUT_FLAG_FFFF8A5E & 0x100)
+	if (FUEL_CUT_FLAG_FFFF8A5E & FCF_100)
 	{
 		r13 = word_16D0/*255*/;
 	};
@@ -486,14 +573,7 @@ static bool FU03_sub_14138()
 
 static void FU03_sub_14174()
 {
-	if ((wMUTD1_BitMap_FAA & FAA_7_HIGH_IGN/*Enable High Oct Ign Map Lookup and other*/) && wMUT1C_ECU_Load >= word_180C/*80*/ && MUT21_RPM_x125div4 >= word_180A/*128*/)
-	{
-		SET(FUEL_CUT_FLAG_FFFF8A5E, 0x4000);
-	}
-	else
-	{
-		CLR(FUEL_CUT_FLAG_FFFF8A5E, 0x4000);
-	};
+	WFLAG(FUEL_CUT_FLAG_FFFF8A5E, FCF_4000, (wMUTD1_BitMap_FAA & FAA_7_HIGH_IGN) && wMUT1C_ECU_Load >= word_180C/*80*/ && MUT21_RPM_x125div4 >= word_180A/*128*/);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -725,7 +805,7 @@ static void FU03_Fuel_Knock_Reaction(EnVars* ev)
 	}
 	else 
 	{
-		if (FUEL_CUT_FLAG_FFFF8A5E & 0x400)
+		if (FUEL_CUT_FLAG_FFFF8A5E & FCF_400)
 		{
 			u32 r13 = wMUT13_Front_O2_ADC8bit;
 
@@ -751,7 +831,7 @@ static void FU03_Fuel_Knock_Reaction(EnVars* ev)
 
 			// loc_14776
 
-			if ((FUEL_CUT_FLAG_FFFF8A5E & 0x4000) && !sub_21E2A())
+			if ((FUEL_CUT_FLAG_FFFF8A5E & FCF_4000) && !sub_21E2A())
 			{
 				afr += (word_1808/*160*/ * Sub_Lim_0(wMUT26_Knock_Retard, HiPower_KnockSum_Subtractor)) >> 8;
 			};
@@ -774,17 +854,17 @@ static void FU03_Fuel_Knock_Reaction(EnVars* ev)
 			afr = word_177E/*188(10.0)*/;
 		};
 
-		if (FUEL_CUT_FLAG_FFFF8A5E & 0x800)
+		if (FUEL_CUT_FLAG_FFFF8A5E & FCF_800)
 		{
 			afr = FU03_Lean_Spool_Calcs_sub_148DA(afr);
 		};
 
-		if ((FUEL_CUT_FLAG_FFFF8A5E & 0x100) && afr < leanSpoolClipValue/*128(14.7)*/)
+		if ((FUEL_CUT_FLAG_FFFF8A5E & FCF_100) && afr < leanSpoolClipValue/*128(14.7)*/)
 		{
 			afr = leanSpoolClipValue/*128(14.7)*/;
 		};
 
-		if (*ev->_20_FUEL_CUT_FLAG_FFFF8A5E & 8)
+		if (*ev->_20_FUEL_CUT_FLAG_FFFF8A5E & FCF_08)
 		{
 			u32 r9 = word_1A1E * 20;
 
@@ -1203,7 +1283,7 @@ static void FU03_sub_Oxygen_Feedback_Trim(EnVars* ev)
 		{
 			r8 = 1;
 		}
-		else if (*ev->_20_FUEL_CUT_FLAG_FFFF8A5E & 8)
+		else if (*ev->_20_FUEL_CUT_FLAG_FFFF8A5E & FCF_08)
 		{
 			u32 r0 = *ev->_132_limLo_O2_Feedback_Trim;
 
@@ -1601,7 +1681,7 @@ static void FU03_sub_159DC()
 		u32 r1 = t1_unk_154E;
 		u32 r13 = t1_unk_1550;
 
-		if (FUEL_CUT_FLAG_FFFF8A5E & 0x8000)
+		if (FUEL_CUT_FLAG_FFFF8A5E & FCF_8000)
 		{
 			r1 = r13;
 		};
@@ -1614,7 +1694,7 @@ static void FU03_sub_159DC()
 
 		if (r1 >= r8)
 		{
-			SET(FUEL_CUT_FLAG_FFFF8A5E, 0x8004);
+			SET(FUEL_CUT_FLAG_FFFF8A5E, FCF_8000|FCF_04);
 
 			r2 = r1;
 		}
@@ -1623,7 +1703,7 @@ static void FU03_sub_159DC()
 			r1 = t1_unk_1546;
 			r13 = t1_unk_154A;
 
-			if (FUEL_CUT_FLAG_FFFF8A5E & 4)
+			if (FUEL_CUT_FLAG_FFFF8A5E & FCF_04)
 			{
 				r1 = r13;
 			};
@@ -1632,23 +1712,23 @@ static void FU03_sub_159DC()
 
 			if (r2 >= r1)
 			{
-				SET(FUEL_CUT_FLAG_FFFF8A5E, 4);
+				SET(FUEL_CUT_FLAG_FFFF8A5E, FCF_04);
 			}
 			else
 			{
-				CLR(FUEL_CUT_FLAG_FFFF8A5E, 4);
+				CLR(FUEL_CUT_FLAG_FFFF8A5E, FCF_04);
 
 				r2 = Mul_Lim_FFFF(r2, 4);
 			};
 		};
 
-		CLR(FUEL_CUT_FLAG_FFFF8A5E, 0x8000);
+		CLR(FUEL_CUT_FLAG_FFFF8A5E, FCF_8000);
 	}
 	else
 	{
 		// loc_15B3A
 
-		CLR(FUEL_CUT_FLAG_FFFF8A5E, 0x8004);
+		CLR(FUEL_CUT_FLAG_FFFF8A5E, FCF_8000|FCF_04);
 
 		r2 = Mul_Lim_FFFF(r2, 4);
 	};
@@ -1924,12 +2004,12 @@ static void FU03_Cranking_Inject()
 
 	if (MUT21_RPM_x125div4 >= word_152A/*15(468)*/)
 	{
-		CLR(FUEL_CUT_FLAG_FFFF8A5E, 2);
+		CLR(FUEL_CUT_FLAG_FFFF8A5E, FCF_02);
 	};
 
-	if ((wMUT1E_MAF_RESET_FLAG & STALL) &&  (FUEL_CUT_FLAG_FFFF8A5E & 2) == 0)
+	if ((wMUT1E_MAF_RESET_FLAG & STALL) &&  (FUEL_CUT_FLAG_FFFF8A5E & FCF_02) == 0)
 	{
-		CLR(FUEL_CUT_FLAG_FFFF8A5E, 1);
+		CLR(FUEL_CUT_FLAG_FFFF8A5E, FCF_01);
 	};
 
 	// loc_16428
@@ -1961,7 +2041,7 @@ static void FU03_Cranking_Inject()
 
 	// loc_1649C
 
-	WFLAG(FUEL_CUT_FLAG_FFFF8A5E, 0x80, wMUT10_Coolant_Temperature_Scaled > word_1782/*255(215)*/);
+	WFLAG(FUEL_CUT_FLAG_FFFF8A5E, FCF_80, wMUT10_Coolant_Temperature_Scaled > word_1782/*255(215)*/);
 
 	// loc_164BE
 
@@ -1977,13 +2057,13 @@ static void FU03_Cranking_Inject()
 
 	__enable_irq();
 
-	if (ONE(wMUT1E_MAF_RESET_FLAG, CRANKING) && ZRO(FUEL_CUT_FLAG_FFFF8A5E, 1))
+	if (ONE(wMUT1E_MAF_RESET_FLAG, CRANKING) && ZRO(FUEL_CUT_FLAG_FFFF8A5E, FCF_01))
 	{
 		// loc_16560
 
 		u32 r1;
 
-		if (ONE(FUEL_CUT_FLAG_FFFF8A5E, 0x80))
+		if (ONE(FUEL_CUT_FLAG_FFFF8A5E, FCF_80))
 		{
 			r1 = Table_Lookup_word_2D_3D(COLD1ST_3594);
 		}
@@ -2037,7 +2117,7 @@ static void FU03_Cranking_Inject()
 
 		__enable_irq();
 
-		SET(FUEL_CUT_FLAG_FFFF8A5E, 3);
+		SET(FUEL_CUT_FLAG_FFFF8A5E, FCF_01|FCF_02);
 		SET(BOOSTCHECK2_FFFF8A0E, 0x40);
 	};
 
@@ -2147,12 +2227,12 @@ static void FU03_sub_167EC()
 
 	u32 ipw = ipw_FFFF8AFC;
 
-	if (FUEL_CUT_FLAG_FFFF8A5E & 4) 
+	if (FUEL_CUT_FLAG_FFFF8A5E & FCF_04) 
 	{
 		SET(rpm_flags, RPM_15_bit);
 	};
 
-	if (FUEL_CUT_FLAG_FFFF8A5E & 0x8000) 
+	if (FUEL_CUT_FLAG_FFFF8A5E & FCF_8000) 
 	{
 		SET(rpm_flags, RPM_9_wtf_cranking);
 	};

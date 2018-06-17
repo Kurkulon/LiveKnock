@@ -852,7 +852,7 @@ static void AA05_sub_19B98()
 		AA05_sub_19E10(word_18F6/*80*/);
 	};
 
-	if (FUEL_CUT_FLAG_FFFF8A5E & 0x200)
+	if (FUEL_CUT_FLAG_FFFF8A5E & FCF_200)
 	{
 		AA05_sub_19E10(word_1B9A/*40*/);
 	};
@@ -1807,7 +1807,7 @@ static void AA05_sub_1B282()
 		r2 = r13;
 	};
 
-	if (FUEL_CUT_FLAG_FFFF8A5E & 0x200)
+	if (FUEL_CUT_FLAG_FFFF8A5E & FCF_200)
 	{
 		r13 = Table_Lookup_byte_2D_3D(EGRRPM_3E78);
 

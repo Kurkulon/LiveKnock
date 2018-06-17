@@ -363,7 +363,7 @@ void F500_sub_FD34()
 
 	if (RT_FLAG1_FFFF8888 & RT_1_bit)
 	{
-		timer_down_TXFLAG3_FFFF8574 = t1_unk_18BC;
+		timer_down_TXFLAG3_FFFF8574 = t1_unk_18BC/*5*/;
 	};
 
 	if (timer_down_TXFLAG3_FFFF8574 == 0)
@@ -1186,40 +1186,40 @@ void sub_A374()
 {
 	const u32 r9 = ~0x10;
 	const u32 r8 = ~2;
-	const u32 r2 = 0x200;
+//	const u32 r2 = 0x200;
 	const u32 r1 = ~0x200;
 
 	__disable_irq();
 
 	u32 r13 = MUT_00_01_FLAGS;
 
-	WBIT(r13, 1, ZRO(bMUTB7, 1));
+	WBIT(r13, RT_0_bit, ZRO(bMUTB7, 1));
 
-	WBIT(r13, 2, ZRO(reg_PEDRL, 2));
+	WBIT(r13, RT_1_bit, ZRO(reg_PEDRL, 2));
 
 	WBIT(r13, POWER_STEERING, bMUTB8 & 4);
 
 	WBIT(r13, AC_SWITCH, ZRO(bMUTB8, 1));
 
-	SET(r13, 0x20);
+	SET(r13, RT_5_ALWAYS_1);
 
 	WBIT(r13, STARTER, ZRO(reg_PEDRL, 4));
 
-	WBIT(r13, 0x80, bMUTBA & 4);
+	WBIT(r13, RT_7_bit, bMUTBA & 4);
 	
-	WBIT(r13, r2, ZRO(reg_PJDRH, 4));
+	WBIT(r13, RT_9_bit, ZRO(reg_PJDRH, 4));
 
-	WBIT(r13, 0x400, ZRO(word_FFFF8868, 0x20));
+	WBIT(r13, RT_10_bit, ZRO(word_FFFF8868, 0x20));
 
-	WBIT(r13, 0x800, bMUTB9 & 1);
+	WBIT(r13, SPEED_ADJUST, bMUTB9 & 1);
 
-	WBIT(r13, 0x1000, bMUTB9 & 4);
+	WBIT(r13, FIX_TIMING, bMUTB9 & 4);
 
-	WBIT(r13, 0x2000, word_FFFF8868 & 0x40);
+	WBIT(r13, RT_13_bit, word_FFFF8868 & 0x40);
 
-	WBIT(r13, 0x4000, ZRO(word_FFFF8868, 0x10));
+	WBIT(r13, RT_14_bit, ZRO(word_FFFF8868, 0x10));
 
-	WBIT(r13, 0x8000, bMUTB7 & 4);
+	WBIT(r13, RT_15_bit, bMUTB7 & 4);
 
 	MUT_00_01_FLAGS = r13;
 
