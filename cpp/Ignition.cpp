@@ -1448,9 +1448,9 @@ static void IG04_Ignition_coil_charge_sub_18BD4()
 
 	u16 t = Table_Lookup_byte_2D_3D(IGNCOILCHGTIME1_3A3E) * 16;
 
-	if (crankHT_x_4us_3 <= word_17A0)
+	if (crankHT_75_4us_3 <= word_17A0)
 	{
-		t = Sub_Lim_0(t, Mul_Fix8_R(word_17A0 - crankHT_x_4us_3, Table_Lookup_byte_2D_3D(IGNCOILCHGTIME2_3A4E)));
+		t = Sub_Lim_0(t, Mul_Fix8_R(word_17A0 - crankHT_75_4us_3, Table_Lookup_byte_2D_3D(IGNCOILCHGTIME2_3A4E)));
 	};
 
 	ignCoilTime_1 = t;

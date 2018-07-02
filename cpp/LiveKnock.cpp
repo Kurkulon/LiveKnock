@@ -75,11 +75,16 @@ extern "C" void LiveKnock()
 	}
 	else
 	{
-		wMUTD1_BitMap_FAA |= Periphery_FAA & FAA_4_CLOSED_LOOP; // Closed loop
+		SET(wMUTD1_BitMap_FAA, FAA_4_CLOSED_LOOP);  // Closed loop
 
 		wMUT0C_Fuel_Trim_Low = 0x80;   
 		wMUT0D_Fuel_Trim_Middle = 0x80;
 		wMUT0E_Fuel_Trim_High = 0x80;
+	};
+
+	if (no_knock_retard != 0)
+	{
+		CLR(wMUTD1_BitMap_FAA, FAA_7_HIGH_IGN); 
 	};
 
 	CLR(bMUTD3_BitMap4_FCA_Store_FFFF89D8, 0x808); // Disable Front/Rear O2 heater check: clear bit 11 address 0xFCA 
@@ -97,7 +102,7 @@ extern "C" void LiveKnock()
 		u32 al = ((u32)(swapb(axis_ig_LOAD)+128)>>8);
 		u32 ar = ((u32)(swapb(axis_ig_RPM)+128)>>8);
 
-		if (hiIgnMapIndex == 15 && (KNOCK_FLAG_FFFF8C34 & KNOCK_RETARD_ENABLED) && ((wMUT72_Knock_Present & 1) == 0) && ar > 7 && wMUT17_TPS_ADC8bit >= TPS(11))
+		if (hiIgnMapIndex == 15 && (KNOCK_FLAG_FFFF8C34 & KNOCK_RETARD_ENABLED) && ((wMUT72_Knock_Present & 1) == 0) && ar > 8 && al > 5 && wMUT17_TPS_ADC8bit >= TPS(11))
 		{
 			u32 ind = ar + al*21;
 
@@ -107,18 +112,21 @@ extern "C" void LiveKnock()
 
 			const u32 knock = wMUT26_Knock_Retard;
 
-			if (knock > 3)
+			if (knock > 1)
 			{
 				const u32 loign = (loIgnMapData[ind]+20)*256;
 
-				timing = Sub_Lim_0(timing, knock>>2);
+				timing = Sub_Lim_0(timing, knock);
 
-				p = (timing < loign) ? loign : timing;
+				if (timing > loign)
+				{
+					p =  timing;
+				};
+			}
+			else if (knock == 0 && timing < 35*256)
+			{
+				p = timing + 1;
 			};
-			//else 
-			//{
-			//	if (timing < hiIgnMapData[ind]) p = timing + 1;
-			//};
 		};
 
 		FeedBack_O2F();

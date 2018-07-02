@@ -882,7 +882,7 @@ void F500_sub_108AA()
 {
 	__disable_irq();
 
-	crankHT_x_4us_3 = 0xFFFF;
+	crankHT_75_4us_3 = 0xFFFF;
 
 	RPM_x_4_096__3 = 0;
 	RPM_x_4_096__2 = 0;
@@ -913,8 +913,8 @@ void F500_sub_108FE()
 {
 	__disable_irq();
 
-	u32 r1 = crankHT_x_4us_3;
-	u32 r2 = crankHT_x_4us_4;
+	u32 r1 = crankHT_75_4us_3;
+	u32 r2 = crankHT_75_4us_4;
 
 	__enable_irq();
 
@@ -957,7 +957,7 @@ void F500_sub_10984()
 
 void F500_sub_10A80()
 {
-	word_FFFF8950 = (RT_FLAG1_FFFF8888 & RACING) ? word_17B0/*232*/ : t1_unk_17AE/*232*/;
+	interpolator_RPM_x_4_096 = (RT_FLAG1_FFFF8888 & RACING) ? word_17B0/*232*/ : t1_unk_17AE/*232*/;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

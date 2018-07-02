@@ -78,22 +78,22 @@ struct Map3D_W
 
 // wMUT1E_MAF_RESET_FLAG
 
-#define CRANKING				0x01 
-#define MAP_error				0x02
-#define DECELERATION_FUEL_CUT	0x04
-#define FUEL_CUT				0x08
-#define STALL					0x10
-#define MUT1E_5_ALWAYS_1		0x20
-#define MUT1E_6_bit				0x40
-#define CLOSED_LOOP_GENERIC		0x80
-#define MUT1E_8_bit				0x100
-#define MUT1E_9_bit				0x200
-#define MUT1E_10_bit			0x400
-#define MUT1E_11_bit			0x800
-#define IDLE					0x1000
-#define CRANKING_TIMED			0x2000
-#define MUT1E_14_bit			0x4000
-#define TIMING_KNOCKDOWN		0x8000
+#define CRANKING						0x01 
+#define MAP_error						0x02
+#define DECELERATION_FUEL_CUT			0x04
+#define FUEL_CUT						0x08
+#define STALL							0x10
+#define MUT1E_5_ALWAYS_1				0x20
+#define MUT1E_6_bit						0x40
+#define CLOSED_LOOP_GENERIC				0x80
+#define MUT1E_8_bit						0x100
+#define MUT1E_9_bit						0x200
+#define MUT1E_10_bit					0x400
+#define UPDATE_OXIGEN_TRIM				0x800
+#define IDLE							0x1000
+#define CRANKING_TIMED					0x2000
+#define MUT1E_14_bit					0x4000
+#define TIMING_KNOCKDOWN				0x8000
 
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -130,9 +130,9 @@ struct Map3D_W
 #define RPM_6_bit						0x40
 #define RPM_7_CLOSED_LOOP_GENERIC		0x80
 #define RPM_8_bit						0x100
-#define RPM_9_wtf_cranking						0x200
+#define RPM_9_wtf_cranking				0x200
 #define RPM_10_bit						0x400
-#define RPM_11_MUT1E_11_bit				0x800
+#define RPM_11_UPDATE_OXIGEN_TRIM				0x800
 #define RPM_12_bit						0x1000
 #define RPM_13_CRANKING_SYNC_INJECT		0x2000
 #define RPM_14_bit						0x4000

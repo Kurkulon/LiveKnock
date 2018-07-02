@@ -442,7 +442,7 @@ static bool BC06_sub_1C8C4()
 
 	r1 *= 80;
 
-	u32 r2 = wMUT1E_MAF_RESET_FLAG & MUT1E_11_bit;
+	u32 r2 = wMUT1E_MAF_RESET_FLAG & UPDATE_OXIGEN_TRIM;
 
 	WFLAG(word_FFFF8D1E, 0x4000, wMUT0F_Oxygen_Feedback_Trim <= R4_Mult_256_ZeroExtendWord_Into_R0_sub_870(word_1DB6));
 

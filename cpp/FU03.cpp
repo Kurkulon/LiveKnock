@@ -536,7 +536,7 @@ static void FU03_Coolant_Air_Calcs_sub_14088(EnVars* ev)
 	u32 r13 = *ev->_20_FUEL_CUT_FLAG_FFFF8A5E;
 
 
-	if (byte_104E == 0 || (wMUT1E_MAF_RESET_FLAG & STALL) || (*ev->_4_wMUT1E_MAF_RESET_FLAG & MUT1E_11_bit) || ((wMUTD1_BitMap_FAA & FAA_4_CLOSED_LOOP) == 0 && cranking_end_timer_up >= (word_1A1E * 20)))
+	if (byte_104E == 0 || (wMUT1E_MAF_RESET_FLAG & STALL) || (*ev->_4_wMUT1E_MAF_RESET_FLAG & UPDATE_OXIGEN_TRIM) || ((wMUTD1_BitMap_FAA & FAA_4_CLOSED_LOOP) == 0 && cranking_end_timer_up >= (word_1A1E * 20)))
 	{
 		CLR(r13, FCF_08);
 	}
@@ -799,7 +799,7 @@ static void FU03_Fuel_Knock_Reaction(EnVars* ev)
 {
 	u32 afr;
 
-	if (*ev->_4_wMUT1E_MAF_RESET_FLAG & MUT1E_11_bit)
+	if (*ev->_4_wMUT1E_MAF_RESET_FLAG & UPDATE_OXIGEN_TRIM)
 	{
 		afr = afr_closed_loop;
 	}
@@ -1337,7 +1337,7 @@ static u16 FU03_sub_1525A(EnVars* ev)
 {
 	u32 r13;
 
-	if (*ev->_4_wMUT1E_MAF_RESET_FLAG & MUT1E_11_bit)
+	if (*ev->_4_wMUT1E_MAF_RESET_FLAG & UPDATE_OXIGEN_TRIM)
 	{
 		r13 = 1;
 	}
@@ -1411,7 +1411,7 @@ static void FU03_sub_153E4(EnVars* ev)
 {
 	u32 r13, r2;
 
-	if (ZRO(*ev->_4_wMUT1E_MAF_RESET_FLAG, MUT1E_11_bit))
+	if (ZRO(*ev->_4_wMUT1E_MAF_RESET_FLAG, UPDATE_OXIGEN_TRIM))
 	{
 		r13 = 0x80;
 	}
@@ -1524,7 +1524,7 @@ static void FU03_sub_1559C(EnVars* ev)
 
 		r2 = Sub_Lim_0(r0, 0x80);
 
-		if (ZRO(*ev->_4_wMUT1E_MAF_RESET_FLAG, MUT1E_11_bit) && (wMUTD1_BitMap_FAA & FAA_5_20) && ((ERROR_FLAG_FFFF89FE & 0xF) || ZRO(wMUT18_Open_Loop_Bit_Array, MUT18_1_02)))
+		if (ZRO(*ev->_4_wMUT1E_MAF_RESET_FLAG, UPDATE_OXIGEN_TRIM) && (wMUTD1_BitMap_FAA & FAA_5_20) && ((ERROR_FLAG_FFFF89FE & 0xF) || ZRO(wMUT18_Open_Loop_Bit_Array, MUT18_1_02)))
 		{
 			r2 = 0x80;
 		};
@@ -2219,7 +2219,7 @@ static void FU03_sub_16750()
 
 static void FU03_sub_167EC()
 {
-	u32 rpm_flags = wMUT1E_MAF_RESET_FLAG & (MUT1E_11_bit|CLOSED_LOOP_GENERIC|STALL|FUEL_CUT|DECELERATION_FUEL_CUT|MAP_error|CRANKING); //0x89F;
+	u32 rpm_flags = wMUT1E_MAF_RESET_FLAG & (UPDATE_OXIGEN_TRIM|CLOSED_LOOP_GENERIC|STALL|FUEL_CUT|DECELERATION_FUEL_CUT|MAP_error|CRANKING); //0x89F;
 
 	u32 r8 = 0x800;
 
@@ -2248,7 +2248,7 @@ static void FU03_sub_167EC()
 
 	ipw_crank_DuringCrankingSync = ipwDuringCranking;
 
-	RPM_FLAGS = (RPM_FLAGS & ~(RPM_15_bit|MUT1E_11_bit|RPM_9_wtf_cranking|CLOSED_LOOP_GENERIC|STALL|FUEL_CUT|DECELERATION_FUEL_CUT|MAP_error|CRANKING)/*0x7560*/) | rpm_flags;
+	RPM_FLAGS = (RPM_FLAGS & ~(RPM_15_bit|UPDATE_OXIGEN_TRIM|RPM_9_wtf_cranking|CLOSED_LOOP_GENERIC|STALL|FUEL_CUT|DECELERATION_FUEL_CUT|MAP_error|CRANKING)/*0x7560*/) | rpm_flags;
 
 	word_FFFF8A5C = (word_FFFF8A5C & ~0x800) | r8;
 

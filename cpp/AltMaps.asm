@@ -147,18 +147,24 @@ _frameCount:		.RES.L      1					;	.EQU H'FFFF8462
 
 	.AIFDEF	DEF_NO_KNOCK_RETARD
 	
-	.SECTION P_21AAA, CODE, LOCATE=H'21AAA
+	.SECTION P_Knock_retard_hook, CODE, LOCATE=H'458
+
+Knock_retard_hook:
 
 			MOV.L	#_no_knock_retard, R0  ; _no_knock_retard
 			MOV.B   @R0, R0     ; no_knock_retard
 			TST     R0, R0
-			BT		P_21AAA_loc1
+			BT		Knock_retard_hook_loc1
 			MOV     #0, R4      ; H'00000000
 
-P_21AAA_loc1:
+Knock_retard_hook_loc1:
 
 			rts	
 			mov     r4, r0                           
+
+	.SECTION C_248F0, CODE, LOCATE=H'248F0
+	
+		.DATA.L		Knock_retard_hook                                    
 
 	.AENDI
 	

@@ -1221,7 +1221,7 @@ static void ML02_sub_12D9C(EnVars* ev)
 
 				*ev->_68_timer_FFFF878E = word_1590;
 			}
-			else if (ZRO(*ev->_8_prev_MUT1E_FLAGS, MUT1E_11_bit))
+			else if (ZRO(*ev->_8_prev_MUT1E_FLAGS, UPDATE_OXIGEN_TRIM))
 			{
 				*ev->_68_timer_FFFF878E = word_1590/*255*/;
 			}
@@ -1256,7 +1256,7 @@ static void ML02_sub_12D9C(EnVars* ev)
 				CLR(r2, MUT18_5_20);
 				SET(r2, MUT18_13_2000);
 			}
-			else if (*ev->_8_prev_MUT1E_FLAGS & MUT1E_11_bit)
+			else if (*ev->_8_prev_MUT1E_FLAGS & UPDATE_OXIGEN_TRIM)
 			{
 				if (*ev->_16_prev_MUT18_Open_Loop_Bit_Array & MUT18_5_20)
 				{
@@ -1332,7 +1332,7 @@ static void ML02_sub_12D9C(EnVars* ev)
 
 static void ML02_sub_13088(EnVars* ev)
 {
-	WFLAG(*ev->_4_wMUT1E_MAF_RESET_FLAG, MUT1E_11_bit, ML02_sub_130BC(ev));
+	WFLAG(*ev->_4_wMUT1E_MAF_RESET_FLAG, UPDATE_OXIGEN_TRIM, ML02_sub_130BC(ev));
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1372,7 +1372,7 @@ static void ML02_sub_13120()
 
 	if (r1 & STALL)
 	{
-		CLR(r1, MUT1E_11_bit|MUT1E_9_bit|MUT1E_8_bit|CLOSED_LOOP_GENERIC|FUEL_CUT|DECELERATION_FUEL_CUT|CRANKING);
+		CLR(r1, UPDATE_OXIGEN_TRIM|MUT1E_9_bit|MUT1E_8_bit|CLOSED_LOOP_GENERIC|FUEL_CUT|DECELERATION_FUEL_CUT|CRANKING);
 		CLR(r2, 0x800);
 	};
 
@@ -1380,7 +1380,7 @@ static void ML02_sub_13120()
 
 	if (r1 & 0x100)
 	{
-		CLR(r1, MUT1E_11_bit|MUT1E_9_bit|CLOSED_LOOP_GENERIC|STALL|DECELERATION_FUEL_CUT|CRANKING);
+		CLR(r1, UPDATE_OXIGEN_TRIM|MUT1E_9_bit|CLOSED_LOOP_GENERIC|STALL|DECELERATION_FUEL_CUT|CRANKING);
 		CLR(r2, 0x800);
 	};
 
@@ -1388,7 +1388,7 @@ static void ML02_sub_13120()
 
 	if (r1 & CRANKING)
 	{
-		CLR(r1, MUT1E_11_bit|MUT1E_9_bit|MUT1E_8_bit|CLOSED_LOOP_GENERIC|STALL|FUEL_CUT|DECELERATION_FUEL_CUT);
+		CLR(r1, UPDATE_OXIGEN_TRIM|MUT1E_9_bit|MUT1E_8_bit|CLOSED_LOOP_GENERIC|STALL|FUEL_CUT|DECELERATION_FUEL_CUT);
 		CLR(r2, 0x800);
 	};
 
@@ -1396,7 +1396,7 @@ static void ML02_sub_13120()
 
 	if (r1 & 0x200)
 	{
-		CLR(r1, MUT1E_11_bit|MUT1E_8_bit|CLOSED_LOOP_GENERIC|STALL|DECELERATION_FUEL_CUT|CRANKING);
+		CLR(r1, UPDATE_OXIGEN_TRIM|MUT1E_8_bit|CLOSED_LOOP_GENERIC|STALL|DECELERATION_FUEL_CUT|CRANKING);
 		CLR(r2, 0x800);
 	};
 
@@ -1404,13 +1404,13 @@ static void ML02_sub_13120()
 
 	if (r1 & DECELERATION_FUEL_CUT)
 	{
-		CLR(r1, MUT1E_11_bit|MUT1E_9_bit|MUT1E_8_bit|CLOSED_LOOP_GENERIC|STALL|CRANKING);
+		CLR(r1, UPDATE_OXIGEN_TRIM|MUT1E_9_bit|MUT1E_8_bit|CLOSED_LOOP_GENERIC|STALL|CRANKING);
 		CLR(r2, 0x800);
 	};
 
 	if (r1 & MAP_error)
 	{
-		CLR(r1, MUT1E_11_bit|CLOSED_LOOP_GENERIC);
+		CLR(r1, UPDATE_OXIGEN_TRIM|CLOSED_LOOP_GENERIC);
 		CLR(r2, 0x800);
 	};
 
@@ -1420,7 +1420,7 @@ static void ML02_sub_13120()
 
 	if (sub_21D9C())
 	{
-		CLR(r1, MUT1E_11_bit|CLOSED_LOOP_GENERIC);
+		CLR(r1, UPDATE_OXIGEN_TRIM|CLOSED_LOOP_GENERIC);
 		CLR(r2, 0x800);
 		SET(wMUT18_Open_Loop_Bit_Array, MUT18_12_1000);
 	};
@@ -1559,7 +1559,7 @@ static void ML02_sub_133BC()
 
 	CLR(wMUT5F, 0x80);
 
-	if (wMUT1E_MAF_RESET_FLAG & MUT1E_11_bit)
+	if (wMUT1E_MAF_RESET_FLAG & UPDATE_OXIGEN_TRIM)
 	{
 		word_FFFF86AE = word_1704/*40*/;
 	};

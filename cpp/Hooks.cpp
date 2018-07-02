@@ -41,7 +41,7 @@ extern "C" u16 IG04_Update_OctanEgrIgnTiming()
 
 	ignition_FFFF8BC4 = egrHighOctIgn = Lookup_HiIgnMap();
 
-	return octanEgrIgnTiming = interpolate_r4_r5_r6(egrHighOctIgn, egrLowOctIgn = Query_byte_2D_3D_Table(LowIgn_7C68), wMUT27_Octane_Number);
+	return octanEgrIgnTiming = interpolate_r4_r5_r6(egrHighOctIgn, egrLowOctIgn = Query_byte_2D_3D_Table(LowIgn_7C68), (no_knock_retard != 0) ? 255 : wMUT27_Octane_Number);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -56,7 +56,7 @@ extern "C" void FU03_HI_LO_Octan()
 
 	Table_Lookup_Axis(LOAD9_676C);
 
-	AFR_OctanInt = (fixAFR) ? AFR(14.7) : interpolate_r4_r5_r6(Table_Lookup_byte_2D_3D(HIGHOKTF_7A88[hiFuelMapIndex&7]), Query_byte_2D_3D_Table(LowOctFMp_7AA8), wMUT27_Octane_Number);
+	AFR_OctanInt = (fixAFR) ? AFR(14.7) : interpolate_r4_r5_r6(Table_Lookup_byte_2D_3D(HIGHOKTF_7A88[hiFuelMapIndex&7]), Query_byte_2D_3D_Table(LowOctFMp_7AA8), (no_knock_retard != 0) ? 255 : wMUT27_Octane_Number);
 
 														//	8,  33,  49,  63,  78,  96, 125				
 	//k_InAirTemp = Table_Lookup_byte_2D_3D(&kAirMapRAM);	// 143, 136, 132, 128, 125, 122, 118
