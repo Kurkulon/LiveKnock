@@ -357,6 +357,15 @@ struct Map3D_W
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+// state_Ignition
+
+#define IGNST_COIL					0
+#define IGNST_SPARK				1
+#define IGNST_2					2
+
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 #define Tephra ((void(*)(void))0x3ec00)
 #define sub_A98A ((void(*)(void))0xA98A)
 

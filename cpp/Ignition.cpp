@@ -139,8 +139,8 @@ extern "C" void SysInit_sub_16D74()
 {
 	word_FFFF8BCA = 160;
 
-	ignCoilTime_1 = IGNCOILCHGTIME1_3A3E->m2d.data[0] << 4; // byte_3A44 << 4;
-	ignCoilTime_3 = IGNCOILCHGTIME3_3A5E->m2d.data[0] << 4; // byte_3A64 << 4;
+	ignCoilTime_4us = IGNCOILCHGTIME1_3A3E->m2d.data[0] << 4; // byte_3A44 << 4;
+	ignCoil_MaxCrankDegrees = IGNCOILCHGTIME3_3A5E->m2d.data[0] << 4; // byte_3A64 << 4;
 
 	IG04_Init_knock_sub_16DB2();
 
@@ -1444,16 +1444,16 @@ static void IG04_Ignition_coil_charge_sub_18BD4()
 {
 	Table_Lookup_Axis(VOLT9_66C6);
 
-	ignCoilTime_3 = Table_Lookup_byte_2D_3D(IGNCOILCHGTIME3_3A5E);
+	ignCoil_MaxCrankDegrees = Table_Lookup_byte_2D_3D(IGNCOILCHGTIME3_3A5E);
 
 	u16 t = Table_Lookup_byte_2D_3D(IGNCOILCHGTIME1_3A3E) * 16;
 
-	if (crankHT_75_4us_3 <= word_17A0)
+	if (crankHT_75_4us_3 <= word_17A0/*2679*/)
 	{
 		t = Sub_Lim_0(t, Mul_Fix8_R(word_17A0 - crankHT_75_4us_3, Table_Lookup_byte_2D_3D(IGNCOILCHGTIME2_3A4E)));
 	};
 
-	ignCoilTime_1 = t;
+	ignCoilTime_4us = t;
 
 	wMUT2D_Ignition_Battery_Trim = t / 16;
 }
