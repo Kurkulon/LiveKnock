@@ -264,7 +264,7 @@ altMUT:
 			.DATA.L		wMUT13_Front_O2_ADC8bit+1
 			.DATA.L		wMUT31_Volumetric_Efficiency+1
 			.DATA.L		wMUT6A_Knock_ADC_Processed+1
-			.DATA.L		wMUT72_Knock_Present+1
+			.DATA.L		wMUT6B_Knock_Base+1
 			.DATA.L		_timeRPM
 			.DATA.L		_timeRPM+1
 			
@@ -636,5 +636,49 @@ loc_B26:
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	.AENDI
+	
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+;TEST_INTERPOLATE:	.DEFINE		"1"
+
+	.AIFDEF TEST_MEM_DECR
+
+	.SECTION P_53E_mem_decr, CODE, LOCATE=H'53E
+
+mem_decr:                                                                                       
+                                mov.l   r0, @-r15                                               
+
+                                stc     sr, r0                                                  
+                                mov.l   r0, @-r15                                               
+                                or      #h'F0, r0                                               
+                                
+                                bra		loc_mem_decr_558
+                                ldc     r0, sr     
+loc_mem_decr_540:                        
+                                mov.w   @r4, r0                                                 
+                                extu.w  r0, r0                                                  
+                                cmp/eq  #0, r0                                                  
+                                bt      loc_mem_decr_558                                                 
+
+                                add     #-1, r0                                                 
+                                mov.w   r0, @r4                                                 
+loc_mem_decr_558:                                                                                        
+                                add     #2, r4                                                  
+                                cmp/hs  r5, r4                                                  
+                                bf      loc_mem_decr_540    
+                                                                          
+                                ldc.l   @r15+, sr                                               
+
+; ---------------------------------------------------------------------------
+
+locret_55E:                                                                                     
+                                rts                                                             
+                                mov.l   @r15+, r0                                               
+
+; End of function mem_decr
+
+	.AENDI
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	.END
