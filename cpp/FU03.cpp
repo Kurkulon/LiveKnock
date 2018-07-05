@@ -167,19 +167,19 @@ static void FU03_VE_map_sub_14620();
 static void FU03_Fuel_Knock_Reaction(EnVars*);
 static u16 FU03_Lean_Spool_Calcs_sub_148DA(u16);
 static void FU03_sub_149E0(EnVars*);
-static void FU03_sub_14B50();
+static void FU03_Oxygen_root();
 static void FU03_sub_14B68();
 static void FU03_sub_14B7E();
 static u16 FU03_sub_14C9A();
 static void FU03_sub_14CBC();
 static bool FU03_sub_14CDC();
 static void FU03_sub_14EE0(EnVars*);
-static void FU03_sub_14F14(EnVars* ev);
+static void FU03_Calc_Limits_O2FT(EnVars* ev);
 static void FU03_sub_Oxygen_Feedback_Trim(EnVars* ev);
 static u16 FU03_sub_1525A(EnVars* ev);
 static void FU03_sub_15300(Vars *v);
-static void FU03_sub_153E4(EnVars* ev);
-static void FU03_sub_1559C(EnVars* ev);
+static void FU03_Calc_MUT52(EnVars* ev);
+static void FU03_Calc_MUT50_LFTB(EnVars* ev);
 static void FU03_sub_15740(EnVars* ev);
 static bool FU03_sub_15870(EnVars* ev);
 static void FU03_InjPulseWidthLimpHome();
@@ -293,13 +293,13 @@ static void Fuel_calcs()
 		timer_FFFF85A2 = word_15EA;
 	};
 
-	FU03_sub_14F14(ENGINE_MAIN_VARIABLES_DIM_off_9198);
+	FU03_Calc_Limits_O2FT(ENGINE_MAIN_VARIABLES_DIM_off_9198);
 	FU03_sub_Oxygen_Feedback_Trim(ENGINE_MAIN_VARIABLES_DIM_off_9198);
 
 	FU03_sub_15300(ENGINE_MAIN_VARIABLES_DIM_off_9198->_432_word_8DB0);
 
-	FU03_sub_153E4(ENGINE_MAIN_VARIABLES_DIM_off_9198);
-	FU03_sub_1559C(ENGINE_MAIN_VARIABLES_DIM_off_9198);
+	FU03_Calc_MUT52(ENGINE_MAIN_VARIABLES_DIM_off_9198);
+	FU03_Calc_MUT50_LFTB(ENGINE_MAIN_VARIABLES_DIM_off_9198);
 
 
 	FU03_InjPulseWidthLimpHome();
@@ -392,7 +392,7 @@ static void SysInit_sub_13B04()
 extern "C" void FU03_root_sub()
 {
 	FU03_sub_13CE4();
-	FU03_sub_14B50();
+	FU03_Oxygen_root();
 	FU03_InjPulseWidthLimpHome();
 	FU03_sub_159DC();
 	FU03_InjLatencyUpdate();
@@ -993,7 +993,7 @@ static void EVO_sub_150A0(EnVars* ev) //FU03_sub_149E0(EnVars* ev)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void FU03_sub_14B50()
+static void FU03_Oxygen_root()
 {
 	FU03_sub_14B68();
 
@@ -1183,18 +1183,18 @@ static bool FU03_sub_14CDC()
 
 static void FU03_sub_14EE0(EnVars* ev)
 {
-	FU03_sub_14F14(ev);
+	FU03_Calc_Limits_O2FT(ev);
 	FU03_sub_Oxygen_Feedback_Trim(ev);
 
 	FU03_sub_15300(ev->_432_word_8DB0);
 
-	FU03_sub_153E4(ev);
-	FU03_sub_1559C(ev);
+	FU03_Calc_MUT52(ev);
+	FU03_Calc_MUT50_LFTB(ev);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void FU03_sub_14F14(EnVars* ev)
+static void FU03_Calc_Limits_O2FT(EnVars* ev)
 {
 	u32 r8 = Table_Lookup_byte_2D_3D(STFUELMINT_45CA);
 	u32 r2 = Table_Lookup_byte_2D_3D(STFUELMAXT_45BC);
@@ -1407,7 +1407,7 @@ static void FU03_sub_15300(Vars *v)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void FU03_sub_153E4(EnVars* ev)
+static void FU03_Calc_MUT52(EnVars* ev)
 {
 	u32 r13, r2;
 
@@ -1468,12 +1468,12 @@ static void FU03_sub_153E4(EnVars* ev)
 
 	// loc_1553A
 
-	*ev->_88_wMUT52 = r13;
+	*ev->_88_wMUT52 = wMUT52 = r13;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void FU03_sub_1559C(EnVars* ev)
+static void FU03_Calc_MUT50_LFTB(EnVars* ev)
 {
 	u32 r9 = *ev->_428_word_FFFF995C;
 
@@ -1567,13 +1567,13 @@ static void FU03_sub_15740(EnVars* ev)
 
 			if (r9 <= 0x8000)
 			{
-				r2 = Sub_Lim_0(r2, (r8 != 0) ? word_1D80 : word_15EC);
+				r2 = Sub_Lim_0(r2, (r8 != 0) ? word_1D80/*12*/ : word_15EC/*5*/);
 			}
 			else
 			{
 				// loc_157CC
 
-				r2 = Add_Lim_FFFF(r2, (r8 != 0) ? word_1D82 : word_15EE);
+				r2 = Add_Lim_FFFF(r2, (r8 != 0) ? word_1D82/*12*/ : word_15EE/*5*/);
 			};
 
 			// loc_157F2

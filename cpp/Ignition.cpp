@@ -137,7 +137,7 @@ extern "C" void SysInit_NVRAM_OctaneNum()
 
 extern "C" void SysInit_sub_16D74()
 {
-	word_FFFF8BCA = 160;
+	timingAdv_75 = 160;
 
 	ignCoilTime_4us = IGNCOILCHGTIME1_3A3E->m2d.data[0] << 4; // byte_3A44 << 4;
 	ignCoil_MaxCrankDegrees = IGNCOILCHGTIME3_3A5E->m2d.data[0] << 4; // byte_3A64 << 4;
@@ -1425,7 +1425,7 @@ static u16 IG04_sub_18A2E()
 
 static void IG04_sub_18B48()
 {
-	word_FFFF8BCA = Sub_Lim_0(word_178A/*174*/ + 57, Div_WW(wMUT04_Timing_Advance_Interpolated*256, 90));
+	timingAdv_75 = Sub_Lim_0(word_178A/*174*/ + 57, Div_WW(wMUT04_Timing_Advance_Interpolated*256, 90));
 	word_FFFF96C8 = Sub_Lim_0(word_178A/*174*/ + 57, Div_WW(word_FFFF96CA * 256, 90));
 }
 

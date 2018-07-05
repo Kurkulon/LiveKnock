@@ -356,9 +356,9 @@ static void ML02_sub_11570()
 
 static void ML02_sub_118B0()
 {
-	u32 r1 = 0xF;
+	u32 r1 = wMUT19_Startup_Check_Bits & 0xF;
 
-	if ((wMUT19_Startup_Check_Bits & r1) >= 1)
+	if (r1 >= 1)
 	{
 		r1 = 1;
 	};
@@ -763,7 +763,7 @@ static bool ML02_Return_0_0()
 
 static bool ML02_sub_1228C()
 {
-	return starter_timer_up >= word_1586/*80*/ && (wMUT40_Stored_Faults_Lo & 0x80) && ZRO(word_FFFF8F2A, 1);
+	return starter_timer_up >= word_1586/*80*/ && (wMUT40_Stored_Faults_Lo & 0x80) && ZRO(camShaftFlags, 1);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

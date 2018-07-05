@@ -359,10 +359,31 @@ struct Map3D_W
 
 // state_Ignition
 
-#define IGNST_COIL					0
+#define IGNST_COIL				0
 #define IGNST_SPARK				1
 #define IGNST_2					2
 
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// camShaftFlags
+
+#define CAM_SYNCHRO				0x01
+#define CAM_02					0x02
+#define CAM_04					0x04
+//#define CAM_08					0x08
+#define CAM_10					0x10
+//#define CAM_20					0x20
+//#define CAM_40					0x40
+//#define CAM_80					0x80
+//#define CAM_100					0x100
+//#define CAM_200					0x200
+//#define CAM_400					0x400
+//#define CAM_800					0x800
+//#define CAM_1000				0x1000
+//#define CAM_2000				0x2000
+//#define CAM_4000				0x4000
+//#define CAM_8000				0x8000
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

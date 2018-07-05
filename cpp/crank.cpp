@@ -423,7 +423,7 @@ static void sub_BED8(u16 mask)
 
 static void CRANK5_root_sub_DC18(u16 osbr, u32 icr)
 {
-	if ((osbr - crankPrev_OSBR2_75) >= 162 || timer_up_FFFF8522 >= 40)
+	if ((osbr - crank_OSBR2_75) >= 162 || timer_up_FFFF8522 >= 40)
 	{
 		if (timer_up_FFFF8524 >= 39)
 		{
@@ -433,12 +433,12 @@ static void CRANK5_root_sub_DC18(u16 osbr, u32 icr)
 		}
 		else
 		{
-			crankHT_5 = osbr - crankPrev_OSBR2_5;
+			crankHT_5 = osbr - crank_OSBR2_5;
 
 			crank_dt_ICR0AH_5 = icr - crankPrev_ICR0AH_5;
 		};
 
-		crankPrev_OSBR2_5 = osbr;
+		crank_OSBR2_5 = osbr;
 
 		crankPrev_ICR0AH_5 = icr;
 
@@ -460,11 +460,11 @@ static void CRANK5_root_sub_DC18(u16 osbr, u32 icr)
 
 static void CRANK75_root_sub_DB40(u16 osbr, u32 icr)
 {
-    if ((osbr - crankPrev_OSBR2_5) >= 254 || timer_up_FFFF8524 >= 40)
+    if ((osbr - crank_OSBR2_5) >= 254 || timer_up_FFFF8524 >= 40)
 	{
 		if (timer_up_FFFF8522 >= 39)
 		{
-			crankPrev_OSBR2_75 = osbr;
+			crank_OSBR2_75 = osbr;
 
 			crankPrev_ICR0AH_75 = icr;
 
@@ -474,9 +474,9 @@ static void CRANK75_root_sub_DB40(u16 osbr, u32 icr)
 		}
 		else
 		{
-			crankHT_75 = osbr - crankPrev_OSBR2_75;
+			crankHT_75 = osbr - crank_OSBR2_75;
 
-			crankPrev_OSBR2_75 = osbr;
+			crank_OSBR2_75 = osbr;
 
 			null_crank_dt_ICR0AH_5 = icr - crankPrev_ICR0AH_75;
 
@@ -548,80 +548,80 @@ static void CRANK75_Main_sub_232A0()
 		camshaft_Shift |= 1;
 	};
 
-	if (word_FFFF8F2A & 1)
+	if (camShaftFlags & CAM_SYNCHRO)
 	{
-		stroke_FFFF8F22 += 1;
+		stroke_75 += 1;
 
-		if (stroke_FFFF8F22 >= 4)
+		if (stroke_75 >= 4)
 		{
-			stroke_FFFF8F22 = 0;
+			stroke_75 = 0;
 		};
 	}
 	else
 	{
-		stroke_FFFF8F22 = 1;
+		stroke_75 = 1;
 	};
 
-	word_FFFF8F32 += 1;
+	crankCounter += 1;
 
-	if (word_FFFF8F32 == 0)
+	if (crankCounter == 0)
 	{
-		word_FFFF8F32 -= 1;
+		crankCounter -= 1;
 	};
 
-	u32 r1 = word_98BA[stroke_FFFF8F22] ^ camshaft_Shift;//0xB1B1, 0xC6C6, 0x1B1B, 0x6C6C
+	u32 r1 = word_98BA[stroke_75] ^ camshaft_Shift;//0xB1B1, 0xC6C6, 0x1B1B, 0x6C6C
 
-	if (word_FFFF8F32 < 4)
+	if (crankCounter < 4)
 	{
-		CLR(word_FFFF8F2A, 1);
-		word_FFFF8F2C = 2;
+		CLR(camShaftFlags, CAM_SYNCHRO);
+		camSyncCrankCounter = 2;
 	}
 	else
 	{
 		if (word_98C2/*3*/ & r1)
 		{
-			if (word_FFFF8F2C != 0)
+			if (camSyncCrankCounter != 0)
 			{
-				word_FFFF8F2C -= 1;
+				camSyncCrankCounter -= 1;
 			}
 			else if ((camshaft_Shift & 0xF) != 0 && (camshaft_Shift & 0xF) != 0xF)
 			{
-				CLR(word_FFFF8F2A, 1);
+				CLR(camShaftFlags, CAM_SYNCHRO);
 			}
 		}
 		else 
 		{
 			if ((r1 & 0xF) == 0)
 			{
-				SET(word_FFFF8F2A, 1);
+				SET(camShaftFlags, CAM_SYNCHRO);
 			};
 
-			word_FFFF8F2C = 2;
+			camSyncCrankCounter = 2;
 		};
 	};
 
 	if (Check_Starter_signal())
 	{
-		if ((word_FFFF8F34 += 1) == 0)
+		if ((starterCrankCounter += 1) == 0)
 		{
-			word_FFFF8F34 -= 1;
+			starterCrankCounter -= 1;
 		};
 	}
 	else
 	{
-		word_FFFF8F34 = 0;
+		starterCrankCounter = 0;
 	};
 
-	if ((word_FFFF8F2A & 1) && (word_FFFF8F34 == 0 || word_FFFF8F34 >= 5))
+	if ((camShaftFlags & CAM_SYNCHRO) && (starterCrankCounter == 0 || starterCrankCounter >= 5))
 	{
-		SET(word_FFFF8F2A, 0x10);
+		SET(camShaftFlags, CAM_10);
 	}
 	else
 	{
-		CLR(word_FFFF8F2A, 0x10);
+		CLR(camShaftFlags, CAM_10);
 	};
 
-	r1 = (word_FFFF8F2A & 0x10) ? word_98BA[stroke_FFFF8F22] : camshaft_Shift;
+	r1 = (camShaftFlags & CAM_10) ? word_98BA[stroke_75] : camshaft_Shift; //0xB1B1, 0xC6C6, 0x1B1B, 0x6C6C
 
 	timerMask_1_2E_2F = word_98C4[r1 & 3]; // 2,1,2,1
 	timerMask_0_2E_2F = word_98CC[r1 & 3]; // 1,2,1,2
@@ -683,7 +683,7 @@ static void CRANK75_Main_sub_232A0()
 	}
 	else
 	{
-		if (Check_Starter_signal() || (word_FFFF8C5C & 0x40) || (word_FFFF8F2A & 1) == 0)
+		if (Check_Starter_signal() || (word_FFFF8C5C & 0x40) || (camShaftFlags & CAM_SYNCHRO) == 0)
 		{
 			timingAdvInternal1 = 202;
 			timingAdvInternal2 = 202;
@@ -739,7 +739,7 @@ static void CRANK75_Main_sub_232A0()
 
 					state_Ignition = IGNST_2;
 
-					u32 r13 = crankPrev_OSBR2_75 + word_FFFF8C20 - CRANK75_Get_IgnCoilTime(r1);
+					u32 r13 = crank_OSBR2_75 + word_FFFF8C20 - CRANK75_Get_IgnCoilTime(r1);
 					
 					r1 = timerValue_1_2E_2F + word_179C/*250*/;
 
@@ -760,7 +760,7 @@ static void CRANK75_Main_sub_232A0()
 
 				// loc_2376E
 
-				timerValue_1_2E_2F = crankPrev_OSBR2_75 + word_FFFF8C20;
+				timerValue_1_2E_2F = crank_OSBR2_75 + word_FFFF8C20;
 
 
 				if ((timingAdvInternal1 >= 202 && (word_FFFF8C5C & 0x40)) || (word_FFFF8C5C & 0x10) == 0)
@@ -805,7 +805,7 @@ static void CRANK75_Main_sub_232A0()
 
 				// loc_2383A
 				
-				r2 += crankPrev_OSBR2_75;
+				r2 += crank_OSBR2_75;
 
 				r2 += word_FFFF8C22;
 
@@ -837,7 +837,7 @@ static void CRANK75_Main_sub_232A0()
 
 	/*u32*/ r1 = word_FFFF8C62 & 0xF;
 
-	if (ZRO(IGN_FLAG9_FFFF8BB6, IGN_F9_01) || r1 == 0 || r1 == 0xF || ZRO(word_FFFF8F2A, 1))
+	if (ZRO(IGN_FLAG9_FFFF8BB6, IGN_F9_01) || r1 == 0 || r1 == 0xF || ZRO(camShaftFlags, CAM_SYNCHRO))
 	{
 		// loc_23932
 
@@ -1484,7 +1484,7 @@ static void CRANK75_MainUpdateTiming()
 		wMUT26_Knock_Retard = 0;
 	};
 
-	u32 ign = word_FFFF8BCA;
+	u32 ign = timingAdv_75;
 
 	if ((IGN_FLAG9_FFFF8BB6 & IGN_F9_04) || word_FFFF8BF4 != 0 || word_FFFF8BFA != 0)
 	{
@@ -1511,15 +1511,15 @@ static void CRANK75_MainUpdateTiming()
 	ign += sub_21AAA(wMUT26_Knock_Retard);
 
 
-	if ((IGN_FLAG9_FFFF8BB6 & IGN_F9_08) && (word_FFFF8F2A & 1))
+	if ((IGN_FLAG9_FFFF8BB6 & IGN_F9_08) && (camShaftFlags & CAM_SYNCHRO))
 	{
 		if (IGN_FLAG9_FFFF8BB6 & IGN_F9_20)
 		{
-			ign += array_OctanNum[stroke_FFFF8F22];
+			ign += array_OctanNum[stroke_75];
 		}
 		else
 		{
-			ign += array_OctanNum[stroke_FFFF8F22];
+			ign += array_OctanNum[stroke_75];
 		};
 	};
 
@@ -1716,7 +1716,7 @@ static void CRANK5_Main_sub_24AF0()
 				while (r13 != timerMask_1_2E_2F && r13 != 0);
 
 				if (state_Ignition != IGNST_COIL
-					&& ((word_FFFF8C5E & 1) || ABSDIF(timerValue_1_2E_2F - crankPrev_OSBR2_5, r1) > crankHT_75_512us))
+					&& ((word_FFFF8C5E & 1) || ABSDIF(timerValue_1_2E_2F - crank_OSBR2_5, r1) > crankHT_75_512us))
 				{
 					CRANK5_sub_2506E();
 				};
@@ -1727,7 +1727,7 @@ static void CRANK5_Main_sub_24AF0()
 
 				if (state_Ignition == IGNST_2)
 				{
-					u32 r2 = crankPrev_OSBR2_5 + r1 - ignCoilTime_Fin_4us - crankHT_75_512us;
+					u32 r2 = crank_OSBR2_5 + r1 - ignCoilTime_Fin_4us - crankHT_75_512us;
 
 					if ((r2 - reg_TCNT2A) & 0x8000)
 					{
@@ -1747,9 +1747,9 @@ static void CRANK5_Main_sub_24AF0()
 
 						ignCoilChargeStartTime_x4us = r2;
 					
-						if (((word_FFFF8C5E & 1) || ABSDIF(timerValue_1_2E_2F - crankPrev_OSBR2_5, r1) > crankHT_75_512us))
+						if (((word_FFFF8C5E & 1) || ABSDIF(timerValue_1_2E_2F - crank_OSBR2_5, r1) > crankHT_75_512us))
 						{
-							timerValue_1_2E_2F = r1 + crankPrev_OSBR2_5;
+							timerValue_1_2E_2F = r1 + crank_OSBR2_5;
 						};
 					};
 				};
@@ -1758,7 +1758,7 @@ static void CRANK5_Main_sub_24AF0()
 
 		// loc_24CD0
 
-		if (ZRO(word_FFFF8F2A, 1) || ZRO(word_FFFF8F2A, 0x10)
+		if (ZRO(camShaftFlags, CAM_SYNCHRO) || ZRO(camShaftFlags, CAM_10)
 			|| (ZRO(word_FFFF8C5C, 0x40/*Fix timing*/) && timingAdvInternal1 < 200 && (Get_2E_2F_2G_status() & timerMask_1_2E_2F) && state_Ignition != IGNST_COIL))
 		{
 			// loc_24D0A
@@ -1771,7 +1771,7 @@ static void CRANK5_Main_sub_24AF0()
 
 		CRANK5_SetIgnCoilTime_Fin();
 
-		u32 r2 = Mul_Fix8_Lim_FFFF(156, word_FFFF8C16) + crankPrev_OSBR2_5 + word_FFFF8C22 - ignCoilTime_Fin_4us;
+		u32 r2 = Mul_Fix8_Lim_FFFF(156, word_FFFF8C16) + crank_OSBR2_5 + word_FFFF8C22 - ignCoilTime_Fin_4us;
 
 		r1 = timerValue_1_2E_2F + word_179C/*250*/;
 
@@ -1810,7 +1810,7 @@ static void CRANK5_Main_sub_24AF0()
 
 	if (wMUTD1_BitMap_FAA & FAA_7_HIGH_IGN/*Enable High Oct Ign Map Lookup and other*/)
 	{
-		CRANK5_sub_C990(25 + ((timerValue_1_2E_2F - crankPrev_OSBR2_5) & 0x8000) ? crankPrev_OSBR2_5 : timerValue_1_2E_2F);
+		CRANK5_sub_C990(25 + ((timerValue_1_2E_2F - crank_OSBR2_5) & 0x8000) ? crank_OSBR2_5 : timerValue_1_2E_2F);
 	};
 	
 	// loc_24DFE
@@ -1819,7 +1819,7 @@ static void CRANK5_Main_sub_24AF0()
 
 	if (timer_down_TXFLAG3_FFFF8574 == 0 || timer_FFFF8592 == 0)
 	{
-		word_FFFF8F2A = 0;
+		camShaftFlags = 0;
 
 		SET(camshaft_Shift, ~1);
 
@@ -1930,7 +1930,7 @@ static void CRANK5_sub_2504A()
 
 static void CRANK5_sub_2506E()
 {
-	u16 r1 = crankPrev_OSBR2_5 + word_FFFF8C24;
+	u16 r1 = crank_OSBR2_5 + word_FFFF8C24;
 
 	if (r1 < reg_TCNT2A)
 	{
@@ -1953,25 +1953,30 @@ static void CRANK5_SetIgnCoilTime_Fin()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+// v1 = 0: 
+
 static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 {
-	u32 r2, ipw, r9 = 0;
+	enum INJMODE {INJ_NONE = 0, INJ_PHASE = 1, INJ_2 = 2, INJ_3 = 3} inj_mode;
+
+//	u32 inj_mode1; // 0 - None; 1 - ; 2 - ; 3 - 
+	u32 ipw, r9 = 0;
 
 	if (v1 == 1)
 	{
 		// async_25DE6
 
-		if (ONE(FUEL_CUT_FLAG_FFFF8A5E, FCF_80) && ONE(RPM_FLAGS, RPM_0_CRANKING) && (word_FFFF8AD6 != 0 || ZRO(word_FFFF8F2A, 2)))
+		if (ONE(FUEL_CUT_FLAG_FFFF8A5E, FCF_80) && ONE(RPM_FLAGS, RPM_0_CRANKING) && (word_FFFF8AD6 != 0 || ZRO(camShaftFlags, CAM_02)))
 		{
 			// loc_25E06
 
-			r2 = 0;
+			inj_mode = INJ_NONE; // None
 		}
 		else
 		{
 			// loc_25E0C
 
-			r2 = 2;
+			inj_mode = INJ_2;
 		};
 
 		// loc_25E0E
@@ -2294,7 +2299,7 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 					r13 = 0;
 				};
 
-				r2 = word_FFFF8B74;
+				u32 r2 = word_FFFF8B74;
 
 				word_FFFF8B9A = Interpolate_256(0, Interpolate_256(r13, r3, word_FFFF8B76), r2);
 
@@ -2385,7 +2390,7 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 
 			if (wMUTC0_bMUT54_Acceleration_Enrichment != 0 || wMUTC1_bMUT55_Deceleration_Enleanment != 0);
 
-			r2 = MAFSxMAF_MULTIPLIER_1_FFFF89A8/*51200*/;
+			u32 r2 = MAFSxMAF_MULTIPLIER_1_FFFF89A8/*51200*/;
 
 			u32 r0 = SHLR8(wMUT0F_Oxygen_Feedback_Trim/*32768*/) << 1; // 256
 
@@ -2417,7 +2422,7 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 
 		if (FUEL_CUT_FLAG_FFFF8A5E & FCF_40)
 		{
-			if (byte_35B7[word_FFFF8AD0] == 0)
+			if (byte_35B7[word_FFFF8AD0] == 0) // 0,  1,  0,  1,  0,  1
 			{
 				ipw = 0;
 			};
@@ -2441,14 +2446,14 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 			word_FFFF8F30 = 0;
 		};
 
-		if (word_FFFF8F2A & 2)
+		if (camShaftFlags & CAM_02)
 		{
 			word_FFFF8F30 = 1;
 		};
 
 		if (RPM_FLAGS & RPM_13_CRANKING_SYNC_INJECT)
 		{
-			r2 = 3;
+			inj_mode = INJ_3;
 
 			ipw = ipw_crank_DuringCrankingSync;
 
@@ -2472,21 +2477,21 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 		//		CLR(RPM_FLAGS, RPM_13_CRANKING_SYNC_INJECT);
 		//	};
 		//}
-		else if ((FUEL_CUT_FLAG_FFFF8A5E & FCF_80) && (RPM_FLAGS & RPM_0_CRANKING) && (word_FFFF8AD6 != 0 || ZRO(word_FFFF8F2A, 2)))
+		else if ((FUEL_CUT_FLAG_FFFF8A5E & FCF_80) && (RPM_FLAGS & RPM_0_CRANKING) && (word_FFFF8AD6 != 0 || ZRO(camShaftFlags, CAM_02)))
 		{
-			r2 = 0;
+			inj_mode = INJ_NONE;
 		}
 		else if (RPM_FLAGS & RPM_15_bit)
 		{
-			r2 = 2;
+			inj_mode = INJ_2;
 		}
-		else if ((word_FFFF8F2A & 2) || (word_FFFF8F2A & 6))
+		else if ((camShaftFlags & CAM_02) || (camShaftFlags & (CAM_04|CAM_02)))
 		{
-			r2 = 1;
+			inj_mode = INJ_PHASE;
 		}
 		else 
 		{
-			r2 = 2;
+			inj_mode = INJ_2;
 
 			ipw = Div_R4_R5__R0(ipw , 4);
 		};
@@ -2500,7 +2505,7 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 
 	// loc_25E12
 
-	if (r2 != 0 && ipw != 0)
+	if (inj_mode != INJ_NONE && ipw != 0)
 	{
 		// loc_25E26
 
@@ -2528,25 +2533,23 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 
 		MUT_2B_FFFF9996 = Mul_Lim_FFFF(ipw, 8);
 
-		if (r2 == 1)
+		u32 inj_mask;
+
+		if (inj_mode == INJ_PHASE)
 		{
 			if (ZRO(word_FFFF8B4E, INJ_7_80))
 			{
 				// loc_25F98
 
-				r2 = word_98D4[strokeNumber+1];
+				inj_mask = word_98D4[strokeNumber+1];//2,1,4,8,2
 
 				if (word_FFFF8B4E & INJ_6_40)
 				{
-					r2 |= word_98D4[strokeNumber];
+					inj_mask |= word_98D4[strokeNumber];//2,1,4,8,2
 				};
 
 			}
 			else if (ZRO(word_FFFF8B4E, INJ_6_40))
-			{
-				r2 = 0;
-			}
-			else
 			{
 				// loc_25EC0
 
@@ -2561,17 +2564,21 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 				{
 					SET(word_FFFF89F2, 0x800);
 
-					r2 = word_98D4[r13];
+					inj_mask = word_98D4[r13];//2,1,4,8,2
 				}
 				else
 				{
 					// loc_25F88
-					r2 = word_98D4[strokeNumber];
+					inj_mask = word_98D4[strokeNumber];//2,1,4,8,2
 				};
+			}
+			else
+			{
+				inj_mask = 0;
 			};
 
 		}
-		else if (r2 == 3)
+		else if (inj_mode == INJ_3)
 		{
 			if (ZRO(BOOSTCHECK2_FFFF8A0E, 0x40) && ZRO(word_FFFF89F2, 0x400))
 			{
@@ -2581,13 +2588,13 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 
 			// loc_25FEA
 
-			r2 = word_98E6[word_FFFF8F28];
+			inj_mask = word_98E6[word_FFFF8F28];//0xF,0xF
 			word_FFFF8F28 ^= 1;
 		}
 		else
 		{
 			// loc_26002
-			r2 = 0xF;
+			inj_mask = 0xF;
 		};
 
 		// loc_26004
@@ -2596,14 +2603,14 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 
 		if ((word_FFFF8A48 & 0x80) && v1 == 0)
 		{
-			StartInjectSync(ipw, r2);
+			StartInjectSync(ipw, inj_mask);
 
 			r9 = 0;
 		}
 		else
 		{
 			// inj_async_2602C
-			StartInjectAsync(ipw, r2);
+			StartInjectAsync(ipw, inj_mask);
 
 			r9 = 1;
 		};
@@ -2614,7 +2621,7 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 
 		for (u32 r1 = 1; r1 <= 8; r1 <<= 1)
 		{
-			if (r2 & r1)
+			if (inj_mask & r1)
 			{
 				ipw += 1;
 			};
@@ -2647,9 +2654,9 @@ static void CRANK75_sub_260B8()
 		strokeNumber = 0;
 	};
 
-	if (word_FFFF8F2A & 1)
+	if (camShaftFlags & CAM_SYNCHRO)
 	{
-		SET(word_FFFF8F2A, 6);
+		SET(camShaftFlags, (CAM_04|CAM_02));
 
 		word_FFFF8F2E = 5;
 
@@ -2657,11 +2664,11 @@ static void CRANK75_sub_260B8()
 	}
 	else
 	{
-		if (ZRO(word_FFFF8F2A, 4))
+		if (ZRO(camShaftFlags, CAM_04))
 		{
 			strokeNumber = ((camshaft_Shift & 3) - 1) & 3;
 
-			SET(word_FFFF8F2A, 2);
+			SET(camShaftFlags, CAM_02);
 
 			word_FFFF8F2E = 5;
 		};
@@ -2671,13 +2678,13 @@ static void CRANK75_sub_260B8()
 	
 	if (word_FFFF8F2E == 0)
 	{
-		CLR(word_FFFF8F2A, 2);
-		SET(word_FFFF8F2A, 4);
+		CLR(camShaftFlags, CAM_02);
+		SET(camShaftFlags, CAM_04);
 	};
 
-	if (word_FFFF8F2A & 1)
+	if (camShaftFlags & CAM_SYNCHRO)
 	{
-		strokeNumber = stroke_FFFF8F22;
+		strokeNumber = stroke_75;
 	};
 
 	DECLIM(word_FFFF8DE6);
@@ -2763,7 +2770,7 @@ static void CRANK75_sub_2B168()
 		SET(word_FFFF8F7A, 4);
 	};
 
-	word_FFFF9990 = stroke_FFFF8F22 << 4;
+	word_FFFF9990 = stroke_75 << 4;
 
 	if (ZRO(word_FFFF8F7A, 0x8000))
 	{
@@ -2779,11 +2786,11 @@ static void CRANK75_sub_2B168()
 
 	u16 **p = &ENGINE_MAIN_VARIABLES_DIM_off_9198->_1064_word_FFFF901E;
 
-	u16 *r2 = p[stroke_FFFF8F22];
+	u16 *r2 = p[stroke_75];
 
 	p = &ENGINE_MAIN_VARIABLES_DIM_off_9198->_1144_word_FFFF9036;
 
-	u16 *r1 = p[stroke_FFFF8F22];
+	u16 *r1 = p[stroke_75];
 
 	*r2 += 1;
 
@@ -3121,7 +3128,7 @@ static void CRANK5_sub_29558(u16 v1, u16 v2)
 
 	u32 **p = (byte_1056/*0*/ != 0 && (flags_FFFF8FFC & 0x80)) ? &ENGINE_MAIN_VARIABLES_DIM_off_9198->_952_dword_FFFF8124 : &ENGINE_MAIN_VARIABLES_DIM_off_9198->_872_bMUTD9;
 
-	r13 = Div_65536_R(*p[stroke_FFFF8F22]);
+	r13 = Div_65536_R(*p[stroke_75]);
 
 	word_FFFF8F62 = Mul_Div(word_FFFF8F60, r13, 0x8000);
 
