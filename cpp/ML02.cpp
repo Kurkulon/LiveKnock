@@ -763,7 +763,7 @@ static bool ML02_Return_0_0()
 
 static bool ML02_sub_1228C()
 {
-	return starter_timer_up >= word_1586/*80*/ && (wMUT40_Stored_Faults_Lo & 0x80) && ZRO(camShaftFlags, 1);
+	return starter_timer_up >= word_1586/*80*/ && (wMUT40_Stored_Faults_Lo & 0x80) && ZRO(camShaftFlags, CAM_SYNCHRO);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

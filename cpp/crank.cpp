@@ -537,7 +537,7 @@ static void ClearTSR_2E_2F_2G(u16 v)
 
 static void CRANK75_Main_sub_232A0()
 {
-	const u32 r9 = 0x8000;
+//	const u32 r9 = 0x8000;
 
 	__disable_irq();
 
@@ -717,7 +717,7 @@ static void CRANK75_Main_sub_232A0()
 		{
 			u32 r2 = filtred_crankHT_x_4us = CRANK75_FiltrCrankHT_2494E(r8, crankHT_75_4us_2);
 
-			if ((r8 > 6250 && timingAdvInternal1 <= 202 && !CRANK75_sub_24636()) || (r2 & r9) || r2 < 326)
+			if ((r8 > 6250 && timingAdvInternal1 <= 202 && !CRANK75_sub_24636()) || (r2 & 0x8000) || r2 < 326)
 			{
 				word_FFFF8C5C = 0;
 				CRANK75_sub_2467E(1);
@@ -743,12 +743,12 @@ static void CRANK75_Main_sub_232A0()
 					
 					r1 = timerValue_1_2E_2F + word_179C/*250*/;
 
-					if ((r13 - r1) & r9)
+					if ((r13 - r1) & 0x8000)
 					{
 						r13 = r1;
 					};
 
-					if ((r13 - reg_TCNT2A) & r9)
+					if ((r13 - reg_TCNT2A) & 0x8000)
 					{
 						r13 = reg_TCNT2A;
 					};
@@ -805,11 +805,7 @@ static void CRANK75_Main_sub_232A0()
 
 				// loc_2383A
 				
-				r2 += crank_OSBR2_75;
-
-				r2 += word_FFFF8C22;
-
-				u16 r13 = r2 - ignCoilTime_Fin_4us;
+				u16 r13 = r2 + crank_OSBR2_75 + word_FFFF8C22 - ignCoilTime_Fin_4us;
 
 				u32 r1 = timerValue_1_2E_2F + word_179C/*250*/;
 
