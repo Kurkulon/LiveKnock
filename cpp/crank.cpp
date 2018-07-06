@@ -93,7 +93,7 @@ static void CRANK_sub_262D0();
 static void CRANK5_SetIgnCoilTime_Fin();
 static void CRANK5_Main_sub_24AF0();
 static void CRANK5_sub_2504A();
-static void CRANK5_sub_2506E();
+static void CRANK5_SetIgnSpark5();
 static void CRANK5_sub_21A04();
 static void CRANK5_sub_29438();
 static void CRANK5_sub_29558(u16 v1, u16 v2);
@@ -114,15 +114,15 @@ static void Update_Gen_G_output();
 
 static void atu22_IMF2G_event();
 static void atu22_CMF2G_event();
-static void ClearTSR_2E_2F_2G(u16 v);
+static void Disable_Ign_Handler(u16 v);
 static bool Check_Starter_signal();
 static bool Check_PEDRL_1();
 
 static void Ign_handler(u16 v);
-static u16 Get_2E_2F_2G_status();
+static u16 Get_Coil_charge_status();
 
-static void Pulse_TIO2_E_F_G_out_1(u16 mask);
-static void sub_BED8(u16 mask);
+static void Start_Coil_Charge(u16 mask);
+static void Disable_Coil_Charge(u16 mask);
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -255,7 +255,7 @@ static void atu22_IMF2G_event()
 {
 	__disable_irq();
 
-	ClearTSR_2E_2F_2G(4);
+	Disable_Ign_Handler(4);
 
 	__enable_irq();
 }
@@ -292,30 +292,30 @@ static void atu22_CMF2G_event()
 
 static void Ign_handler(u16 mask)
 {
-	ClearTSR_2E_2F_2G(mask);
+	Disable_Ign_Handler(mask);
 
-	SET(local_2636C, timerMask_1_2E_2F & mask);
+	SET(local_2636C, curTimingMask_75 & mask);
 
-	mask = timerMask_1_2E_2F & local_2636C;
+	mask = curTimingMask_75 & local_2636C;
 
-	if (timerMask_1_2E_2F == mask)
+	if (curTimingMask_75 == mask)
 	{
-		if (state_Ignition == IGNST_2)
+		if (state_Ignition == IGNST_CUR_COIL)
 		{
 			state_Ignition = IGNST_SPARK;
 
 			if ((word_FFFF8C5E & 1) == 0)
 			{
-				SetIgnSparkStartTime(mask, timerValue_1_2E_2F);
+				SetIgnSparkStartTime(mask, curIgnSparkTime_4us);
 			};
 		}
 		else if (state_Ignition == IGNST_SPARK && (word_FFFF8C5E & 1) == 0)
 		{
 			// loc_263CE
 
-			state_Ignition = IGNST_COIL;
+			state_Ignition = IGNST_NEXT_COIL;
 
-			SetIgnCoilChargeStartTime(timerMask_0_2E_2F, timerValue_0_2E_2F);
+			SetIgnCoilChargeStartTime(nxtTimingMask_75, ignCoilNextStartTime_x4us);
 		};
 
 		local_2636C &= ~mask;
@@ -324,7 +324,7 @@ static void Ign_handler(u16 mask)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static u16 Get_2E_2F_2G_status()
+static u16 Get_Coil_charge_status()
 {
 	__disable_irq();
 
@@ -337,7 +337,7 @@ static u16 Get_2E_2F_2G_status()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void Pulse_TIO2_E_F_G_out_1(u16 mask)
+static void Start_Coil_Charge(u16 mask)
 {
 	__disable_irq();
 
@@ -347,7 +347,7 @@ static void Pulse_TIO2_E_F_G_out_1(u16 mask)
 
 		CLR(reg_TSR2A, 0x10);
 
-		reg_TIOR2C = reg_TIOR2C & 0xF8 | 1;
+		reg_TIOR2C = reg_TIOR2C & 0xF8 | 1; // 0 output on GR compare-match
 
 		while(ZRO(reg_TSR2A, 0x10)) ;
 	};
@@ -358,7 +358,7 @@ static void Pulse_TIO2_E_F_G_out_1(u16 mask)
 
 		CLR(reg_TSR2A, 0x20);
 
-		reg_TIOR2C = reg_TIOR2C & 0x8F | 0x10;
+		reg_TIOR2C = reg_TIOR2C & 0x8F | 0x10; // 0 output on GR compare-match
 
 		while(ZRO(reg_TSR2A, 0x20)) ;
 	};
@@ -369,7 +369,7 @@ static void Pulse_TIO2_E_F_G_out_1(u16 mask)
 
 		CLR(reg_TSR2A, 0x40);
 
-		reg_TIOR2D = reg_TIOR2D & 0xF8 | 1;
+		reg_TIOR2D = reg_TIOR2D & 0xF8 | 1; // 0 output on GR compare-match
 
 		while(ZRO(reg_TSR2A, 0x40)) ;
 	};
@@ -379,7 +379,7 @@ static void Pulse_TIO2_E_F_G_out_1(u16 mask)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void sub_BED8(u16 mask)
+static void Disable_Coil_Charge(u16 mask)
 {
 	__disable_irq();
 
@@ -501,7 +501,7 @@ static void CRANK75_root_sub_DB40(u16 osbr, u32 icr)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void ClearTSR_2E_2F_2G(u16 v)
+static void Disable_Ign_Handler(u16 v)
 {
 	__disable_irq();
 
@@ -623,8 +623,8 @@ static void CRANK75_Main_sub_232A0()
 
 	r1 = (camShaftFlags & CAM_10) ? word_98BA[stroke_75] : camshaft_Shift; //0xB1B1, 0xC6C6, 0x1B1B, 0x6C6C
 
-	timerMask_1_2E_2F = word_98C4[r1 & 3]; // 2,1,2,1
-	timerMask_0_2E_2F = word_98CC[r1 & 3]; // 1,2,1,2
+	curTimingMask_75 = word_98C4[r1 & 3]; // 2,1,2,1
+	nxtTimingMask_75 = word_98CC[r1 & 3]; // 1,2,1,2
 
 	word_FFFF8C62 <<= 1;
 
@@ -633,39 +633,39 @@ static void CRANK75_Main_sub_232A0()
 		word_FFFF8C62 |= 1;
 	};
 
-	u32 r8 = crankHT_75_4us = crankHT_75;
+	u32 crnkHT75 = crankHT_75_4us = crankHT_75; // r8
 
-	u32 r2 = ((word_FFFF8C5C & 5) << 1) | 0x35;
+	u32 r2 = ((word_FFFF8C5C & (IGN_X_RPM1775|IGN_X_RPM500)) << 1) | IGN_X_RPM4800|IGN_X_RPM1540|IGN_X_RPM1775|IGN_X_RPM500;// 0x35;
 
 	if (IGN_FLAG9_FFFF8BB6 & IGN_F9_FIX5) // Fix timing at 5 degrees;
 	{
-		SET(r2, 0x40);
+		SET(r2, IGN_X_FIX5);
 	};
 
-	if (r8 >= t1_crankHT_1798/*1562*/)
+	if (crnkHT75 >= t1_crankHT_1798/*1562(4800rpm)*/)
 	{
-		CLR(r2, 0x20);
+		CLR(r2, IGN_X_RPM4800);
 
-		if (r8 >= 4225)
+		if (crnkHT75 >= 4225/*1775rpm*/)
 		{
-			CLR(r2, 4);
+			CLR(r2, IGN_X_RPM1775);
 		};
 
-		if (r8 >= 4870)
+		if (crnkHT75 >= 4870/*1540rpm*/)
 		{
-			CLR(r2, 0x10);
+			CLR(r2, IGN_X_RPM1540);
 		};
 
-		r1 = 14848;
+		r1 = 14848/*500rpm*/;
 
-		if (word_FFFF8C5C & 1)
+		if (word_FFFF8C5C & IGN_X_RPM500)
 		{
-			r1 = 18688;
+			r1 = 18688/*400rpm*/;
 		};
 
-		if (r8 >= r1)
+		if (crnkHT75 >= r1)
 		{
-			CLR(r2, 1);
+			CLR(r2, IGN_X_RPM500);
 		};
 	};
 
@@ -683,7 +683,7 @@ static void CRANK75_Main_sub_232A0()
 	}
 	else
 	{
-		if (Check_Starter_signal() || (word_FFFF8C5C & 0x40) || (camShaftFlags & CAM_SYNCHRO) == 0)
+		if (Check_Starter_signal() || (word_FFFF8C5C & IGN_X_FIX5) || (camShaftFlags & CAM_SYNCHRO) == 0)
 		{
 			timingAdvInternal1 = 202;
 			timingAdvInternal2 = 202;
@@ -694,13 +694,13 @@ static void CRANK75_Main_sub_232A0()
 			CRANK75_MainUpdateTiming();
 		};
 
-		if ((Check_Starter_signal() && (wMUT14_Battery_Level_ADC8bit < 0xFF)) || (word_FFFF8C5C & 1) == 0)
+		if ((Check_Starter_signal() && (wMUT14_Battery_Level_ADC8bit < 0xFF)) || (word_FFFF8C5C & IGN_X_RPM500) == 0)
 		{
 			word_FFFF8C5C = 0;
 
 			CRANK75_sub_2467E(1);
 		}
-		else if ((word_FFFF8C5C & 2) == 0)
+		else if ((word_FFFF8C5C & IGN_X_PREV_RPM500) == 0)
 		{
 			if (CRANK75_sub_24636())
 			{
@@ -709,39 +709,39 @@ static void CRANK75_Main_sub_232A0()
 			}
 			else
 			{
-				word_FFFF8C5C = 1;
+				word_FFFF8C5C = IGN_X_RPM500;
 				CRANK75_sub_2467E(1);
 			};
 		}
 		else
 		{
-			u32 r2 = filtred_crankHT_x_4us = CRANK75_FiltrCrankHT_2494E(r8, crankHT_75_4us_2);
+			u32 fCHT = filtred_crankHT_x_4us = CRANK75_FiltrCrankHT_2494E(crnkHT75, crankHT_75_4us_2);
 
-			if ((r8 > 6250 && timingAdvInternal1 <= 202 && !CRANK75_sub_24636()) || (r2 & 0x8000) || r2 < 326)
+			if ((crnkHT75 > 6250/*<1200rpm*/ && timingAdvInternal1 <= 202 && !CRANK75_sub_24636()) || (fCHT & 0x8000)/*<228rpm*/ || fCHT < 326/*>23000rpm*/)
 			{
 				word_FFFF8C5C = 0;
 				CRANK75_sub_2467E(1);
 			}
 			else
 			{
-				word_FFFF8C20 = Sub_Lim_0(Mul_Div(timingAdvInternal1 , r2, 512), word_179E/*15*/);
-				word_FFFF8C22 = Sub_Lim_0(Mul_Div(timingAdvInternal2 , r2, 512), word_179E/*15*/);
+				curTiming_75_4us = Sub_Lim_0(Mul_Div(timingAdvInternal1 , fCHT, 512), word_179E/*15*/);
+				nxtTiming_75_4us = Sub_Lim_0(Mul_Div(timingAdvInternal2 , fCHT, 512), word_179E/*15*/);
 
-				if ((Get_2E_2F_2G_status() & timerMask_1_2E_2F) == timerMask_1_2E_2F)
+				if ((Get_Coil_charge_status() & curTimingMask_75) == curTimingMask_75)
 				{
 					state_Ignition = IGNST_SPARK;
 
-					ClearTSR_2E_2F_2G(timerMask_1_2E_2F);
+					Disable_Ign_Handler(curTimingMask_75);
 				}
 				else
 				{
 					// loc_23704
 
-					state_Ignition = IGNST_2;
+					state_Ignition = IGNST_CUR_COIL;
 
-					u32 r13 = crank_OSBR2_75 + word_FFFF8C20 - CRANK75_Get_IgnCoilTime(r1);
+					u16 r13 = crank_OSBR2_75 + curTiming_75_4us - CRANK75_Get_IgnCoilTime(fCHT);
 					
-					r1 = timerValue_1_2E_2F + word_179C/*250*/;
+					u16 r1 = curIgnSparkTime_4us + word_179C/*250*/;
 
 					if ((r13 - r1) & 0x8000)
 					{
@@ -753,17 +753,17 @@ static void CRANK75_Main_sub_232A0()
 						r13 = reg_TCNT2A;
 					};
 
-					ignCoilChargeStartTime_x4us = r13;
+					curIgnCoilStartTime_4us = r13;
 
-					SetIgnCoilChargeStartTime(timerMask_1_2E_2F, r13);
+					SetIgnCoilChargeStartTime(curTimingMask_75, r13);
 				};
 
 				// loc_2376E
 
-				timerValue_1_2E_2F = crank_OSBR2_75 + word_FFFF8C20;
+				curIgnSparkTime_4us = crank_OSBR2_75 + curTiming_75_4us;
 
 
-				if ((timingAdvInternal1 >= 202 && (word_FFFF8C5C & 0x40)) || (word_FFFF8C5C & 0x10) == 0)
+				if ((timingAdvInternal1 >= 202 && (word_FFFF8C5C & IGN_X_FIX5)) || (word_FFFF8C5C & IGN_X_RPM1540) == 0)
 				{
 					// loc_23796
 
@@ -773,14 +773,14 @@ static void CRANK75_Main_sub_232A0()
 				{
 					// loc_237A2
 
-					if (state_Ignition != IGNST_2)
+					if (state_Ignition != IGNST_CUR_COIL)
 					{
-						if (timerValue_1_2E_2F < reg_TCNT2A)
+						if (curIgnSparkTime_4us < reg_TCNT2A)
 						{
-							timerValue_1_2E_2F = reg_TCNT2A;
+							curIgnSparkTime_4us = reg_TCNT2A;
 						};
 
-						SetIgnSparkStartTime(timerMask_1_2E_2F, timerValue_1_2E_2F);
+						SetIgnSparkStartTime(curTimingMask_75, curIgnSparkTime_4us);
 					};
 				};
 
@@ -789,32 +789,32 @@ static void CRANK75_Main_sub_232A0()
 				if (timingAdvInternal1 <= 199)
 				{
 					// loc_23834
-					word_FFFF8C24 = 0;
+					curTiming_5_4us = 0;
 				}
-				else if (word_FFFF8C5C & 0x40)
+				else if (word_FFFF8C5C & IGN_X_FIX5)
 				{
 					// loc_2382A
-					word_FFFF8C24 = 50;
+					curTiming_5_4us = 50;
 				}
 				else
 				{
-					u32 r13 = Sub_Lim_0(Mul_Div(r2, (timingAdvInternal1 - 199), 512), word_179E/*15*/);
+					u32 r13 = Sub_Lim_0(Mul_Div(fCHT, (timingAdvInternal1 - 199), 512), word_179E/*15*/);
 
-					word_FFFF8C24 = (r13 >= 1) ? r13 : 1;
+					curTiming_5_4us = (r13 >= 1) ? r13 : 1;
 				};
 
 				// loc_2383A
 				
-				u16 r13 = r2 + crank_OSBR2_75 + word_FFFF8C22 - ignCoilTime_Fin_4us;
+				u16 r13 = fCHT + crank_OSBR2_75 + nxtTiming_75_4us - ignCoilTime_Fin_4us;
 
-				u32 r1 = timerValue_1_2E_2F + word_179C/*250*/;
+				u32 r1 = curIgnSparkTime_4us + word_179C/*250*/;
 
 				if (r13 < r1)
 				{
 					r13 = r1;
 				};
 
-				timerValue_0_2E_2F = r13;
+				ignCoilNextStartTime_x4us = r13;
 			};
 		};
 	};
@@ -825,7 +825,7 @@ static void CRANK75_Main_sub_232A0()
 
 	crankHT_75_4us_2 = crankHT_75_4us;
 
-	crankHT_75_512us = crankHT_75_4us >> 7;
+	crankHT_75_div_128 = crankHT_75_4us >> 7;
 
 	__enable_irq();
 
@@ -856,7 +856,7 @@ static void CRANK75_Main_sub_232A0()
 	{
 		// loc_2396C
 
-		u16* p = (timerMask_1_2E_2F == 1) ? &word_FFFF8C68 : &word_FFFF8C66;
+		u16* p = (curTimingMask_75 == 1) ? &word_FFFF8C68 : &word_FFFF8C66;
 
 		r1 &= 3;
 
@@ -1098,11 +1098,11 @@ static void CRANK75_sub_2467E(u16 v)
 	if (v == 1)
 	{
 		filtred_crankHT_x_4us = crankHT_75_4us;
-		Pulse_TIO2_E_F_G_out_1(timerMask_1_2E_2F);
+		Start_Coil_Charge(curTimingMask_75);
 	};
 
-	state_Ignition = IGNST_COIL;
-	word_FFFF8C24 = 0;
+	state_Ignition = IGNST_NEXT_COIL;
+	curTiming_5_4us = 0;
 	timingAdvInternal1 = 202;
 	timingAdvInternal2 = 202;
 	timingAdvScaled = 160;
@@ -1584,7 +1584,7 @@ static void CRANK75_MainUpdateTiming()
 
 static u16 CRANK75_FiltrCrankHT_2494E(u16 r1, u16 r2)
 {
-	if (ZRO(word_FFFF8C5C, 1) || ZRO(word_FFFF8C5C, 2) || (word_FFFF8C5C & 0x20) || r1 >= 7500)
+	if (ZRO(word_FFFF8C5C, IGN_X_RPM500) || ZRO(word_FFFF8C5C, IGN_X_PREV_RPM500) || (word_FFFF8C5C & IGN_X_RPM4800) || r1 >= 7500)
 	{
 		return r1;
 	};
@@ -1621,11 +1621,11 @@ static u16 CRANK75_Get_IgnCoilTime(u16 r1)
 {
 	u32 r2;
 
-	if ((word_FFFF8C5C & 0x0C) == 0x0C)
+	if ((word_FFFF8C5C & (IGN_X_PREV_RPM1775|IGN_X_RPM1775)) == (IGN_X_PREV_RPM1775|IGN_X_RPM1775))
 	{
 		r2 = ignCoilTime_Fin_4us;
 	}
-	else if (r1 < 4400)
+	else if (r1 < 4400/*1700rpm*/)
 	{
 		r2 = ignCoilTime_4us;
 	}
@@ -1674,10 +1674,10 @@ static void CRANK5_Main_sub_24AF0()
 		SET(camshaft_Shift, 1);
 	};
 
-	u32 r13 = word_FFFF8C16 = crankHT_5;
+	u32 crnkHT5 = crankHT_5_copy = crankHT_5;
 
 
-	if (timer_FFFF8594 == 0 || (r13 & 0x8000))
+	if (timer_FFFF8594 == 0 || (crnkHT5 & 0x8000))
 	{
 		word_FFFF8C5C = 0;
 
@@ -1686,7 +1686,7 @@ static void CRANK5_Main_sub_24AF0()
 		CRANK5_sub_2504A();
 		CRANK5_SetIgnCoilTime_Fin();
 	}
-	else if (ZRO(word_FFFF8C5C, 2))
+	else if (ZRO(word_FFFF8C5C, IGN_X_PREV_RPM500))
 	{
 		// loc_24B50
 
@@ -1697,55 +1697,57 @@ static void CRANK5_Main_sub_24AF0()
 	{
 		// loc_24B5C
 
-		u32 r1 = word_FFFF8C24;
+		u32 curTm5 = curTiming_5_4us; // r1
 
-		if (r1 != 0)
+		if (curTm5 != 0)
 		{
-			if (Get_2E_2F_2G_status() & timerMask_1_2E_2F)
+			if (Get_Coil_charge_status() & curTimingMask_75)
 			{
 				// loc_24B7E
 
+				u32 r13;
+
 				do
 				{
-					u32 r13 = Get_2E_2F_2G_status() & timerMask_1_2E_2F;
+					r13 = Get_Coil_charge_status() & curTimingMask_75;
 				}
-				while (r13 != timerMask_1_2E_2F && r13 != 0);
+				while (r13 != curTimingMask_75 && r13 != 0);
 
-				if (state_Ignition != IGNST_COIL
-					&& ((word_FFFF8C5E & 1) || ABSDIF(timerValue_1_2E_2F - crank_OSBR2_5, r1) > crankHT_75_512us))
+				if (state_Ignition != IGNST_NEXT_COIL
+					&& ((word_FFFF8C5E & 1) || ABSDIF(curIgnSparkTime_4us - crank_OSBR2_5, curTm5) > crankHT_75_div_128))
 				{
-					CRANK5_sub_2506E();
+					CRANK5_SetIgnSpark5();
 				};
 			}
 			else
 			{
 				// loc_24C30
 
-				if (state_Ignition == IGNST_2)
+				if (state_Ignition == IGNST_CUR_COIL)
 				{
-					u32 r2 = crank_OSBR2_5 + r1 - ignCoilTime_Fin_4us - crankHT_75_512us;
+					u32 r2 = crank_OSBR2_5 + curTm5 - ignCoilTime_Fin_4us - crankHT_75_div_128;
 
 					if ((r2 - reg_TCNT2A) & 0x8000)
 					{
 						r2 = reg_TCNT2A;
 
-						Pulse_TIO2_E_F_G_out_1(timerMask_1_2E_2F);
+						Start_Coil_Charge(curTimingMask_75);
 
-						ignCoilChargeStartTime_x4us = r2;
+						curIgnCoilStartTime_4us = r2;
 
-						CRANK5_sub_2506E();
+						CRANK5_SetIgnSpark5();
 					}
 					else
 					{
 						// loc_24C80
 
-						SetIgnCoilChargeStartTime(timerMask_1_2E_2F, r2);
+						SetIgnCoilChargeStartTime(curTimingMask_75, r2);
 
-						ignCoilChargeStartTime_x4us = r2;
+						curIgnCoilStartTime_4us = r2;
 					
-						if (((word_FFFF8C5E & 1) || ABSDIF(timerValue_1_2E_2F - crank_OSBR2_5, r1) > crankHT_75_512us))
+						if (((word_FFFF8C5E & 1) || ABSDIF(curIgnSparkTime_4us - crank_OSBR2_5, curTm5) > crankHT_75_div_128))
 						{
-							timerValue_1_2E_2F = r1 + crank_OSBR2_5;
+							curIgnSparkTime_4us = curTm5 + crank_OSBR2_5;
 						};
 					};
 				};
@@ -1755,7 +1757,7 @@ static void CRANK5_Main_sub_24AF0()
 		// loc_24CD0
 
 		if (ZRO(camShaftFlags, CAM_SYNCHRO) || ZRO(camShaftFlags, CAM_10)
-			|| (ZRO(word_FFFF8C5C, 0x40/*Fix timing*/) && timingAdvInternal1 < 200 && (Get_2E_2F_2G_status() & timerMask_1_2E_2F) && state_Ignition != IGNST_COIL))
+			|| (ZRO(word_FFFF8C5C, IGN_X_FIX5) && timingAdvInternal1 < 200 && (Get_Coil_charge_status() & curTimingMask_75) && state_Ignition != IGNST_NEXT_COIL))
 		{
 			// loc_24D0A
 
@@ -1767,9 +1769,12 @@ static void CRANK5_Main_sub_24AF0()
 
 		CRANK5_SetIgnCoilTime_Fin();
 
-		u32 r2 = Mul_Fix8_Lim_FFFF(156, word_FFFF8C16) + crank_OSBR2_5 + word_FFFF8C22 - ignCoilTime_Fin_4us;
+		// вычисление начала момента следующего заряда катушки. Время поворота на 110 градусов плюс текущее время с ДПКВ 5 градусов до ВМТ 
+		// плюс время момента зажигания минус время на заряд катушки
+		
+		u32 r2 = Mul_Fix8_Lim_FFFF(156, crankHT_5_copy)/*110 deg*/ + crank_OSBR2_5 + nxtTiming_75_4us - ignCoilTime_Fin_4us;
 
-		r1 = timerValue_1_2E_2F + word_179C/*250*/;
+		u32 r1 = curIgnSparkTime_4us + word_179C/*250*/;
 
 		if ((r2 - r1) & 0x8000)
 		{
@@ -1778,23 +1783,23 @@ static void CRANK5_Main_sub_24AF0()
 
 		// loc_24D54
 
-		if (Get_2E_2F_2G_status() & timerMask_1_2E_2F)
+		if (Get_Coil_charge_status() & curTimingMask_75)
 		{
-			if (state_Ignition != IGNST_COIL)
+			if (state_Ignition != IGNST_NEXT_COIL)
 			{
-				timerValue_0_2E_2F = r2;
+				ignCoilNextStartTime_x4us = r2;
 			};
 		}
 		else
 		{
-			if (state_Ignition != IGNST_2)
+			if (state_Ignition != IGNST_CUR_COIL)
 			{
-				state_Ignition = IGNST_COIL;
+				state_Ignition = IGNST_NEXT_COIL;
 
-				SetIgnCoilChargeStartTime(timerMask_0_2E_2F, r2);
+				SetIgnCoilChargeStartTime(nxtTimingMask_75, r2);
 			};
 			
-			timerValue_0_2E_2F = r2;
+			ignCoilNextStartTime_x4us = r2;
 		};
 	};
 
@@ -1806,7 +1811,7 @@ static void CRANK5_Main_sub_24AF0()
 
 	if (wMUTD1_BitMap_FAA & FAA_7_HIGH_IGN/*Enable High Oct Ign Map Lookup and other*/)
 	{
-		CRANK5_sub_C990(25 + ((timerValue_1_2E_2F - crank_OSBR2_5) & 0x8000) ? crank_OSBR2_5 : timerValue_1_2E_2F);
+		CRANK5_sub_C990(25 + ((curIgnSparkTime_4us - crank_OSBR2_5) & 0x8000) ? crank_OSBR2_5 : curIgnSparkTime_4us);
 	};
 	
 	// loc_24DFE
@@ -1917,27 +1922,27 @@ static void CRANK5_Main_sub_24AF0()
 
 static void CRANK5_sub_2504A()
 {
-	sub_BED8(0xFF);
-	state_Ignition = IGNST_COIL;
-	timerValue_1_2E_2F = reg_TCNT2A;
+	Disable_Coil_Charge(0xFF);
+	state_Ignition = IGNST_NEXT_COIL;
+	curIgnSparkTime_4us = reg_TCNT2A;
 }	
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void CRANK5_sub_2506E()
+static void CRANK5_SetIgnSpark5()
 {
-	u16 r1 = crank_OSBR2_5 + word_FFFF8C24;
+	u16 r1 = crank_OSBR2_5 + curTiming_5_4us;
 
-	if (r1 < reg_TCNT2A)
+	if ((r1 - reg_TCNT2A) & 0x8000)
 	{
 		r1 = reg_TCNT2A;
 	};
 
 	state_Ignition = IGNST_SPARK;
 
-	SetIgnSparkStartTime(timerMask_1_2E_2F, r1);
+	SetIgnSparkStartTime(curTimingMask_75, r1);
 
-	timerValue_1_2E_2F = r1;
+	curIgnSparkTime_4us = r1;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -2830,7 +2835,9 @@ static void SetIgnCoilChargeStartTime(u16 mask, u16 v)
 		r13 = reg_TCNT2A + 2;
 	};
 
-	if (mask & 1) { reg_GR2E = r13; CLR(reg_TSR2A, 0x10); reg_TIOR2C = reg_TIOR2C & 0xF8 | 1; };
+	// 0 output on GR compare-match
+
+	if (mask & 1) { reg_GR2E = r13; CLR(reg_TSR2A, 0x10); reg_TIOR2C = reg_TIOR2C & 0xF8 | 1; };	
 	if (mask & 2) { reg_GR2F = r13; CLR(reg_TSR2A, 0x20); reg_TIOR2C = reg_TIOR2C & 0x8F | 0x10; };
 	if (mask & 4) { reg_GR2G = r13; CLR(reg_TSR2A, 0x40); reg_TIOR2D = reg_TIOR2D & 0xF8 | 1; };
 
@@ -2851,6 +2858,8 @@ static void SetIgnSparkStartTime(u16 mask, u16 v)
 	{
 		r13 = reg_TCNT2A + 2;
 	};
+
+	// 1 output on GR compare-match
 
 	if (mask & 1) { reg_GR2E = r13; CLR(reg_TSR2A, 0x10); reg_TIOR2C = reg_TIOR2C & 0xF8 | 2; };
 	if (mask & 2) { reg_GR2F = r13; CLR(reg_TSR2A, 0x20); reg_TIOR2C = reg_TIOR2C & 0x8F | 0x20; };
@@ -3039,10 +3048,7 @@ static u16 sub_2640E(u16 ipw)
 		ipw = r2;
 	};
 
-	if (word_FFFF8AF2 != 0)
-	{
-		word_FFFF8AF2 -= 1;
-	};
+	DECLIM(word_FFFF8AF2);
 
 	return ipw;
 }

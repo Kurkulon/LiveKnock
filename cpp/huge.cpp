@@ -27,7 +27,7 @@
 #define sub_E478							((void(*)(void))0xE478)
 #define sub_DCB4							((bool(*)(void))0xDCB4)
 #define sub_D4E4							((bool(*)(void))0xD4E4)
-#define Pulse_TIO2_E_F_G_out_1				((void(*)(u16))0xBE1C)
+#define Start_Coil_Charge				((void(*)(u16))0xBE1C)
 
 extern void Update_Gen_G_output();
 
@@ -210,7 +210,7 @@ static void HUGE_Method_801_6_Hz()
 
 		if (sub_DCB4())
 		{
-			Pulse_TIO2_E_F_G_out_1(timerMask_1_2E_2F);
+			Start_Coil_Charge(curTimingMask_75);
 		};
 	};
 

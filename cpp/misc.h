@@ -335,6 +335,27 @@ struct Map3D_W
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+// word_FFFF8C5C
+
+#define IGN_X_RPM500				0x01
+#define IGN_X_PREV_RPM500			0x02
+#define IGN_X_RPM1775				0x04
+#define IGN_X_PREV_RPM1775			0x08
+#define IGN_X_RPM1540				0x10
+#define IGN_X_RPM4800				0x20
+#define IGN_X_FIX5					0x40
+#define IGN_X_80					0x80
+#define IGN_X_100					0x100
+#define IGN_X_200					0x200
+#define IGN_X_400					0x400
+#define IGN_X_800					0x800
+#define IGN_X_1000					0x1000
+#define IGN_X_2000					0x2000
+#define IGN_X_4000					0x4000
+#define IGN_X_8000					0x8000
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 // FUEL_CUT_FLAG_FFFF8A5E
 
 #define FCF_01					0x01
@@ -359,9 +380,9 @@ struct Map3D_W
 
 // state_Ignition
 
-#define IGNST_COIL				0
+#define IGNST_NEXT_COIL				0
 #define IGNST_SPARK				1
-#define IGNST_2					2
+#define IGNST_CUR_COIL					2
 
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
