@@ -140,6 +140,94 @@ void F500_root_sub()
 
 void F500_Init_Load_ECU_Info_And_BitMap_Flags()
 {
+	wMUT3B_Masked_Map_Index = 0; // Zero_MUT3B();
+
+	maskedMapIndex = (wMUT3B_Masked_Map_Index >> 7) & 7;
+
+	u32 r1 = (ECU_Internal_ID_0/*0*/ != 0) ? word_F5A[maskedMapIndex]: Immobilizer_Switch_F40;
+
+	if (r1 > 7) r1 = 0;
+
+	wMUT34_Map_Index = r1;
+
+	wMUTD0_BitMap1 = BitMap1_byte_F9A[wMUT34_Map_Index];
+
+	wMUTD1_BitMap_FAA = BitMap2_byte_FAA[wMUT34_Map_Index];
+
+	if (Disable_Immo)
+	{
+		CLR(wMUTD1_BitMap_FAA, FAA_3_IMMO);
+	};
+
+	bMUTD2_FBA_MAF_MAP_FLAG = BitMap3_byte_FBA[wMUT34_Map_Index];
+
+	if (disable_Perefery)
+	{
+		// loc_F62A
+
+		r1 = BitMap4_byte_FCA[wMUT34_Map_Index];
+		u32 r8 = BitMap5_byte_FDA[wMUT34_Map_Index];
+		u32 r2 = BitMap6_unk_FEA[wMUT34_Map_Index];
+
+		if (Enable_O2_Frequency_Ratio_Check == 0)
+		{
+			CLR(r1, 2);
+		};
+
+		if (Enable_O2_Slow_Response_Check == 0)
+		{
+			CLR(r1, 4);
+		};
+
+		if (byte_101F == 0)
+		{
+			CLR(r1, 0x10);
+		};
+
+		if (byte_1020 == 0)
+		{
+			CLR(r1, 0x20);
+		};
+
+		if (Enable_O2_Voltage_Check == 0)
+		{
+			CLR(r1, 0x40);
+		};
+
+		if (Enable_AFR_Check == 0)
+		{
+			CLR(r1, 0x80);
+		};
+
+		if (Enable_Idle_Control_Check == 0)
+		{
+			CLR(r1, 0x100);
+		};
+
+		if (Enable_Intake_EGR_MAP_Check == 0)
+		{
+			CLR(r1, 0x600);
+		};
+
+		if (Enable_Evaporative_Checks == 0)
+		{
+			CLR(r1, 0x6000);
+		};
+
+		bMUTD3_BitMap4_FCA_Store_FFFF89D8 = r1;
+		bMUTD4_BitMap5_FDA_Store_FFFF89DA = r8;
+		FEA_perephery = r2;
+	}
+	else
+	{
+		// loc_F6CA
+
+		FEA_perephery = 0;
+
+		bMUTD4_BitMap5_FDA_Store_FFFF89DA = 0;
+
+		bMUTD3_BitMap4_FCA_Store_FFFF89D8 = 0;
+	};
 
 }
 

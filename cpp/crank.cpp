@@ -142,22 +142,22 @@ extern "C" void atu02_ici0A()
 
 	crank_ICR0AH_250ns = reg_ICR0A;
 
-	if (crank_Flags & 1)
-	{
-		if ((reg_PADRL & 1) == 0)
-		{
-			r1 = 1;
-		};
-	}
-	else
-	{
-		if ((reg_PADRL & 1) != 0)
-		{
-			r1 = 1;
-		};
-	};
+	//if (crank_Flags & 1)
+	//{
+	//	if ((reg_PADRL & 1) == 0)
+	//	{
+	//		r1 = 1;
+	//	};
+	//}
+	//else
+	//{
+	//	if ((reg_PADRL & 1) != 0)
+	//	{
+	//		r1 = 1;
+	//	};
+	//};
 
-	if (r1 != 0) // ((crank_Flags ^ reg_PADRL) & 1)
+	if ((crank_Flags ^ reg_PADRL) & 1)
 	{
 		reg_OCR2G = reg_TCNT2B + 13;
 

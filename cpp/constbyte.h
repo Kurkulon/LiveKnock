@@ -3,6 +3,37 @@
 
 #include "types.h"
 
+#define	_highbaudflag_F30            		(*(const byte*)0x0F30)			                                                     
+#define	const_igntestflag2_F31       		(*(const byte*)0x0F31)			                                                     
+#define	IGN_TEST_FLAG_0_F32          		(*(const byte*)0x0F32)			                                                     
+#define	flags_F33                    		(*(const byte*)0x0F33)			                                                     
+#define	flags_F34                    		(*(const byte*)0x0F34)			                                                     
+#define	byte_F35                     		(*(const byte*)0x0F35)			                                                     
+#define	null_byte_F38                		(*(const byte*)0x0F38)			                                                     
+#define	byte_F39                     		(*(const byte*)0x0F39)			                                                     
+#define	byte_F3A                     		(*(const byte*)0x0F3A)			                                                     
+#define	Disable_Immo                 		(*(const byte*)0x0F3B)			                                                     
+#define	word_F3C                     		(*(const word*)0x0F3C)			                                                     
+#define	Immobilizer_Switch_F40       		(*(const word*)0x0F40)			                                                     
+#define	ECU_Internal_ID_0            		(*(const word*)0x0F42)			                                                     
+#define	word_F44            				((const word*)0x0F44)			                                                     
+#define	ECU_Internal_ID_1            		(*(const word*)0x0F54)			                                                     
+
+#define	word_F56            				(*(const word*)0x0F56)			                                                     
+#define	word_F58            				(*(const word*)0x0F58)			                                                     
+#define	word_F5A            				((const word*)0x0F5A)			                                                     
+#define	byte_F6A            				((const byte*)0x0F6A)			                                                     
+#define	BitMap0_byte_F8A       				((const word*)0x0F8A)			                                                     
+
+#define	BitMap1_byte_F9A       				((const word*)0x0F9A)			                                                     
+#define	BitMap2_byte_FAA       				((const word*)0x0FAA)			                                                     
+#define	BitMap3_byte_FBA       				((const word*)0x0FBA)			                                                     
+#define	BitMap4_byte_FCA       				((const word*)0x0FCA)			                                                     
+#define	BitMap5_byte_FDA       				((const word*)0x0FDA)			                                                     
+#define	BitMap6_unk_FEA       				((const word*)0x0FEA)			                                                     
+#define	immobilizerHex_FFA       			((const word*)0x0FFA)			                                                     
+#define	BitMap8_100A		       			((const word*)0x100A)			                                                     
+
 
 #define	disable_Perefery					(*(const byte*)0x101C)
 #define	Enable_O2_Frequency_Ratio_Check		(*(const byte*)0x101D)
