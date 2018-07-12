@@ -684,7 +684,7 @@
 #define      word_FFFF89B4                  							(*(u16*)0xFFFF89B4)                                                        
 #define      word_FFFF89B6                  							(*(u16*)0xFFFF89B6)                                                        
 #define      Manifold_AbsPressure_null      							(*(u16*)0xFFFF89BA)                                                        
-#define      MAF_MAP__Hz_FFFF89BC           							(*(u16*)0xFFFF89BC)                                                        
+#define      MAF_MAP_Hz_FFFF89BC           							(*(u16*)0xFFFF89BC)                                                        
 #define      word_FFFF89BE                  							(*(u16*)0xFFFF89BE)                                                        
 #define      word_FFFF89C0                  							(*(u16*)0xFFFF89C0)                                                        
 #define      word_FFFF89C2                  							(*(u16*)0xFFFF89C2)                                                        

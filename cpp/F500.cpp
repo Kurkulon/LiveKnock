@@ -2,10 +2,12 @@
 
 #include <umachine.h>
 
+#include "ext_ram_vars.h"
+
 #include "misc.h"
 #include "constbyte.h"
 #include "constword.h"
-#include "ram.h"
+//#include "ram.h"
 #include "EnVars.h"
 #include "hwreg.h"
 
@@ -1150,7 +1152,7 @@ void F500_sub_10C6E()
 		word_FFFF89C0 = 0;
 	};
 
-	MAF_MAP__Hz_FFFF89BC = Lim_FF(Mul_Div_R(word_FFFF89C0, 1024, word_223C /*18*/ * 100));
+	MAF_MAP_Hz_FFFF89BC = Lim_FF(Mul_Div_R(word_FFFF89C0, 1024, word_223C /*18*/ * 100));
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
