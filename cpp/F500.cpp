@@ -1,62 +1,66 @@
-#pragma section _F500
+//#pragma section _F500
 
 #include <umachine.h>
 
-#include "ext_ram_vars.h"
+//#include "ext_ram_vars.h"
 
 #include "misc.h"
 #include "constbyte.h"
 #include "constword.h"
-//#include "ram.h"
+#include "ram.h"
 #include "EnVars.h"
 #include "hwreg.h"
 
 #undef F500_Init_Load_ECU_Info_And_BitMap_Flags
 
 //#define sub_A374			((void(*)(void))0xA374)
-#define F500_Get_All_ADC	((void(*)(void))0xA7F0)
-#define F500_sub_21C80		((bool(*)(void))0x21C80)
+#define F500_Get_All_ADC		((void(*)(void))0xA7F0)
+#define F500_sub_21C80			((bool(*)(void))0x21C80)
+#define F500_InitManifoldVars	((void(*)(void))0x23244)
+#define sub_A374				((void(*)(void))0xA374)
 
 #define ENGINE_MAIN_VARIABLES_DIM_off_9198		((EnVars*)0x9198)
 
 void F500_root_sub();
-void F500_Init_Load_ECU_Info_And_BitMap_Flags();
-void F500_sub_F6E6();
-void F500_sub_F7E4();
-void F500_sub_F834();
-void F500_sub_FBB4();
-void F500_sub_FD34();
-void F500_sub_FDB6();
-void F500_sub_FDF4();
-void F500_Coolant_Temp_Threshold_Tests();
-void F500_Coolant_Calc1_sub_FF2C();
-void F500_Coolant_Calibration_Calc();
-void F500_Update_IAT_Sensor();
-void F500_Update_Air_Temp_Scaled();
-void F500_sub_10188();
-void F500_sub_10220();
-void F500_O22_Manipulations_sub_1023C(EnVars* ev);
-void F500_TPS_Load_RPM_Calcs();
-void F500_TPS_sub_103DA();
-void F500_sub_1044C();
-bool F500_CheckIdleRPM();
-void F500_MAP_Coolant_Calcs();
-bool F500_sub_10820();
-void F500_sub_10878();
-void F500_sub_108AA();
-void F500_sub_108FE();
-void F500_sub_10984();
-void F500_sub_10A80();
-void F500_sub_10AA6();
-bool F500_Check_MAP_Fault();
-void F500_Load_sub_10B72();
-void F500_sub_10C6E();
-void F500_sub_10E10();
-void F500_MAP_Hz_Calc_sub_10E54();
-void F500_sub_10F08();
-void F500_Countdown_Timers_sub_10F5C();
-void F500_Battery_Calcs_sub_1101A();
-void sub_A374();
+
+static void F500_Init_Load_ECU_Info_And_BitMap_Flags();
+static void F500_sub_F6E6();
+static void F500_sub_F7E4();
+static void F500_sub_F834();
+static u16	F500_sub_FBB4(u32 v);
+//static void F500_sub_FBB4();
+static void F500_sub_FD34();
+static void F500_sub_FDB6();
+static void F500_sub_FDF4();
+static void F500_Coolant_Temp_Threshold_Tests();
+static void F500_Coolant_Calc1_sub_FF2C();
+static void F500_Coolant_Calibration_Calc();
+static void F500_Update_IAT_Sensor();
+static void F500_Update_Air_Temp_Scaled();
+static void F500_sub_10188();
+static void F500_sub_10220();
+static void F500_O22_Manipulations_sub_1023C(EnVars* ev);
+static void F500_TPS_Load_RPM_Calcs();
+static void F500_TPS_sub_103DA();
+static void F500_sub_1044C();
+static bool F500_CheckIdleRPM();
+static void F500_MAP_Coolant_Calcs();
+static bool F500_sub_10820();
+static void F500_sub_10878();
+static void F500_sub_108AA();
+static void F500_sub_108FE();
+static void F500_sub_10984();
+static void F500_sub_10A80();
+static void F500_sub_10AA6();
+static bool F500_Check_MAP_Fault();
+static void F500_Load_sub_10B72();
+static void F500_sub_10C6E();
+static void F500_sub_10E10();
+static void F500_MAP_Hz_Calc_sub_10E54();
+static void F500_sub_10F08();
+static void F500_Countdown_Timers_sub_10F5C();
+static void F500_Battery_Calcs_sub_1101A();
+static void _sub_A374();
 
 
 #define CEL8_685C							((Axis*)0x685C)
@@ -92,24 +96,6 @@ void sub_A374();
 
 
 
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-void F500_InitManifoldVars()
-{
-	u32 r1 = wMUT1A_Manifold_AbsPressure_ADC8bit;
-
-	__disable_irq();
-
-	Manifold_ADC8bit_1 = r1;
-	Manifold_ADC8bit_2 = r1;
-	Manifold_ADC8bit_3 = r1;
-	Manifold_ADC8bit_4 = r1;
-	Manifold_AbsPressure_ADC8bit_avrg = r1;
-	Manifold_AbsPressure_ADC8bit_x256_avrg = r1 << 8;
-
-	__enable_irq();
-}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -1272,7 +1258,7 @@ void F500_Battery_Calcs_sub_1101A()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-void sub_A374()
+static void _sub_A374()
 {
 	const u32 r9 = ~0x10;
 	const u32 r8 = ~2;

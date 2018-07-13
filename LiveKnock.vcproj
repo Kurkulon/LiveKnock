@@ -43,8 +43,8 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="wmake -h version=Release"
-				ReBuildCommandLine="wmake -h -a version=Release"
+				BuildCommandLine="make -h version=Release"
+				ReBuildCommandLine="make -h -a version=Release"
 				CleanCommandLine="@del /Q .\Release\*.*"
 				Output="$(ProjectDir)\LiveKnock.axf"
 				PreprocessorDefinitions="__softfp="

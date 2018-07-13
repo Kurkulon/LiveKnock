@@ -510,7 +510,7 @@ extern Map3D_W* HighIgn_7C48[8];		//#define HighIgn_7C48	((void*)0x7C48)
 extern Map3D_B* HIGHOKTF_7A88[8];		//#define HIGHOKTF_7A88	((void*)0x7A88)
 extern Map3D_W* veMapArray[8];		
 
-#define AFR_OctanInt									(*(u16*)0xFFFF8ACA)
+//#define AFR_OctanInt									(*(u16*)0xFFFF8ACA)
 
 #define RPM19_6CEE										((Axis*)0x6CEE)
 #define LOAD11_6D1E										((Axis*)0x6D1E)

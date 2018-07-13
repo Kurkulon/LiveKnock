@@ -20,14 +20,14 @@ gnu_compiler_options =  -fno-show-column -m2 -c -fno-diagnostics-show-option -Os
 
 # -SPeed 
 
-debug_compiler_options =  -OPtimize=1 -SIze 
+debug_compiler_options =  -OPtimize=1
 debug_linker_options = 
 lbgsh_options = 
 libsuffix=d
 
 !else
 
-debug_compiler_options = -O3 -Otime --debug
+debug_compiler_options = -OPtimize=1
 debug_linker_options = 
 lbgsh_options = 
 libsuffix=r
@@ -79,7 +79,7 @@ link_options = -NOLOGO -FOrm=Binary -LISt -SHow=SY -LIBrary=$(libname)
   
 ##################################################################################################
 
-$(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs $(objdir)\stock.abs
+$(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs $(objdir)\stock.abs $(objdir)\F500.abs
 	@echo Patch ROM...
 	@copy /Y bin\orig_93270019.hex $^@
 	@bin\elfpatch $^@ $[@
@@ -87,7 +87,7 @@ $(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs $(objdir)\stock.abs
 
 ##################################################################################################
 
-$(objdir)\LiveKnock.abs : LiveMap.o AltMaps.o Hooks.o LiveKnock.o # Ignition.o crank.o ,P_Ignition/39000,P_crank/3C000
+$(objdir)\LiveKnock.abs : LiveMap.o AltMaps.o Hooks.o LiveKnock.o	# Ignition.o crank.o ,P_Ignition/39000,P_crank/3C000
 	@echo Linking $^@ ...
 	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P_Hooks/2CC0,P/39000,B/FFFF8480 -LIBrary=$(libname) -OUtput="$^@" $<
 	@echo $(delimiter)	
@@ -107,12 +107,18 @@ $(objdir)\LiveKnock.abs : LiveMap.o AltMaps.o Hooks.o LiveKnock.o # Ignition.o c
 	@echo $(delimiter)	
 
 ##################################################################################################
-##################################################################################################
 
-$(objdir)\stock.abs : Ignition.o crank.o idle.o F500.o FU03.o ML02.o BC06.o huge.o # 93270019.o
+$(objdir)\stock.abs : Ignition.o crank.o idle.o  FU03.o ML02.o BC06.o huge.o  # 93270019.o
 	@echo Linking $^@ ...
 	@copy /Y $[@ $^@
 	@rem optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Binary -start=ROM/0,RAM/FFFF6000,HWREG/FFFFE400,P_Ignition/39000,P_crank/3C000,B/FFFF8480 -LIBrary=$(libname) -OUtput="$^@" $<
+	@echo $(delimiter)	
+
+##################################################################################################
+
+$(objdir)\F500.abs : ext_ram_vars.o F500.o
+	@echo Linking $^@ ...
+	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -map="$(objdir)\$^&.bls" -start=P/F500,B_EXT_RAM_VARS/FFFF8000 -LIBrary=$(libname) -OUtput="$^@" $<
 	@echo $(delimiter)	
 
 ##################################################################################################

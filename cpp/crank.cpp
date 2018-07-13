@@ -126,6 +126,24 @@ static void Disable_Coil_Charge(u16 mask);
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+void F500_InitManifoldVars()
+{
+	u16 r1 = wMUT1A_Manifold_AbsPressure_ADC8bit;
+
+	__disable_irq();
+
+	Manifold_ADC8bit_1 = r1;
+	Manifold_ADC8bit_2 = r1;
+	Manifold_ADC8bit_3 = r1;
+	Manifold_ADC8bit_4 = r1;
+	Manifold_AbsPressure_ADC8bit_avrg = r1;
+	Manifold_AbsPressure_ADC8bit_x256_avrg = r1 << 8;
+
+	__enable_irq();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 #pragma interrupt(atu02_ici0A)
 
 extern "C" void atu02_ici0A()
