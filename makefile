@@ -67,7 +67,7 @@ delimiter = ____________________________________________________________________
 
 ##################################################################################################
 
-compiler_options = $(debug_compiler_options) -NOLOGO -CPu=sh2 -RTnext -ENAble_register -macsave=0
+compiler_options = $(debug_compiler_options) -NOLOGO -CPu=sh2 -RTnext -ENAble_register -macsave=0 -ALIAS=ANSI
 
 ##################################################################################################
 
@@ -116,9 +116,11 @@ $(objdir)\stock.abs : Ignition.o crank.o idle.o  FU03.o ML02.o BC06.o huge.o  # 
 
 ##################################################################################################
 
+# -map="$(objdir)\$^&.bls"
+
 $(objdir)\F500.abs : ext_ram_vars.o F500.o
 	@echo Linking $^@ ...
-	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -map="$(objdir)\$^&.bls" -start=P/F500,B_EXT_RAM_VARS/FFFF8000 -LIBrary=$(libname) -OUtput="$^@" $<
+	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P/F500,B_EXT_RAM_VARS/FFFF8000 -LIBrary=$(libname) -OUtput="$^@" $< 
 	@echo $(delimiter)	
 
 ##################################################################################################

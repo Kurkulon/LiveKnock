@@ -2,12 +2,12 @@
 
 #include <umachine.h>
 
-//#include "ext_ram_vars.h"
+#include "ext_ram_vars.h"
 
 #include "misc.h"
 #include "constbyte.h"
 #include "constword.h"
-#include "ram.h"
+//#include "ram.h"
 #include "EnVars.h"
 #include "hwreg.h"
 
@@ -283,7 +283,7 @@ void F500_sub_F834()
 
 	if ((byte_1046 & 2) == 0)
 	{
-		SET(rtf, FIX_TIMING);
+		SET(rtf, RT_13_bit);
 	};
 
 	if (byte_102A == 0)
@@ -301,25 +301,25 @@ void F500_sub_F834()
 		SET(rtf, RT_5_ALWAYS_1);
 	};
 
-	if (wMUT10_Coolant_Temperature_Scaled <= word_18BA)
+	if (wMUT10_Coolant_Temperature_Scaled <= word_18BA/*60*/)
 	{
 		CLR(rtf, POWER_STEERING);
 	};
 
 
-	TRG(word_FFFF8D60, r9, wMUT12_Coolant_Temperature_Min_81, word_1A86, word_1A88);
+	TRG(word_FFFF8D60, r9, wMUT12_Coolant_Temperature_Min_81, word_1A86/*150*/, word_1A88/*155*/);
 
 
-	if ((wMUT1E_MAF_RESET_FLAG & (CRANKING|STALL)) || cranking_end_timer_up < word_18B8 || (word_FFFF8D60 & 0x100))
+	if ((wMUT1E_MAF_RESET_FLAG & (CRANKING|STALL)) || cranking_end_timer_up < word_18B8/*120*/ || (word_FFFF8D60 & 0x100))
 	{
 		CLR(rtf, AC_SWITCH);
 	};
 
 	CLR(word_FFFF8CE4, 0x8000);
 
-	if (byte_102E == 2)
+	if (byte_102E/*2*/ == 2)
 	{
-		if ((rtf & AC_SWITCH) && (cranking_end_timer_up < (word_19F6 * 20)))
+		if ((rtf & AC_SWITCH) && (cranking_end_timer_up < (word_19F6/*24*/ * 20)))
 		{
 			SET(r2, r9);
 		}
@@ -334,37 +334,37 @@ void F500_sub_F834()
 		};
 	};
 
-	if (byte_102E == 2)
+	if (byte_102E == 2/*2*/)
 	{
-		if (wMUT15_Barometric_Pressure > word_19F0)
+		if (wMUT15_Barometric_Pressure > word_19F0/*180*/)
 		{
-			timer_FFFF8784 = word_19FC;
+			timer_FFFF8784 = word_19FC/*120*/;
 		};
 
 		u32 r13 = (byte)(fix8_FFFF8DCE>>8);
 
 
-		TRG(wMUT19_Startup_Check_Bits, 0x2000, r13, word_2110, word_210E);
+		TRG(wMUT19_Startup_Check_Bits, 0x2000, r13, word_2110/*24*/, word_210E/*204*/);
 
 
 		if ((rtf & (AC_SWITCH|RT_0_bit)) == (AC_SWITCH|RT_0_bit))
 		{
-			if (wMUT11_Intake_Air_Temperature_Scaled > word_19F8 || (IATONOFF_105E != 0 && (wMUT19_Startup_Check_Bits & 0x2000)) 
-				|| timer_FFFF8784 == 0 || wMUT10_Coolant_Temperature_Scaled < word_19FA || cranking_end_timer_up < (word_19F4*20))
+			if (wMUT11_Intake_Air_Temperature_Scaled > word_19F8/*121*/ || (IATONOFF_105E/*0*/ != 0 && (wMUT19_Startup_Check_Bits & 0x2000)) 
+				|| timer_FFFF8784 == 0 || wMUT10_Coolant_Temperature_Scaled < word_19FA/*121*/ || cranking_end_timer_up < (word_19F4/*24*/*20))
 			{
 				CLR(rtf, RT_0_bit);
 			};
 		};
 	};
 
-	if ((bMUTD2_FBA_MAF_MAP_FLAG & 0x10) == 0 && ((rtf & AC_SWITCH) == 0 || byte_102E == 0))
+	if ((bMUTD2_FBA_MAF_MAP_FLAG & 0x10) == 0 && ((rtf & AC_SWITCH) == 0 || byte_102E/*2*/ == 0))
 	{
 		CLR(rtf, RT_0_bit);
 		CLR(r2, 0x100);
 		CLR(r8, 0x3000);
 	};
 
-	if (byte_102B != 0)
+	if (byte_102B/*1*/ != 0)
 	{
 		CLR(rtf, FIX_TIMING);
 	};
@@ -407,24 +407,24 @@ u16 F500_sub_FBB4(u32 v)
 {
 	const u32 r2 = 0x2000;
 
-	if (wMUT15_Barometric_Pressure > word_19F0)
+	if (wMUT15_Barometric_Pressure > word_19F0/*180*/)
 	{
 		timer_FFFF8784 = word_19FC;
 	};
 
 	u32 r13 = SHLR8(fix8_FFFF8DCE);
 
-	TRG(wMUT19_Startup_Check_Bits, 0x2000, r13, word_2110, word_210E);
+	TRG(wMUT19_Startup_Check_Bits, 0x2000, r13, word_2110/*77*/, word_210E/*204*/);
 
 	if ((v & 0x11) == 0x11)
 	{
-		if (wMUT11_Intake_Air_Temperature_Scaled > word_19F8 
-			|| (IATONOFF_105E != 0 && (wMUT19_Startup_Check_Bits & r2))
+		if (wMUT11_Intake_Air_Temperature_Scaled > word_19F8/*121*/ 
+			|| (IATONOFF_105E/*0*/ != 0 && (wMUT19_Startup_Check_Bits & r2))
 			|| timer_FFFF8784 == 0
-			|| wMUT10_Coolant_Temperature_Scaled < word_19FA
-			|| cranking_end_timer_up < (word_19F4 * 20))
+			|| wMUT10_Coolant_Temperature_Scaled < word_19FA/*121*/
+			|| cranking_end_timer_up < (word_19F4/*24*/ * 20))
 		{
-			v &= ~1;
+			CLR(v, 1);
 		};
 	};
 
@@ -538,11 +538,11 @@ void F500_Coolant_Calc1_sub_FF2C()
 	u32 r1 = adc_CoolTemp_10bit_MUTCF;
 
 
-	u32 r2 = map_Coolant_Temp_Scaling->data[map_Coolant_Temp_Scaling->len - 1 - t1_unk_1C08];
+	u32 r2 = map_Coolant_Temp_Scaling->data[map_Coolant_Temp_Scaling->len - 1 - t1_unk_1C08/*80*/];
 
 	if (wMUT71_Sensor_Error & (MUT71_4_bit|MUT71_0_COOLANT))
 	{
-		r1 = map_Coolant_Temp_Scaling->data[map_Coolant_Temp_Scaling->len - 1 - coolTemp_sensor_err_val];
+		r1 = map_Coolant_Temp_Scaling->data[map_Coolant_Temp_Scaling->len - 1 - coolTemp_sensor_err_val/*121*/];
 	};
 
 	if (wMUT1E_MAF_RESET_FLAG & STALL)
@@ -553,7 +553,7 @@ void F500_Coolant_Calc1_sub_FF2C()
 	{
 		r1 = Lim16(r1, Sub_Lim_0(COOLANT_TEMPERATURE_2BYTE_FFFF88A8, 12), COOLANT_TEMPERATURE_2BYTE_FFFF88A8 + 4);
 
-		if ((SPEED_FLAGS & 0x1000) && r2 <= r1)
+		if ((SPEED_FLAGS & 0x1000) && r2 < r1)
 		{
 			r1 = r2;
 		};
@@ -574,7 +574,7 @@ void F500_Coolant_Calibration_Calc()
 
 	coolTempScaledSensor = Table_Lookup_byte_2D_3D(COOLTEMSCAL_98FA);
 
-	wMUT12_Coolant_Temperature_Min_81 = (wMUT71_Sensor_Error & (MUT71_4_bit|MUT71_0_COOLANT)) ? coolTemp_sensor_err_val : coolTempScaledSensor;
+	wMUT12_Coolant_Temperature_Min_81 = (wMUT71_Sensor_Error & (MUT71_4_bit|MUT71_0_COOLANT)) ? coolTemp_sensor_err_val/*121*/ : coolTempScaledSensor;
 
 	if (adc_CoolTemp_10bit_MUTCF == COOLANT_TEMPERATURE_2BYTE_FFFF88A8)
 	{
@@ -594,7 +594,7 @@ void F500_Coolant_Calibration_Calc()
 
 void F500_Update_IAT_Sensor()
 {
-	WFLAG(wMUT71_Sensor_Error, MUT71_1_IAT, wMUT3A_AirTemp_ADC8bit < word_1C0E || wMUT3A_AirTemp_ADC8bit > word_1C0C);
+	WFLAG(wMUT71_Sensor_Error, MUT71_1_IAT, wMUT3A_AirTemp_ADC8bit < word_1C0E/*10*/ || wMUT3A_AirTemp_ADC8bit > word_1C0C/*234*/);
 
 	F500_Update_Air_Temp_Scaled();
 	
@@ -654,7 +654,7 @@ void F500_O22_Manipulations_sub_1023C(EnVars* ev)
 {
 	if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 8) == 0 || (*ev->_176_word_FFFF9296 & 4) == 0)
 	{
-		O2_SECONDARY_SENSOR_VOLTAGE_SHLL8_CLIPPED_FFFF88D0 = Interpolate_256(O2_SECONDARY_SENSOR_VOLTAGE_SHLL8_CLIPPED_FFFF88D0, wMUT3C_Rear_O2_ADC8bit << 8, t1_unk_16FE);
+		O2_SECONDARY_SENSOR_VOLTAGE_SHLL8_CLIPPED_FFFF88D0 = Interpolate_256(O2_SECONDARY_SENSOR_VOLTAGE_SHLL8_CLIPPED_FFFF88D0, wMUT3C_Rear_O2_ADC8bit << 8, t1_unk_16FE/*250*/);
 
 		*ev->_40_wMUT5C_ADC_Rear_02_Voltage = Div_256_R(O2_SECONDARY_SENSOR_VOLTAGE_SHLL8_CLIPPED_FFFF88D0);
 	};
@@ -714,9 +714,11 @@ void F500_TPS_sub_103DA()
 
 	if (timeEvents & EVT_0_25ms)
 	{
-		word_FFFF8904 = Sub_Lim_0(prev_TPS_sub_103DA, wMUT17_TPS_ADC8bit);
+		u32 tps = wMUT17_TPS_ADC8bit;
 
-		prev_TPS_sub_103DA = wMUT17_TPS_ADC8bit;
+		word_FFFF8904 = Sub_Lim_0(prev_TPS_sub_103DA, tps);
+
+		prev_TPS_sub_103DA = tps;
 	};
 }
 
@@ -732,7 +734,7 @@ void F500_sub_1044C()
 	}
 	else
 	{
-		timer_FFFF857A = word_198E;
+		timer_FFFF857A = word_198E/*255*/;
 
 		CLR(wMUT1E_MAF_RESET_FLAG, IDLE);
 	};
@@ -741,7 +743,7 @@ void F500_sub_1044C()
 	{
 		u32 r13 = wMUT8A_TPS_Corrected;
 
-		timer_FFFF857A = word_198E;
+		timer_FFFF857A = word_198E/*255*/;
 
 		if (r13 > 33)
 		{
@@ -785,19 +787,19 @@ bool F500_CheckIdleRPM()
 		return false;
 	};
 
-	if (wMUT10_Coolant_Temperature_Scaled <= word_1986)
+	if (wMUT10_Coolant_Temperature_Scaled <= word_1986/*121*/)
 	{
 		return false;
 	};
 
-	if (wMUT73_TPS_Open_Delta > word_198C)
+	if (wMUT73_TPS_Open_Delta > word_198C/*2*/)
 	{
 		return false;
 	};
 
 	u32 r13 = wMUT17_TPS_ADC8bit;
 
-	if (r13 < word_198A || r13 > word_1988)
+	if (r13 < word_198A/*10*/ || r13 > word_1988/*77*/)
 	{
 		return false;
 	};
@@ -811,7 +813,7 @@ bool F500_CheckIdleRPM()
 		r13 = wMUT24_Target_Idle_RPM - MUT20_RPM_Idle_x125div16;
 	};
 
-	if (r13 > word_1990)
+	if (r13 > word_1990/*6(47rpm)*/)
 	{
 		return false;
 	};
@@ -840,8 +842,12 @@ void F500_MAP_Coolant_Calcs()
 			|| ((RTF & RT_7_bit) == 0 && (RTF & RT_5_ALWAYS_1) == 0 && (byte_105C/*0*/ == 0 || (RTF & POWER_STEERING) == 0))
 			|| (enrichmentWarmUp >= enrichCoolant && COOLANT_REL_6_FFFF8AC2 == 0 && COOLANT_REL_7_FFFF8AEC == 0))
 		{
+			// loc_106BC
+
 			if (tm_10ms_FFFF86EA == 0)
 			{
+				// loc_106D0
+
 				if (fuelTrim_FFFF8AE4 > 0x80 && (timeEvents & EVT_1_50ms))
 				{
 					fuelTrim_FFFF8AE4 = Sub_Lim_0(fuelTrim_FFFF8AE4, t1_unk_20A8/*6*/);
@@ -849,14 +855,20 @@ void F500_MAP_Coolant_Calcs()
 			}
 			else
 			{
+				// loc_106C4
+
 				fuelTrim_FFFF8AE4 = t1_unk_20AA/*128*/;
 			};
 		}
 		else
 		{
+			// loc_1065C
+
 			tm_10ms_FFFF86EA = t1_unk_20AC;
 			fuelTrim_FFFF8AE4 = t1_unk_20AA;
 		};
+
+		// loc_106FA
 
 		if (fuelTrim_FFFF8AE4 < 0x80) { fuelTrim_FFFF8AE4 = 0x80; };
 
@@ -920,7 +932,7 @@ bool F500_sub_10820()
 		return false;
 	};
 
-	if (byte_105C == 0)
+	if (byte_105C/*0*/ == 0)
 	{
 		return true;
 	};
@@ -1009,7 +1021,7 @@ void F500_sub_108FE()
 
 void F500_sub_10984()
 {
-	if (cranking_end_timer_up >= word_16BC)
+	if (cranking_end_timer_up >= word_16BC/*40*/)
 	{
 		dif_rpm_x125div32_AB = Lim_FF(Sub_Lim_0(rpm_x125div32_A, rpm_x125div32_B));
 
@@ -1056,9 +1068,9 @@ void F500_sub_10AA6()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-bool F500_Check_MAP_Fault()
+static bool F500_Check_MAP_Fault()
 {
-	u32 r13 = wMUT1A_Manifold_AbsPressure_ADC8bit;
+	register u32 r13 = wMUT1A_Manifold_AbsPressure_ADC8bit;
 
 	TRG(ZERO_8_IGNITION_FLAGS, 0x10, wMUT8A_TPS_Corrected, word_1C68, word_1C6A);
 

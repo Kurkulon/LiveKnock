@@ -638,8 +638,23 @@ inline u32 MAX(u32 a, u32 b) { return (a >= b) ? a : b; }
 //#define ABSDIF(a, b) (((a) >= (b)) ? ((a) - (b)) : ((b) - (a)))
 inline u32 ABSDIF(u32 a, u32 b) { return (a >= b) ? (a - b) : (b - a); }
 
-#define TRG(f, m, v, l, h) { if (f & m) { if (v <= l) { CLR(f, m);	}; } else {	if (v > h) { SET(f, m);	};};}
+#define TRG(f, m, v, l, h) { /*u16 rf = f; u16 rv = v;*/ if (f & m) { if (v <= l) { CLR(f, m); }; } else { if (v > h) { SET(f, m); }; }; /*f = rf;*/ }
 
+//inline void TRG(u16& f, u16 m, i32 v, i32 l, i32 h)
+//{
+//	u16 rf = f;
+//
+//	if (rf & m)
+//	{ 
+//		if (v <= l) { CLR(rf, m); }; 
+//	}
+//	else
+//	{ 
+//		if (v > h) { SET(rf, m); }; 
+//	}; 
+//
+//	f = rf;
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
