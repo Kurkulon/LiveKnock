@@ -91,9 +91,9 @@ static void ML02_sub_11E00();
 static void ML02_sub_11E14();
 static void ML02_sub_11EE8();
 static void ML02_sub_11F88();
-static void ML02_sub_11FD8();
+static void ML02_Update_STALL_Flag();
 static bool ML02_Check_STALL();
-static void ML02_Check_12030();
+static void ML02_Update_CRANKING_Flag();
 static bool ML02_Check_CRANKING();
 static void ML02_sub_12180();
 static bool ML02_Return_0_0();
@@ -616,8 +616,8 @@ static void ML02_sub_11EE8()
 
 static void ML02_sub_11F88()
 {
-	ML02_sub_11FD8();
-	ML02_Check_12030();
+	ML02_Update_STALL_Flag();
+	ML02_Update_CRANKING_Flag();
 	ML02_sub_12180();
 	ML02_sub_1268C();
 	ML02_O2_Closed_Loop();
@@ -628,7 +628,7 @@ static void ML02_sub_11F88()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void ML02_sub_11FD8()
+static void ML02_Update_STALL_Flag()
 {
 	WFLAG(wMUT1E_MAF_RESET_FLAG, STALL, ML02_Check_STALL());
 }
@@ -642,7 +642,7 @@ static bool ML02_Check_STALL()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void ML02_Check_12030()
+static void ML02_Update_CRANKING_Flag()
 {
 	WFLAG(wMUT1E_MAF_RESET_FLAG, CRANKING, ML02_Check_CRANKING());
 }
@@ -1378,7 +1378,7 @@ static void ML02_sub_13120()
 
 	// loc_13142
 
-	if (r1 & 0x100)
+	if (r1 & MUT1E_8_bit)
 	{
 		CLR(r1, UPDATE_OXIGEN_TRIM|MUT1E_9_bit|CLOSED_LOOP_GENERIC|STALL|DECELERATION_FUEL_CUT|CRANKING);
 		CLR(r2, 0x800);
@@ -1394,7 +1394,7 @@ static void ML02_sub_13120()
 
 	// loc_1315C
 
-	if (r1 & 0x200)
+	if (r1 & MUT1E_9_bit)
 	{
 		CLR(r1, UPDATE_OXIGEN_TRIM|MUT1E_8_bit|CLOSED_LOOP_GENERIC|STALL|DECELERATION_FUEL_CUT|CRANKING);
 		CLR(r2, 0x800);
@@ -1476,7 +1476,7 @@ static void ML02_sub_131EC()
 
 static void ML02_sub_13320()
 {
-	WFLAG(word_FFFF928E, 2, (wMUT1E_MAF_RESET_FLAG & 0x800) && ZRO(word_FFFF928E, 4));
+	WFLAG(word_FFFF928E, 2, (wMUT1E_MAF_RESET_FLAG & UPDATE_OXIGEN_TRIM) && ZRO(word_FFFF928E, 4));
 
 	WFLAG(word_FFFF9290, 2, (word_FFFF89F6 & 0x800) && ZRO(word_FFFF9290, 4));
 	
@@ -1751,7 +1751,7 @@ static void ML02_Fuel_Knock_Reaction(EnVars* ev)
 
 	r13 = r2 + (r13 >> 8);
 
-	if (*ev->_4_wMUT1E_MAF_RESET_FLAG & 0x800)
+	if (*ev->_4_wMUT1E_MAF_RESET_FLAG & UPDATE_OXIGEN_TRIM)
 	{
 		r13 += *ev->_52_wMUT66;
 
