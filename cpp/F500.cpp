@@ -76,6 +76,7 @@ static void _sub_A374();
 #define mapInletAirTemp_Scaling				((Axis*)0x9B82)
 #define CEL7_692E							((Axis*)0x692E)
 #define map_Coolant_Temp_Scaling			((Axis*)0x99A8)
+#define RPM17_7098							((Axis*)0x7098)
 
 
 
@@ -93,6 +94,7 @@ static void _sub_A374();
 #define byte_9B00							((Map3D_B *)0x9B00)
 #define CORFUELAIR_33A6						((Map3D_B *)0x33A6)
 #define COOLTEMSCAL_98FA					((Map3D_B *)0x98FA)
+#define battery_voltage_compensation_5272	((Map3D_W *)0x5272)
 
 
 
@@ -1265,7 +1267,35 @@ void F500_Countdown_Timers_sub_10F5C()
 
 void F500_Battery_Calcs_sub_1101A()
 {
-	Mul_Lim_FFFF(wMUT88_Fuel_Level_ADC8bit, 191);
+	u32 r0 = Mul_Lim_FFFF(wMUT88_Fuel_Level_ADC8bit, 191);
+
+	r0 = Div_R4_R5__R0(r0, wMUT14_Battery_Level_ADC8bit);
+
+	BATTERY_L_FFFF91D2 = Sub_Lim_0(255, r0);
+
+	if (timer_up_FFFF852C <= t1_unk_22F6/*400*/)
+	{
+		BATTERY_8_FFFF91D4 = BATTERY_L_FFFF91D2 << 8;
+	}
+	else
+	{
+		// loc_1106A
+
+		if (timeEvents & EVT_2_100ms)
+		{
+			u32 r13 = (wMUT2E_Vehicle_Speed_Frequency > t1_Speed_Frequency_2368/*20*/) ? t1_unk_22E4/*254*/ : t1_unk_22E2/*254*/;
+
+			BATTERY_8_FFFF91D4 = Interpolate_256(BATTERY_8_FFFF91D4, BATTERY_L_FFFF91D2, r13);
+		};
+	};
+
+	// loc_110A8
+
+	wMUTB4_lookup_value = BATTERY_8_FFFF91D4 >> 8;
+
+	Table_Lookup_Axis(RPM17_7098);
+
+	BATT_COMP_FFFF91AC = Table_Lookup_word_2D_3D(battery_voltage_compensation_5272);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
