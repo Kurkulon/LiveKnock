@@ -27,7 +27,8 @@
 #define sub_E478							((void(*)(void))0xE478)
 #define sub_DCB4							((bool(*)(void))0xDCB4)
 #define sub_D4E4							((bool(*)(void))0xD4E4)
-#define Start_Coil_Charge				((void(*)(u16))0xBE1C)
+#define Start_Coil_Charge					((void(*)(u16))0xBE1C)
+#define sub_AD94							((void(*)(void))0xAD94)
 
 extern void Update_Gen_G_output();
 
@@ -792,7 +793,7 @@ inline void Huge_200_Knock()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-inline void Huge_200_loc_27326()
+inline void Huge_200_Idle_Stepper()
 {
 	// loc_27326
 
@@ -825,13 +826,13 @@ inline void Huge_200_loc_27326()
 				{
 					r1 += 1;
 
-					POTEPINS1011_FFFF80C8 += 1;
+					stepperPinOutIndex += 1;
 				}
 				else
 				{
 					r1 -= 1;
 
-					POTEPINS1011_FFFF80C8 -= 1;
+					stepperPinOutIndex -= 1;
 				};
 
 				// loc_274DC
@@ -839,6 +840,8 @@ inline void Huge_200_loc_27326()
 				__disable_irq();
 
 				wMUT16_ISC_Steps = SwapBytes16(r1);
+
+				sub_AD94();
 
 				__enable_irq();
 
@@ -1106,7 +1109,7 @@ static void Huge_200_Hz()
 
 	// loc_27326
 
-	Huge_200_loc_27326();
+	Huge_200_Idle_Stepper();
 
 	// loc_27532
 
