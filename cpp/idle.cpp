@@ -214,7 +214,7 @@ static void SysInit_NVRAM_18F80()
 
 	ufix8_MUT0A_FFFF80BC = word_1936/*0x8D00*/;
 	ufix8_MUT08_Coolant_Temperature = word_1936/*0x8D00*/;
-	wMUT22 = 0x80;
+	wMUT22 = M22_80;
 
 	wMUT16_ISC_Steps = SwapBytes16(0);
 
@@ -231,11 +231,11 @@ static void SysInit_NVRAM_18F80()
 
 static void SysInit_sub_19014()
 {
-	if (wMUT22 & 0xA0)
+	if (wMUT22 & (M22_80|M22_20) /*0xA0*/)
 	{
 		stepperPinOutIndex = 3;
 		wMUT16_ISC_Steps = SwapBytes16(0);
-		wMUT22 = 0x80;
+		wMUT22 = M22_80;
 	}
 	else
 	{
@@ -244,7 +244,7 @@ static void SysInit_sub_19014()
 			stepperPinOutIndex = 3;
 		};
 
-		wMUT22 = 0x40;
+		wMUT22 = M22_40;
 	};
 
 	word_FFFF86C4 = 1;
@@ -266,15 +266,19 @@ extern "C" void AA05_root_sub_19096()
 	AA05_sub_1A7E0();
 	AA05_sub_1AD34();
 
-	if (sub_21EF8() != 0 && (wMUT22 & 0xB0) == 0)
+	if (sub_21EF8() != 0 && (wMUT22 & (M22_80|M22_20|M22_10)/*0xB0*/) == 0)
 	{
 		mut25_IdleSteps = AA05_IDLESTEPLOOKtab_sub_19E5A(mut76_Idle_Y_Axis = wMUT9E);
-		CLR(wMUT22, 0x3F);
-		CLR(wMUT23, 0xB5);
+		CLR(wMUT22, M22_20|M22_10|M22_08|M22_04|M22_02|M22_01 /*0x3F*/);
+		CLR(wMUT23, M23_80|M23_20|M23_10|M23_04|M23_01 /*0xB5*/);
 	};
 
 	AA05_sub_1BD6C();
-	AA05_sub_1BE74();
+
+	// AA05_sub_1BE74();
+
+	wMUT25_Idle_Stepper_Value = mut25_IdleSteps;
+	wMUT76_Idle_Stepper_Y_Axis = mut76_Idle_Y_Axis;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -492,45 +496,45 @@ static void AA05_sub_195A2()
 
 		if (wMUT2E_Vehicle_Speed_Frequency >= word_18D8/*28*/)
 		{
-			SET(wMUT23, 0x400);
+			SET(wMUT23, M23_400);
 		}
 		else
 		{
-			CLR(wMUT23, 0x400);
+			CLR(wMUT23, M23_400);
 		};
 
 		if (RTF & POWER_STEERING)
 		{
-			if (wMUT23 & 0x400)
+			if (wMUT23 & M23_400)
 			{
-				SET(wMUT23, 0x200);
+				SET(wMUT23, M23_200);
 			}
 			else
 			{
-				CLR(wMUT23, 0x200);
+				CLR(wMUT23, M23_200);
 			};
 		};
 
 		u32 r13;
 
-		if ((wMUT23 & 0x200) == 0 && ZRO(RT_FLAG1_FFFF8888, AC_SWITCH|POWER_STEERING))
+		if ((wMUT23 & M23_200) == 0 && ZRO(RT_FLAG1_FFFF8888, AC_SWITCH|POWER_STEERING))
 		{
-			SET(wMUT23, 0x1000);
+			SET(wMUT23, M23_1000);
 
 			r13 = (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1/*Engine Running*/) ? word_18D0 : word_18D2;
 
 			if (r13 > word_FFFF854A)
 			{
-				CLR(wMUT23, 0x800);
+				CLR(wMUT23, M23_800);
 			}
 			else
 			{
-				SET(wMUT23, 0x800);
+				SET(wMUT23, M23_800);
 			};
 		}
 		else
 		{
-			CLR(wMUT23, 0x1800);
+			CLR(wMUT23, M23_1000|M23_800);
 		};
 
 
@@ -549,7 +553,7 @@ static void AA05_sub_195A2()
 
 		if (word_FFFF85D0 != 0)
 		{
-			if ((wMUT23 & 0x1800) == 0x1000)
+			if ((wMUT23 & (M23_1000|M23_8000)) == M23_1000)
 			{
 				if (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1)
 				{
@@ -568,7 +572,7 @@ static void AA05_sub_195A2()
 			r13 = Sub_Lim_0(r13, word_18CE/*1*/);
 		};
 
-		if (wMUT23 & 0x800)
+		if (wMUT23 & M23_800)
 		{
 			u32 r3 = (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) ? word_18D4/*7*/ : word_18D6/*7*/;
 			
@@ -596,7 +600,7 @@ static void AA05_sub_19804()
 {
 	u32 RTF = ((RT_FLAG1_COPY_FFFF888A ^ RT_FLAG1_FFFF8888) & RT_FLAG1_FFFF8888);
 
-	if (wMUT23 & 1)
+	if (wMUT23 & M23_01)
 	{
 		timer_up_FFFF8534 = 0xFFFF;
 		timer_up_FFFF8536 = 0xFFFF;
@@ -829,7 +833,7 @@ static void AA05_sub_19B98()
 		AA05_sub_19E10(word_18EA/*120*/);
 	};
 
-	if (wMUT23 & 0x20)
+	if (wMUT23 & M23_20)
 	{
 		AA05_sub_19E10(word_18EE/*80*/);
 	};
@@ -926,7 +930,7 @@ static u16 AA05_IDLESTEPLOOKtab_sub_19E5A(u16 v)
 
 static void AA05_sub_19E8C()
 {
-	if ((wMUT1E_MAF_RESET_FLAG & CRANKING) || (wMUT22 & 0xA0))
+	if ((wMUT1E_MAF_RESET_FLAG & CRANKING) || (wMUT22 & (M22_80|M22_20) /*0xA0*/))
 	{
 		word_FFFF8CC8 = Table_Lookup_byte_2D_3D(unk041_3B92);
 	}
@@ -958,7 +962,7 @@ static void AA05_sub_19EEC()
 
 static void AA05_sub_19F0E()
 {	
-	CLR(wMUT23, 0x40);
+	CLR(wMUT23, M23_40);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1042,7 +1046,7 @@ static void AA05_sub_1A11C()
 	{
 		u32 r1;
 
-		if (wMUT23 & 0x40)
+		if (wMUT23 & M23_40)
 		{
 			r1 = word_1968;
 		}	
@@ -1175,7 +1179,7 @@ static void AA05_sub_1A448()
 
 static void AA05_sub_1A462()
 {
-	CLR(wMUT23, 0x100);
+	CLR(wMUT23, M23_100);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1221,19 +1225,19 @@ static bool AA05_sub_1A4F2()
 		|| (wMUT1E_MAF_RESET_FLAG & (CRANKING|STALL)) 
 		|| cranking_stall_timer_up < word_1978/*0*/)
 	{
-		CLR(wMUT23, 4);
+		CLR(wMUT23, M23_04);
 	}
 	else
 	{
-		if (ZRO(wMUT23, 4))
+		if (ZRO(wMUT23, M23_04))
 		{
 			word_FFFF85C4 = 0;
 		};
 
-		SET(wMUT23, 4);
+		SET(wMUT23, M23_04);
 	};
 
-	return wMUT23 & 4;
+	return wMUT23 & M23_04;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1252,7 +1256,7 @@ static void AA05_sub_1A5A8()
 {
 	u32 r1 = ((RPM_x_4_096__1 >> 3) + 1) >> 1;
 
-	WFLAG(wMUT23, 8, r1 >= rpm_x125div32_B && (r1 - rpm_x125div32_B) >= word_19E4);
+	WFLAG(wMUT23, M23_08, r1 >= rpm_x125div32_B && (r1 - rpm_x125div32_B) >= word_19E4);
 
 	if ((byte_1050 == 1 && (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1)) 
 		|| ZRO(RT_FLAG1_FFFF8888, RT_7_bit) 
@@ -1305,31 +1309,31 @@ static void AA05_sub_1A7E0()
 		AA05_sub_1A99C();
 	};
 
-	if (wMUT22 & 0x20)
+	if (wMUT22 & M22_20)
 	{
 		AA05_sub_1A9D0();
 	};
 
-	if (((RT_FLAG1_FFFF8888 & 0x40) && timer_down_TXFLAG3_FFFF8574 != 0) || (wMUT22 & 0x20))
+	if (((RT_FLAG1_FFFF8888 & 0x40) && timer_down_TXFLAG3_FFFF8574 != 0) || (wMUT22 & M22_20))
 	{
-		CLR(wMUT22, 0x40);
+		CLR(wMUT22, M22_40);
 	};
 
-	if(ZRO(wMUT22, 0x20))
+	if(ZRO(wMUT22, M22_20))
 	{
-		if ((wMUT22 & 0x80) || (timer_down_TXFLAG3_FFFF8574 == 0 && ZRO(wMUT22, 0x40)))
+		if ((wMUT22 & M22_80) || (timer_down_TXFLAG3_FFFF8574 == 0 && ZRO(wMUT22, M22_40)))
 		{
 			AA05_sub_1AB00();
 		};
 	};
 
-	if (ZRO(wMUT22, 0xA0) && timer_down_TXFLAG3_FFFF8574 == 0)
+	if (ZRO(wMUT22, (M22_80|M22_20) /*0xA0*/) && timer_down_TXFLAG3_FFFF8574 == 0)
 	{
 		AA05_sub_1AB72();
 	}
 	else
 	{
-		CLR(wMUT22, 0x10);
+		CLR(wMUT22, M22_10);
 	};
 
 	if ((wMUT1E_MAF_RESET_FLAG & MAP_error) && ZRO(wMUT1E_MAF_RESET_FLAG, CRANKING|STALL) && ZRO(wMUT22, 0xB0))
@@ -1338,7 +1342,7 @@ static void AA05_sub_1A7E0()
 	}
 	else
 	{
-		CLR(wMUT22, 8);
+		CLR(wMUT22, M22_08);
 	};
 
 	if (AA05_sub_1ABEC() || ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x2000) && (word_FFFF80E6 & 0x300)))
@@ -1347,7 +1351,7 @@ static void AA05_sub_1A7E0()
 	}
 	else
 	{
-		CLR(wMUT22, 4);
+		CLR(wMUT22, M22_04);
 	}
 
 }
@@ -1393,10 +1397,10 @@ static void AA05_sub_1A9D0()
 
 		__enable_irq();
 
-		SET(wMUT22, 2);
+		SET(wMUT22, M22_02);
 	};
 
-	if (wMUT22 & 2)
+	if (wMUT22 & M22_02)
 	{
 		if (wMUT16_ISC_Steps & 0xFF)
 		{
@@ -1406,12 +1410,12 @@ static void AA05_sub_1A9D0()
 		}
 		else
 		{
-			CLR(wMUT22, 2);
-			SET(wMUT22, 1);
+			CLR(wMUT22, M22_02);
+			SET(wMUT22, M22_01);
 		};
 	};
 
-	if (wMUT22 & 1)
+	if (wMUT22 & M22_01)
 	{
 		if (wMUT16_ISC_Steps == word_1984/*6*/)
 		{
@@ -1440,7 +1444,7 @@ static void AA05_sub_1AAB4(u16 v)
 
 	SET(u16_FLAGS_FFFF8C96, 1);
 
-	CLR(wMUT23, 0xB5);
+	CLR(wMUT23, M23_80|M23_20|M23_10|M23_04|M23_01 /*0xB5*/);
 
 	word_FFFF8CB8 = 0;
 	word_FFFF8CDE = 0;
@@ -1452,7 +1456,7 @@ static void AA05_sub_1AAB4(u16 v)
 
 static void AA05_sub_1AB00()
 {
-	SET(wMUT22, 0x80);
+	SET(wMUT22, M22_80);
 
 	if (wMUT16_ISC_Steps == word_197E/*136*/)
 	{
@@ -1462,9 +1466,9 @@ static void AA05_sub_1AB00()
 
 		wMUT16_ISC_Steps = SwapBytes16(wMUT25_Idle_Stepper_Value);
 
-		CLR(wMUT22, 0x80);
+		CLR(wMUT22, M22_80);
 
-		SET(wMUT22, 0x40);
+		SET(wMUT22, M22_40);
 		
 		__enable_irq();
 	}
@@ -1481,7 +1485,7 @@ static void AA05_sub_1AB00()
 static void AA05_sub_1AB72()
 {
 	CLR(wMUT22, 0xAF);
-	SET(wMUT22, 0x10);
+	SET(wMUT22, M22_10);
 
 	AA05_sub_1AAB4(word_18EA);
 
@@ -1493,7 +1497,7 @@ static void AA05_sub_1AB72()
 static void AA05_sub_1ABA4()
 {
 	CLR(wMUT22, 0xB7);
-	SET(wMUT22, 8);
+	SET(wMUT22, M22_08);
 
 	AA05_sub_1AAB4(word_18EA);
 
@@ -1516,7 +1520,7 @@ static bool AA05_sub_1ABEC()
 
 static void AA05_Set_MUT22_0x04()
 {
-	SET(wMUT22, 4);
+	SET(wMUT22, M22_04);
 
 	AA05_sub_1AAB4(word_18FE/*80*/);
 
@@ -1556,13 +1560,13 @@ static void AA05_sub_1AD34()
 		}
 		else if (AA05_sub_1B196())
 		{
-			SET(wMUT23, 0x10);
+			SET(wMUT23, M23_10);
 
 			AA05_sub_1B260();
 		}
 		else
 		{
-			CLR(wMUT23, 0x10);
+			CLR(wMUT23, M23_10);
 
 			word_FFFF85C0 = word_192E/*200*/;
 
@@ -1579,12 +1583,12 @@ static void AA05_sub_1ADF4()
 {
 	if (wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING))
 	{
-		CLR(wMUT23, 0xB4);
-		SET(wMUT23, 1);
+		CLR(wMUT23, M23_80|M23_20|M23_10|M23_04 /*0xB4*/);
+		SET(wMUT23, M23_01);
 	}
 	else
 	{
-		CLR(wMUT23, 1);
+		CLR(wMUT23, M23_01);
 	};
 }
 
@@ -1625,7 +1629,7 @@ static void AA05_sub_1AE90()
 static void AA05_sub_1AEC6()
 {
 	if (ZRO(RT_FLAG1_FFFF8888, AC_SWITCH) 
-		&& ZRO(wMUT23, 1) 
+		&& ZRO(wMUT23, M23_01) 
 		&& (ZRO(bMUTD3_BitMap4_FCA_Store_FFFF89D8, 0x100) || ZRO(word_FFFF90B6, 1)))
 	{
 		u32 r0 = Add_Lim_FFFF(0x80, Table_Lookup_word_2D_3D(unk0064_486C));
@@ -1696,7 +1700,7 @@ static u16 AA05_sub_1B0BC()
 
 static u16 AA05_sub_1B0DC(u16 v)
 {
-	if (wMUT23 & 1)
+	if (wMUT23 & M23_01)
 	{
 		v = Lim16(v, Sub_Lim_0(word_1904/*125*/ + word_FFFF8CA4, 0x80), Sub_Lim_0(word_1926/*200*/ + word_FFFF8CA4, 0x80));
 	}
@@ -1782,13 +1786,13 @@ static void AA05_sub_1B282()
 
 	if (r13 > r1)
 	{
-		SET(wMUT23, 0x20);
+		SET(wMUT23, M23_20);
 
 		r1 = word_FFFF8CB8;
 	}
 	else
 	{
-		CLR(wMUT23, 0x20);
+		CLR(wMUT23, M23_20);
 
 		word_FFFF8CB8 = 0;
 		word_FFFF8CDE = 0;
@@ -1823,7 +1827,7 @@ static void AA05_sub_1B282()
 	r1 = AA05_sub_1B876() + r8;
 	r2 = AA05_sub_1B876() + r9;
 
-	if (ZRO(wMUT23, 0x10))
+	if (ZRO(wMUT23, M23_10))
 	{
 		r1 += word_FFFF8CD0;
 		r2 += word_FFFF8CD0;
@@ -2104,8 +2108,8 @@ static bool AA05_sub_1B934()
 {
 	CLR(word_FFFF987E, 0x80);
 
-	return (wMUT23 & 0x10)
-		&& ZRO(wMUT23, 1)
+	return (wMUT23 & M23_10)
+		&& ZRO(wMUT23, M23_01)
 		&& word_FFFF8CC8 == 0
 		&& ZRO(RT_FLAG1_FFFF8888, POWER_STEERING) 
 		&& word_FFFF86CA == 0
@@ -2256,7 +2260,7 @@ static u16 AA05_sub_1BD34()
 
 static void AA05_sub_1BD6C()
 {
-	if (ZRO(wMUT22, 0xA0))
+	if (ZRO(wMUT22, (M22_80|M22_20) /*0xA0*/))
 	{
 		mut25_IdleSteps = Lim16(mut25_IdleSteps, 0, max_Idle_Steps);
 	};
@@ -2284,8 +2288,8 @@ static void AA05_sub_1BDC6()
 
 
 	if ((RT_FLAG1_FFFF8888 & (AC_SWITCH|POWER_STEERING)) 
-		|| ZRO(wMUT23, 0x10)
-		|| (wMUT23 & 1)
+		|| ZRO(wMUT23, M23_10)
+		|| (wMUT23 & M23_01)
 		|| mut25_IdleSteps == 0
 		|| word_FFFF8CB6 < mut76_Idle_Y_Axis
 		|| (RPM_x_4_096__1 >> 5) < wMUT24_Target_Idle_RPM
@@ -2306,13 +2310,13 @@ static void AA05_sub_1BDC6()
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+/*
 static void AA05_sub_1BE74()
 {
 	wMUT25_Idle_Stepper_Value = mut25_IdleSteps;
 	wMUT76_Idle_Stepper_Y_Axis = mut76_Idle_Y_Axis;
 }
-
+*/
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 static u16 sub_220A2()

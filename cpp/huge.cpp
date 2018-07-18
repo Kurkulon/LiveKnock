@@ -809,7 +809,7 @@ inline void Huge_200_Idle_Stepper()
 
 		u32 r13 = 3;
 
-		if (wMUT22 & 0x80)
+		if (wMUT22 & M22_80)
 		{
 			r13 = 4;
 		};

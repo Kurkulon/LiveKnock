@@ -1590,7 +1590,7 @@ static void BC06_sub_1EBEA()
 
 		wMUT93_Fadout_Timer_Value = Lim_FF( MIN(r1, r2) );
 
-		word_FFFF86D4 = (wMUT23 & 0x10) ? word_1BB0 : word_1BAE;
+		word_FFFF86D4 = (wMUT23 & M23_10) ? word_1BB0 : word_1BAE;
 	};
 
 	// loc_1EDD8

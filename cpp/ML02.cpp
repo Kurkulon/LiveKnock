@@ -837,7 +837,7 @@ static u16 ML02_Get_Idle_RPM_lim_123E0()
 		r1 += 6;
 	};
 
-	if ((wMUT23 & 0x20) || timer_FFFF8788 != 0 || ZRO(RPM_FLAGS, RPM_14_bit))
+	if ((wMUT23 & M23_20) || timer_FFFF8788 != 0 || ZRO(RPM_FLAGS, RPM_14_bit))
 	{
 		if (prev_MUT1E_FLAGS & DECELERATION_FUEL_CUT)
 		{
@@ -902,7 +902,7 @@ static bool ML02_sub_1262C(u16 rpm)
 	return MUT21_RPM_x125div4 > rpm
 		&& ZRO(wMUT19_Startup_Check_Bits, 0x40) 
 		&& cranking_end_timer_up >= (word_155A * 20)
-		&& ZRO(wMUT23, 0x20)
+		&& ZRO(wMUT23, M23_20)
 		&& (RT_FLAG1_COPY_FFFF888A & RT_FLAG1_FFFF8888 & RT_7_bit)
 		&& crank5_FFFF8A36 == 0;
 }

@@ -408,6 +408,48 @@ struct Map3D_W
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+// MUT22
+
+#define M22_01 					0x01 
+#define M22_02					0x02
+#define M22_04					0x04
+#define M22_08					0x08
+#define M22_10					0x10
+#define M22_20					0x20
+#define M22_40					0x40
+#define M22_80					0x80
+#define M22_100					0x100
+#define M22_200					0x200
+#define M22_400					0x400
+#define M22_800					0x800
+#define M22_1000				0x1000
+#define M22_2000				0x2000
+#define M22_4000				0x4000
+#define M22_8000				0x8000
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// MUT23
+
+#define M23_01 					0x01 
+#define M23_02					0x02
+#define M23_04					0x04
+#define M23_08					0x08
+#define M23_10					0x10
+#define M23_20					0x20
+#define M23_40					0x40
+#define M23_80					0x80
+#define M23_100					0x100
+#define M23_200					0x200
+#define M23_400					0x400
+#define M23_800					0x800
+#define M23_1000				0x1000
+#define M23_2000				0x2000
+#define M23_4000				0x4000
+#define M23_8000				0x8000
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 #define Tephra ((void(*)(void))0x3ec00)
 #define sub_A98A ((void(*)(void))0xA98A)
 

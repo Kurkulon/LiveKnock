@@ -80,7 +80,7 @@ static u16 	IG04_sub_21DCE(u16 v);
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-#define IGN_TEST_FLAG_0_F32					(*(const byte*)0xF32)
+//#define IGN_TEST_FLAG_0_F32					(*(const byte*)0xF32)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -806,7 +806,7 @@ static bool IG04_sub_17BEC()
 		return false;
 	};
 
-	if (wMUT22 & 4)
+	if (wMUT22 & M22_04)
 	{
 		return false;
 	};
@@ -852,7 +852,7 @@ static bool IG04_sub_17C9C()
 		return false;
 	};
 
-	if (wMUT22 & 4)
+	if (wMUT22 & M22_04)
 	{
 		return false;
 	};
