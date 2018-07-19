@@ -2,12 +2,12 @@
 
 #include <umachine.h>
 
-#include "ext_ram_vars.h"
+//#include "ext_ram_vars.h"
 
 #include "misc.h"
 #include "constbyte.h"
 #include "constword.h"
-//#include "ram.h"
+#include "ram.h"
 #include "EnVars.h"
 #include "hwreg.h"
 
@@ -527,7 +527,7 @@ void F500_Coolant_Temp_Threshold_Tests()
 	Table_Lookup_Axis(CEL8_6D98);
 	Table_Lookup_Axis(CEL9_75BA);
 
-	if (timer_down_TXFLAG3_FFFF8574 == 0 && (SPEED_FLAGS & 0x400))
+	if (timer_down_TXFLAG3_FFFF8574 == 0 && (SPEED_FLAGS & SPD_10_400))
 	{
 		coolantTempScld_COPY_2 = wMUT10_Coolant_Temperature_Scaled;
 	};
@@ -779,7 +779,7 @@ bool F500_CheckIdleRPM()
 		return false;
 	};
 
-	if ((wMUT23 & 0x10) == 0)
+	if ((wMUT23 & M23_10) == 0)
 	{
 		return false;
 	};
@@ -806,16 +806,7 @@ bool F500_CheckIdleRPM()
 		return false;
 	};
 
-	if (MUT20_RPM_Idle_x125div16 >= wMUT24_Target_Idle_RPM)
-	{
-		r13 = MUT20_RPM_Idle_x125div16 - wMUT24_Target_Idle_RPM;
-	}
-	else
-	{
-		r13 = wMUT24_Target_Idle_RPM - MUT20_RPM_Idle_x125div16;
-	};
-
-	if (r13 > word_1990/*6(47rpm)*/)
+	if (ABSDIF(MUT20_RPM_Idle_x125div16, wMUT24_Target_Idle_RPM) > word_1990/*6(47rpm)*/)
 	{
 		return false;
 	};

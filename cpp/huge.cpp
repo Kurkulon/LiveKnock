@@ -818,11 +818,11 @@ inline void Huge_200_Idle_Stepper()
 
 		if (word_FFFF8C9A >= r13)
 		{
-			u32 r1 = wMUT16_ISC_Steps;
+			u32 r1 = wMUT16_cur_Idle_Steps;
 			
-			if (SwapBytes16(r1) == r1 && r1 != wMUT25_Idle_Stepper_Value)
+			if (SwapBytes16(r1) == r1 && r1 != wMUT25_Target_Idle_Steps)
 			{
-				if (r1 < wMUT25_Idle_Stepper_Value)
+				if (r1 < wMUT25_Target_Idle_Steps)
 				{
 					r1 += 1;
 
@@ -839,7 +839,7 @@ inline void Huge_200_Idle_Stepper()
 
 				__disable_irq();
 
-				wMUT16_ISC_Steps = SwapBytes16(r1);
+				wMUT16_cur_Idle_Steps = SwapBytes16(r1);
 
 				sub_AD94();
 

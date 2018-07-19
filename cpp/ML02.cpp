@@ -1133,9 +1133,9 @@ static void ML02_MAP_Change_Calcs()
 
 	u32 r13 = ABSDIF(r1, r2);
 
-	if (r13 >= 0xff) r13 = 0xFF;
+	if (r13 >= 255) r13 = 255;
 
-	WFLAG(SPEED_FLAGS, SPD_1_02, r13 >= t1_MAF_CHANGE_SENSOR_15D6);
+	WFLAG(SPEED_FLAGS, SPD_1_02, r13 >= t1_MAF_CHANGE_SENSOR_15D6/*255*/);
 
 	if ((r8 ^ SPEED_FLAGS) & SPEED_FLAGS & SPD_1_02)
 	{

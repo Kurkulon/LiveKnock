@@ -41,7 +41,7 @@ wMUT12_Coolant_Temperature_Min_81:							.EQU H'FFFF88AC
 wMUT13_Front_O2_ADC8bit:									.EQU H'FFFF88BC 
 wMUT14_Battery_Level_ADC8bit:								.EQU H'FFFF88E6 
 wMUT15_Barometric_Pressure:									.EQU H'FFFF88DC 
-wMUT16_ISC_Steps:											.EQU H'FFFF80CA 
+wMUT16_cur_Idle_Steps:											.EQU H'FFFF80CA 
 wMUT17_TPS_ADC8bit:											.EQU H'FFFF88E8 
 wMUT18_Open_Loop_Bit_Array:									.EQU H'FFFF8A02 
 wMUT19_Startup_Check_Bits:									.EQU H'FFFF89FC 
@@ -54,7 +54,7 @@ wMUT1F_ECU_Load_Previous:									.EQU H'FFFF8954
 wMUT22:														.EQU H'FFFF80C6 
 wMUT23:														.EQU H'FFFF8C92 
 wMUT24_Target_Idle_RPM:										.EQU H'FFFF8CA2 
-wMUT25_Idle_Stepper_Value:									.EQU H'FFFF8CAC 
+wMUT25_Target_Idle_Steps:									.EQU H'FFFF8CAC 
 wMUT26_Knock_Retard:										.EQU H'FFFF8C32 
 wMUT27_Octane_Number:										.EQU H'FFFF80B8 
 wMUT2A_Injector_Pulse_Width_us:								.EQU H'FFFF9994 
@@ -121,7 +121,7 @@ wMUT72_Knock_Present:										.EQU H'FFFF89E6
 wMUT73_TPS_Open_Delta:										.EQU H'FFFF88F8 
 wMUT74_TPS_Close_Delta:										.EQU H'FFFF88FC 
 wMUT75:														.EQU H'FFFF8CA6 
-wMUT76_Idle_Stepper_Y_Axis:									.EQU H'FFFF8CAE 
+wMUT76_Idle_Control_Value:									.EQU H'FFFF8CAE 
 wMUT77:														.EQU H'FFFF8D6C 
 wMUT78:														.EQU H'FFFF8D6A 
 wMUT79_Injector_Latency:									.EQU H'FFFF8AF8 

@@ -412,8 +412,8 @@ struct Map3D_W
 
 #define M22_01 					0x01 
 #define M22_02					0x02
-#define M22_04					0x04
-#define M22_08					0x08
+#define M22_SPEED_ADJUST					0x04
+#define M22_MAP_ERROR					0x08
 #define M22_10					0x10
 #define M22_20					0x20
 #define M22_40					0x40
@@ -431,13 +431,13 @@ struct Map3D_W
 
 // MUT23
 
-#define M23_01 					0x01 
-#define M23_02					0x02
+#define M23_STALL_CRANKING 		0x01 
+//#define M23_02					0x02
 #define M23_04					0x04
 #define M23_08					0x08
 #define M23_10					0x10
 #define M23_20					0x20
-#define M23_40					0x40
+#define M23_40_ALWAYS_0			0x40
 #define M23_80					0x80
 #define M23_100					0x100
 #define M23_200					0x200
