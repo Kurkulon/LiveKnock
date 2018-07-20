@@ -414,7 +414,7 @@ struct Map3D_W
 #define M22_02					0x02
 #define M22_SPEED_ADJUST					0x04
 #define M22_MAP_ERROR					0x08
-#define M22_10					0x10
+#define M22_STALL					0x10
 #define M22_20					0x20
 #define M22_40					0x40
 #define M22_80					0x80

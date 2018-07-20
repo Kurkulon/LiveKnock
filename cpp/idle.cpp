@@ -160,7 +160,7 @@ static void AA05_sub_1A99C();
 static void AA05_sub_1A9D0();
 static void AA05_sub_1AAB4(u16 v);
 static void AA05_sub_1AB00();
-static void AA05_sub_1AB72();
+static void AA05_STALL();
 static void AA05_MAP_Error();
 static bool AA05_Check_Speed_Adjust();
 static void AA05_SPEED_ADJUST();
@@ -239,7 +239,7 @@ static void SysInit_sub_19014()
 	}
 	else
 	{
-		if (wMUT16_cur_Idle_Steps == some_iscstep_const_1982)
+		if (wMUT16_cur_Idle_Steps == some_iscstep_const_1982/*80*/)
 		{
 			stepperPinOutIndex = 3;
 		};
@@ -358,10 +358,10 @@ static void AA05_Idle_root()
 	
 	AA05_sub_1AD34();
 
-	if (sub_21EF8()/*0*/ != 0 && (wMUT22 & (M22_80|M22_20|M22_10)/*0xB0*/) == 0)
+	if (sub_21EF8()/*0*/ != 0 && (wMUT22 & (M22_80|M22_20|M22_STALL)/*0xB0*/) == 0)
 	{
 		mut25_IdleSteps = AA05_IDLESTEPLOOKtab_sub_19E5A(idle_Control_Value = wMUT9E);
-		CLR(wMUT22, M22_20|M22_10|M22_MAP_ERROR|M22_SPEED_ADJUST|M22_02|M22_01 /*0x3F*/);
+		CLR(wMUT22, M22_20|M22_STALL|M22_MAP_ERROR|M22_SPEED_ADJUST|M22_02|M22_01 /*0x3F*/);
 		CLR(wMUT23, M23_80|M23_20|M23_10|M23_04|M23_STALL_CRANKING /*0xB5*/);
 	};
 
@@ -392,10 +392,10 @@ extern "C" void AA05_root_sub_19096()
 	AA05_sub_1A7E0();
 	AA05_sub_1AD34();
 
-	if (sub_21EF8()/*0*/ != 0 && (wMUT22 & (M22_80|M22_20|M22_10)/*0xB0*/) == 0)
+	if (sub_21EF8()/*0*/ != 0 && (wMUT22 & (M22_80|M22_20|M22_STALL)/*0xB0*/) == 0)
 	{
 		mut25_IdleSteps = AA05_IDLESTEPLOOKtab_sub_19E5A(idle_Control_Value = wMUT9E);
-		CLR(wMUT22, M22_20|M22_10|M22_MAP_ERROR|M22_SPEED_ADJUST|M22_02|M22_01 /*0x3F*/);
+		CLR(wMUT22, M22_20|M22_STALL|M22_MAP_ERROR|M22_SPEED_ADJUST|M22_02|M22_01 /*0x3F*/);
 		CLR(wMUT23, M23_80|M23_20|M23_10|M23_04|M23_STALL_CRANKING /*0xB5*/);
 	};
 
@@ -1020,7 +1020,7 @@ static void AA05_sub_19E10(u16 v)
 
 static void AA05_Init_Max_Idle_Steps()
 {
-	max_Idle_Steps = (wMUT10_Coolant_Temperature_Scaled >= word_1A14 && ZRO(word_FFFF80E6, 0x300)) ? word_1A10/*100*/ : word_1A12/*120*/;
+	max_Idle_Steps = (wMUT10_Coolant_Temperature_Scaled >= word_1A14/*117*/ && ZRO(word_FFFF80E6, 0x300)) ? word_1A10/*100*/ : word_1A12/*120*/;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1439,14 +1439,14 @@ static void AA05_sub_1A7E0()
 
 	if (ZRO(wMUT22, (M22_80|M22_20) /*0xA0*/) && timer_down_TXFLAG3_FFFF8574 == 0)
 	{
-		AA05_sub_1AB72();
+		AA05_STALL();
 	}
 	else
 	{
-		CLR(wMUT22, M22_10);
+		CLR(wMUT22, M22_STALL);
 	};
 
-	if ((wMUT1E_MAF_RESET_FLAG & MAP_error) && ZRO(wMUT1E_MAF_RESET_FLAG, CRANKING|STALL) && ZRO(wMUT22, M22_80|M22_20|M22_10 /*0xB0*/))
+	if ((wMUT1E_MAF_RESET_FLAG & MAP_error) && ZRO(wMUT1E_MAF_RESET_FLAG, CRANKING|STALL) && ZRO(wMUT22, M22_80|M22_20|M22_STALL /*0xB0*/))
 	{
 		AA05_MAP_Error();
 	}
@@ -1592,10 +1592,10 @@ static void AA05_sub_1AB00()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void AA05_sub_1AB72()
+static void AA05_STALL()
 {
 	CLR(wMUT22, M22_80|M22_20|M22_MAP_ERROR|M22_SPEED_ADJUST|M22_02|M22_01 /*0xAF*/);
-	SET(wMUT22, M22_10);
+	SET(wMUT22, M22_STALL);
 
 	AA05_sub_1AAB4(word_18EA);
 
@@ -1606,7 +1606,7 @@ static void AA05_sub_1AB72()
 
 static void AA05_MAP_Error()
 {
-	CLR(wMUT22, M22_80|M22_20|M22_10|M22_SPEED_ADJUST|M22_02|M22_01 /*0xB7*/);
+	CLR(wMUT22, M22_80|M22_20|M22_STALL|M22_SPEED_ADJUST|M22_02|M22_01 /*0xB7*/);
 	SET(wMUT22, M22_MAP_ERROR);
 
 	AA05_sub_1AAB4(word_18EA);
@@ -1618,7 +1618,7 @@ static void AA05_MAP_Error()
 
 static bool AA05_Check_Speed_Adjust()
 {
-	if ((wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING)) || (wMUT22 & (M22_80|M22_20|M22_10|M22_MAP_ERROR)/*0xB8*/) || (RT_FLAG1_FFFF8888 & (RT_5_ALWAYS_1|RACING) ) != RT_5_ALWAYS_1 || (RT_FLAG1_FFFF8888 & (SPEED_ADJUST|FIX_TIMING)) != (SPEED_ADJUST|FIX_TIMING))
+	if ((wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING)) || (wMUT22 & (M22_80|M22_20|M22_STALL|M22_MAP_ERROR)/*0xB8*/) || (RT_FLAG1_FFFF8888 & (RT_5_ALWAYS_1|RACING) ) != RT_5_ALWAYS_1 || (RT_FLAG1_FFFF8888 & (SPEED_ADJUST|FIX_TIMING)) != (SPEED_ADJUST|FIX_TIMING))
 	{
 		timer_Check_Idle_SAC = word_1A02/*8*/;
 	};
@@ -1656,7 +1656,7 @@ static void AA05_SPEED_ADJUST()
 
 static void AA05_sub_1AD34()
 {
-	if (ZRO(wMUT22, M22_80|M22_20|M22_10|M22_MAP_ERROR|M22_SPEED_ADJUST /*0xBC*/))
+	if (ZRO(wMUT22, M22_80|M22_20|M22_STALL|M22_MAP_ERROR|M22_SPEED_ADJUST /*0xBC*/))
 	{
 		AA05_sub_1ADF4();
 		
