@@ -806,7 +806,7 @@ static bool IG04_sub_17BEC()
 		return false;
 	};
 
-	if (wMUT22 & M22_SPEED_ADJUST)
+	if (wMUT22_ISCV & M22_SPEED_ADJUST)
 	{
 		return false;
 	};
@@ -852,7 +852,7 @@ static bool IG04_sub_17C9C()
 		return false;
 	};
 
-	if (wMUT22 & M22_SPEED_ADJUST)
+	if (wMUT22_ISCV & M22_SPEED_ADJUST)
 	{
 		return false;
 	};

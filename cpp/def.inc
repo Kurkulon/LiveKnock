@@ -51,7 +51,7 @@ wMUT1C_ECU_Load:											.EQU H'FFFF8952
 wMUT1D_Manifold_Absolute_Pressure_Mean:						.EQU H'FFFF8968 
 wMUT1E_MAF_RESET_FLAG:										.EQU H'FFFF89F4 
 wMUT1F_ECU_Load_Previous:									.EQU H'FFFF8954 
-wMUT22:														.EQU H'FFFF80C6 
+wMUT22_ISCV:														.EQU H'FFFF80C6 
 wMUT23:														.EQU H'FFFF8C92 
 wMUT24_Target_Idle_RPM:										.EQU H'FFFF8CA2 
 wMUT25_Target_Idle_Steps:									.EQU H'FFFF8CAC 

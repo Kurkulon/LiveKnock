@@ -75,7 +75,7 @@ extern	u16 	ufix8_RAM_VAR_1936_FFFF80BE;
 extern	u16 	word_FFFF80C0;
 extern	u16 	word_FFFF80C2;
 extern	u16 	word_FFFF80C4;
-extern	u16 	wMUT22;
+extern	u16 	wMUT22_ISCV;
 extern	u16 	POTEPINS1011_FFFF80C8;
 extern	u16 	wMUT16_ISC_Steps;
 extern	byte	unused_byte_FFFF80CC[2];

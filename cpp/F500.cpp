@@ -17,7 +17,10 @@
 #define F500_Get_All_ADC		((void(*)(void))0xA7F0)
 #define F500_sub_21C80			((bool(*)(void))0x21C80)
 #define F500_InitManifoldVars	((void(*)(void))0x23244)
-#define sub_A374				((void(*)(void))0xA374)
+//#define sub_A374				((void(*)(void))0xA374)
+
+#pragma noregsave(sub_A374)
+static void sub_A374();
 
 #define ENGINE_MAIN_VARIABLES_DIM_off_9198		((EnVars*)0x9198)
 
@@ -60,7 +63,6 @@ static void F500_MAP_Hz_Calc_sub_10E54();
 static void F500_sub_10F08();
 static void F500_Countdown_Timers_sub_10F5C();
 static void F500_Battery_Calcs_sub_1101A();
-static void _sub_A374();
 
 
 #define CEL8_685C							((Axis*)0x685C)
@@ -278,22 +280,22 @@ void F500_sub_F834()
 
 	u32 r8 = word_FFFF8896;
 
-	if (byte_102D == 0)
+	if (byte_102D/*0*/ == 0)
 	{
 		CLR(rtf, RT_14_bit|RT_10_bit);
 	};
 
-	if ((byte_1046 & 2) == 0)
+	if ((byte_1046/*0*/ & 2) == 0)
 	{
 		SET(rtf, RT_13_bit);
 	};
 
-	if (byte_102A == 0)
+	if (byte_102A/*0*/ == 0)
 	{
-		CLR(rtf, RT_9_bit);
+		CLR(rtf, RT_FR);
 	};
 
-	if (byte_1041 == 0)
+	if (byte_1041/*0*/ == 0)
 	{
 		CLR(r2, 0x10);
 	};
@@ -1291,7 +1293,7 @@ void F500_Battery_Calcs_sub_1101A()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void _sub_A374()
+static void sub_A374()
 {
 	const u32 r9 = ~0x10;
 	const u32 r8 = ~2;
@@ -1316,7 +1318,7 @@ static void _sub_A374()
 
 	WBIT(r13, RT_7_bit, bMUTBA & 4);
 	
-	WBIT(r13, RT_9_bit, ZRO(reg_PJDRH, 4));
+	WBIT(r13, RT_FR, ZRO(reg_PJDRH, 4));
 
 	WBIT(r13, RT_10_bit, ZRO(word_FFFF8868, 0x20));
 

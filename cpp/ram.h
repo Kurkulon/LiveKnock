@@ -76,7 +76,7 @@
 #define      word_FFFF80C0                  							(*(u16*)0xFFFF80C0)                                                        
 #define      word_FFFF80C2                  							(*(u16*)0xFFFF80C2)                                                        
 #define      word_FFFF80C4                  							(*(u16*)0xFFFF80C4)                                                        
-#define      wMUT22                         							(*(u16*)0xFFFF80C6)                                                        
+#define      wMUT22_ISCV                         							(*(u16*)0xFFFF80C6)                                                        
 #define      stepperPinOutIndex          							(*(u16*)0xFFFF80C8)                                                        
 #define      wMUT16_cur_Idle_Steps               							(*(u16*)0xFFFF80CA)                                                        
 #define      wMUT40_Stored_Faults_Lo        							(*(u16*)0xFFFF80CE)                                                        

@@ -109,7 +109,7 @@ struct Map3D_W
 #define STARTER					0x40
 #define RT_7_bit				0x80
 #define RT_8_bit				0x100
-#define RT_9_bit				0x200
+#define RT_FR				0x200
 #define RT_10_bit				0x400
 #define SPEED_ADJUST			0x800
 #define FIX_TIMING				0x1000
@@ -410,22 +410,22 @@ struct Map3D_W
 
 // MUT22
 
-#define M22_01 					0x01 
-#define M22_02					0x02
-#define M22_SPEED_ADJUST					0x04
-#define M22_MAP_ERROR					0x08
-#define M22_STALL					0x10
-#define M22_20					0x20
-#define M22_40					0x40
-#define M22_80					0x80
-#define M22_100					0x100
-#define M22_200					0x200
-#define M22_400					0x400
-#define M22_800					0x800
-#define M22_1000				0x1000
-#define M22_2000				0x2000
-#define M22_4000				0x4000
-#define M22_8000				0x8000
+#define M22_ZERO_POS 			0x01 
+#define M22_FORCED_CLOSE		0x02
+#define M22_SPEED_ADJUST		0x04
+#define M22_MAP_ERROR			0x08
+#define M22_STALL				0x10
+#define M22_INIT_ISCV			0x20
+#define M22_MAX_OPEN_POS		0x40
+#define M22_FORCED_OPEN			0x80
+//#define M22_100				0x100
+//#define M22_200				0x200
+//#define M22_400				0x400
+//#define M22_800				0x800
+//#define M22_1000				0x1000
+//#define M22_2000				0x2000
+//#define M22_4000				0x4000
+//#define M22_8000				0x8000
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
