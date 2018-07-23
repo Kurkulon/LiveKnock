@@ -781,7 +781,7 @@ bool F500_CheckIdleRPM()
 		return false;
 	};
 
-	if ((wMUT23 & M23_10) == 0)
+	if ((wMUT23 & M23_IDLE_MODE_RPM) == 0)
 	{
 		return false;
 	};

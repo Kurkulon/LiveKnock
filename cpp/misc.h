@@ -435,7 +435,7 @@ struct Map3D_W
 //#define M23_02					0x02
 #define M23_04					0x04
 #define M23_08					0x08
-#define M23_10					0x10
+#define M23_IDLE_MODE_RPM		0x10
 #define M23_20					0x20
 #define M23_40_ALWAYS_0			0x40
 #define M23_80					0x80
@@ -447,6 +447,21 @@ struct Map3D_W
 #define M23_2000				0x2000
 #define M23_4000				0x4000
 #define M23_8000				0x8000
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// idle_FLAGS
+
+#define IDLF_01					0x01
+#define IDLF_02					0x02
+#define IDLF_04					0x04
+#define IDLF_08					0x08
+#define IDLF_10					0x10
+#define IDLF_20					0x20
+#define IDLF_40					0x40
+#define IDLF_80					0x80
+#define IDLF_100				0x100
+
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -664,6 +679,8 @@ struct TM32
 
 #define ONE(v, m) ((v & m) != 0)
 #define ZRO(v, m) ((v & m) == 0)
+#define AND(v, m) ((v & m) == m)
+
 
 #define WBIT(v, m, c) { v &= ~m; if (c) v |= m; }
 

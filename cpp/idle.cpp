@@ -34,7 +34,7 @@
 //#define target_Idle_RPM_1					(*(u16*)0xFFFF8CBC)
 //#define min_Idle_RPM					(*(u16*)0xFFFF8CBE)
 //#define word_FFFF86C2					(*(u16*)0xFFFF86C2)
-//#define u16_FLAGS_FFFF8C96				(*(u16*)0xFFFF8C96)
+//#define idle_FLAGS				(*(u16*)0xFFFF8C96)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -125,7 +125,7 @@ extern "C" void AA05_root_sub_19096();
 static void AA05_sub_19188();
 static void AA05_sub_19260();
 static void AA05_sub_1929C();
-static void AA05_MUT09_MUT0B();
+static void AA05_Init_MUT09_MUT0B();
 static void AA05_Calc_Target_Idle_RPM();
 static void AA05_Calc_Min_Idle_RPM();
 static void AA05_sub_195A2();
@@ -135,7 +135,7 @@ static void AA05_GENERATOR_CHARGING_sub_19A2C();
 static void AA05_sub_19B98();
 static void AA05_sub_19E10(u16 v);
 static void AA05_Init_Max_Idle_Steps();
-static u16 AA05_IDLESTEPLOOKtab_sub_19E5A(u16);
+static u16 AA05_Idle_Control_to_Steps(u16);
 static void AA05_sub_19E8C();
 static void AA05_sub_19EEC();
 static void AA05_sub_19F0E();
@@ -167,16 +167,16 @@ static void AA05_SPEED_ADJUST();
 static void AA05_Idle_Update();
 static void AA05_sub_1ADF4();
 static bool AA05_sub_1AE26();
-static void AA05_sub_1AE76();
-static void AA05_sub_1AE90();
+static void AA05_IdleCntrlVl_StallCranking_ISCV_Locked();
+static void AA05_Cranking_Idle_Control_StartUp();
 static void AA05_Calc_Min_Idle_Control_Value();
 static void AA05_Idle_Control_Feedback_RPM();
 static u16  AA05_sub_1B0BC();
 static u16 AA05_Lim_Idle_Control_Value(u16 v);
-static void AA05_sub_1B178();
-static bool AA05_sub_1B196();
-static void AA05_sub_1B260();
-static void AA05_sub_1B282();
+static void AA05_IdleCntrlVl_StallCranking_ISCV_Moving();
+static bool AA05_Check_Idle_Mode_RPM();
+static void AA05_Idle_Control_Mode_RPM();
+static void AA05_Calc_Base_Idle_Control();
 static u16 AA05_sub_1B470();
 static u16 AA05_sub_1B4C2();
 static bool AA05_sub_1B588();
@@ -189,14 +189,14 @@ static u16  AA05_sub_1B876();
 static u16  AA05_sub_1B89C();
 static u16  AA05_Return_0_1();
 static u16  AA05_sub_1B8CA();
-static void AA05_sub_1B8F2();
+static void AA05_MUT09_MUT0B();
 static bool AA05_sub_1B934();
-static void AA05_sub_1BA2C();
-static u16 AA05_sub_1BAC6();
-static void AA05_sub_1BAFE();
+static void AA05_Update_MUT09_MUT0B();
+static u16 AA05_Get_Trims_Idle_Control();
+static void AA05_Update_Trims_Idle_Control();
 static bool AA05_sub_1BB1A();
-static void AA05_sub_1BB96();
-static void AA05_sub_1BC6E();
+static void AA05_Calc_Trims_Idle_Control();
+static void AA05_Idle_Control_Mode0();
 static u16 AA05_sub_1BD34();
 static void AA05_sub_1BD6C();
 static void AA05_sub_1BDA0();
@@ -210,17 +210,17 @@ static u16 sub_220B4();
 
 static void SysInit_NVRAM_18F80()
 {
-	ufix8_RAM_VAR_1936_FFFF80BE = word_1936/*0x8D00*/;
+	trim_Idle_Control_AC_2 = word_1936/*0x8D00*/;
 
-	ufix8_MUT0A_FFFF80BC = word_1936/*0x8D00*/;
-	ufix8_MUT08_Coolant_Temperature = word_1936/*0x8D00*/;
+	trim_Idle_Control_AC_1 = word_1936/*0x8D00*/;
+	trim_Idle_Control_main = word_1936/*0x8D00*/;
 	wMUT22_ISCV = M22_FORCED_OPEN;
 
 	wMUT16_cur_Idle_Steps = SwapBytes16(0);
 
-	word_FFFF825C = ufix8_MUT08_Coolant_Temperature;
-	word_FFFF825E = ufix8_MUT0A_FFFF80BC;
-	word_FFFF8260 = ufix8_RAM_VAR_1936_FFFF80BE;
+	word_FFFF825C = trim_Idle_Control_main;
+	word_FFFF825E = trim_Idle_Control_AC_1;
+	word_FFFF8260 = trim_Idle_Control_AC_2;
 	word_FFFF8262 = word_FFFF80C0;
 	word_FFFF8264 = word_FFFF80C2;
 	word_FFFF8266 = word_FFFF80C4;
@@ -249,9 +249,9 @@ static void SysInit_sub_19014()
 
 	word_FFFF86C4 = 1;
 
-	u16_Coolant_Temperature = SHLR8(ufix8_MUT08_Coolant_Temperature);
+	u16_Coolant_Temperature = SHLR8(trim_Idle_Control_main);
 
-	SET(u16_FLAGS_FFFF8C96, 1);
+	SET(idle_FLAGS, IDLF_01);
 
 	AA05_Init_Max_Idle_Steps();
 
@@ -275,18 +275,18 @@ static void AA05_Idle_root()
 
 	coolant_Idle_Control_Init = Table_Lookup_byte_2D_3D(unk111_4850);
 
-	CLR(u16_FLAGS_FFFF8C96, 0x100);
+	CLR(idle_FLAGS, IDLF_100);
 
 	// AA05_sub_1929C();
 
 	if (wMUT1E_MAF_RESET_FLAG & STALL)
 	{
-		AA05_MUT09_MUT0B();
+		AA05_Init_MUT09_MUT0B();
 
 		word_FFFF8CB8 = 0;
 		word_FFFF8CDE = 0;
 
-		CLR(u16_FLAGS_FFFF8C96, 0x1E);
+		CLR(idle_FLAGS, IDLF_10|IDLF_08|IDLF_04|IDLF_02 /*0x1E*/);
 	};
 
 	AA05_Calc_Target_Idle_RPM();
@@ -313,7 +313,7 @@ static void AA05_Idle_root()
 
 		//AA05_sub_1A0BA();
 	
-		WFLAG(u16_FLAGS_FFFF8C96, 0x80, AA05_sub_1A0E8());
+		WFLAG(idle_FLAGS, IDLF_80, AA05_sub_1A0E8());
 
 		AA05_sub_1A11C();
 
@@ -360,9 +360,9 @@ static void AA05_Idle_root()
 
 	if (sub_21EF8()/*0*/ != 0 && (wMUT22_ISCV & (M22_FORCED_OPEN|M22_INIT_ISCV|M22_STALL)/*0xB0*/) == 0)
 	{
-		mut25_IdleSteps = AA05_IDLESTEPLOOKtab_sub_19E5A(idle_Control_Value = wMUT9E);
+		mut25_IdleSteps = AA05_Idle_Control_to_Steps(idle_Control_Value = wMUT9E);
 		CLR(wMUT22_ISCV, M22_INIT_ISCV|M22_STALL|M22_MAP_ERROR|M22_SPEED_ADJUST|M22_FORCED_CLOSE|M22_ZERO_POS /*0x3F*/);
-		CLR(wMUT23, M23_80|M23_20|M23_10|M23_04|M23_STALL_CRANKING /*0xB5*/);
+		CLR(wMUT23, M23_80|M23_20|M23_IDLE_MODE_RPM|M23_04|M23_STALL_CRANKING /*0xB5*/);
 	};
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -394,9 +394,9 @@ extern "C" void AA05_root_sub_19096()
 
 	if (sub_21EF8()/*0*/ != 0 && (wMUT22_ISCV & (M22_FORCED_OPEN|M22_INIT_ISCV|M22_STALL)/*0xB0*/) == 0)
 	{
-		mut25_IdleSteps = AA05_IDLESTEPLOOKtab_sub_19E5A(idle_Control_Value = wMUT9E);
+		mut25_IdleSteps = AA05_Idle_Control_to_Steps(idle_Control_Value = wMUT9E);
 		CLR(wMUT22_ISCV, M22_INIT_ISCV|M22_STALL|M22_MAP_ERROR|M22_SPEED_ADJUST|M22_FORCED_CLOSE|M22_ZERO_POS /*0x3F*/);
-		CLR(wMUT23, M23_80|M23_20|M23_10|M23_04|M23_STALL_CRANKING /*0xB5*/);
+		CLR(wMUT23, M23_80|M23_20|M23_IDLE_MODE_RPM|M23_04|M23_STALL_CRANKING /*0xB5*/);
 	};
 
 	AA05_sub_1BD6C();
@@ -444,7 +444,7 @@ static void AA05_sub_19260()
 
 	coolant_Idle_Control_Init = Table_Lookup_byte_2D_3D(unk111_4850);
 
-	CLR(u16_FLAGS_FFFF8C96, 0x100);
+	CLR(idle_FLAGS, IDLF_100);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -453,18 +453,18 @@ static void AA05_sub_1929C()
 {
 	if (wMUT1E_MAF_RESET_FLAG & STALL)
 	{
-		AA05_MUT09_MUT0B();
+		AA05_Init_MUT09_MUT0B();
 
 		word_FFFF8CB8 = 0;
 		word_FFFF8CDE = 0;
 
-		CLR(u16_FLAGS_FFFF8C96, 0x1E);
+		CLR(idle_FLAGS, IDLF_10|IDLF_08|IDLF_04|IDLF_02 /*0x1E*/);
 	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void AA05_MUT09_MUT0B()
+static void AA05_Init_MUT09_MUT0B()
 {
 	u32 r3, r13;
 
@@ -562,14 +562,14 @@ static void AA05_Calc_Min_Idle_RPM()
 {
 	if (wMUT1E_MAF_RESET_FLAG & STALL)
 	{
-		SET(u16_FLAGS_FFFF8C96, 0x20);
+		SET(idle_FLAGS, IDLF_20);
 
 		word_FFFF86C2 = 0;
 	};
 
 	if (wMUT1E_MAF_RESET_FLAG & CRANKING)
 	{
-		WFLAG(u16_FLAGS_FFFF8C96, 0x20, wMUT11_Intake_Air_Temperature_Scaled > word_1A26/*120*/)
+		WFLAG(idle_FLAGS, IDLF_20, wMUT11_Intake_Air_Temperature_Scaled > word_1A26/*120*/)
 	};
 
 	word_FFFF86C2 = (wMUT11_Intake_Air_Temperature_Scaled > word_1A20/*91*/) ? word_1A24/*30*/ * 80 : 0;
@@ -1025,7 +1025,7 @@ static void AA05_Init_Max_Idle_Steps()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static u16 AA05_IDLESTEPLOOKtab_sub_19E5A(u16 v)
+static u16 AA05_Idle_Control_to_Steps(u16 v)
 {
 	Table_Lookup_Axis(CEL8_6946_IDLE);
 
@@ -1131,7 +1131,7 @@ static u16 AA05_sub_1A068()
 
 static void AA05_sub_1A0BA()
 {
-	WFLAG(u16_FLAGS_FFFF8C96, 0x80, AA05_sub_1A0E8());
+	WFLAG(idle_FLAGS, IDLF_80, AA05_sub_1A0E8());
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1152,7 +1152,7 @@ static void AA05_sub_1A11C()
 {
 	TRG(word_FFFF8C94, 4, wMUT10_Coolant_Temperature_Scaled, word_196C, word_196A);
 
-	if (ZRO(RT_FLAG1_FFFF8888, RT_7_bit) && ZRO(u16_FLAGS_FFFF8C96, 0x80) && MUT20_RPM_Idle_x125div16 > word_1938)
+	if (ZRO(RT_FLAG1_FFFF8888, RT_7_bit) && ZRO(idle_FLAGS, IDLF_80) && MUT20_RPM_Idle_x125div16 > word_1938)
 	{
 		u32 r1;
 
@@ -1386,20 +1386,20 @@ static void AA05_sub_1A5A8()
 
 static void AA05_sub_1A74E()
 {
-	TRG(u16_FLAGS_FFFF8C96, 0x40, wMUT10_Coolant_Temperature_Scaled, word_2106, word_2104);
+	TRG(idle_FLAGS, IDLF_40, wMUT10_Coolant_Temperature_Scaled, word_2106/*117*/, word_2104/*122*/);
 
-	if (u16_FLAGS_FFFF8C96 & 0x40)
+	if (idle_FLAGS & IDLF_40)
 	{
 		if (word_FFFF87AE == 0)
 		{
 			DECLIM(word_FFFF8CE2);
 
-			word_FFFF87AE = word_2108;
+			word_FFFF87AE = word_2108/*36*/;
 		};
 	}
 	else
 	{
-		word_FFFF87AE = word_2108;
+		word_FFFF87AE = word_2108/*36*/;
 
 		word_FFFF8CE2 = Table_Lookup_byte_2D_3D(unk070_4884);
 	};
@@ -1473,12 +1473,12 @@ static bool AA05_sub_1A8CA()
 	u32 r1 = wMUT16_cur_Idle_Steps;
 
 	return SwapBytes16(r1) != r1
-			|| ufix8_MUT08_Coolant_Temperature > ufix8_COOLANT_TEMP_CONST_1932 
-			|| ufix8_MUT0A_FFFF80BC > ufix8_COOLANT_TEMP_CONST_1932 
-			|| ufix8_RAM_VAR_1936_FFFF80BE > ufix8_COOLANT_TEMP_CONST_1932
-			|| ufix8_MUT08_Coolant_Temperature < ufix8_COOLANT_TEMP_CONST_1934 
-			|| ufix8_MUT0A_FFFF80BC < ufix8_COOLANT_TEMP_CONST_1934 
-			|| ufix8_RAM_VAR_1936_FFFF80BE < ufix8_COOLANT_TEMP_CONST_1934;
+			|| trim_Idle_Control_main > ufix8_COOLANT_TEMP_CONST_1932 
+			|| trim_Idle_Control_AC_1 > ufix8_COOLANT_TEMP_CONST_1932 
+			|| trim_Idle_Control_AC_2 > ufix8_COOLANT_TEMP_CONST_1932
+			|| trim_Idle_Control_main < ufix8_COOLANT_TEMP_CONST_1934 
+			|| trim_Idle_Control_AC_1 < ufix8_COOLANT_TEMP_CONST_1934 
+			|| trim_Idle_Control_AC_2 < ufix8_COOLANT_TEMP_CONST_1934;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1488,11 +1488,11 @@ static void AA05_sub_1A99C()
 	u32 r10 = word_1936 /*0x8D00*/;
 	wMUT22_ISCV = M22_INIT_ISCV;
 
-	ufix8_RAM_VAR_1936_FFFF80BE = r10;
-	ufix8_MUT0A_FFFF80BC = r10;
-	ufix8_MUT08_Coolant_Temperature = r10;
+	trim_Idle_Control_AC_2 = r10;
+	trim_Idle_Control_AC_1 = r10;
+	trim_Idle_Control_main = r10;
 
-	AA05_MUT09_MUT0B();
+	AA05_Init_MUT09_MUT0B();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1552,14 +1552,14 @@ static void AA05_sub_1AAB4(u16 v)
 {
 	AA05_sub_19E10(v);
 
-	SET(u16_FLAGS_FFFF8C96, 1);
+	SET(idle_FLAGS, IDLF_01);
 
-	CLR(wMUT23, M23_80|M23_20|M23_10|M23_04|M23_STALL_CRANKING /*0xB5*/);
+	CLR(wMUT23, M23_80|M23_20|M23_IDLE_MODE_RPM|M23_04|M23_STALL_CRANKING /*0xB5*/);
 
 	word_FFFF8CB8 = 0;
 	word_FFFF8CDE = 0;
 
-	AA05_MUT09_MUT0B();
+	AA05_Init_MUT09_MUT0B();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1611,7 +1611,7 @@ static void AA05_MAP_Error()
 
 	AA05_sub_1AAB4(word_18EA);
 
-	mut25_IdleSteps = AA05_IDLESTEPLOOKtab_sub_19E5A(idle_Control_Value = word_1A00/*80*/);
+	mut25_IdleSteps = AA05_Idle_Control_to_Steps(idle_Control_Value = word_1A00/*80*/);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1649,7 +1649,7 @@ static void AA05_SPEED_ADJUST()
 		r13 = Query_byte_2D_3D_Table(IDLERPMNEYTACOFF_7A48);
 	};
 
-	mut25_IdleSteps = AA05_IDLESTEPLOOKtab_sub_19E5A(idle_Control_Value = r13 + baro_Idle_Control_Init + coolant_Idle_Control_Init);
+	mut25_IdleSteps = AA05_Idle_Control_to_Steps(idle_Control_Value = r13 + baro_Idle_Control_Init + coolant_Idle_Control_Init);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1662,28 +1662,28 @@ static void AA05_Idle_Update()
 		
 		if (AA05_sub_1AE26())
 		{
-			AA05_sub_1AE76(); // wMUT16_cur_Idle_Steps == wMUT25_Target_Idle_Steps && (wMUT1E_MAF_RESET_FLAG & CRANKING)
+			AA05_IdleCntrlVl_StallCranking_ISCV_Locked(); // wMUT16_cur_Idle_Steps == wMUT25_Target_Idle_Steps && (wMUT1E_MAF_RESET_FLAG & CRANKING)
 		}
 		else if (wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING))
 		{
-			AA05_sub_1B178();
+			AA05_IdleCntrlVl_StallCranking_ISCV_Moving();
 		}
-		else if (AA05_sub_1B196())
+		else if (AA05_Check_Idle_Mode_RPM())
 		{
-			SET(wMUT23, M23_10);
+			SET(wMUT23, M23_IDLE_MODE_RPM);
 
-			AA05_sub_1B260();
+			AA05_Idle_Control_Mode_RPM();
 		}
 		else
 		{
-			CLR(wMUT23, M23_10);
+			CLR(wMUT23, M23_IDLE_MODE_RPM);
 
 			word_FFFF85C0 = word_192E/*200*/;
 
-			AA05_sub_1BC6E();
+			AA05_Idle_Control_Mode0();
 		};
 
-		mut25_IdleSteps = AA05_IDLESTEPLOOKtab_sub_19E5A(idle_Control_Value);
+		mut25_IdleSteps = AA05_Idle_Control_to_Steps(idle_Control_Value);
 	};
 }
 
@@ -1693,7 +1693,7 @@ static void AA05_sub_1ADF4()
 {
 	if (wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING))
 	{
-		CLR(wMUT23, M23_80|M23_20|M23_10|M23_04 /*0xB4*/);
+		CLR(wMUT23, M23_80|M23_20|M23_IDLE_MODE_RPM|M23_04 /*0xB4*/);
 		SET(wMUT23, M23_STALL_CRANKING);
 	}
 	else
@@ -1708,30 +1708,30 @@ static bool AA05_sub_1AE26()
 {
 	if (ZRO(wMUT1E_MAF_RESET_FLAG, CRANKING|STALL))
 	{
-		SET(u16_FLAGS_FFFF8C96, 1);
+		SET(idle_FLAGS, IDLF_01);
 	}
 	else if (wMUT16_cur_Idle_Steps == wMUT25_Target_Idle_Steps)
 	{
-		CLR(u16_FLAGS_FFFF8C96, 1);
+		CLR(idle_FLAGS, IDLF_01);
 	};
 
-	return ZRO(u16_FLAGS_FFFF8C96, 1) && (wMUT1E_MAF_RESET_FLAG & CRANKING);
+	return ZRO(idle_FLAGS, IDLF_01) && (wMUT1E_MAF_RESET_FLAG & CRANKING);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void AA05_sub_1AE76()
+static void AA05_IdleCntrlVl_StallCranking_ISCV_Locked()
 {
-	AA05_sub_1AE90();
+	AA05_Cranking_Idle_Control_StartUp();
 	AA05_Calc_Min_Idle_Control_Value();
 	AA05_Idle_Control_Feedback_RPM();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void AA05_sub_1AE90()
+static void AA05_Cranking_Idle_Control_StartUp()
 {
-	word_FFFF8CA4 = Table_Lookup_byte_2D_3D((SPEED_FLAGS & SPD_2_ALWAYS_0) ? ICSVSTARTUPADD2_3B30 : ICSVSTARTUPADD1_4924) + baro_Idle_Control_Init + coolant_Idle_Control_Init;
+	base_Idle_Control = Table_Lookup_byte_2D_3D((SPEED_FLAGS & SPD_2_ALWAYS_0) ? ICSVSTARTUPADD2_3B30 : ICSVSTARTUPADD1_4924) + baro_Idle_Control_Init + coolant_Idle_Control_Init;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1744,7 +1744,7 @@ static void AA05_Calc_Min_Idle_Control_Value()
 	{
 		u32 r0 = Add_Lim_FFFF(0x80, Table_Lookup_word_2D_3D(unk0064_486C));
 
-		min_Idle_Control_Value = Sub_Lim_0(u16_Coolant_Temperature + word_FFFF8CA4, r0);
+		min_Idle_Control_Value = Sub_Lim_0(u16_Coolant_Temperature + base_Idle_Control, r0);
 	}
 	else
 	{
@@ -1812,7 +1812,7 @@ static u16 AA05_Lim_Idle_Control_Value(u16 v)
 {
 	if (wMUT23 & M23_STALL_CRANKING)
 	{
-		v = Lim16(v, Sub_Lim_0(word_1904/*125*/ + word_FFFF8CA4, 0x80), Sub_Lim_0(word_1926/*200*/ + word_FFFF8CA4, 0x80));
+		v = Lim16(v, Sub_Lim_0(word_1904/*125*/ + base_Idle_Control, 0x80), Sub_Lim_0(word_1926/*200*/ + base_Idle_Control, 0x80));
 	}
 	else if (min_Idle_Control_Value >= v)
 	{
@@ -1824,17 +1824,17 @@ static u16 AA05_Lim_Idle_Control_Value(u16 v)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void AA05_sub_1B178()
+static void AA05_IdleCntrlVl_StallCranking_ISCV_Moving()
 {
-	AA05_sub_1AE90();
+	AA05_Cranking_Idle_Control_StartUp();
 	AA05_Calc_Min_Idle_Control_Value();
 
-	idle_Control_Value = word_FFFF8CA4;
+	idle_Control_Value = base_Idle_Control;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static bool AA05_sub_1B196()
+static bool AA05_Check_Idle_Mode_RPM()
 {
 	return (ZRO(NVRAM_FFFF802C, 0x400) || MUT20_RPM_Idle_x125div16 < wMUT24_Target_Idle_RPM || wMUT10_Coolant_Temperature_Scaled < word_2CAA/*120*/)
 		&& (RT_FLAG1_FFFF8888 & RT_7_bit)
@@ -1848,18 +1848,18 @@ static bool AA05_sub_1B196()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void AA05_sub_1B260()
+static void AA05_Idle_Control_Mode_RPM()
 {
-	AA05_sub_1B282();                                       
+	AA05_Calc_Base_Idle_Control();                                       
 	AA05_Calc_Min_Idle_Control_Value();                                       
 	AA05_Idle_Control_Feedback_RPM();                                        
-	AA05_sub_1B8F2();                                        
-	AA05_sub_1BAFE();                                        
+	AA05_MUT09_MUT0B();                                        
+	AA05_Update_Trims_Idle_Control();                                        
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void AA05_sub_1B282()
+static void AA05_Calc_Base_Idle_Control()
 {
 	u32 r1 = AA05_sub_1B470() + word_FFFF8CCC;
 
@@ -1870,7 +1870,7 @@ static void AA05_sub_1B282()
 		r1 = r13;
 	};
 
-	CLR(u16_FLAGS_FFFF8C96, 2);
+	CLR(idle_FLAGS, IDLF_02);
 
 	r1 += word_FFFF8CE2;
 
@@ -1937,7 +1937,7 @@ static void AA05_sub_1B282()
 	r1 = AA05_sub_1B876() + r8;
 	r2 = AA05_sub_1B876() + r9;
 
-	if (ZRO(wMUT23, M23_10))
+	if (ZRO(wMUT23, M23_IDLE_MODE_RPM))
 	{
 		r1 += word_FFFF8CD0;
 		r2 += word_FFFF8CD0;
@@ -1967,7 +1967,7 @@ static void AA05_sub_1B282()
 	r1 += word_FFFF8CD8;
 	r2 += word_FFFF8CD8;
 
-	word_FFFF8CA4 = r1;
+	base_Idle_Control = r1;
 	word_FFFF8CE6 = r2;
 }
 
@@ -2043,13 +2043,13 @@ static u16 AA05_sub_1B4C2()
 
 static bool AA05_sub_1B588()
 {
-	TRG(u16_FLAGS_FFFF8C96, 0x10, wMUT2E_Vehicle_Speed_Frequency, word_199C, word_199A);
+	TRG(idle_FLAGS, IDLF_10, wMUT2E_Vehicle_Speed_Frequency, word_199C, word_199A);
 
-	TRG(u16_FLAGS_FFFF8C96, 8, MUT21_RPM_x125div4, word_19A0, word_199E);
+	TRG(idle_FLAGS, IDLF_08, MUT21_RPM_x125div4, word_19A0, word_199E);
 
-	TRG(u16_FLAGS_FFFF8C96, 4, wMUT10_Coolant_Temperature_Scaled, word_19A2, word_19A4);
+	TRG(idle_FLAGS, IDLF_04, wMUT10_Coolant_Temperature_Scaled, word_19A2, word_19A4);
 
-	return ((u16_FLAGS_FFFF8C96 & 0x1C) == 0x1C && (RT_FLAG1_FFFF8888 & (RPM_7_CLOSED_LOOP_GENERIC|RPM_5_REVLIM)) == RPM_7_CLOSED_LOOP_GENERIC);
+	return (AND(idle_FLAGS, IDLF_10|IDLF_08|IDLF_04 /*0x1C*/) && (RT_FLAG1_FFFF8888 & (RPM_7_CLOSED_LOOP_GENERIC|RPM_5_REVLIM)) == RPM_7_CLOSED_LOOP_GENERIC);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -2072,7 +2072,7 @@ static u16 AA05_sub_1B67E()
 {
 	if (word_FFFF86C2 != 0)
 	{
-		u32 r1 = (u16_FLAGS_FFFF8C96 & 0x20) ? word_1A28 : word_1A2A;
+		u32 r1 = (idle_FLAGS & IDLF_20) ? word_1A28 : word_1A2A;
 
 		r1 = Mul_Div_R(word_FFFF86C2, r1, word_1A24*80);
 
@@ -2199,16 +2199,16 @@ static u16 AA05_sub_1B8CA()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void AA05_sub_1B8F2()
+static void AA05_MUT09_MUT0B()
 {
 	if (AA05_sub_1B934())
 	{
-		AA05_sub_1BA2C();
+		AA05_Update_MUT09_MUT0B();
 	};
 
 	if (MUT20_RPM_Idle_x125div16 >= word_1922/*128(1000)*/ && wMUT2E_Vehicle_Speed_Frequency > word_1924/*10(2.5)*/)
 	{
-		AA05_MUT09_MUT0B();
+		AA05_Init_MUT09_MUT0B();
 	};
 }
 
@@ -2218,7 +2218,7 @@ static bool AA05_sub_1B934()
 {
 	CLR(word_FFFF987E, 0x80);
 
-	return (wMUT23 & M23_10)
+	return (wMUT23 & M23_IDLE_MODE_RPM)
 		&& ZRO(wMUT23, M23_STALL_CRANKING)
 		&& word_FFFF8CC8 == 0
 		&& ZRO(RT_FLAG1_FFFF8888, POWER_STEERING) 
@@ -2229,11 +2229,11 @@ static bool AA05_sub_1B934()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void AA05_sub_1BA2C()
+static void AA05_Update_MUT09_MUT0B()
 {
-	u32 r13 = Sub_Lim_0(idle_Control_Value + 0x100, word_FFFF8CA4);
+	u32 r13 = Sub_Lim_0(idle_Control_Value + 0x100, base_Idle_Control);// base_Idle_Control + SHLR8(r2) - 0x80 + 0x100 - base_Idle_Control - SHLR8(r2)
 	
-	r13 = Sub_Lim_0(r13, SHLR8(AA05_sub_1BAC6()));
+	r13 = Sub_Lim_0(r13, SHLR8(AA05_Get_Trims_Idle_Control()));// Sub_Lim_0(base_Idle_Control + SHLR8(r2), 0x80);
 	
 	r13 = Lim_FF(r13);
 
@@ -2254,29 +2254,29 @@ static void AA05_sub_1BA2C()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static u16 AA05_sub_1BAC6()
+static u16 AA05_Get_Trims_Idle_Control()
 {
 	if (ZRO(RT_FLAG1_FFFF8888, AC_SWITCH))
 	{
-		return ufix8_MUT08_Coolant_Temperature;
+		return trim_Idle_Control_main;
 	}
-	else if (byte_102E != 1 || ZRO(RT_FLAG1_FFFF8888, RT_0_bit))
+	else if (byte_102E/*2*/ != 1 || ZRO(RT_FLAG1_FFFF8888, RT_0_bit))
 	{
-		return ufix8_MUT0A_FFFF80BC;
+		return trim_Idle_Control_AC_1;
 	}
 	else
 	{
-		return ufix8_RAM_VAR_1936_FFFF80BE;
+		return trim_Idle_Control_AC_2;
 	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void AA05_sub_1BAFE()
+static void AA05_Update_Trims_Idle_Control()
 {
 	if (AA05_sub_1BB1A())
 	{
-		AA05_sub_1BB96();
+		AA05_Calc_Trims_Idle_Control();
 	};
 }
 
@@ -2300,13 +2300,13 @@ static bool AA05_sub_1BB1A()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void AA05_sub_1BB96()
+static void AA05_Calc_Trims_Idle_Control()
 {
-	u32 r2 = AA05_sub_1BAC6();
+	u32 r2 = AA05_Get_Trims_Idle_Control();
 
 	word_FFFF85C0 = word_192C;
 
-	u32 r13 = Sub_Lim_0(word_FFFF8CA4 + SHLR8(r2), 0x80);
+	u32 r13 = Sub_Lim_0(base_Idle_Control + SHLR8(r2), 0x80);
 
 	if (idle_Control_Value >= r13)
 	{
@@ -2321,31 +2321,31 @@ static void AA05_sub_1BB96()
 		r13 = Sub_Lim_0(r2, Mul_Lim_FFFF(r13, 5));
 	};
 
-	r13 = Lim16(r13, ufix8_COOLANT_TEMP_CONST_1934, ufix8_COOLANT_TEMP_CONST_1932);
+	r13 = Lim16(r13, ufix8_COOLANT_TEMP_CONST_1934/*6A00*/, ufix8_COOLANT_TEMP_CONST_1932/*FFFF*/);
 
 	if (ZRO(RT_FLAG1_FFFF8888, AC_SWITCH))
 	{
-		ufix8_MUT08_Coolant_Temperature = r13;
+		trim_Idle_Control_main = r13;
 	}
-	else if (byte_102E != 1 || ZRO(RT_FLAG1_FFFF8888, RT_0_bit))
+	else if (byte_102E/*2*/ != 1 || ZRO(RT_FLAG1_FFFF8888, RT_0_bit))
 	{
-		ufix8_MUT0A_FFFF80BC = r13;
+		trim_Idle_Control_AC_1 = r13;
 	}
 	else
 	{
-		ufix8_RAM_VAR_1936_FFFF80BE = r13;
+		trim_Idle_Control_AC_2 = r13;
 	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void AA05_sub_1BC6E()
+static void AA05_Idle_Control_Mode0()
 {
-	AA05_sub_1B282();
+	AA05_Calc_Base_Idle_Control();
 	AA05_Calc_Min_Idle_Control_Value();
-	AA05_sub_1B8F2();
+	AA05_MUT09_MUT0B();
 
-	idle_Control_Value = Sub_Lim_0(word_FFFF8CA4 + SHLR8(AA05_sub_1BAC6()) + AA05_sub_1BD34(), 0x100);
+	idle_Control_Value = Sub_Lim_0(base_Idle_Control + SHLR8(AA05_Get_Trims_Idle_Control()) + AA05_sub_1BD34(), 0x100);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -2393,12 +2393,12 @@ static void AA05_sub_1BDC6()
 {
 	if (u16_Coolant_Temperature > SHLR8(ufix8_COOLANT_TEMP_CONST_1932))
 	{
-		u16_Coolant_Temperature = SHLR8(ufix8_MUT08_Coolant_Temperature);
+		u16_Coolant_Temperature = SHLR8(trim_Idle_Control_main);
 	};
 
 
 	if ((RT_FLAG1_FFFF8888 & (AC_SWITCH|POWER_STEERING)) 
-		|| ZRO(wMUT23, M23_10)
+		|| ZRO(wMUT23, M23_IDLE_MODE_RPM)
 		|| (wMUT23 & M23_STALL_CRANKING)
 		|| mut25_IdleSteps == 0
 		|| min_Idle_Control_Value < idle_Control_Value
