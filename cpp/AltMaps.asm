@@ -1,7 +1,7 @@
 
 	.INCLUDE "cpp\def.inc"
 
-;DEF_ENRICH_COOL_AIR_MAPS:	.DEFINE		"1"
+DEF_ENRICH_COOL_AIR_MAPS:	.DEFINE		"1"
 TEST_INTERPOLATE:			.DEFINE		"1"
 ;DEF_NO_KNOCK_RETARD:		.DEFINE		"1"
 
@@ -108,9 +108,9 @@ _frameCount:		.RES.L      1					;	.EQU H'FFFF8462
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-;	.SECTION P_F506, CODE, LOCATE=H'F506
+	.SECTION P_F506, CODE, LOCATE=H'F506
 
-;			nop   	                                                        
+			nop   	                                                        
 
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -386,22 +386,13 @@ enrichCoolantMapDataRAM .EQU enrichCoolantMapData + RAM - ROM
 
 			.align 4
 
-			.DATA.W		H'FFFF
-
 kAirMap:
-			.DATA.W 	H'300                                                   
-			.DATA.L 	_axis_fu_RPM
+			.DATA.W 	2
+			.DATA.W 	0                                                  
 			.DATA.L 	axisIndex_7_InAirTemp
-			.DATA.B 	14
 kAirMapData:
-			.DATA.B 	157, 157, 157, 157, 157, 157, 157, 157, 157, 157, 157, 157, 157, 157
-			.DATA.B 	142, 142, 142, 142, 142, 142, 142, 142, 142, 142, 142, 142, 142, 142
-			.DATA.B 	134, 134, 134, 134, 134, 134, 134, 134, 134, 134, 134, 134, 134, 134
-			.DATA.B 	128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128, 128
-			.DATA.B 	122, 122, 122, 122, 122, 122, 122, 122, 122, 122, 122, 122, 122, 122
-			.DATA.B 	115, 115, 115, 115, 115, 115, 115, 115, 115, 115, 115, 115, 115, 115
-			.DATA.B 	106, 106, 106, 106, 106, 106, 106, 106, 106, 106, 106, 106, 106, 106
-			
+			.DATA.W 	H'8F00, H'8800, H'8400, H'8000, H'7D00, H'7A00, H'7600
+						
 kAirMapRAM		.EQU kAirMap + RAM - ROM
 kAirMapDataRAM	.EQU kAirMapData + RAM - ROM
 

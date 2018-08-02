@@ -362,12 +362,12 @@ static void FeedBack_O2F()
 
 				if (al >= 10) 
 				{
-					kr1 == 0;
-					kl1d == 0;
+					kr1 = 0;
+					kl1d = 0;
 				}
 				else if (ar >= 18)
 				{
-					kr1 == 0;
+					kr1 = 0;
 				};
 
 				if (kl0d != 0)
