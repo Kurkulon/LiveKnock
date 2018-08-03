@@ -51,9 +51,9 @@ extern "C" void Test_Interpolate()
 
 extern "C" void LiveKnock()
 {
-	__disable_irq();
+//	__disable_irq();
 
-	F500_Init_Load_ECU_Info_And_BitMap_Flags();
+//	F500_Init_Load_ECU_Info_And_BitMap_Flags();
 
 	if (__DEADloc != 0xDEAD)
 	{
@@ -69,27 +69,27 @@ extern "C" void LiveKnock()
 		no_knock_retard = 0;
 	};
 
-	if (openLoop)
-	{
-		CLR(wMUTD1_BitMap_FAA, FAA_4_CLOSED_LOOP); // Closed loop
-	}
-	else
-	{
-		SET(wMUTD1_BitMap_FAA, FAA_4_CLOSED_LOOP);  // Closed loop
+	//if (openLoop)
+	//{
+	//	CLR(wMUTD1_BitMap_FAA, FAA_4_CLOSED_LOOP); // Closed loop
+	//}
+	//else
+	//{
+	//	SET(wMUTD1_BitMap_FAA, FAA_4_CLOSED_LOOP);  // Closed loop
 
-		wMUT0C_Fuel_Trim_Low = 0x80;   
-		wMUT0D_Fuel_Trim_Middle = 0x80;
-		wMUT0E_Fuel_Trim_High = 0x80;
-	};
+	//	wMUT0C_Fuel_Trim_Low = 0x80;   
+	//	wMUT0D_Fuel_Trim_Middle = 0x80;
+	//	wMUT0E_Fuel_Trim_High = 0x80;
+	//};
 
-	if (no_knock_retard != 0)
-	{
-		CLR(wMUTD1_BitMap_FAA, FAA_7_HIGH_IGN); 
-	};
+	//if (no_knock_retard != 0)
+	//{
+	//	CLR(wMUTD1_BitMap_FAA, FAA_7_HIGH_IGN); 
+	//};
 
-	CLR(bMUTD3_BitMap4_FCA_Store_FFFF89D8, 0x808); // Disable Front/Rear O2 heater check: clear bit 11 address 0xFCA 
+	//CLR(bMUTD3_BitMap4_FCA_Store_FFFF89D8, 0x808); // Disable Front/Rear O2 heater check: clear bit 11 address 0xFCA 
 
-	__enable_irq();
+//	__enable_irq();
 
 	
 	frameCount += 1;

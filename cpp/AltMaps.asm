@@ -1,7 +1,7 @@
 
 	.INCLUDE "cpp\def.inc"
 
-DEF_ENRICH_COOL_AIR_MAPS:	.DEFINE		"1"
+;DEF_ENRICH_COOL_AIR_MAPS:	.DEFINE		"1"
 TEST_INTERPOLATE:			.DEFINE		"1"
 ;DEF_NO_KNOCK_RETARD:		.DEFINE		"1"
 
@@ -108,9 +108,9 @@ _frameCount:		.RES.L      1					;	.EQU H'FFFF8462
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	.SECTION P_F506, CODE, LOCATE=H'F506
+;	.SECTION P_F506, CODE, LOCATE=H'F506
 
-			nop   	                                                        
+;			nop   	                                                        
 
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -142,6 +142,16 @@ _frameCount:		.RES.L      1					;	.EQU H'FFFF8462
 	.SECTION C_19454, CODE, LOCATE=H'19454
 	
 		.DATA.L		_Hook_ForcedIdleRPM                                    
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+;	.IMPORT	_Hook_Update_IAT_Sensor
+
+;	.SECTION C_100DC, CODE, LOCATE=H'100DC
+	
+;			mov.l	#_Hook_Update_IAT_Sensor, r0                           
+;			jmp   	@r0                                                             
+;			nop   	                                                        
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -389,7 +399,9 @@ enrichCoolantMapDataRAM .EQU enrichCoolantMapData + RAM - ROM
 kAirMap:
 			.DATA.W 	2
 			.DATA.W 	0                                                  
+			.DATA.L 	_axis_fu_RPM
 			.DATA.L 	axisIndex_7_InAirTemp
+			.DATA.W 	14
 kAirMapData:
 			.DATA.W 	H'8F00, H'8800, H'8400, H'8000, H'7D00, H'7A00, H'7600
 						

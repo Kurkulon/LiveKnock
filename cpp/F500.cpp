@@ -1,4 +1,4 @@
-//#pragma section _F500
+#pragma section _F500
 
 #include <umachine.h>
 
@@ -13,25 +13,24 @@
 
 #undef F500_Init_Load_ECU_Info_And_BitMap_Flags
 
-//#define sub_A374			((void(*)(void))0xA374)
 #define F500_Get_All_ADC		((void(*)(void))0xA7F0)
 #define F500_sub_21C80			((bool(*)(void))0x21C80)
 #define F500_InitManifoldVars	((void(*)(void))0x23244)
-//#define sub_A374				((void(*)(void))0xA374)
 
-#pragma noregsave(sub_A374)
-static void sub_A374();
 
 #define ENGINE_MAIN_VARIABLES_DIM_off_9198		((EnVars*)0x9198)
 
 void F500_root_sub();
 
+static void F500_Init_BitMap_Flags_New();
 static void F500_Init_Load_ECU_Info_And_BitMap_Flags();
 static void F500_sub_F6E6();
 static void F500_sub_F7E4();
 static void F500_sub_F834();
+
+#ifdef F500_TEST
+
 static u16	F500_sub_FBB4(u32 v);
-//static void F500_sub_FBB4();
 static void F500_sub_FD34();
 static void F500_sub_FDB6();
 static void F500_sub_FDF4();
@@ -64,6 +63,53 @@ static void F500_sub_10F08();
 static void F500_Countdown_Timers_sub_10F5C();
 static void F500_Battery_Calcs_sub_1101A();
 
+#pragma noregsave(sub_A374)
+static void sub_A374();
+
+#define F500_Init_Load_ECU_Info_And_BitMap_Flags	((void(*)(void))0xF58C)
+#define F500_sub_F6E6								((void(*)(void))0xF6E6)
+#define F500_sub_F7E4								((void(*)(void))0xF7E4)
+#define F500_sub_F834								((void(*)(void))0xF834)
+
+#else // F500_TEST
+
+#define	F500_sub_FBB4								((void(*)(u32)) 0xFBB4)
+#define F500_sub_FD34								((void(*)(void))0xFD34)
+#define F500_sub_FDB6								((void(*)(void))0xFDB6)
+#define F500_sub_FDF4								((void(*)(void))0xFDF4)
+#define F500_Coolant_Temp_Threshold_Tests			((void(*)(void))0xFE44)
+#define F500_Coolant_Calc1_sub_FF2C					((void(*)(void))0xFF2C)
+#define F500_Coolant_Calibration_Calc				((void(*)(void))0xFFF8)
+#define F500_Update_IAT_Sensor						((void(*)(void))0x100DC)
+#define F500_Update_Air_Temp_Scaled					((void(*)(void))0x1014A)
+#define F500_sub_10188								((void(*)(void))0x10188)
+#define F500_sub_10220								((void(*)(void))0x10220)
+#define F500_O22_Manipulations_sub_1023C			((void(*)(EnVars*))0x1023C)
+#define F500_TPS_Load_RPM_Calcs						((void(*)(void))0xFFF8)
+#define F500_TPS_sub_103DA							((void(*)(void))0x103DA)
+#define F500_sub_1044C								((void(*)(void))0x1044C)
+#define F500_CheckIdleRPM							((void(*)(void))0x10530)
+#define F500_MAP_Coolant_Calcs						((void(*)(void))0x105BE)
+#define F500_sub_10820								((void(*)(void))0x10820)
+#define F500_sub_10878								((void(*)(void))0x10878)
+#define F500_sub_108AA								((void(*)(void))0x108AA)
+#define F500_sub_108FE								((void(*)(void))0x108FE)
+#define F500_sub_10984								((void(*)(void))0x10984)
+#define F500_sub_10A80								((void(*)(void))0x10A80)
+#define F500_sub_10AA6								((void(*)(void))0x10AA6)
+#define F500_Check_MAP_Fault						((void(*)(void))0x10AFE)
+#define F500_Load_sub_10B72							((void(*)(void))0x10B72)
+#define F500_sub_10C6E								((void(*)(void))0x10C6E)
+#define F500_sub_10E10								((void(*)(void))0x10E10)
+#define F500_MAP_Hz_Calc_sub_10E54					((void(*)(void))0x10E54)
+#define F500_sub_10F08								((void(*)(void))0x10F08)
+#define F500_Countdown_Timers_sub_10F5C				((void(*)(void))0x10F5C)
+#define F500_Battery_Calcs_sub_1101A				((void(*)(void))0x1101A)
+
+#define sub_A374									((void(*)(void))0xA374)
+
+
+#endif // F500_TEST
 
 #define CEL8_685C							((Axis*)0x685C)
 #define CEL9_6876							((Axis*)0x6876)
@@ -79,12 +125,6 @@ static void F500_Battery_Calcs_sub_1101A();
 #define CEL7_692E							((Axis*)0x692E)
 #define map_Coolant_Temp_Scaling			((Axis*)0x99A8)
 #define RPM17_7098							((Axis*)0x7098)
-
-
-
-
-
-
 
 
 #define AFRRPM_4C1A							((Map3D_B *)0x4C1A)
@@ -105,7 +145,7 @@ static void F500_Battery_Calcs_sub_1101A();
 
 void F500_root_sub()
 {
-	F500_Init_Load_ECU_Info_And_BitMap_Flags();
+	F500_Init_BitMap_Flags_New(); //F500_Init_Load_ECU_Info_And_BitMap_Flags();
 
 	F500_sub_F6E6();
 
@@ -130,7 +170,46 @@ void F500_root_sub()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-void F500_Init_Load_ECU_Info_And_BitMap_Flags()
+void F500_Init_BitMap_Flags_New()
+{
+	maskedMapIndex = wMUT3B_Masked_Map_Index = 0; // Zero_MUT3B();
+
+	wMUT34_Map_Index = 0;
+
+	if (__DEADloc != 0xDEAD || (wMUT1E_MAF_RESET_FLAG & STALL))
+	{
+		wMUTD0_BitMap1 = BitMap1_byte_F9A[0];
+
+		wMUTD1_BitMap_FAA = BitMap2_byte_FAA[0];
+
+		bMUTD2_FBA_MAF_MAP_FLAG = BitMap3_byte_FBA[0];
+
+		bMUTD3_BitMap4_FCA_Store_FFFF89D8 = BitMap4_byte_FCA[0];
+		bMUTD4_BitMap5_FDA_Store_FFFF89DA = BitMap5_byte_FDA[0];
+		FEA_perephery = BitMap6_unk_FEA[0];
+	};
+
+	if (openLoop)
+	{
+		CLR(wMUTD1_BitMap_FAA, FAA_4_CLOSED_LOOP); // Closed loop
+	}
+	else
+	{
+		SET(wMUTD1_BitMap_FAA, FAA_4_CLOSED_LOOP);  // Closed loop
+
+		wMUT0C_Fuel_Trim_Low = 0x80;   
+		wMUT0D_Fuel_Trim_Middle = 0x80;
+		wMUT0E_Fuel_Trim_High = 0x80;
+	};
+
+	WFLAG(wMUTD1_BitMap_FAA, FAA_7_HIGH_IGN, no_knock_retard == 0); 
+
+	CLR(bMUTD3_BitMap4_FCA_Store_FFFF89D8, 0x808); // Disable Front/Rear O2 heater check: clear bit 11 address 0xFCA 
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void F500_Init_Load_ECU_Info_And_BitMap_Flags()
 {
 	wMUT3B_Masked_Map_Index = 0; // Zero_MUT3B();
 
@@ -406,6 +485,8 @@ void F500_sub_F834()
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#ifdef F500_TEST
 
 u16 F500_sub_FBB4(u32 v)
 {
@@ -1380,3 +1461,6 @@ static void sub_A374()
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#endif // F500_TEST
+

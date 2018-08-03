@@ -468,7 +468,7 @@ struct Map3D_W
 #define Tephra ((void(*)(void))0x3ec00)
 #define sub_A98A ((void(*)(void))0xA98A)
 
-#define Table_Lookup_byte_2D_3D ((u16(*)(Map3D_B*))0xC28)
+#define Table_Lookup_byte_2D_3D ((u32(*)(Map3D_B*))0xC28)
 #define Table_Lookup_word_2D_3D ((u32(*)(Map3D_W*))0xE02)
 
 #define Table_Lookup_Axis								((void(*)(Axis*))0xCC6)
@@ -628,7 +628,7 @@ extern u16	rpmTimeRAM[];
 extern const u16 hiIgnMapData[];
 
 extern Map3D_B enrichCoolantMapRAM;
-extern Map3D_B kAirMapRAM;
+extern Map3D_W kAirMapRAM;
 
 extern "C" u16 Interpolate_my(u16,u16,u16);
 extern "C" u16 interpolate_r4_r5_r6_my(u16,u16,u16);

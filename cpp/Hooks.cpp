@@ -8,10 +8,12 @@
 #include "misc.h"
 
 #define CEL7_692E							((Axis*)0x692E)
+#define mapInletAirTemp_Scaling				((Axis*)0x9B82)
 
 #define CORFUELAIR_33A6						((Map3D_B *)0x33A6)
+#define byte_9B00							((Map3D_B *)0x9B00)
 
-#define F500_Update_Air_Temp_Scaled	((void(*)(void))0x1014A)
+//#define F500_Update_Air_Temp_Scaled	((void(*)(void))0x1014A)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -57,14 +59,6 @@ extern "C" void FU03_HI_LO_Octan()
 	Table_Lookup_Axis(LOAD9_676C);
 
 	AFR_OctanInt = (fixAFR) ? AFR(14.7) : interpolate_r4_r5_r6(Table_Lookup_byte_2D_3D(HIGHOKTF_7A88[hiFuelMapIndex&7]), Query_byte_2D_3D_Table(LowOctFMp_7AA8), (no_knock_retard != 0) ? 255 : wMUT27_Octane_Number);
-
-																//	8,  33,  49,  63,  78,  96, 125				
-	k_InAirTemp = Table_Lookup_byte_2D_3D(&kAirMapRAM) >> 8;	// 143, 136, 132, 128, 125, 122, 118
-																//			, 1.252, 1.192, 
-
-	//EVO
-	//   8,  33,  49,  63,  78,  96, 125, 155
-	// 158, 143, 135, 129, 122, 115, 106, 106
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -89,5 +83,37 @@ extern "C" u16 Hook_ForcedIdleRPM(u16 v)
 	return (forcedIdleRPM != 0) ? forcedIdleRPM : v;
 }
 
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma noregsave(Hook_Update_IAT_Sensor)
+
+extern "C" void Hook_Update_IAT_Sensor()
+{
+	WFLAG(wMUT71_Sensor_Error, MUT71_1_IAT, wMUT3A_AirTemp_ADC8bit < word_1C0E/*10*/ || wMUT3A_AirTemp_ADC8bit > word_1C0C/*234*/);
+
+	//F500_Update_Air_Temp_Scaled();
+	
+	Table_Lookup_Axis(mapInletAirTemp_Scaling);
+
+	inletAirTempScaledInternal = Table_Lookup_byte_2D_3D(byte_9B00);
+
+	wMUT11_Intake_Air_Temperature_Scaled = (wMUT71_Sensor_Error & MUT71_1_IAT) ? IAT_sensor_err_val/*84*/ : inletAirTempScaledInternal;
+
+
+	Table_Lookup_Axis(CEL7_692E);
+														//		 8,  33,  49,  63,  78,  96, 125				
+	k_InAirTemp = Table_Lookup_byte_2D_3D(CORFUELAIR_33A6);	// 143, 136, 132, 128, 125, 122, 118
+															//			, 1.252, 1.192, 
+
+	//EVO
+	//   8,  33,  49,  63,  78,  96, 125, 155
+	// 158, 143, 135, 129, 122, 115, 106, 106
+
+	if (timer_down_TXFLAG3_FFFF8574 == 0 && (SPEED_FLAGS & 0x400))
+	{
+		NVRAM_Intake_Air_Temperature_Scaled = wMUT11_Intake_Air_Temperature_Scaled;
+	};
+}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

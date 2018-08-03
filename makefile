@@ -79,7 +79,7 @@ link_options = -NOLOGO -FOrm=Binary -LISt -SHow=SY -LIBrary=$(libname)
   
 ##################################################################################################
 
-$(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs $(objdir)\stock.abs $(objdir)\F500.abs
+$(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs $(objdir)\stock.abs
 	@echo Patch ROM...
 	@copy /Y bin\orig_93270019.hex $^@
 	@bin\elfpatch $^@ $[@
@@ -87,9 +87,9 @@ $(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs $(objdir)\stock.abs $(objdir)\F
 
 ##################################################################################################
 
-$(objdir)\LiveKnock.abs : LiveMap.o AltMaps.o Hooks.o LiveKnock.o	# Ignition.o crank.o ,P_Ignition/39000,P_crank/3C000
+$(objdir)\LiveKnock.abs : LiveMap.o AltMaps.o Hooks.o LiveKnock.o F500.o	# Ignition.o crank.o ,P_Ignition/39000,P_crank/3C000
 	@echo Linking $^@ ...
-	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P_Hooks/2CC0,P/39000,B/FFFF8480 -LIBrary=$(libname) -OUtput="$^@" $<
+	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P_Hooks/2CC0,P_F500/F500,P/39000,B/FFFF8480 -LIBrary=$(libname) -OUtput="$^@" $<
 	@echo $(delimiter)	
 
 ##################################################################################################
@@ -118,7 +118,7 @@ $(objdir)\stock.abs : Ignition.o crank.o idle.o  FU03.o ML02.o BC06.o huge.o  # 
 
 # -map="$(objdir)\$^&.bls"
 
-$(objdir)\F500.abs : ext_ram_vars.o F500.o
+$(objdir)\F500.abs : F500.o # ext_ram_vars.o
 	@echo Linking $^@ ...
 	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P/F500,B_EXT_RAM_VARS/FFFF8000 -LIBrary=$(libname) -OUtput="$^@" $< 
 	@echo $(delimiter)	
