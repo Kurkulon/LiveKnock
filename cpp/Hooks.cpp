@@ -86,34 +86,34 @@ extern "C" u16 Hook_ForcedIdleRPM(u16 v)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#pragma noregsave(Hook_Update_IAT_Sensor)
-
-extern "C" void Hook_Update_IAT_Sensor()
-{
-	WFLAG(wMUT71_Sensor_Error, MUT71_1_IAT, wMUT3A_AirTemp_ADC8bit < word_1C0E/*10*/ || wMUT3A_AirTemp_ADC8bit > word_1C0C/*234*/);
-
-	//F500_Update_Air_Temp_Scaled();
-	
-	Table_Lookup_Axis(mapInletAirTemp_Scaling);
-
-	inletAirTempScaledInternal = Table_Lookup_byte_2D_3D(byte_9B00);
-
-	wMUT11_Intake_Air_Temperature_Scaled = (wMUT71_Sensor_Error & MUT71_1_IAT) ? IAT_sensor_err_val/*84*/ : inletAirTempScaledInternal;
-
-
-	Table_Lookup_Axis(CEL7_692E);
-														//		 8,  33,  49,  63,  78,  96, 125				
-	k_InAirTemp = Table_Lookup_byte_2D_3D(CORFUELAIR_33A6);	// 143, 136, 132, 128, 125, 122, 118
-															//			, 1.252, 1.192, 
-
-	//EVO
-	//   8,  33,  49,  63,  78,  96, 125, 155
-	// 158, 143, 135, 129, 122, 115, 106, 106
-
-	if (timer_down_TXFLAG3_FFFF8574 == 0 && (SPEED_FLAGS & 0x400))
-	{
-		NVRAM_Intake_Air_Temperature_Scaled = wMUT11_Intake_Air_Temperature_Scaled;
-	};
-}
+//#pragma noregsave(Hook_Update_IAT_Sensor)
+//
+//extern "C" void Hook_Update_IAT_Sensor()
+//{
+//	WFLAG(wMUT71_Sensor_Error, MUT71_1_IAT, wMUT3A_AirTemp_ADC8bit < word_1C0E/*10*/ || wMUT3A_AirTemp_ADC8bit > word_1C0C/*234*/);
+//
+//	//F500_Update_Air_Temp_Scaled();
+//	
+//	Table_Lookup_Axis(mapInletAirTemp_Scaling);
+//
+//	inletAirTempScaledInternal = Table_Lookup_byte_2D_3D(byte_9B00);
+//
+//	wMUT11_Intake_Air_Temperature_Scaled = (wMUT71_Sensor_Error & MUT71_1_IAT) ? IAT_sensor_err_val/*84*/ : inletAirTempScaledInternal;
+//
+//
+//	Table_Lookup_Axis(CEL7_692E);
+//														//		 8,  33,  49,  63,  78,  96, 125				
+//	k_InAirTemp = Table_Lookup_byte_2D_3D(CORFUELAIR_33A6);	// 143, 136, 132, 128, 125, 122, 118
+//															//			, 1.252, 1.192, 
+//
+//	//EVO
+//	//   8,  33,  49,  63,  78,  96, 125, 155
+//	// 158, 143, 135, 129, 122, 115, 106, 106
+//
+//	if (timer_down_TXFLAG3_FFFF8574 == 0 && (SPEED_FLAGS & 0x400))
+//	{
+//		NVRAM_Intake_Air_Temperature_Scaled = wMUT11_Intake_Air_Temperature_Scaled;
+//	};
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
