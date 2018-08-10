@@ -51,9 +51,9 @@ extern "C" void Test_Interpolate()
 
 extern "C" void LiveKnock()
 {
-//	__disable_irq();
+	__disable_irq();
 
-//	F500_Init_Load_ECU_Info_And_BitMap_Flags();
+	F500_Init_Load_ECU_Info_And_BitMap_Flags();
 
 	if (__DEADloc != 0xDEAD)
 	{
@@ -69,65 +69,64 @@ extern "C" void LiveKnock()
 		no_knock_retard = 0;
 	};
 
-	//if (openLoop)
-	//{
-	//	CLR(wMUTD1_BitMap_FAA, FAA_4_CLOSED_LOOP); // Closed loop
-	//}
-	//else
-	//{
-	//	SET(wMUTD1_BitMap_FAA, FAA_4_CLOSED_LOOP);  // Closed loop
+	if (openLoop)
+	{
+		CLR(wMUTD1_BitMap_FAA, FAA_4_CLOSED_LOOP); // Closed loop
+	}
+	else
+	{
+		SET(wMUTD1_BitMap_FAA, FAA_4_CLOSED_LOOP);  // Closed loop
 
-	//	wMUT0C_Fuel_Trim_Low = 0x80;   
-	//	wMUT0D_Fuel_Trim_Middle = 0x80;
-	//	wMUT0E_Fuel_Trim_High = 0x80;
-	//};
+		wMUT0C_Fuel_Trim_Low = 0x80;   
+		wMUT0D_Fuel_Trim_Middle = 0x80;
+		wMUT0E_Fuel_Trim_High = 0x80;
+	};
 
-	//if (no_knock_retard != 0)
-	//{
-	//	CLR(wMUTD1_BitMap_FAA, FAA_7_HIGH_IGN); 
-	//};
+	if (no_knock_retard != 0)
+	{
+		CLR(wMUTD1_BitMap_FAA, FAA_7_HIGH_IGN); 
+	};
 
-	//CLR(bMUTD3_BitMap4_FCA_Store_FFFF89D8, 0x808); // Disable Front/Rear O2 heater check: clear bit 11 address 0xFCA 
+	CLR(bMUTD3_BitMap4_FCA_Store_FFFF89D8, 0x808); // Disable Front/Rear O2 heater check: clear bit 11 address 0xFCA 
 
-//	__enable_irq();
+	__enable_irq();
 
 	
 	frameCount += 1;
 
 
 
-
 	if ((wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING)) == 0)
 	{
-		u32 al = ((u32)(swapb(axis_ig_LOAD)+128)>>8);
-		u32 ar = ((u32)(swapb(axis_ig_RPM)+128)>>8);
+		//u32 al = ((u32)(swapb(axis_ig_LOAD)+128)>>8);
+		//u32 ar = ((u32)(swapb(axis_ig_RPM)+128)>>8);
 
-		if (hiIgnMapIndex == 15 && (KNOCK_FLAG_FFFF8C34 & KNOCK_RETARD_ENABLED) && ((wMUT72_Knock_Present & 1) == 0) && ar > 8 && al > 5 && wMUT17_TPS_ADC8bit >= TPS(11))
-		{
-			u32 ind = ar + al*21;
+		//if (hiIgnMapIndex == 15 && (KNOCK_FLAG_FFFF8C34 & KNOCK_RETARD_ENABLED) && ((wMUT72_Knock_Present & 1) == 0) && ar > 8 && al > 5 && wMUT17_TPS_ADC8bit >= TPS(11))
+		//{
+		//	u32 ind = ar + al*21;
 
-			u16 &p = hiIgnMapRAM[ind];
+		//	u16 &p = hiIgnMapRAM[ind];
 
-			u32 timing = p;
+		//	u32 timing = p;
 
-			const u32 knock = wMUT26_Knock_Retard;
+		//	const u32 knock = wMUT26_Knock_Retard;
 
-			if (knock > 1)
-			{
-				const u32 loign = (loIgnMapData[ind]+20)*256;
+		//	if (knock > 1)
+		//	{
+		//		const u32 loign = (loIgnMapData[ind]+20)*256;
 
-				timing = Sub_Lim_0(timing, knock);
+		//		timing = Sub_Lim_0(timing, knock);
 
-				if (timing > loign)
-				{
-					p =  timing;
-				};
-			}
-			else if (knock == 0 && timing < 35*256)
-			{
-				p = timing + 1;
-			};
-		};
+		//		if (timing > loign)
+		//		{
+		//			p =  timing;
+		//		};
+		//	}
+		//	else if (knock == 0 && timing < 35*256)
+		//	{
+		//		p = timing + 1;
+		//	};
+		//};
 
 		FeedBack_O2F();
 
@@ -138,7 +137,7 @@ extern "C" void LiveKnock()
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+/*
 #pragma noregsave(FeedBack_WBO2)
 
 static void FeedBack_WBO2()
@@ -194,7 +193,7 @@ static void FeedBack_WBO2()
 		ve_timer = LDT;
 	};
 }
-
+*/
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #pragma noregsave(TimeRPM)
@@ -229,7 +228,7 @@ static void TimeRPM()
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+/*
 #pragma noregsave(FeedBack_WBO2_v2)
 
 static void FeedBack_WBO2_v2()
@@ -327,7 +326,7 @@ static void FeedBack_WBO2_v2()
 		ve_timer = LDT;
 	};
 }
-
+*/
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #pragma noregsave(FeedBack_O2F)
@@ -337,13 +336,13 @@ static void FeedBack_O2F()
 //	static u16 timer;
 //	static TM32 tm;
 //	static byte pi;
-	const byte LDT = 5;
+	const byte LDT = 20;
 
 	if (veMapIndex == 15 && wMUT4A_Purge_Control_Duty == 0 && (wMUT1E_MAF_RESET_FLAG & (DECELERATION_FUEL_CUT|FUEL_CUT|MAP_error)) == 0)
 	{
 		if (ve_timer == 0)
 		{
-			i16 d = ((u32)wMUT0F_Oxygen_Feedback_Trim >> 8) - 128;
+			i16 d = ((u32)wMUT0F_Oxygen_Feedback_Trim >> 10) - 32;
 
 			if (d != 0)
 			{

@@ -20,7 +20,7 @@ gnu_compiler_options =  -fno-show-column -m2 -c -fno-diagnostics-show-option -Os
 
 # -SPeed 
 
-debug_compiler_options =  -OPtimize=1
+debug_compiler_options =  -OPtimize=1 -SIze
 debug_linker_options = 
 lbgsh_options = 
 libsuffix=d
@@ -87,7 +87,7 @@ $(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs $(objdir)\stock.abs
 
 ##################################################################################################
 
-$(objdir)\LiveKnock.abs : LiveMap.o AltMaps.o Hooks.o LiveKnock.o F500.o	# Ignition.o crank.o ,P_Ignition/39000,P_crank/3C000
+$(objdir)\LiveKnock.abs : LiveMap.o AltMaps.o Hooks.o LiveKnock.o #F500.o	# Ignition.o crank.o ,P_Ignition/39000,P_crank/3C000
 	@echo Linking $^@ ...
 	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P_Hooks/2CC0,P_F500/F500,P/39000,B/FFFF8480 -LIBrary=$(libname) -OUtput="$^@" $<
 	@echo $(delimiter)	
