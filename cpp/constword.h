@@ -1236,5 +1236,6 @@
 #define      word_2CAA												(*(const u16*)0x2CAA)
 #define      word_2CAC												(*(const u16*)0x2CAC)
 
+#define      word_8B00												(*(const u16*)0x8B00)
 
 #endif	// CONSTWORD_H__10_07_2017__10_23

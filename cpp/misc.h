@@ -483,7 +483,7 @@ struct Map3D_W
 #define sub_21E14										((u16(*)(u16))0x21E14)
 #define SHLR8											((byte(*)(u32))0x864)
 #define Mult_R4_65536									((u32(*)(u16))0x876)
-#define SwapBytes16										((u16(*)(u16))0x8B8)
+#define SwapBytes16										((u16(*)(byte))0x8B8)
 
 #define Add_Lim_FFFF									((u32(*)(u16,u16))0x500)
 #define Add_Lim_FFFFFFFF								((u32(*)(u32,u32))0x51C)
@@ -528,7 +528,7 @@ struct Map3D_W
 
 #define __disable_irq									((void(*)(void))0x400)
 #define __enable_irq									((void(*)(void))0x41e)
-#define F500_Init_Load_ECU_Info_And_BitMap_Flags		((void(*)(void))0xF58C)
+//#define F500_Init_Load_ECU_Info_And_BitMap_Flags		((void(*)(void))0xF58C)
 
 #define Timer_Counter_Related_sub_C928					((void(*)(void))0xC928)
 #define Knock_Output_Calc_sub_AC96						((void(*)(void))0xAC96)
@@ -537,7 +537,9 @@ struct Map3D_W
 #define BC06_sub_1E2D0									((void(*)(void))0x1E2D0)
 #define PEDR_LO_Check_sub_A790							((bool(*)(void))0xA790)
 	
+#define Set_Intterupt_Mask								((void(*)(u16))0x430)
 
+#define Disable_Coil_Charge								((void(*)(u16))0xBED8)
 
 #define RPM21_6788_IGN									((Axis*)0x6788)
 #define LOAD12_67BC_IGN									((Axis*)0x67BC)

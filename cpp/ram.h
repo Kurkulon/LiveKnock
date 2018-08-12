@@ -227,6 +227,8 @@
 
 // 200 Hz  FFFF8528 - FFFF8526
 
+#define      __word_FFFF851E              								(*(u16*)0xFFFF851E)                                                        
+
 #define      timer_up_FFFF8520              							(*(u16*)0xFFFF8520)                                                        
 #define      timer_up_FFFF8522              							(*(u16*)0xFFFF8522)                                                        
 #define      timer_up_FFFF8524              							(*(u16*)0xFFFF8524)                                                        

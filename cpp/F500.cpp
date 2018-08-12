@@ -1,6 +1,6 @@
 #pragma section _F500
 
-#include <umachine.h>
+//#include <umachine.h>
 
 //#include "ext_ram_vars.h"
 
@@ -20,15 +20,20 @@
 
 #define ENGINE_MAIN_VARIABLES_DIM_off_9198		((EnVars*)0x9198)
 
+//#pragma noregsave(F500_root_sub)
+//#pragma noregsave(F500_Init_BitMap_Flags_New)
+//#pragma noregsave(F500_Init_Load_ECU_Info_And_BitMap_Flags)
+
 void F500_root_sub();
 
-static void F500_Init_BitMap_Flags_New();
+void F500_Init_BitMap_Flags_New();
 static void F500_Init_Load_ECU_Info_And_BitMap_Flags();
+
+#ifdef F500_TEST
+
 static void F500_sub_F6E6();
 static void F500_sub_F7E4();
 static void F500_sub_F834();
-
-#ifdef F500_TEST
 
 static u16	F500_sub_FBB4(u32 v);
 static void F500_sub_FD34();
@@ -67,11 +72,12 @@ static void F500_Battery_Calcs_sub_1101A();
 static void sub_A374();
 
 #define F500_Init_Load_ECU_Info_And_BitMap_Flags	((void(*)(void))0xF58C)
+
+#else // F500_TEST
+
 #define F500_sub_F6E6								((void(*)(void))0xF6E6)
 #define F500_sub_F7E4								((void(*)(void))0xF7E4)
 #define F500_sub_F834								((void(*)(void))0xF834)
-
-#else // F500_TEST
 
 #define	F500_sub_FBB4								((void(*)(u32)) 0xFBB4)
 #define F500_sub_FD34								((void(*)(void))0xFD34)
@@ -303,6 +309,7 @@ static void F500_Init_Load_ECU_Info_And_BitMap_Flags()
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#ifdef F500_TEST
 
 void F500_sub_F6E6()
 {
@@ -486,7 +493,6 @@ void F500_sub_F834()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#ifdef F500_TEST
 
 u16 F500_sub_FBB4(u32 v)
 {

@@ -114,6 +114,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cpp\main.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\cpp\ML02.cpp"
 				>
 			</File>

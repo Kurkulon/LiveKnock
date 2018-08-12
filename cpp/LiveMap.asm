@@ -6,7 +6,8 @@
 	
 	.INCLUDE "cpp\def.inc"
 	
-
+	.EXPORT _LiveMap
+	
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	.SECTION    B_LIVEMAP, DATA, LOCATE=H'FFFF8400
@@ -90,9 +91,9 @@ HookedProc:						.EQU	H'A98A
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	.SECTION C_EC28, DATA, LOCATE=H'EC28
+;	.SECTION C_EC28, DATA, LOCATE=H'EC28
 
-		.DATA.L		COPY                                    
+;		.DATA.L		COPY                                    
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -521,7 +522,7 @@ TEIEinvade: ;JUMP HERE FROM EARLIER IF TRANSMISSION HAS ALREADY FINISHED
 ; !!! 932700xx PATCH this address to 0xEC28
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	
-COPY: ;COPY ROM TO RAM IF TEPHRA'S DEAD VARIABLE IS NOT 0XDEAD
+_LiveMap: ;COPY ROM TO RAM IF TEPHRA'S DEAD VARIABLE IS NOT 0XDEAD
 
 	sts.l   pr, @-r15                                               
 	mov.l   r14, @-r15                                              
@@ -577,13 +578,13 @@ __exit:
 	jsr		@r10
 	nop
 	
-	mov.l	#_LiveKnock,r10
-	jsr		@r10
-	nop
+;	mov.l	#_LiveKnock,r10
+;	jsr		@r10
+;	nop
 	
-	mov.l	#HookedProc, r10
-	jsr		@r10
-	nop
+;	mov.l	#HookedProc, r10
+;	jsr		@r10
+;	nop
 	
 	mov.l   @r15+, r14                                              
 	lds.l   @r15+, pr                                               

@@ -5,6 +5,40 @@
 TEST_INTERPOLATE:			.DEFINE		"1"
 ;DEF_NO_KNOCK_RETARD:		.DEFINE		"1"
 
+DEF_SIMULATION:				.DEFINE		"1"
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	.AIFDEF	DEF_SIMULATION
+
+;Simulation test 
+
+	.SECTION P_B3A0, CODE, LOCATE=H'B3A0
+
+			nop   	                                                        
+
+	.SECTION P_B426, CODE, LOCATE=H'B426
+
+			nop   	                                                        
+
+	.SECTION P_BB50, CODE, LOCATE=H'BB50
+
+			nop   	                                                        
+
+	.SECTION P_BF1C, CODE, LOCATE=H'BF1C
+
+			nop   	                                                        
+
+	.SECTION P_BF4C, CODE, LOCATE=H'BF4C
+
+			nop   	                                                        
+
+	.SECTION P_BF7C, CODE, LOCATE=H'BF7C
+
+			nop  
+			
+	.AENDI 	                                                        
+
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	.SECTION    B_ALTMAPS, DATA, LOCATE=H'FFFF8420
@@ -108,9 +142,9 @@ _frameCount:		.RES.L      1					;	.EQU H'FFFF8462
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	.SECTION P_F506, CODE, LOCATE=H'F506
+;	.SECTION P_F506, CODE, LOCATE=H'F506
 
-			nop   	                                                        
+;			nop   	                                                        
 
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
