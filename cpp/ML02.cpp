@@ -1,4 +1,7 @@
-#pragma section _ML02
+//#pragma section _ML02
+
+#pragma section _main
+
 
 #include <umachine.h>
 
@@ -64,8 +67,7 @@
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void SysInit_Set_0x10_MUT1E_MAF_RESET_FLAG();
-static void ML02_root_sub_1123E();
+
 static void ML02_sub_11300();
 static void ML02_sub_11332();
 static void ML02_sub_11390();
@@ -132,12 +134,88 @@ static void ML02_sub_139C4();
 
 
 
+//#pragma noregsave(ML02_sub_11300)
+//#pragma noregsave(ML02_sub_11332)
+//#pragma noregsave(ML02_sub_11390)
+//#pragma noregsave(ML02_sub_113C6)
+//#pragma noregsave(ML02_sub_114B4)
+//#pragma noregsave(ML02_sub_114E2)
+//#pragma noregsave(ML02_sub_11528)
+//#pragma noregsave(ML02_sub_11570)
+//#pragma noregsave(ML02_sub_118B0)
+//#pragma noregsave(ML02_sub_118E2)
+//#pragma noregsave(ML02_sub_11910)
+//#pragma noregsave(ML02_Return_0	)
+//#pragma noregsave(ML02_sub_119DC)
+//#pragma noregsave(ML02_sub_11A4E)
+//#pragma noregsave(ML02_sub_11A98)
+//#pragma noregsave(ML02_sub_11AEC)
+//#pragma noregsave(ML02_sub_11B36)
+////#pragma noregsave(ML02_sub_11B74)
+//#pragma noregsave(ML02_sub_11D48)
+//#pragma noregsave(ML02_sub_11D82)
+//#pragma noregsave(ML02_sub_11DBA)
+//#pragma noregsave(ML02_sub_11E00)
+//#pragma noregsave(ML02_sub_11E14				)
+//#pragma noregsave(ML02_sub_11EE8				)
+////#pragma noregsave(ML02_sub_11F88				)
+////#pragma noregsave(ML02_Update_STALL_Flag		)
+////#pragma noregsave(ML02_Check_STALL				)
+////#pragma noregsave(ML02_Update_CRANKING_Flag		)
+////#pragma noregsave(ML02_Check_CRANKING			)
+////#pragma noregsave(ML02_sub_12180				)
+//#pragma noregsave(ML02_Return_0_0				)
+//#pragma noregsave(ML02_sub_1228C				)
+//#pragma noregsave(ML02_sub_122BA				)
+//#pragma noregsave(ML02_SPEED_LIM_sub_12316					)
+//#pragma noregsave(ML02_W2D									)
+//#pragma noregsave(ML02_Get_Idle_RPM_lim_123E0				)
+//#pragma noregsave(ML02_sub_124AE							)
+////#pragma noregsave(ML02_sub_1262C							)
+//#pragma noregsave(ML02_sub_1268C							)
+//#pragma noregsave(ML02_O2_Closed_Loop						)
+//#pragma noregsave(ML02_O2_Heater_Tests						)
+//#pragma noregsave(ML02_Open_And_Closed_Loop_Calcs			)
+//#pragma noregsave(ML02_Open_andor_Closed_Loop_Fuel_Calcs	)
+//#pragma noregsave(ML02_Open_Loop_Calc						)
+//#pragma noregsave(ML02_sub_12BC0							)
+//#pragma noregsave(ML02_Closed_Loop_Error					)
+//#pragma noregsave(ML02_Open_Closed_Loop_Some_Check			)
+//#pragma noregsave(ML02_MAP_Change_Calcs						)
+//#pragma noregsave(ML02_sub_12D9C							)
+//#pragma noregsave(ML02_sub_13088							)
+//#pragma noregsave(ML02_sub_130BC							)
+//#pragma noregsave(ML02_sub_13120							)
+//#pragma noregsave(ML02_sub_131EC							)
+//#pragma noregsave(ML02_sub_13320							)
+//#pragma noregsave(ML02_sub_13398							)
+//#pragma noregsave(ML02_sub_133BC							)
+//#pragma noregsave(ML02_sub_1359C							)
+//#pragma noregsave(ML02_sub_13602							)
+//#pragma noregsave(ML02_sub_1364C			)
+//#pragma noregsave(ML02_sub_1376C			)
+//#pragma noregsave(ML02_Fuel_Knock_Reaction	)
+//#pragma noregsave(ML02_sub_139A8			)
+//#pragma noregsave(ML02_sub_139C4			)
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+void SysInit_NVRAM_111C8()
+{
+	word_FFFF8042 = word_FFFF8044 = word_FFFF8046 = 0x8080;
+
+	bMUT60 = bMUT61 = bMUT62 = 0x8080;
+
+	coolant_temp_FFFF8038 = coolTemp_sensor_err_val;
+
+	dword_FFFF8268 = 0;
+
+	dword_FFFF826C = 0;
+}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void SysInit_Set_0x10_MUT1E_MAF_RESET_FLAG()
+void SysInit_Set_0x10_MUT1E_MAF_RESET_FLAG()
 {
 	wMUT1E_MAF_RESET_FLAG = STALL;
 
@@ -146,7 +224,9 @@ static void SysInit_Set_0x10_MUT1E_MAF_RESET_FLAG()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void ML02_root_sub_1123E()
+//#pragma regsave(ML02_root_sub_1123E)
+
+void ML02_root_sub_1123E()
 {
 	ML02_sub_11300();                    
 	ML02_sub_11332();                    
