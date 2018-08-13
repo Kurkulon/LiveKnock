@@ -20,14 +20,14 @@ gnu_compiler_options =  -fno-show-column -m2 -c -fno-diagnostics-show-option -Os
 
 # -SPeed 
 
-debug_compiler_options =  -OPtimize=1 -SIze
+debug_compiler_options =  -OPtimize=1 -SIze -SHIft=Inline -GBr=Auto
 debug_linker_options = 
 lbgsh_options = 
 libsuffix=d
 
 !else
 
-debug_compiler_options = -OPtimize=1
+debug_compiler_options = -OPtimize=1 -SIze -SHIft=Inline
 debug_linker_options = 
 lbgsh_options = 
 libsuffix=r

@@ -1,4 +1,5 @@
-#pragma section _F500
+//#pragma section _F500
+#pragma section _main
 
 //#include <umachine.h>
 
@@ -20,8 +21,8 @@
 
 #define ENGINE_MAIN_VARIABLES_DIM_off_9198		((EnVars*)0x9198)
 
-//#pragma noregsave(F500_root_sub)
-//#pragma noregsave(F500_Init_BitMap_Flags_New)
+#pragma regsave(F500_root_sub)
+//#pragma regsave(F500_Init_BitMap_Flags_New)
 //#pragma noregsave(F500_Init_Load_ECU_Info_And_BitMap_Flags)
 
 void F500_root_sub();
@@ -29,11 +30,11 @@ void F500_root_sub();
 void F500_Init_BitMap_Flags_New();
 static void F500_Init_Load_ECU_Info_And_BitMap_Flags();
 
-#ifdef F500_TEST
 
 static void F500_sub_F6E6();
 static void F500_sub_F7E4();
 static void F500_sub_F834();
+
 
 static u16	F500_sub_FBB4(u32 v);
 static void F500_sub_FD34();
@@ -68,16 +69,66 @@ static void F500_sub_10F08();
 static void F500_Countdown_Timers_sub_10F5C();
 static void F500_Battery_Calcs_sub_1101A();
 
+
+//#pragma noregsave(F500_sub_F834)
+//#pragma noregsave(F500_Coolant_Calibration_Calc		)
+
+
+
+#pragma noregsave(F500_sub_F6E6)
+#pragma noregsave(F500_sub_F7E4)
+#pragma noregsave(F500_sub_FBB4)
+#pragma noregsave(F500_sub_FD34)
+#pragma noregsave(F500_sub_FDB6)
+#pragma noregsave(F500_sub_FDF4)
+#pragma noregsave(F500_Coolant_Temp_Threshold_Tests	)
+#pragma noregsave(F500_Coolant_Calc1_sub_FF2C		)
+#pragma noregsave(F500_Update_IAT_Sensor			)
+#pragma noregsave(F500_Update_Air_Temp_Scaled		)
+#pragma noregsave(F500_sub_10188					)
+#pragma noregsave(F500_sub_10220					)
+#pragma noregsave(F500_O22_Manipulations_sub_1023C	)
+#pragma noregsave(F500_TPS_Load_RPM_Calcs			)
+#pragma noregsave(F500_TPS_sub_103DA				)
+#pragma noregsave(F500_sub_1044C					)
+#pragma noregsave(F500_CheckIdleRPM					)
+#pragma noregsave(F500_MAP_Coolant_Calcs			)
+#pragma noregsave(F500_sub_10820					)
+#pragma noregsave(F500_sub_10878				)
+#pragma noregsave(F500_sub_108AA				)
+#pragma noregsave(F500_sub_108FE				)
+#pragma noregsave(F500_sub_10984				)
+#pragma noregsave(F500_sub_10A80				)
+#pragma noregsave(F500_sub_10AA6				)
+#pragma noregsave(F500_Check_MAP_Fault			)
+#pragma noregsave(F500_Load_sub_10B72				)
+#pragma noregsave(F500_sub_10C6E					)
+#pragma noregsave(F500_sub_10E10					)
+#pragma noregsave(F500_MAP_Hz_Calc_sub_10E54		)
+#pragma noregsave(F500_sub_10F08					)
+#pragma noregsave(F500_Countdown_Timers_sub_10F5C	)
+#pragma noregsave(F500_Battery_Calcs_sub_1101A		)
+
+
+
+
+
+
+
+
+
+#ifdef F500_TEST
+
 #pragma noregsave(sub_A374)
 static void sub_A374();
 
 #define F500_Init_Load_ECU_Info_And_BitMap_Flags	((void(*)(void))0xF58C)
 
-#else // F500_TEST
 
 #define F500_sub_F6E6								((void(*)(void))0xF6E6)
 #define F500_sub_F7E4								((void(*)(void))0xF7E4)
 #define F500_sub_F834								((void(*)(void))0xF834)
+
 
 #define	F500_sub_FBB4								((void(*)(u32)) 0xFBB4)
 #define F500_sub_FD34								((void(*)(void))0xFD34)
@@ -112,6 +163,8 @@ static void sub_A374();
 #define F500_Countdown_Timers_sub_10F5C				((void(*)(void))0x10F5C)
 #define F500_Battery_Calcs_sub_1101A				((void(*)(void))0x1101A)
 
+#else // F500_TEST
+
 #define sub_A374									((void(*)(void))0xA374)
 
 
@@ -145,7 +198,105 @@ static void sub_A374();
 #define battery_voltage_compensation_5272	((Map3D_W *)0x5272)
 
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+#undef PEDR_LO_Check_sub_A790
+
+inline bool PEDR_LO_Check_sub_A790() { return ZRO(reg_PEDRL, 2); }
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+void SysInit_NVRAM_F234()
+{
+	wMUT1B_TPS_Idle_Adder = 0x80;
+
+	coolantTempScld_COPY_2 = coolTemp_sensor_err_val;
+
+	NVRAM_Intake_Air_Temperature_Scaled = IAT_sensor_err_val;
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+void SysInit_Copy_ADC_To_Local_Vars_More_sub_F26C()
+{
+	starter_timer_up = 0xFFFF;
+
+	cranking_end_timer_up = 0xFFFF;
+
+	COOLANT_TEMPERATURE_2BYTE_FFFF88A8 = adc_CoolTemp_10bit_MUTCF;
+
+	F500_Coolant_Calibration_Calc();
+
+	F500_Update_Air_Temp_Scaled();
+
+	word_FFFF888C = MUT_00_01_FLAGS;
+
+	word_FFFF8894 = MUT_03_FLAGS;
+
+	word_FFFF8898 = word_FFFF8896;
+
+	F500_sub_F834();
+
+	RT_FLAG1_COPY_FFFF888A = RT_FLAG1_FFFF8888;
+
+	word_FFFF8892 = word_FFFF8890;
+
+	LAUNCH_TEST_FLAG_1_COPY_FFFF889C = LAUNCH_TEST_FLAG_1_FFFF889A;
+
+	timer_down_TXFLAG3_FFFF8574 = t1_unk_18BC;
+
+	if (PEDR_LO_Check_sub_A790())
+	{
+		timer_FFFF8582 = 8;
+	};
+
+	enrichmentWarmUp = 0x80;
+
+	timer_FFFF8578 = maf_MAP__source_calc_16A8;
+
+	if (wMUTD1_BitMap_FAA & FAA_1_REAR_O2)
+	{
+		wMUT5C_ADC_Rear_02_Voltage = wMUT3C_Rear_O2_ADC8bit;
+
+		O2_SECONDARY_SENSOR_VOLTAGE_SHLL8_CLIPPED_FFFF88D0 = wMUT5C_ADC_Rear_02_Voltage << 8;
+
+		bMUT5D_ADC_UNK_PORT_08_COPY = ADC_08_8bit;
+
+		ADC_UNK_PORT_08_COPY_SHLL8_CLIPPED_FFFF88D2 = bMUT5D_ADC_UNK_PORT_08_COPY << 8;
+		
+		wMUT5B_Rear_02_Voltage = word_FFFF8A22 = t1_unk_16D2;
+
+		wMUT5A = word_FFFF8A20 = t1_unk_16D2;
+	}
+	else
+	{
+		wMUT5B_Rear_02_Voltage = wMUT5A = t1_unk_158A;
+	};
+
+	interpolator_RPM_x_4_096 = t1_unk_17AE;
+
+	prev_TPS_sub_103DA = wMUT17_TPS_ADC8bit;
+
+	wMUT15_Barometric_Pressure = Barometric_FFFF8024;
+
+	BATTERY_L_FFFF91D2 = Sub_Lim_0(0xFF, Div_R4_R5__R0(Mul_Lim_FFFF(wMUT88_Fuel_Level_ADC8bit, 191), wMUT14_Battery_Level_ADC8bit));
+
+	BATTERY_8_FFFF91D4 = BATTERY_L_FFFF91D2 << 8;
+
+	wMUTB4_lookup_value = (u32)BATTERY_8_FFFF91D4 >> 8;
+
+	Table_Lookup_Axis(RPM17_7098);
+
+	BATT_COMP_FFFF91AC = Table_Lookup_word_2D_3D(battery_voltage_compensation_5272);
+
+	ADC_UNK_PORT_0E_2BYTE_MULT8_FFFF8914 = fuel_Temp_ADC10bit << 6;
+
+	coolantTempDuringCranking = wMUT10_Coolant_Temperature_Scaled;
+
+	airTempDuringCranking = wMUT11_Intake_Air_Temperature_Scaled;
+
+	word_FFFF9946 = COOLANT_TEMPERATURE_2BYTE_FFFF88A8;
+}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -309,9 +460,8 @@ static void F500_Init_Load_ECU_Info_And_BitMap_Flags()
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#ifdef F500_TEST
 
-void F500_sub_F6E6()
+static void F500_sub_F6E6()
 {
 	if (RT_FLAG1_FFFF8888 & STARTER)
 	{
@@ -335,7 +485,7 @@ void F500_sub_F6E6()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-void F500_sub_F7E4()
+static void F500_sub_F7E4()
 {
 	word_FFFF8898 = word_FFFF8896;
 	word_FFFF8894 = MUT_03_FLAGS;
@@ -357,7 +507,7 @@ void F500_sub_F7E4()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-void F500_sub_F834()
+static void F500_sub_F834()
 {
 	const u32 r9 = 0x100;
 
@@ -431,7 +581,7 @@ void F500_sub_F834()
 			timer_FFFF8784 = word_19FC/*120*/;
 		};
 
-		u32 r13 = (byte)(fix8_FFFF8DCE>>8);
+		u32 r13 = (byte)((u32)fix8_FFFF8DCE>>8);
 
 
 		TRG(wMUT19_Startup_Check_Bits, 0x2000, r13, word_2110/*24*/, word_210E/*204*/);
@@ -493,8 +643,7 @@ void F500_sub_F834()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-
-u16 F500_sub_FBB4(u32 v)
+static u16 F500_sub_FBB4(u32 v)
 {
 	const u32 r2 = 0x2000;
 
@@ -848,7 +997,7 @@ void F500_sub_1044C()
 
 	if (bMUTD2_FBA_MAF_MAP_FLAG & 8)
 	{
-		r1 = Sub_Lim_0(161, TPS_NVRAM_FFFF802A >> 2);
+		r1 = Sub_Lim_0(161, (u32)TPS_NVRAM_FFFF802A >> 2);
 
 		if (FLAGS_FFFF8EB0 & 0x80)
 		{
@@ -1092,9 +1241,9 @@ void F500_sub_108FE()
 
 	rpm_x125div32_B = DIV_DW_R(1920000, r1);
 
-	MUT20_RPM_Idle_x125div16 = Lim_FF((rpm_x125div32_B + 1) >> 1);
+	MUT20_RPM_Idle_x125div16 = Lim_FF((u32)(rpm_x125div32_B + 1) >> 1);
 	
-	MUT21_RPM_x125div4 = Lim_FF((rpm_x125div32_B + 4) >> 3);
+	MUT21_RPM_x125div4 = Lim_FF((u32)(rpm_x125div32_B + 4) >> 3);
 	
 	null_RPM_x125div256 = DIV_DW_R(15360000, r1);
 }
@@ -1166,7 +1315,7 @@ void F500_Load_sub_10B72()
 	__disable_irq();
 
 	u32 r1 = Manifold_AbsPressure_ADC8bit_avrg;
-	u32 r2 = Manifold_AbsPressure_ADC8bit_x256_avrg >> 7;
+	u32 r2 = (u32)Manifold_AbsPressure_ADC8bit_x256_avrg >> 7;
 	u32 r8 = wMUT1A_Manifold_AbsPressure_ADC8bit;
 
 	__enable_irq();
@@ -1371,7 +1520,7 @@ void F500_Battery_Calcs_sub_1101A()
 
 	// loc_110A8
 
-	wMUTB4_lookup_value = BATTERY_8_FFFF91D4 >> 8;
+	wMUTB4_lookup_value = (u32)BATTERY_8_FFFF91D4 >> 8;
 
 	Table_Lookup_Axis(RPM17_7098);
 
@@ -1379,6 +1528,7 @@ void F500_Battery_Calcs_sub_1101A()
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#ifdef F500_TEST
 
 static void sub_A374()
 {

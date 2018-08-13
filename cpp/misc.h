@@ -536,10 +536,9 @@ struct Map3D_W
 #define sub_21E84										((bool(*)(void))0x21E84)
 #define BC06_sub_1E2D0									((void(*)(void))0x1E2D0)
 #define PEDR_LO_Check_sub_A790							((bool(*)(void))0xA790)
+
 	
 #define Set_Intterupt_Mask								((void(*)(u16))0x430)
-
-#define Disable_Coil_Charge								((void(*)(u16))0xBED8)
 
 #define RPM21_6788_IGN									((Axis*)0x6788)
 #define LOAD12_67BC_IGN									((Axis*)0x67BC)

@@ -110,9 +110,9 @@ axisIndex_7_InAirTemp							.EQU	H'FFFF8852
 
 _frameCount:		.RES.L      1					;	.EQU H'FFFF8462
 
-	.SECTION C_F0D4, DATA, LOCATE=H'F0D4
+;	.SECTION C_F0D4, DATA, LOCATE=H'F0D4
 
-	.DATA.L		_frameCount                                    
+;	.DATA.L		_frameCount                                    
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

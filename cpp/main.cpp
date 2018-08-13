@@ -10,6 +10,7 @@
 #include "ram.h"
 #include "EnVars.h"
 #include "hwreg.h"
+#include "F500.h"
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -29,7 +30,6 @@
 
 #define PDIOR_Stuff_sub_AD3C		((void(*)(void))0xAD3C)
 
-#define SysInit_NVRAM_F234			((void(*)(void))0xF234)
 #define SysInit_NVRAM_266DC			((void(*)(void))0x266DC)
 #define SysInit_NVRAM_111C8			((void(*)(void))0x111C8)
 #define SysInit_NVRAM_Trims			((void(*)(void))0x13AB8)
@@ -56,7 +56,6 @@
 #define PHDR_Stuff_sub_C388								((void(*)(void))0xC388)
 #define PADR_Stuff_sub_A5F8								((void(*)(void))0xA5F8)
 #define sub_A374										((void(*)(void))0xA374)
-#define SysInit_Copy_ADC_To_Local_Vars_More_sub_F26C	((void(*)(void))0xF26C)
 #define SysInit_sub_266FC								((void(*)(void))0x266FC)
 #define SysInit_Set_0x10_MUT1E_MAF_RESET_FLAG			((void(*)(void))0x11228)
 #define SysInit_sub_13B04								((void(*)(void))0x13B04)
@@ -68,6 +67,8 @@
 #define SysInit_sub_230FA								((void(*)(void))0x230FA)
 #define SysInit_sub_22100								((void(*)(void))0x22100)
 #define SysInit_sub_8000								((void(*)(void))0x8000)
+
+#define Disable_Coil_Charge								((void(*)(u16))0xBED8)
 
 
 
@@ -87,8 +88,6 @@ extern void LiveKnock();
 static void WaitTimer();
 
 
-extern void F500_root_sub();
-extern void F500_Init_BitMap_Flags_New();
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -403,6 +402,7 @@ static void sub_F164()
 
 	if (timer_FFFF8592 == 0 || timer_down_TXFLAG3_FFFF8574 == 0)
 	{
+		__disable_irq();
 		Init_ATU_sub_C5D2();
 		SysInit_ATU_0_DMA_2();
 		Init_ATU_0_2B();
