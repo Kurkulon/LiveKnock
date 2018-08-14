@@ -108,7 +108,7 @@ $(objdir)\LiveKnock.abs : LiveMap.o AltMaps.o Hooks.o LiveKnock.o main.o F500.o	
 
 ##################################################################################################
 
-$(objdir)\stock.abs : Ignition.o crank.o idle.o  FU03.o BC06.o huge.o  # 93270019.o
+$(objdir)\stock.abs : Ignition.o crank.o idle.o  FU03.o BC06.o huge.o libsfunc.o # 93270019.o
 	@echo Linking $^@ ...
 	@copy /Y $[@ $^@
 	@rem optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Binary -start=ROM/0,RAM/FFFF6000,HWREG/FFFFE400,P_Ignition/39000,P_crank/3C000,B/FFFF8480 -LIBrary=$(libname) -OUtput="$^@" $<

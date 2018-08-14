@@ -105,6 +105,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cpp\LibsFunc.asm"
+				>
+			</File>
+			<File
 				RelativePath=".\cpp\LiveKnock.cpp"
 				>
 			</File>
