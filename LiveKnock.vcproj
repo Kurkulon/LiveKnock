@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="8,00"
 	Name="LiveKnock"
 	ProjectGUID="{AB9A6019-E9B2-45AE-83D4-26DD4067F158}"
 	RootNamespace="LiveKnock"
@@ -64,6 +64,14 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
+			<File
+				RelativePath=".\cpp\ADC.asm"
+				>
+			</File>
+			<File
+				RelativePath=".\cpp\adc_hw.cpp"
+				>
+			</File>
 			<File
 				RelativePath=".\cpp\AltMaps.asm"
 				>
@@ -129,6 +137,10 @@
 				RelativePath=".\ida\ram_vars.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\cpp\WTF.asm"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -164,6 +176,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cpp\hwreg_asm.inc"
+				>
+			</File>
+			<File
+				RelativePath=".\cpp\libsfunc_exp.inc"
+				>
+			</File>
+			<File
 				RelativePath=".\cpp\misc.h"
 				>
 			</File>
@@ -173,6 +193,10 @@
 			</File>
 			<File
 				RelativePath=".\cpp\ram.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cpp\ram_asm.inc"
 				>
 			</File>
 			<File

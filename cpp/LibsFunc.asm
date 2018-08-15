@@ -9,12 +9,33 @@ wMUT34_Map_Index:		.EQU	H'FFFF89E0
 
 ;+++++++++++++++++++++++++++++++++++++++++++++++
 
+	.EXPORT __disable_irq, __enable_irq, Set_Intterupt_Mask, Add_Lim_FFFF, Add_R4w_R5w, Add_Lim_FFFFFFFF
+	.EXPORT memsetz, mem_decr, mem_incr, Lim_FF, Lim_FFFF, Lim16, Lim32, Mul_Div, Mul_DW_Div, Mul_Div_R 
+	.EXPORT Mul_R4_R5w_Div_R6w_Round_R0, Mul_R4_R5_Div_128_Into_R0, Mul_Fix7_R, Mul32_Fix7, Mul_R4_R5w_Div_128_Round_R0
+	.EXPORT Mul_Fix8_Lim_FFFF, Mul32_Fix8, Mul_Fix8_R, Mul_R4_R5w_Div_256_Round_R0, SHLR8
+	.EXPORT R4_Div_65536_ZeroExtendWord_Into_R0_sub_86A, R4_Mult_256_ZeroExtendWord_Into_R0_sub_870, Mult_R4_65536
+	.EXPORT Div_256_R, Div_65536_R, SwapBytes16, Div_R4_R5__R0, Div_DW, Div_WW, DIV_DW_R, Interpolate_256, sub_AE0
+	.EXPORT interpolate_r4_r5_r6, sub_B68, Table_Lookup_byte_2D_3D, Table_Lookup_Axis, Interpolate, GET_FROM_MASSIVE_byte
+	.EXPORT GET_FROM_MASSIVE_word, Query_byte_2D_3D_Table, GET_LOC_DIM_sub_DF6, Table_Lookup_word_2D_3D, sub_EA6, sub_EBC, Mul_Lim_FFFF, Mul16, Mul32_lim, Sub_Lim_0
+
+	.EXPORT ___disable_irq, ___enable_irq, _Set_Intterupt_Mask, _Add_Lim_FFFF, _Add_R4w_R5w, _Add_Lim_FFFFFFFF
+	.EXPORT _memsetz, _mem_decr, _mem_incr, _Lim_FF, _Lim_FFFF, _Lim16, _Lim32, _Mul_Div, _Mul_DW_Div, _Mul_Div_R
+	.EXPORT _Mul_R4_R5w_Div_R6w_Round_R0, _Mul_R4_R5_Div_128_Into_R0, _Mul_Fix7_R, _Mul32_Fix7, _Mul_R4_R5w_Div_128_Round_R0
+	.EXPORT _Mul_Fix8_Lim_FFFF, _Mul32_Fix8, _Mul_Fix8_R, _Mul_R4_R5w_Div_256_Round_R0, _SHLR8
+	.EXPORT _R4_Div_65536_ZeroExtendWord_Into_R0_sub_86A, _R4_Mult_256_ZeroExtendWord_Into_R0_sub_870, _Mult_R4_65536
+	.EXPORT _Div_256_R, _Div_65536_R, _SwapBytes16, _Div_R4_R5__R0, _Div_DW, _Div_WW, _DIV_DW_R, _Interpolate_256, _sub_AE0
+	.EXPORT _interpolate_r4_r5_r6, _sub_B68, _Table_Lookup_byte_2D_3D, _Table_Lookup_Axis, _Interpolate, _GET_FROM_MASSIVE_byte
+	.EXPORT _GET_FROM_MASSIVE_word, _Query_byte_2D_3D_Table, _GET_LOC_DIM_sub_DF6, _Table_Lookup_word_2D_3D, _sub_EA6, _sub_EBC, _Mul_Lim_FFFF, _Mul16, _Mul32_lim, _Sub_Lim_0
+
+;+++++++++++++++++++++++++++++++++++++++++++++++
+
 	.SECTION    P_LIBSFUNC, CODE, LOCATE=H'400
 
 ; =============== S U B	R O U T	I N E ==========
 
 
 __disable_irq:									
+___disable_irq:									
 												
 				mov.l	r0, @-r15				
 				mov.l	r3, @-r15				
@@ -44,6 +65,7 @@ loc_40E:
 
 
 __enable_irq:									
+___enable_irq:									
 												
 				mov.l	r0, @-r15				
 				mov.l	r1, @-r15				
@@ -68,6 +90,7 @@ __enable_irq:
 ; SR = (SR & ~0xF0) | ((R4 & 0xF) << 4)
 
 Set_Intterupt_Mask:								
+_Set_Intterupt_Mask:								
 												
 				mov.l	r0, @-r15				
 				mov.l	r1, @-r15				
@@ -102,6 +125,7 @@ Set_Intterupt_Mask:
 ; R0 = Min(R4w + R5w, 0xFFFF)
 
 Add_Lim_FFFF:									
+_Add_Lim_FFFF:									
 												
 				extu.w	r5, r5					
 				extu.w	r4, r0					
@@ -132,6 +156,7 @@ locret_510:
 ; R0 = R4w + R5w
 
 Add_R4w_R5w:									
+_Add_R4w_R5w:									
 												
 				extu.w	r5, r5					
 				extu.w	r4, r0					
@@ -151,6 +176,7 @@ Add_R4w_R5w:
 ; R0 = Min(R4+R5, 0xFFFFFFFF)
 
 Add_Lim_FFFFFFFF:								
+_Add_Lim_FFFFFFFF:								
 												
 				mov	r4, r0						
 				clrt							
@@ -176,6 +202,7 @@ locret_526:
 ; while	(R4 < R5) { *(u16*)R4++	= 0 };
 
 memsetz:										
+_memsetz:										
 												
 				mov.l	r10, @-r15				
 				mov	#0, r10						
@@ -208,6 +235,7 @@ locret_53A:
 ; while	(R4 < R5) { if (*R4 != 0) *R4 -= 1; R4++; };
 
 mem_decr:										
+_mem_decr:										
 												
 				mov.l	r0, @-r15				
 
@@ -254,6 +282,7 @@ locret_55E:
 ; while	(R4 < R5) { if (*R4 < 0xFFFF) *R4 += 1;	R4++; };
 
 mem_incr:										
+_mem_incr:										
 												
 				mov.l	r0, @-r15				
 				mov.l	r10, @-r15				
@@ -303,6 +332,7 @@ loc_588:
 ; R0 = (R4 < 0xFF) ? R4	: 0xFF;
 
 Lim_FF:											
+_Lim_FF:											
 												
 				extu.w	r4, r0					
 				mov	#h'FFFFFFFF, r4             
@@ -325,6 +355,7 @@ Lim_FF:
 ; R0 = (R4 < 0xFFFF) ? R4 : 0xFFFF;
 
 Lim_FFFF:										
+_Lim_FFFF:										
 												
 				mov	r4, r0						
 				mov	#h'FFFFFFFF, r4             
@@ -356,6 +387,7 @@ locret_5A4:
 ; R0 = R4w Lim[R6w...R5w];
 
 Lim16:											
+_Lim16:											
 												
 				extu.w	r4, r0					
 				extu.w	r6, r6					
@@ -370,6 +402,7 @@ Lim16:
 ; R0 = R4 Lim[R6...R5];
 
 Lim32:											
+_Lim32:											
 												
 												
 				mov	r4, r0						
@@ -425,6 +458,7 @@ locret_5CA:
 ; R0 = R4w * R5w / R6w
 
 Mul_Div:										
+_Mul_Div:										
 												
 				sts.l	pr, @-r15				
 				extu.w	r4, r4					
@@ -453,6 +487,7 @@ Mul_Div:
 ; R0 = (R4 * R5w) / R6w;
 
 Mul_DW_Div:										
+_Mul_DW_Div:										
 												
 				extu.w	r5, r5					
 				extu.w	r6, r6					
@@ -564,6 +599,7 @@ locret_686:
 ; R0 = (R4w * R5w + R6w/2) / R6w
 
 Mul_Div_R:										
+_Mul_Div_R:										
 												
 				sts.l	pr, @-r15				
 				extu.w	r4, r4					
@@ -592,6 +628,7 @@ Mul_Div_R:
 ; R0 = (R4 * R5w + R6w/2) / R6w;
 
 Mul_R4_R5w_Div_R6w_Round_R0:					
+_Mul_R4_R5w_Div_R6w_Round_R0:					
 												
 				mov.l	r11, @-r15				
 				extu.w	r5, r5					
@@ -706,6 +743,7 @@ locret_74E:
 ; R0 = R4w * R5w / 128;	Без округления
 
 Mul_R4_R5_Div_128_Into_R0:						
+_Mul_R4_R5_Div_128_Into_R0:						
 												
 				extu.w	r5, r5					
 				extu.w	r4, r4					
@@ -729,6 +767,7 @@ Mul_R4_R5_Div_128_Into_R0:
 ; R0 = (R4w * R5w + 64)	/ 128; С округлением
 
 Mul_Fix7_R:										
+_Mul_Fix7_R:										
 												
 				extu.w	r5, r5					
 				extu.w	r4, r4					
@@ -766,6 +805,7 @@ locret_77C:
 ; R0 = R4 * R5w	/ 128;
 
 Mul32_Fix7:										
+_Mul32_Fix7:										
 												
 				extu.w	r5, r5					
 				dmulu.l	r4, r5					
@@ -810,6 +850,7 @@ locret_7A2:
 ; R0 = (R4 * R5w + 64) / 128;
 
 Mul_R4_R5w_Div_128_Round_R0:					
+_Mul_R4_R5w_Div_128_Round_R0:					
 												
 				extu.w	r5, r5					
 				dmulu.l	r4, r5					
@@ -853,6 +894,7 @@ locret_7CC:
 ; R0 = R4w * R5w / 256;
 
 Mul_Fix8_Lim_FFFF:								
+_Mul_Fix8_Lim_FFFF:								
 												
 				extu.w	r5, r5					
 				extu.w	r4, r4					
@@ -883,6 +925,7 @@ locret_7E2:
 ; R0 = R4 * R5w	/ 256;
 
 Mul32_Fix8:										
+_Mul32_Fix8:										
 												
 				extu.w	r5, r5					
 				dmulu.l	r4, r5					
@@ -923,6 +966,7 @@ locret_800:
 ; R0 = (R4w * R5w + 128) / 256
 
 Mul_Fix8_R:										
+_Mul_Fix8_R:										
 												
 				extu.w	r5, r5					
 				extu.w	r4, r4					
@@ -958,6 +1002,8 @@ locret_820:
 ; R0 = (R4 * R5w + 128)	/ 256;
 
 Mul_R4_R5w_Div_256_Round_R0:
+_Mul_R4_R5w_Div_256_Round_R0:
+
 				mov.l	r1, @-r15				
 				extu.w	r5, r5					
 				dmulu.l	r4, r5					
@@ -1003,6 +1049,7 @@ locret_84C:
 ; R0 = (byte)(R4 >> 8);
 
 SHLR8:											
+_SHLR8:											
 												
 				shlr8	r4						
 				rts								
@@ -1020,6 +1067,7 @@ SHLR8:
 
 
 R4_Div_65536_ZeroExtendWord_Into_R0_sub_86A:	
+_R4_Div_65536_ZeroExtendWord_Into_R0_sub_86A:	
 												
 				shlr16	r4						
 				rts								
@@ -1037,6 +1085,7 @@ R4_Div_65536_ZeroExtendWord_Into_R0_sub_86A:
 
 
 R4_Mult_256_ZeroExtendWord_Into_R0_sub_870:		
+_R4_Mult_256_ZeroExtendWord_Into_R0_sub_870:		
 												
 				shll8	r4						
 				rts								
@@ -1055,6 +1104,7 @@ R4_Mult_256_ZeroExtendWord_Into_R0_sub_870:
 ; R4 *=	65536;
 
 Mult_R4_65536:									
+_Mult_R4_65536:									
 												
 				shll16	r4						
 				rts								
@@ -1073,6 +1123,7 @@ Mult_R4_65536:
 ; R0 = Min((R4+128)/256, 0xFF)
 
 Div_256_R:										
+_Div_256_R:										
 												
 												
 				swap.b	r4, r0					
@@ -1109,6 +1160,7 @@ locret_894:
 ; R0 = (R4 < 0xFFFF0000) ? (R4 + 32768)/65536 :	0xFFFF;
 
 Div_65536_R:									
+_Div_65536_R:									
 				swap.w	r4, r0					
 				extu.w	r0, r0					
 				shll16	r4						
@@ -1146,6 +1198,7 @@ locret_8AE:
 
 
 SwapBytes16:									
+_SwapBytes16:									
 				extu.b	r4, r0					
 				not	r4, r4						
 				extu.b	r4, r4					
@@ -1164,6 +1217,7 @@ SwapBytes16:
 ; R0 = (R5w > 0) ? R4w / R5w : 0xFFFF;
 
 Div_R4_R5__R0:									
+_Div_R4_R5__R0:									
 												
 				extu.w	r5, r5					
 				mov	r5, r0						
@@ -1221,6 +1275,7 @@ locret_8FE:
 ; R0 = R4 / R5w
 
 Div_DW:											
+_Div_DW:											
 												
 				mov.l	r10, @-r15				
 				bra	loc_90C						
@@ -1339,6 +1394,7 @@ locret_9AC:
 ; R0=R4/R5
 
 Div_WW:											
+_Div_WW:											
 												
 				extu.w	r5, r5					
 				extu.w	r4, r4					
@@ -1398,6 +1454,7 @@ locret_9EE:
 ; R0 = (R4 + R5w / 2) /	R5w
 
 DIV_DW_R:										
+_DIV_DW_R:										
 												
 				mov.l	r10, @-r15				
 				mov.l	r11, @-r15				
@@ -1533,6 +1590,7 @@ loc_AAE:
 
 
 Interpolate_256:								
+_Interpolate_256:								
 												
 				extu.w	r4, r4					
 				extu.w	r5, r5					
@@ -1573,6 +1631,7 @@ locret_ADC:
 
 
 sub_AE0:
+_sub_AE0:
 				mov.l	r1, @-r15				
 				extu.w	r6, r6					
 				mov.l	#256, r1				
@@ -1627,6 +1686,7 @@ locret_B12:
 ; R0 = R5 + (R4*R6 - R5*R6) / 255; R6 =	[0 ... 255]
 
 interpolate_r4_r5_r6:							
+_interpolate_r4_r5_r6:							
 												
 				mov.l	r10, @-r15				
 				extu.w	r4, r4					
@@ -1700,6 +1760,7 @@ locret_B64:
 
 
 sub_B68:
+_sub_B68:
 				mov.l	r1, @-r15				
 				extu.w	r6, r6					
 				mov.l	#255, r1				
@@ -1826,6 +1887,7 @@ locret_C18:
 
 
 Table_Lookup_byte_2D_3D:						
+_Table_Lookup_byte_2D_3D:						
 												
 				sts.l	pr, @-r15				
 				mov.l	r1, @-r15				
@@ -1945,6 +2007,7 @@ loc_CAE:
 ; Table_Lookup_Axis(AxisTable *tbl)
 
 Table_Lookup_Axis:								
+_Table_Lookup_Axis:								
 												
 				sts.l	pr, @-r15				
 												
@@ -2094,6 +2157,7 @@ loc_D60:
 ; R4 - v1; R5 -	v2; R6 - interpolator;
 
 Interpolate:									
+_Interpolate:									
 												
 				sts.l	pr, @-r15				
 				mov.l	r11, @-r15				
@@ -2178,6 +2242,7 @@ loc_DBC:
 ; R0 = (byte)R4[MUT34_Map_Index	& 7];
 
 GET_FROM_MASSIVE_byte:							
+_GET_FROM_MASSIVE_byte:							
 												
 				mov.l	#wMUT34_Map_Index, r0	
 				mov.w	@r0, r0					
@@ -2197,6 +2262,7 @@ GET_FROM_MASSIVE_byte:
 ; R0 = (word)R4[MUT34_Map_Index	& 7];
 
 GET_FROM_MASSIVE_word:							
+_GET_FROM_MASSIVE_word:							
 												
 				mov.l	#wMUT34_Map_Index, r0	
 				mov.w	@r0, r0					
@@ -2216,6 +2282,7 @@ GET_FROM_MASSIVE_word:
 
 
 Query_byte_2D_3D_Table:							
+_Query_byte_2D_3D_Table:							
 												
 				sts.l	pr, @-r15				
 				mov.l	#wMUT34_Map_Index, r0	
@@ -2242,6 +2309,7 @@ locret_DF2:
 
 
 GET_LOC_DIM_sub_DF6:							
+_GET_LOC_DIM_sub_DF6:							
 												
 				mov.l	#wMUT34_Map_Index, r0	
 				mov.w	@r0, r0					
@@ -2260,6 +2328,7 @@ GET_LOC_DIM_sub_DF6:
 
 
 Table_Lookup_word_2D_3D:						
+_Table_Lookup_word_2D_3D:						
 												
 				sts.l	pr, @-r15				
 				mov.l	r1, @-r15				
@@ -2368,6 +2437,7 @@ loc_E8E:
 
 
 sub_EA6:
+_sub_EA6:
 				sts.l	pr, @-r15				
 				mov.l	#wMUT34_Map_Index, r0	
 				mov.w	@r0, r0					
@@ -2391,6 +2461,7 @@ sub_EA6:
 
 
 sub_EBC:
+_sub_EBC:
 				mov.l	#wMUT34_Map_Index, r0	
 				mov.w	@r0, r0					
 				and	#7, r0						
@@ -2420,6 +2491,7 @@ sub_EBC:
 
 
 Mul_Lim_FFFF:									
+_Mul_Lim_FFFF:									
 												
 				extu.w	r4, r4					
 				extu.w	r5, r5					
@@ -2448,6 +2520,7 @@ locret_EEA:
 
 
 Mul16:											
+_Mul16:											
 												
 				extu.w	r4, r4					
 				extu.w	r5, r5					
@@ -2465,6 +2538,7 @@ Mul16:
 
 
 Mul32_lim:										
+_Mul32_lim:										
 												
 				dmulu.l	r5, r4					
 				sts	macl, r0					
@@ -2490,6 +2564,7 @@ locret_F06:
 ; R0 = (R4 >= R5) ? (R4-R5) : 0
 
 Sub_Lim_0:										
+_Sub_Lim_0:										
 												
 				extu.w	r5, r5					
 				bra	loc_F14						

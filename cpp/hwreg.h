@@ -675,5 +675,12 @@ struct S_SCI
 #define reg_ADDR15H                     (*(u8* )0xFFFFF826)     
 #define reg_ADDR15L                     (*(u8* )0xFFFFF827)     
 
+#define reg_ADCSR1						(*(u8* )0xFFFFF838)     
+#define reg_ADCR1						(*(u8* )0xFFFFF839)     
+
+#define unk_FFFFF858					(*(u8* )0xFFFFF858)     
+#define unk_FFFFF859					(*(u8* )0xFFFFF859)     
+
+
 #endif // HWREG_H__24_06_2017__23_34
 
