@@ -676,6 +676,7 @@ struct TM32
 
 #define SET(v, m) (v |= m)
 #define CLR(v, m) (v &= ~m)
+#define NOT(v, m) (v ^= m)
 #define WFLAG(f, m, c) {if (c) { f |= m; } else { f &= ~m; }}
 
 #define ONE(v, m) ((v & m) != 0)

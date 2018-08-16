@@ -1,15 +1,17 @@
-#pragma section _main
+#pragma section _adc_hw
 
 //#include <umachine.h>
 
 //#include "ext_ram_vars.h"
 
 #include "misc.h"
-#include "constbyte.h"
-#include "constword.h"
+//#include "constbyte.h"
+//#include "constword.h"
 #include "ram.h"
-#include "EnVars.h"
+//#include "EnVars.h"
 #include "hwreg.h"
+
+#define HUGE_Method_801_6_Hz			((void(*)(void))0x2686C)
 
 
 static u16 GetADC0(byte r1);
@@ -1238,125 +1240,168 @@ loc_B8F2:
 ; =============== S U B	R O U T	I N E ============
 
 ; 801.6	Hz
+*/
+#pragma interrupt(cmti0)
 
-cmti0:											
-				sts.l	pr, @-r15				
-				mov.l	r14, @-r15				
-				mov	r15, r14					
-				sts.l	macl, @-r15				
-				sts.l	mach, @-r15				
-				mov.l	r10, @-r15				
-				mov.l	r11, @-r15				
-				mov.l	r12, @-r15				
-				mov.l	r13, @-r15				
-				mov.l	r3, @-r15				
-				mov.l	r4, @-r15				
-				mov.l	r5, @-r15				
-				mov.l	r6, @-r15				
-				mov.l	r7, @-r15				
-				mov.l	r0, @-r15				
-				mov.l	#__disable_irq,	r10		
-				jsr	@r10 ; __disable_irq		
-				nop								; 
+extern "C" void cmti0()
+{
+//				sts.l	pr, @-r15				
+//				mov.l	r14, @-r15				
+//				mov	r15, r14					
+//				sts.l	macl, @-r15				
+//				sts.l	mach, @-r15				
+//				mov.l	r10, @-r15				
+//				mov.l	r11, @-r15				
+//				mov.l	r12, @-r15				
+//				mov.l	r13, @-r15				
+//				mov.l	r3, @-r15				
+//				mov.l	r4, @-r15				
+//				mov.l	r5, @-r15				
+//				mov.l	r6, @-r15				
+//				mov.l	r7, @-r15				
+//				mov.l	r0, @-r15	
 
-				mov.l	#reg_TCNT2A, r10		
-				mov.w	@r10, r10				
-				mov.l	#word_FFFF9AD6,	r11		
-				mov.w	r10, @r11				
-				mov.w	#~h'80, r0                
-				mov.l	#reg_CMCSR0, r10		
-				mov.w	@r10, r10				
-				and	r0, r10						
-				mov.l	#reg_CMCSR0, r11		
-				mov.w	r10, @r11				
-				mov.l	#downTimer_801,	r10		
-				mov.w	@r10, r10				
-				tst	r10, r10					
-				bt	loc_BA20					
+	__disable_irq();
 
-				mov.l	#downTimer_801,	r10		
-				mov.w	@r10, r0				
-				add	#-1, r0						
-				mov.w	r0, @r10				
+//				mov.l	#__disable_irq,	r10		
+//				jsr	@r10 ; __disable_irq		
+//				nop								; 
+//
+	word_FFFF9AD6 = reg_TCNT2A;
 
+//				mov.l	#reg_TCNT2A, r10		
+//				mov.w	@r10, r10				
+//				mov.l	#word_FFFF9AD6,	r11		
+//				mov.w	r10, @r11	
 
-loc_BA20:										
-				mov.l	#word_FFFF9AD2,	r10		
-				mov.w	@r10, r0				
-				mov.w	#312, r11				
-				add	r11, r0						
-				mov.w	r0, @r10				
-				mov.l	#word_FFFF9AD2,	r10		
-				mov.w	@r10, r10				
-				mov.l	#reg_TCNT2A, r11		
-				mov.w	@r11, r11				
-				sub	r11, r10					
-				extu.w	r10, r0					
-				shlr8	r0						
-				tst	#h'80, r0                     
-				bt	loc_BA5C					
+	CLR(reg_CMCSR0, 0x80);
 
-				mov.l	#word_FFFF9AD2,	r10		
-				mov.w	@r10, r0				
-				mov.w	#312, r11				
-				add	r11, r0						
-				mov.w	r0, @r10				
-				mov.l	#__enable_irq, r10		
-				jsr	@r10 ; __enable_irq			
-				nop								 
+//				mov.w	#~h'80, r0                
+//				mov.l	#reg_CMCSR0, r10		
+//				mov.w	@r10, r10				
+//				and	r0, r10						
+//				mov.l	#reg_CMCSR0, r11		
+//				mov.w	r10, @r11	
 
-				mov.l	#HUGE_Method_801_6_Hz, r10
-				jsr	@r10 ; HUGE_Method_801_6_Hz	
-				nop								
+	DECLIM(downTimer_801);
 
-				mov.l	#HUGE_Method_801_6_Hz, r10
-				jsr	@r10 ; HUGE_Method_801_6_Hz	
-				nop								 
+//				mov.l	#downTimer_801,	r10		
+//				mov.w	@r10, r10				
+//				tst	r10, r10					
+//				bt	loc_BA20					
+//
+//				mov.l	#downTimer_801,	r10		
+//				mov.w	@r10, r0				
+//				add	#-1, r0						
+//				mov.w	r0, @r10				
+//
+//
+//loc_BA20:	
 
-				bra	loc_BA76					
-				nop								 
+	word_FFFF9AD2 += 312;
 
-				.NOPOOL
+//				mov.l	#word_FFFF9AD2,	r10		
+//				mov.w	@r10, r0				
+//				mov.w	#312, r11				
+//				add	r11, r0						
+//				mov.w	r0, @r10	
 
-; -------------------------------------------------
+	if ((word_FFFF9AD2 - reg_TCNT2A) & 0x8000)
 
-loc_BA5C:										
-				mov.l	#__enable_irq, r10		
-				jsr	@r10 ; __enable_irq			
-				nop								
+//				mov.l	#word_FFFF9AD2,	r10		
+//				mov.w	@r10, r10				
+//				mov.l	#reg_TCNT2A, r11		
+//				mov.w	@r11, r11				
+//				sub	r11, r10					
+//				extu.w	r10, r0					
+//				shlr8	r0						
+//				tst	#h'80, r0                     
+//				bt	loc_BA5C					
+//
+	{
+		word_FFFF9AD2 += 312;
 
-				mov.l	#HUGE_Method_801_6_Hz, r10
-				jsr	@r10 ; HUGE_Method_801_6_Hz	
-				nop								
+//				mov.l	#word_FFFF9AD2,	r10		
+//				mov.w	@r10, r0				
+//				mov.w	#312, r11				
+//				add	r11, r0						
+//				mov.w	r0, @r10	
 
-				mov.l	#reg_TCNT2A, r10		
-				mov.w	@r10, r10				
-				mov.l	#word_FFFF9AD6,	r11		
-				mov.w	@r11, r11				
-				sub	r11, r10					
-				mov.l	#word_FFFF9AD4,	r12		
-				mov.w	r10, @r12				
+		__enable_irq();
 
+//				mov.l	#__enable_irq, r10		
+//				jsr	@r10 ; __enable_irq			
+//				nop								 
+//
+		HUGE_Method_801_6_Hz();
 
-loc_BA76:										
-				mov.l	@r15+, r0				
-				mov.l	@r15+, r7				
-				mov.l	@r15+, r6				
-				mov.l	@r15+, r5				
-				mov.l	@r15+, r4				
-				mov.l	@r15+, r3				
-				mov.l	@r15+, r13				
-				mov.l	@r15+, r12				
-				mov.l	@r15+, r11				
-				mov.l	@r15+, r10				
-				lds.l	@r15+, mach				
-				lds.l	@r15+, macl				
-				mov.l	@r15+, r14				
-				lds.l	@r15+, pr				
-				rte								
-				nop								
+//				mov.l	#HUGE_Method_801_6_Hz, r10
+//				jsr	@r10 ; HUGE_Method_801_6_Hz	
+//				nop								
+//
+		HUGE_Method_801_6_Hz();
 
-; End of function cmti0
+//				mov.l	#HUGE_Method_801_6_Hz, r10
+//				jsr	@r10 ; HUGE_Method_801_6_Hz	
+//				nop								 
+//
+//				bra	loc_BA76					
+//				nop								 
+//
+//				.NOPOOL
+//
+	}
+	else
+	{
+//; -------------------------------------------------
+//
+//loc_BA5C:		
+			__enable_irq();
+
+//				mov.l	#__enable_irq, r10		
+//				jsr	@r10 ; __enable_irq			
+//				nop								
+//
+		HUGE_Method_801_6_Hz();
+
+//				mov.l	#HUGE_Method_801_6_Hz, r10
+//				jsr	@r10 ; HUGE_Method_801_6_Hz	
+//				nop								
+//
+		word_FFFF9AD4 = reg_TCNT2A - word_FFFF9AD6;
+
+//				mov.l	#reg_TCNT2A, r10		
+//				mov.w	@r10, r10				
+//				mov.l	#word_FFFF9AD6,	r11		
+//				mov.w	@r11, r11				
+//				sub	r11, r10					
+//				mov.l	#word_FFFF9AD4,	r12		
+//				mov.w	r10, @r12				
+//
+//
+//loc_BA76:	
+
+	};
+
+//				mov.l	@r15+, r0				
+//				mov.l	@r15+, r7				
+//				mov.l	@r15+, r6				
+//				mov.l	@r15+, r5				
+//				mov.l	@r15+, r4				
+//				mov.l	@r15+, r3				
+//				mov.l	@r15+, r13				
+//				mov.l	@r15+, r12				
+//				mov.l	@r15+, r11				
+//				mov.l	@r15+, r10				
+//				lds.l	@r15+, mach				
+//				lds.l	@r15+, macl				
+//				mov.l	@r15+, r14				
+//				lds.l	@r15+, pr				
+//				rte								
+//				nop								
+}
+
+/*; End of function cmti0
 
 ; -------------------------------------------------
 
@@ -1388,4 +1433,4 @@ loc_BA76:
 ;+++++++++++++++++++++++++++++++++++++++++++++++
 
 		.END
-*/	
+	*/

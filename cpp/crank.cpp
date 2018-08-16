@@ -112,8 +112,8 @@ static u16 sub_2640E(u16 ipw);
 static void Update_Gen_G_output();
 
 
-static void atu22_IMF2G_event();
-static void atu22_CMF2G_event();
+//static void atu22_IMF2G_event();
+//static void atu22_CMF2G_event();
 static void Disable_Ign_Handler(u16 v);
 static bool Check_Starter_signal();
 static bool Check_PEDRL_1();
@@ -144,98 +144,98 @@ void F500_InitManifoldVars()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#pragma interrupt(atu02_ici0A)
-
-extern "C" void atu02_ici0A()
-{
-	u16 r1 = 0;
-
-	__disable_irq();
-
-	ici0A_TCNT2A = reg_TCNT2A;
-
-	CLR(reg_TSR0, 1);
-
-	crank_OSBR2_4us = reg_OSBR2;
-
-	crank_ICR0AH_250ns = reg_ICR0A;
-
-	//if (crank_Flags & 1)
-	//{
-	//	if ((reg_PADRL & 1) == 0)
-	//	{
-	//		r1 = 1;
-	//	};
-	//}
-	//else
-	//{
-	//	if ((reg_PADRL & 1) != 0)
-	//	{
-	//		r1 = 1;
-	//	};
-	//};
-
-	if ((crank_Flags ^ reg_PADRL) & 1)
-	{
-		reg_OCR2G = reg_TCNT2B + 13;
-
-		SET(crank_Flags, 2);
-	}
-	else
-	{
-		reg_OCR2G = reg_TCNT2B - 1;
-
-		CLR(crank_Flags, 2);
-	};
-
-	CLR(reg_TSR2B, 0x40);
-
-	__enable_irq();
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-#pragma interrupt(atu22_imi2G)
-
-extern "C" void atu22_imi2G()
-{
-	if (reg_TSR2A & 0x40)
-	{
-		__disable_irq();
-
-		CLR(reg_TSR2A, 0x40);
-
-		__enable_irq();
-
-		atu22_IMF2G_event();
-	};
-
-	if (reg_TSR2B & 0x40)
-	{
-		__disable_irq();
-
-		CLR(reg_TSR2B, 0x40);
-
-		__enable_irq();
-
-		atu22_CMF2G_event();
-	};
-}
-
+//#pragma interrupt(atu02_ici0A)
+//
+//extern "C" void atu02_ici0A()
+//{
+////	u16 r1 = 0;
+//
+//	__disable_irq();
+//
+//	ici0A_TCNT2A = reg_TCNT2A;
+//
+//	CLR(reg_TSR0, 1);
+//
+//	crank_OSBR2_4us = reg_OSBR2;
+//
+//	crank_ICR0AH_250ns = reg_ICR0A;
+//
+//	//if (crank_Flags & 1)
+//	//{
+//	//	if ((reg_PADRL & 1) == 0)
+//	//	{
+//	//		r1 = 1;
+//	//	};
+//	//}
+//	//else
+//	//{
+//	//	if ((reg_PADRL & 1) != 0)
+//	//	{
+//	//		r1 = 1;
+//	//	};
+//	//};
+//
+//	if ((crank_Flags ^ reg_PADRL) & 1)
+//	{
+//		reg_OCR2G = reg_TCNT2B + 13;
+//
+//		SET(crank_Flags, 2);
+//	}
+//	else
+//	{
+//		reg_OCR2G = reg_TCNT2B - 1;
+//
+//		CLR(crank_Flags, 2);
+//	};
+//
+//	CLR(reg_TSR2B, 0x40);
+//
+//	__enable_irq();
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+//#pragma interrupt(atu22_imi2G)
+//
+//extern "C" void atu22_imi2G()
+//{
+//	if (reg_TSR2A & 0x40)
+//	{
+//		__disable_irq();
+//
+//		CLR(reg_TSR2A, 0x40);
+//
+//		__enable_irq();
+//
+//		atu22_IMF2G_event();
+//	};
+//
+//	if (reg_TSR2B & 0x40)
+//	{
+//		__disable_irq();
+//
+//		CLR(reg_TSR2B, 0x40);
+//
+//		__enable_irq();
+//
+//		atu22_CMF2G_event();
+//	};
+//}
 
-#pragma interrupt(atu22_imi2H) 
 
-extern "C" void atu22_imi2H()
-{
-	__disable_irq();
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	CLR(reg_TSR2B, 0x80);
 
-	__enable_irq();
-}
+//#pragma interrupt(atu22_imi2H) 
+//
+//extern "C" void atu22_imi2H()
+//{
+//	__disable_irq();
+//
+//	CLR(reg_TSR2B, 0x80);
+//
+//	__enable_irq();
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -269,7 +269,7 @@ extern "C" void atu22_imi2F()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void atu22_IMF2G_event()
+void atu22_IMF2G_event()
 {
 	__disable_irq();
 
@@ -280,31 +280,31 @@ static void atu22_IMF2G_event()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void atu22_CMF2G_event()
-{
-	__disable_irq();
-
-	u32 r3 = crank_ICR0AH_250ns;
-	u32 r6 = crank_OSBR2_4us;
-
-	if (crank_Flags & 2)
-	{
-		CLR(crank_Flags, 2);
-
-		if (crank_Flags & 1)
-		{
-			CRANK75_root_sub_DB40(r6, r3);
-		}
-		else
-		{
-			CRANK5_root_sub_DC18(r6, r3);
-		};
-	}
-	else
-	{
-		__enable_irq();
-	};
-}
+//static void atu22_CMF2G_event()
+//{
+//	__disable_irq();
+//
+//	u32 r3 = crank_ICR0AH_250ns;
+//	u32 r6 = crank_OSBR2_4us;
+//
+//	if (crank_Flags & 2)
+//	{
+//		CLR(crank_Flags, 2);
+//
+//		if (crank_Flags & 1)
+//		{
+//			CRANK75_root_sub_DB40(r6, r3);
+//		}
+//		else
+//		{
+//			CRANK5_root_sub_DC18(r6, r3);
+//		};
+//	}
+//	else
+//	{
+//		__enable_irq();
+//	};
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
