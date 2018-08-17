@@ -616,7 +616,7 @@ extern u16 axis_ve_RPM;
 extern u16 axis_ve_LOAD;	
 extern byte ve_index;	
 extern byte ve_timer;	
-extern byte fb_VE;	
+extern i8 fb_VE;	
 extern byte forcedIdleRPM;	
 extern u32 frameCount;
 extern u16 timeRPM;	
@@ -691,6 +691,10 @@ struct TM32
 #define DECLIM(v) { if (v != 0) {v -= 1;}; }
 #define INCLIM80(v) { if (v < 0x80) {v += 1;}; }
 #define INC32(v) { if ((v+=1) == 0) {v -= 1;}; }
+
+#define WPDR16(p,v) { *((u16*)&p) = v; }
+#define RPDR16(p)	(*((u16*)&p))
+
 
 //#define MIN(a,b) (((a) < (b)) ? (a) : (b))
 inline u32 MIN(u32 a, u32 b) { return (a < b) ? a : b; }

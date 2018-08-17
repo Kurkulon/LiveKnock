@@ -56,8 +56,8 @@
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-static void CRANK5_root_sub_DC18(u16 osbr, u32 icr);
-static void CRANK75_root_sub_DB40(u16 osbr, u32 icr);
+//static void CRANK5_root_sub_DC18(u16 osbr, u32 icr);
+//static void CRANK75_root_sub_DB40(u16 osbr, u32 icr);
 
 static void SetIgnCoilChargeStartTime(u16 mask, u16 v);
 static void SetIgnSparkStartTime(u16 mask, u16 v);
@@ -77,7 +77,7 @@ static u16 CRANK75_Get_IgnCoilTime(u16 v);
 static void CRANK75_Knock_sub_23F8C();
 static void CRANK75_Knock_sub_24AC0();
 static void CRANK75_MainUpdateTiming();
-static void CRANK75_Main_sub_232A0();
+void CRANK75_Main_sub_232A0();
 static bool CRANK75_sub_24636();
 static void CRANK75_sub_2467E(u16 v);
 static void CRANK75_sub_260B8();
@@ -85,13 +85,14 @@ static void CRANK75_sub_2941C();
 static void CRANK75_sub_2B168();
 
 
-static bool CRANK_CheckCamshaft_sub_A7C0();
 static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2);
 static void CRANK_sub_262D0();
 
 
 static void CRANK5_SetIgnCoilTime_Fin();
-static void CRANK5_Main_sub_24AF0();
+
+void CRANK5_Main_sub_24AF0();
+
 static void CRANK5_sub_2504A();
 static void CRANK5_SetIgnSpark5();
 static void CRANK5_sub_21A04();
@@ -109,14 +110,15 @@ static void CRANK5_sub_C990(u16 v);
 
 
 static u16 sub_2640E(u16 ipw);
-static void Update_Gen_G_output();
 
+extern "C" void Update_Gen_G_output();
+extern "C" bool CRANK_CheckCamshaft_sub_A7C0();
 
 //static void atu22_IMF2G_event();
 //static void atu22_CMF2G_event();
 static void Disable_Ign_Handler(u16 v);
-static bool Check_Starter_signal();
-static bool Check_PEDRL_1();
+extern "C" bool Check_Starter_signal();
+extern "C" bool Check_PEDRL_1();
 
 static void Ign_handler(u16 v);
 static u16 Get_Coil_charge_status();
@@ -439,83 +441,83 @@ static void Disable_Coil_Charge(u16 mask)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void CRANK5_root_sub_DC18(u16 osbr, u32 icr)
-{
-	if ((osbr - crank_OSBR2_75) >= 162 || timer_up_FFFF8522 >= 40)
-	{
-		if (timer_up_FFFF8524 >= 39)
-		{
-			crank_dt_ICR0AH_5 = 0xFFFFFFFF;
-
-			crankHT_5 = 0xFFFF;
-		}
-		else
-		{
-			crankHT_5 = osbr - crank_OSBR2_5;
-
-			crank_dt_ICR0AH_5 = icr - crankPrev_ICR0AH_5;
-		};
-
-		crank_OSBR2_5 = osbr;
-
-		crankPrev_ICR0AH_5 = icr;
-
-		timer_up_FFFF8524 = 0;
-
-		__enable_irq();
-
-		CRANK5_Main_sub_24AF0();
-
-		word_FFFF8870 = reg_TCNT2A - ici0A_TCNT2A;
-
-		SET(crank_Flags, 1);
-	};
-
-	__enable_irq();
-}
+//static void CRANK5_root_sub_DC18(u16 osbr, u32 icr)
+//{
+//	if ((osbr - crank_OSBR2_75) >= 162 || timer_up_FFFF8522 >= 40)
+//	{
+//		if (timer_up_FFFF8524 >= 39)
+//		{
+//			crank_dt_ICR0AH_5 = 0xFFFFFFFF;
+//
+//			crankHT_5 = 0xFFFF;
+//		}
+//		else
+//		{
+//			crankHT_5 = osbr - crank_OSBR2_5;
+//
+//			crank_dt_ICR0AH_5 = icr - crankPrev_ICR0AH_5;
+//		};
+//
+//		crank_OSBR2_5 = osbr;
+//
+//		crankPrev_ICR0AH_5 = icr;
+//
+//		timer_up_FFFF8524 = 0;
+//
+//		__enable_irq();
+//
+//		CRANK5_Main_sub_24AF0();
+//
+//		word_FFFF8870 = reg_TCNT2A - ici0A_TCNT2A;
+//
+//		SET(crank_Flags, 1);
+//	};
+//
+//	__enable_irq();
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void CRANK75_root_sub_DB40(u16 osbr, u32 icr)
-{
-    if ((osbr - crank_OSBR2_5) >= 254 || timer_up_FFFF8524 >= 40)
-	{
-		if (timer_up_FFFF8522 >= 39)
-		{
-			crank_OSBR2_75 = osbr;
-
-			crankPrev_ICR0AH_75 = icr;
-
-			null_crank_dt_ICR0AH_5 = (u32)-1;
-
-			crankHT_75 = (u16)-1;
-		}
-		else
-		{
-			crankHT_75 = osbr - crank_OSBR2_75;
-
-			crank_OSBR2_75 = osbr;
-
-			null_crank_dt_ICR0AH_5 = icr - crankPrev_ICR0AH_75;
-
-			crankPrev_ICR0AH_75 = icr;
-		};
-
-		timer_up_FFFF8522 = 0;
-
-		__enable_irq();
-
-		CRANK75_Main_sub_232A0();
-
-		word_FFFF886E = reg_TCNT2A - ici0A_TCNT2A;
-
-		__disable_irq();
-
-		CLR(crank_Flags, 1);
-	};
-
-	__enable_irq();
-}
+//static void CRANK75_root_sub_DB40(u16 osbr, u32 icr)
+//{
+//    if ((osbr - crank_OSBR2_5) >= 254 || timer_up_FFFF8524 >= 40)
+//	{
+//		if (timer_up_FFFF8522 >= 39)
+//		{
+//			crank_OSBR2_75 = osbr;
+//
+//			crankPrev_ICR0AH_75 = icr;
+//
+//			null_crank_dt_ICR0AH_5 = (u32)-1;
+//
+//			crankHT_75 = (u16)-1;
+//		}
+//		else
+//		{
+//			crankHT_75 = osbr - crank_OSBR2_75;
+//
+//			crank_OSBR2_75 = osbr;
+//
+//			null_crank_dt_ICR0AH_5 = icr - crankPrev_ICR0AH_75;
+//
+//			crankPrev_ICR0AH_75 = icr;
+//		};
+//
+//		timer_up_FFFF8522 = 0;
+//
+//		__enable_irq();
+//
+//		CRANK75_Main_sub_232A0();
+//
+//		word_FFFF886E = reg_TCNT2A - ici0A_TCNT2A;
+//
+//		__disable_irq();
+//
+//		CLR(crank_Flags, 1);
+//	};
+//
+//	__enable_irq();
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -553,7 +555,7 @@ static void Disable_Ign_Handler(u16 v)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void CRANK75_Main_sub_232A0()
+void CRANK75_Main_sub_232A0()
 {
 //	const u32 r9 = 0x8000;
 
@@ -1128,24 +1130,24 @@ static void CRANK75_sub_2467E(u16 v)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static bool CRANK_CheckCamshaft_sub_A7C0()
-{
-	return (reg_PADRL & 4) == 0;
-}
+//static bool CRANK_CheckCamshaft_sub_A7C0()
+//{
+//	return (reg_PADRL & 4) == 0;
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static bool Check_Starter_signal()
-{
-	return (reg_PEDRL & 4) == 0;
-}
+//static bool Check_Starter_signal()
+//{
+//	return (reg_PEDRL & 4) == 0;
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static bool Check_PEDRL_1()
-{
-	return (reg_PEDRL & 1) != 0;
-}
+//static bool Check_PEDRL_1()
+//{
+//	return (reg_PEDRL & 1) != 0;
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -1679,7 +1681,7 @@ static void CRANK75_Knock_sub_24AC0()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void CRANK5_Main_sub_24AF0()
+void CRANK5_Main_sub_24AF0()
 {
 //	u32 r8 = 0x8000;
 
@@ -2819,24 +2821,6 @@ static void CRANK75_sub_2B168()
 
 	if (*r1 == 0) { *r1 -= 1; };
 }	
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-static void Update_Gen_G_output()
-{
-	__disable_irq();
-
-	if (ZRO(KNOCK_FLAG2_FFFF887A, KNOCK_F2_01))
-	{
-		SET(reg_PFDRL, 0x80);
-	}
-	else
-	{
-		CLR(reg_PFDRL, 0x80);
-	};
-
-	__enable_irq();
-}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

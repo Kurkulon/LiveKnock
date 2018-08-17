@@ -20,7 +20,7 @@ gnu_compiler_options =  -fno-show-column -m2 -c -fno-diagnostics-show-option -Os
 
 # -SPeed 
 
-debug_compiler_options =  -OPtimize=1 -SIze -SHIft=Inline -GBr=Auto
+debug_compiler_options =  -OPtimize=0 -SIze -SHIft=Inline
 debug_linker_options = 
 lbgsh_options = 
 libsuffix=d
@@ -87,9 +87,9 @@ $(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs $(objdir)\stock.abs
 
 ##################################################################################################
 
-$(objdir)\LiveKnock.abs : LiveMap.o AltMaps.o Hooks.o LiveKnock.o main.o F500.o	ML02.o # Ignition.o crank.o ,P_Ignition/39000,P_crank/3C000
+$(objdir)\LiveKnock.abs : LiveMap.o AltMaps.o Hooks.o LiveKnock.o main.o F500.o	#ML02.o # Ignition.o crank.o ,P_Ignition/39000,P_crank/3C000
 	@echo Linking $^@ ...
-	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P_main/EB04,P_Hooks/2CC0,P_F500/F500,P/39000,B/FFFF8480 -LIBrary=$(libname) -OUtput="$^@" $<
+	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P_main/EB04,P_Hooks/2CC0,P/39000,B/FFFF8480 -LIBrary=$(libname) -OUtput="$^@" $<
 	@echo $(delimiter)	
 
 ##################################################################################################
@@ -108,10 +108,10 @@ $(objdir)\LiveKnock.abs : LiveMap.o AltMaps.o Hooks.o LiveKnock.o main.o F500.o	
 
 ##################################################################################################
 
-$(objdir)\stock.abs : Ignition.o crank.o idle.o  FU03.o BC06.o huge.o LibsFunc.o ADC.o adc_hw.o atu02_ici0A.o
+$(objdir)\stock.abs : main.o LiveMap.o AltMaps.o Hooks.o LiveKnock.o F500.o	ML02.o Ignition.o crank.o idle.o  FU03.o BC06.o huge.o LibsFunc.o adc_hw.o atu02_ici0A.o c_9D18.o
 	@echo Linking $^@ ...
 	@copy /Y $[@ $^@
-	@rem optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Binary -start=ROM/0,RAM/FFFF6000,HWREG/FFFFE400,P_Ignition/39000,P_crank/3C000,B/FFFF8480 -LIBrary=$(libname) -OUtput="$^@" $<
+	@rem optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Binary -start=P_main/EB04,P_Hooks/2CC0,P/39000,B/FFFF8480,HWREG/FFFFE400,P_Ignition/16E90,P_idle/18F80,P_crank/23244,P_FU03/13AB8 -LIBrary=$(libname) -OUtput="$^@" $<
 	@echo $(delimiter)	
 
 ##################################################################################################

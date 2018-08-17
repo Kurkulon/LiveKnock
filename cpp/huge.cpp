@@ -30,7 +30,7 @@
 #define Start_Coil_Charge					((void(*)(u16))0xBE1C)
 #define sub_AD94							((void(*)(void))0xAD94)
 
-extern void Update_Gen_G_output();
+extern "C" void Update_Gen_G_output();
 
 //#define Update_Gen_G_output					((void(*)(void))0xAD06)
 //#define MUT98_sub_329C6						((void(*)(void))0x329C6)
@@ -89,7 +89,6 @@ extern void StartInjectAsync(u16 v, u16 mask);
 extern void StartInjectSync(u16 v, u16 mask);
 
 
-static void HUGE_Method_801_6_Hz();
 static void Huge_400_Hz();
 static void Huge_200_Hz();
 static void Huge_100_Hz();
@@ -146,43 +145,7 @@ extern "C" void SysInit_ATU_2A_2B_3_4_5_8_10()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#pragma interrupt(cmti0)
-
-extern "C" void cmti0()
-{
-	__disable_irq();
-
-	word_FFFF9AD6 = reg_TCNT2A;
-
-	CLR(reg_CMCSR0, 0x80);
-
-	DECLIM(downTimer_801);
-
-	word_FFFF9AD2 += 312;
-
-	if ((word_FFFF9AD2 - reg_TCNT2A) & 0x8000)
-	{
-		word_FFFF9AD2 += 312;
-
-		__enable_irq();
-
-		HUGE_Method_801_6_Hz();
-
-		HUGE_Method_801_6_Hz();
-	}
-	else
-	{
-		__enable_irq();
-
-		HUGE_Method_801_6_Hz();
-
-		word_FFFF9AD4 = reg_TCNT2A - word_FFFF9AD6;
-	};
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-static void HUGE_Method_801_6_Hz()
+extern "C" void HUGE_Method_801_6_Hz()
 {
 	__disable_irq();
 

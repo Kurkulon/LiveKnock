@@ -25,6 +25,9 @@
 //#pragma regsave(F500_Init_BitMap_Flags_New)
 //#pragma noregsave(F500_Init_Load_ECU_Info_And_BitMap_Flags)
 
+#define sub_A374									((void(*)(void))0xA374)
+//extern "C" void sub_A374();
+
 void F500_root_sub();
 
 void F500_Init_BitMap_Flags_New();
@@ -119,9 +122,6 @@ static void F500_Battery_Calcs_sub_1101A();
 
 #ifdef F500_TEST
 
-#pragma noregsave(sub_A374)
-static void sub_A374();
-
 #define F500_Init_Load_ECU_Info_And_BitMap_Flags	((void(*)(void))0xF58C)
 
 
@@ -164,8 +164,6 @@ static void sub_A374();
 #define F500_Battery_Calcs_sub_1101A				((void(*)(void))0x1101A)
 
 #else // F500_TEST
-
-#define sub_A374									((void(*)(void))0xA374)
 
 
 #endif // F500_TEST

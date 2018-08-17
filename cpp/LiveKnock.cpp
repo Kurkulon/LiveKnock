@@ -344,6 +344,8 @@ static void FeedBack_O2F()
 		{
 			i16 d = ((u32)wMUT0F_Oxygen_Feedback_Trim >> 10) - 32;
 
+			fb_VE = d;
+
 			if (d != 0)
 			{
 				byte al = axis_ve_LOAD;
