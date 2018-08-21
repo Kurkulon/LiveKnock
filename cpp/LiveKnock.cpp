@@ -342,7 +342,7 @@ static void FeedBack_O2F()
 	{
 		if (ve_timer == 0)
 		{
-			i16 d = ((u32)wMUT0F_Oxygen_Feedback_Trim >> 10) - 32;
+			i16 d = ((u32)wMUT0F_Oxygen_Feedback_Trim >> 8) - 128;
 
 			fb_VE = d;
 
