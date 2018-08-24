@@ -29,7 +29,7 @@
 
 #define Read_Ports_And_Registers_sub_B114				((void(*)(void))0xB114)
 
-extern void atu22_IMF2G_event();
+extern "C" void atu22_IMF2G_event();
 
 
 static void CRANK75_root_sub_DB40(u16 osbr, u32 icr);

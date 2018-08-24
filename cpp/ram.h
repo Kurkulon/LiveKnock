@@ -1771,7 +1771,7 @@
 #define      word_FFFF9A5A                  							(*(u16*)0xFFFF9A5A)                                                        
 #define      recieve_buffer_1_2             							(*(u16*)0xFFFF9A5C)                                                        
 #define      word_FFFF9A5E                  							(*(u16*)0xFFFF9A5E)                                                        
-#define      dword_FFFF9A60                 							((byte*)0xFFFF9A60)				//.res.b h'40                                                     
+#define      dword_FFFF9A60                 							((u32*)0xFFFF9A60)				//.res.b h'40                                                     
 #define      word_FFFF9AB0                  							(*(u16*)0xFFFF9AB0)                                                        
 #define      word_FFFF9AB2                  							(*(u16*)0xFFFF9AB2)                                                        
 #define      word_FFFF9AB4                  							(*(u16*)0xFFFF9AB4)                                                        

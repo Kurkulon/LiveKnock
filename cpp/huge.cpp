@@ -98,50 +98,50 @@ static void Huge_50_Hz();
 static void Huge_800_Hz_27F62();
 
 static void Update_MAP_Avrg();
-static u16 sub_E44C();
+extern "C" u16 sub_E44C();
 static void MUT98_sub_329C6();
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SysInit_ATU_2A_2B_3_4_5_8_10()
-{
-	__disable_irq();
-
-	reg_PSCR1 = 3; // 4 MHz
-
-	reg_PSCR4 = 3; // 4 MHz
-
-	reg_TCR2A = 0x34; // 250kHz
-	reg_TCR2B = 0x34;
-	reg_TCR3 = 0x34;
-	reg_TCR4 = 0x34;
-	reg_TCR5 = 0x34;
-
-	reg_TCR8 = reg_TCR8 & 0xF | 0x50;
-
-	reg_TIOR10 = 0x30;
-	reg_TCR10 = 0;
-	reg_TIER10 = 0x10;
-	reg_TMDR = 0;
-	reg_TSTR1 = reg_TSTR1 & 2 | 0x7D;
-
-	reg_CMCOR0 = 2495; // period
-	reg_CMCSR0 = 0x40; // Pô/8 = 2MHz
-	CLR(reg_CMCSR0, 0x80); // reset irq
-	SET(reg_CMSTR, 1);		// start CMT0
-
-	word_FFFF9AD2 = reg_TCNT2A + 312;
-
-	CLR(reg_TIER3, 0x3A0);
-
-	reg_TIOR4A = 0x11;
-	reg_TIOR4B = 0x11;
-	CLR(reg_TIER3, 0x40);
-
-	downTimer_801 = 1;
-
-	__enable_irq();
-}
+//extern "C" void SysInit_ATU_2A_2B_3_4_5_8_10()
+//{
+//	__disable_irq();
+//
+//	reg_PSCR1 = 3; // 4 MHz
+//
+//	reg_PSCR4 = 3; // 4 MHz
+//
+//	reg_TCR2A = 0x34; // 250kHz
+//	reg_TCR2B = 0x34;
+//	reg_TCR3 = 0x34;
+//	reg_TCR4 = 0x34;
+//	reg_TCR5 = 0x34;
+//
+//	reg_TCR8 = reg_TCR8 & 0xF | 0x50;
+//
+//	reg_TIOR10 = 0x30;
+//	reg_TCR10 = 0;
+//	reg_TIER10 = 0x10;
+//	reg_TMDR = 0;
+//	reg_TSTR1 = reg_TSTR1 & 2 | 0x7D;
+//
+//	reg_CMCOR0 = 2495; // period
+//	reg_CMCSR0 = 0x40; // Pô/8 = 2MHz
+//	CLR(reg_CMCSR0, 0x80); // reset irq
+//	SET(reg_CMSTR, 1);		// start CMT0
+//
+//	word_FFFF9AD2 = reg_TCNT2A + 312;
+//
+//	CLR(reg_TIER3, 0x3A0);
+//
+//	reg_TIOR4A = 0x11;
+//	reg_TIOR4B = 0x11;
+//	CLR(reg_TIER3, 0x40);
+//
+//	downTimer_801 = 1;
+//
+//	__enable_irq();
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -1109,18 +1109,18 @@ static void Update_MAP_Avrg()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static u16 sub_E44C()
-{
-	__disable_irq();
-
-	u32 r1 = word_FFFF9ACC;
-
-	word_FFFF9ACC = 0;
-
-	__enable_irq();
-
-	return r1;
-}
+//static u16 sub_E44C()
+//{
+//	__disable_irq();
+//
+//	u32 r1 = word_FFFF9ACC;
+//
+//	word_FFFF9ACC = 0;
+//
+//	__enable_irq();
+//
+//	return r1;
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

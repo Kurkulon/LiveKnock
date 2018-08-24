@@ -16,7 +16,9 @@
 
 #define Get_ADC_Knock				((void(*)(void))0xA92C)
 #define atu22_Get_DSTR_0x3C00		((u16(*)(void))0xC850)
-#define Reset_IRQ0F					((u16(*)(void))0xC258)
+//#define Reset_IRQ0F					((u16(*)(void))0xC258)
+
+extern "C" bool Reset_IRQ0F();
 
 #define sub_21AAA					((u16(*)(u16))0x21AAA)
 #define sub_21ACC					((u16(*)(u16))0x21ACC)
@@ -59,15 +61,17 @@
 //static void CRANK5_root_sub_DC18(u16 osbr, u32 icr);
 //static void CRANK75_root_sub_DB40(u16 osbr, u32 icr);
 
-static void SetIgnCoilChargeStartTime(u16 mask, u16 v);
-static void SetIgnSparkStartTime(u16 mask, u16 v);
+extern "C" void SetIgnCoilChargeStartTime(u16 mask, u16 v);
+extern "C" void SetIgnSparkStartTime(u16 mask, u16 v);
 
 void StartInjectSync(u16 v, u16 mask);
 void StartInjectAsync(u16 v, u16 mask);
-void InjOpenStart(u16 v, u16 mask);
+
+extern "C" void InjOpenStart(u16 v, u16 mask);
 
 u16 INJECTOR_RESCALED_sub_26174(u16 v);
-u16 atu22_Get_ECNT9A();
+
+extern "C" u16 atu22_Get_ECNT9A();
 
 
 
@@ -116,15 +120,15 @@ extern "C" bool CRANK_CheckCamshaft_sub_A7C0();
 
 //static void atu22_IMF2G_event();
 //static void atu22_CMF2G_event();
-static void Disable_Ign_Handler(u16 v);
+extern "C" void Disable_Ign_Handler(u16 v);
 extern "C" bool Check_Starter_signal();
 extern "C" bool Check_PEDRL_1();
 
-static void Ign_handler(u16 v);
-static u16 Get_Coil_charge_status();
+extern "C" void Ign_handler(u16 v);
+extern "C" u16 Get_Coil_charge_status();
 
-static void Start_Coil_Charge(u16 mask);
-static void Disable_Coil_Charge(u16 mask);
+extern "C" void Start_Coil_Charge(u16 mask);
+extern "C" void Disable_Coil_Charge(u16 mask);
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -241,44 +245,44 @@ void F500_InitManifoldVars()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#pragma interrupt(atu22_imi2E)
-
-extern "C" void atu22_imi2E()
-{
-	__disable_irq();
-
-	CLR(reg_TSR2A, 0x10);
-
-	__enable_irq();
-
-	Ign_handler(1);
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-#pragma interrupt(atu22_imi2F)
-
-extern "C" void atu22_imi2F()
-{
-	__disable_irq();
-
-	CLR(reg_TSR2A, 0x20);
-
-	__enable_irq();
-
-	Ign_handler(2);
-}
+//#pragma interrupt(atu22_imi2E)
+//
+//extern "C" void atu22_imi2E()
+//{
+//	__disable_irq();
+//
+//	CLR(reg_TSR2A, 0x10);
+//
+//	__enable_irq();
+//
+//	Ign_handler(1);
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-void atu22_IMF2G_event()
-{
-	__disable_irq();
+//#pragma interrupt(atu22_imi2F)
+//
+//extern "C" void atu22_imi2F()
+//{
+//	__disable_irq();
+//
+//	CLR(reg_TSR2A, 0x20);
+//
+//	__enable_irq();
+//
+//	Ign_handler(2);
+//}
 
-	Disable_Ign_Handler(4);
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	__enable_irq();
-}
+//void atu22_IMF2G_event()
+//{
+//	__disable_irq();
+//
+//	Disable_Ign_Handler(4);
+//
+//	__enable_irq();
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -310,7 +314,7 @@ void atu22_IMF2G_event()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void Ign_handler(u16 mask)
+extern "C" void Ign_handler(u16 mask)
 {
 	Disable_Ign_Handler(mask);
 
@@ -344,100 +348,100 @@ static void Ign_handler(u16 mask)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static u16 Get_Coil_charge_status()
-{
-	__disable_irq();
-
-	u32 r1 = reg_PHDRH;
-
-	__enable_irq();
-
-	return (~(r1 >> 4)) & 7;
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-static void Start_Coil_Charge(u16 mask)
-{
-	__disable_irq();
-
-	if (mask & 1)
-	{
-		reg_GR2E = reg_TCNT2A + 2;
-
-		CLR(reg_TSR2A, 0x10);
-
-		reg_TIOR2C = reg_TIOR2C & 0xF8 | 1; // 0 output on GR compare-match
-
-		while(ZRO(reg_TSR2A, 0x10)) ;
-	};
-
-	if (mask & 2)
-	{
-		reg_GR2F = reg_TCNT2A + 2;
-
-		CLR(reg_TSR2A, 0x20);
-
-		reg_TIOR2C = reg_TIOR2C & 0x8F | 0x10; // 0 output on GR compare-match
-
-		while(ZRO(reg_TSR2A, 0x20)) ;
-	};
-
-	if (mask & 4)
-	{
-		reg_GR2G = reg_TCNT2A + 2;
-
-		CLR(reg_TSR2A, 0x40);
-
-		reg_TIOR2D = reg_TIOR2D & 0xF8 | 1; // 0 output on GR compare-match
-
-		while(ZRO(reg_TSR2A, 0x40)) ;
-	};
-
-	__enable_irq();
-}
+//static u16 Get_Coil_charge_status()
+//{
+//	__disable_irq();
+//
+//	u32 r1 = reg_PHDRH;
+//
+//	__enable_irq();
+//
+//	return (~(r1 >> 4)) & 7;
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void Disable_Coil_Charge(u16 mask)
-{
-	__disable_irq();
+//static void Start_Coil_Charge(u16 mask)
+//{
+//	__disable_irq();
+//
+//	if (mask & 1)
+//	{
+//		reg_GR2E = reg_TCNT2A + 2;
+//
+//		CLR(reg_TSR2A, 0x10);
+//
+//		reg_TIOR2C = reg_TIOR2C & 0xF8 | 1; // 0 output on GR compare-match
+//
+//		while(ZRO(reg_TSR2A, 0x10)) ;
+//	};
+//
+//	if (mask & 2)
+//	{
+//		reg_GR2F = reg_TCNT2A + 2;
+//
+//		CLR(reg_TSR2A, 0x20);
+//
+//		reg_TIOR2C = reg_TIOR2C & 0x8F | 0x10; // 0 output on GR compare-match
+//
+//		while(ZRO(reg_TSR2A, 0x20)) ;
+//	};
+//
+//	if (mask & 4)
+//	{
+//		reg_GR2G = reg_TCNT2A + 2;
+//
+//		CLR(reg_TSR2A, 0x40);
+//
+//		reg_TIOR2D = reg_TIOR2D & 0xF8 | 1; // 0 output on GR compare-match
+//
+//		while(ZRO(reg_TSR2A, 0x40)) ;
+//	};
+//
+//	__enable_irq();
+//}
 
-	if (mask & 1)
-	{
-		reg_GR2E = reg_TCNT2A + 2;
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-		CLR(reg_TSR2A, 0x10);
-
-		reg_TIOR2C = reg_TIOR2C & 0xF8 | 2;
-
-		while(ZRO(reg_TSR2A, 0x10)) ;
-	};
-
-	if (mask & 2)
-	{
-		reg_GR2F = reg_TCNT2A + 2;
-
-		CLR(reg_TSR2A, 0x20);
-
-		reg_TIOR2C = reg_TIOR2C & 0x8F | 0x20;
-
-		while(ZRO(reg_TSR2A, 0x20)) ;
-	};
-
-	if (mask & 4)
-	{
-		reg_GR2G = reg_TCNT2A + 2;
-
-		CLR(reg_TSR2A, 0x40);
-
-		reg_TIOR2D = reg_TIOR2D & 0xF8 | 2;
-
-		while(ZRO(reg_TSR2A, 0x40)) ;
-	};
-
-	__enable_irq();
-}
+//static void Disable_Coil_Charge(u16 mask)
+//{
+//	__disable_irq();
+//
+//	if (mask & 1)
+//	{
+//		reg_GR2E = reg_TCNT2A + 2;
+//
+//		CLR(reg_TSR2A, 0x10);
+//
+//		reg_TIOR2C = reg_TIOR2C & 0xF8 | 2;
+//
+//		while(ZRO(reg_TSR2A, 0x10)) ;
+//	};
+//
+//	if (mask & 2)
+//	{
+//		reg_GR2F = reg_TCNT2A + 2;
+//
+//		CLR(reg_TSR2A, 0x20);
+//
+//		reg_TIOR2C = reg_TIOR2C & 0x8F | 0x20;
+//
+//		while(ZRO(reg_TSR2A, 0x20)) ;
+//	};
+//
+//	if (mask & 4)
+//	{
+//		reg_GR2G = reg_TCNT2A + 2;
+//
+//		CLR(reg_TSR2A, 0x40);
+//
+//		reg_TIOR2D = reg_TIOR2D & 0xF8 | 2;
+//
+//		while(ZRO(reg_TSR2A, 0x40)) ;
+//	};
+//
+//	__enable_irq();
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -521,37 +525,37 @@ static void Disable_Coil_Charge(u16 mask)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void Disable_Ign_Handler(u16 v)
-{
-	__disable_irq();
-
-	u32 r13 = reg_TCNT2A;
-
-	r13 -= 1;
-
-	if (v & 1)
-	{
-		reg_GR2E = r13;
-
-		CLR(reg_TSR2A, 0x10);
-	};
-
-	if (v & 2)
-	{
-		reg_GR2F = r13;
-
-		CLR(reg_TSR2A, 0x20);
-	};
-
-	if (v & 4)
-	{
-		reg_GR2G = r13;
-
-		CLR(reg_TSR2A, 0x40);
-	};
-
-	__enable_irq();
-}
+//static void Disable_Ign_Handler(u16 v)
+//{
+//	__disable_irq();
+//
+//	u32 r13 = reg_TCNT2A;
+//
+//	r13 -= 1;
+//
+//	if (v & 1)
+//	{
+//		reg_GR2E = r13;
+//
+//		CLR(reg_TSR2A, 0x10);
+//	};
+//
+//	if (v & 2)
+//	{
+//		reg_GR2F = r13;
+//
+//		CLR(reg_TSR2A, 0x20);
+//	};
+//
+//	if (v & 4)
+//	{
+//		reg_GR2G = r13;
+//
+//		CLR(reg_TSR2A, 0x40);
+//	};
+//
+//	__enable_irq();
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -2722,11 +2726,11 @@ static void CRANK_sub_262D0()
 {
 	u32 r1 = atu22_Get_DSTR_0x3C00();
 
-	u32 r13 = Reset_IRQ0F();
+	bool r13 = Reset_IRQ0F();
 
 	if ((word_FFFF8DF2 ^ r1) & word_FFFF8DF2 & word_FFFF8DF4)
 	{
-		if (r13 != 0)
+		if (r13)
 		{
 			CLR(wMUT72_Knock_Present, 2);
 
@@ -2824,51 +2828,51 @@ static void CRANK75_sub_2B168()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void SetIgnCoilChargeStartTime(u16 mask, u16 v)
-{
-	__disable_irq();
-
-	u32 r13 = v;
-
-	v -= reg_TCNT2A + 2;
-
-	if (v & 0x8000)
-	{
-		r13 = reg_TCNT2A + 2;
-	};
-
-	// 0 output on GR compare-match
-
-	if (mask & 1) { reg_GR2E = r13; CLR(reg_TSR2A, 0x10); reg_TIOR2C = reg_TIOR2C & 0xF8 | 1; };	
-	if (mask & 2) { reg_GR2F = r13; CLR(reg_TSR2A, 0x20); reg_TIOR2C = reg_TIOR2C & 0x8F | 0x10; };
-	if (mask & 4) { reg_GR2G = r13; CLR(reg_TSR2A, 0x40); reg_TIOR2D = reg_TIOR2D & 0xF8 | 1; };
-
-	__enable_irq();
-}
+//static void SetIgnCoilChargeStartTime(u16 mask, u16 v)
+//{
+//	__disable_irq();
+//
+//	u32 r13 = v;
+//
+//	v -= reg_TCNT2A + 2;
+//
+//	if (v & 0x8000)
+//	{
+//		r13 = reg_TCNT2A + 2;
+//	};
+//
+//	// 0 output on GR compare-match
+//
+//	if (mask & 1) { reg_GR2E = r13; CLR(reg_TSR2A, 0x10); reg_TIOR2C = reg_TIOR2C & 0xF8 | 1; };	
+//	if (mask & 2) { reg_GR2F = r13; CLR(reg_TSR2A, 0x20); reg_TIOR2C = reg_TIOR2C & 0x8F | 0x10; };
+//	if (mask & 4) { reg_GR2G = r13; CLR(reg_TSR2A, 0x40); reg_TIOR2D = reg_TIOR2D & 0xF8 | 1; };
+//
+//	__enable_irq();
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void SetIgnSparkStartTime(u16 mask, u16 v)
-{
-	__disable_irq();
-
-	u32 r13 = v;
-
-	v -= reg_TCNT2A + 2;
-
-	if (v & 0x8000)
-	{
-		r13 = reg_TCNT2A + 2;
-	};
-
-	// 1 output on GR compare-match
-
-	if (mask & 1) { reg_GR2E = r13; CLR(reg_TSR2A, 0x10); reg_TIOR2C = reg_TIOR2C & 0xF8 | 2; };
-	if (mask & 2) { reg_GR2F = r13; CLR(reg_TSR2A, 0x20); reg_TIOR2C = reg_TIOR2C & 0x8F | 0x20; };
-	if (mask & 4) { reg_GR2G = r13; CLR(reg_TSR2A, 0x40); reg_TIOR2D = reg_TIOR2D & 0xF8 | 2; };
-
-	__enable_irq();
-}
+//static void SetIgnSparkStartTime(u16 mask, u16 v)
+//{
+//	__disable_irq();
+//
+//	u32 r13 = v;
+//
+//	v -= reg_TCNT2A + 2;
+//
+//	if (v & 0x8000)
+//	{
+//		r13 = reg_TCNT2A + 2;
+//	};
+//
+//	// 1 output on GR compare-match
+//
+//	if (mask & 1) { reg_GR2E = r13; CLR(reg_TSR2A, 0x10); reg_TIOR2C = reg_TIOR2C & 0xF8 | 2; };
+//	if (mask & 2) { reg_GR2F = r13; CLR(reg_TSR2A, 0x20); reg_TIOR2C = reg_TIOR2C & 0x8F | 0x20; };
+//	if (mask & 4) { reg_GR2G = r13; CLR(reg_TSR2A, 0x40); reg_TIOR2D = reg_TIOR2D & 0xF8 | 2; };
+//
+//	__enable_irq();
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -2916,48 +2920,48 @@ void StartInjectAsync(u16 v, u16 mask)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-void InjOpenStart(u16 v, u16 mask)
-{
-	__disable_irq();
-
-	if (v != 0)
-	{
-		u32 r13 = 0xFFFFFFFF + v;
-
-		if (mask & 1) 	{	reg_DCNT8K = r13; 	};
-		if (mask & 2) 	{	reg_DCNT8L = r13; 	};
-		if (mask & 4) 	{	reg_DCNT8M = r13; 	};
-		if (mask & 8) 	{	reg_DCNT8N = r13; 	};
-		if (mask & 16) 	{	reg_DCNT8O = r13; 	};
-		if (mask & 32) 	{	reg_DCNT8P = r13; 	};
-
-		SET(reg_DSTR, (mask & 63) << 10);
-	};
-	
-	__enable_irq();
-}
+//void InjOpenStart(u16 v, u16 mask)
+//{
+//	__disable_irq();
+//
+//	if (v != 0)
+//	{
+//		u32 r13 = 0xFFFFFFFF + v;
+//
+//		if (mask & 1) 	{	reg_DCNT8K = r13; 	};
+//		if (mask & 2) 	{	reg_DCNT8L = r13; 	};
+//		if (mask & 4) 	{	reg_DCNT8M = r13; 	};
+//		if (mask & 8) 	{	reg_DCNT8N = r13; 	};
+//		if (mask & 16) 	{	reg_DCNT8O = r13; 	};
+//		if (mask & 32) 	{	reg_DCNT8P = r13; 	};
+//
+//		SET(reg_DSTR, (mask & 63) << 10);
+//	};
+//	
+//	__enable_irq();
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-u16 atu22_Get_ECNT9A()
-{
-	__disable_irq();
-
-	u32 r1 = reg_ECNT9A;
-
-	reg_ECNT9A = 0;
-
-	if (reg_TSR9 & 1)
-	{
-		r1 = 0xFF;
-
-		CLR(reg_TSR9, 1);
-	};
-
-	__enable_irq();
-
-	return r1;
-}
+//u16 atu22_Get_ECNT9A()
+//{
+//	__disable_irq();
+//
+//	u32 r1 = reg_ECNT9A;
+//
+//	reg_ECNT9A = 0;
+//
+//	if (reg_TSR9 & 1)
+//	{
+//		r1 = 0xFF;
+//
+//		CLR(reg_TSR9, 1);
+//	};
+//
+//	__enable_irq();
+//
+//	return r1;
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

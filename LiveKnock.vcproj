@@ -69,10 +69,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\cpp\adc_hw.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\cpp\AltMaps.asm"
 				>
 			</File>
