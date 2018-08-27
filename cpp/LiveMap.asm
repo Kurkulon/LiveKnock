@@ -7,12 +7,13 @@
 	.INCLUDE "cpp\def.inc"
 	
 	.EXPORT _LiveMap
+	.EXPORT ___DMAOPFLAG
 	
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	.SECTION    B_LIVEMAP, DATA, LOCATE=H'FFFF8400
 
-DMAOPFLAG:						.RES.L 1	; H'ffff8480
+___DMAOPFLAG:					.RES.L 1	; H'ffff8480
 DMAOPFLAG2:						.RES.L 1	; H'ffff8484
 DMAadr:							.RES.L 1	; H'ffff8488
 DMAlength:						.RES.W 1	; H'ffff848c
@@ -106,7 +107,7 @@ HookedProc:						.EQU	H'A98A
 
 	.SECTION C_D314, DATA, LOCATE=H'D314
 
-		.DATA.L		DMAOPFLAG		;	0xD316=0x84,0x80                               
+		.DATA.L		___DMAOPFLAG		;	0xD316=0x84,0x80                               
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -237,7 +238,7 @@ brE012: ;FOR SETTING UP FIRST DMA TRANSFER
 	mov.l 	#DMATCR3,r11
 	mov.l 	r0,@r11
 	mov		#H'37,r0			; 0X37	IS THE NUMBER OF MY CHILDHOOD HOME - SUITABLE RANDOM NON ZERO NUMBER THAT WE CAN SET WHEN WE DON'T WANT THE ECU TO KILL OUR DMA PROCESS
-	mov.l 	#DMAOPFLAG,r10
+	mov.l 	#___DMAOPFLAG,r10
 	mov.l 	r0,@r10
 	mov.l 	#SSR0,r10
 	mov.b 	@r10,r0
@@ -379,7 +380,7 @@ brE0: ;USES EARLIER 4 BYTE ADDRESS AND 2 BYTE LENGTH TO LOG THE MUT TABLE
 	mov.l 	#DMATCR3,r10
 	mov.l 	r0,@r10
 	mov		#H'37,r0
-	mov.l 	#DMAOPFLAG,r10
+	mov.l 	#___DMAOPFLAG,r10
 	mov.l 	r0,@r10
 	mov.w 	#SCR0_CLRRE_SETTIE,r0
 	mov.l 	#SCR0,r10
@@ -415,7 +416,7 @@ brE1: ;USES PREVIOUS 4 BYTE ADDRESS AND 2 BYTE LENGTH TO WRITE A BLOCK OF RAM TO
 	mov.l 	#DMATCR3,r10
 	mov.l 	r0,@r10
 	mov		#H'37,r0
-	mov.l 	#DMAOPFLAG,r10
+	mov.l 	#___DMAOPFLAG,r10
 	mov.l 	r0,@r10
 	mov.w 	#SCR0_CLRRE_SETTIE,r0
 	mov.l 	#SCR0,r10
@@ -451,7 +452,7 @@ brE2: ;USES PREVIOUS 4 BYTE ADDRESS AND 2 BYTE LENGTH TO READ A BLOCK FROM SERIA
 	mov.l	#DMATCR3,r10
 	mov.l	r0,@r10
 	mov		#H'37,r0
-	mov.l 	#DMAOPFLAG,r10
+	mov.l 	#___DMAOPFLAG,r10
 	mov.l 	r0,@r10
 	mov.l 	#SSR0,r10
 	mov.b 	@r10,r0
@@ -491,7 +492,7 @@ TEIE: ;TRANSMIT END INTERRUPT
 TEIEinvade: ;JUMP HERE FROM EARLIER IF TRANSMISSION HAS ALREADY FINISHED
 
 	mov		#0,r0
-	mov.l 	#DMAOPFLAG,r10 ;CLEAR OUR 0X37 VARIABLE
+	mov.l 	#___DMAOPFLAG,r10 ;CLEAR OUR 0X37 VARIABLE
 	mov.l 	r0,@r10
 	mov.w 	#SCR0_SETRE_CLRTEIE,r0 ;RESET SERIAL PORT INTERRUPT CONFIG
 	mov.l 	#SCR0,r10
@@ -569,7 +570,7 @@ TIMEOUT: ;KILLS DMA IF COMMS HAVE BEEN KILLED
 	mov.l 	r0,@r10
 
 	mov		#0,r0
-	mov.w 	#DMAOPFLAG,r10
+	mov.w 	#___DMAOPFLAG,r10
 	mov.l 	r0,@r10
 
 __exit:

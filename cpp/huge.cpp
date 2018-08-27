@@ -835,13 +835,13 @@ inline void Huge_200_loc_27532()
 
 		// loc_2756A
 
-		if (ZRO(word_FFFF8D74, 0x80) && word_FFFF8DB4 == 5 && (word_FFFF8DA8 + word_FFFF8DAA + word_FFFF8DAC + word_FFFF8DAE) == word_FFFF8DB0)
+		if (ZRO(word_FFFF8D74, 0x80) && word_FFFF8DB4 == 5 && (word_FFFF8DA8[0] + word_FFFF8DA8[1] + word_FFFF8DA8[2] + word_FFFF8DA8[3]) == word_FFFF8DA8[4])
 		{
-			wMUT70_Array_of_Serial_Receive_Data_Register_2_RDR2_Values = word_FFFF8DA8;
+			wMUT70_Array_of_Serial_Receive_Data_Register_2_RDR2_Values = word_FFFF8DA8[0];
 
-			word_FFFF8D9A = word_FFFF8DAA;
-			word_FFFF8D9E = word_FFFF8DAC;
-			word_FFFF8DA0 = word_FFFF8DAE;
+			word_FFFF8D9A = word_FFFF8DA8[1];
+			word_FFFF8D9E = word_FFFF8DA8[2];
+			word_FFFF8DA0 = word_FFFF8DA8[3];
 			word_FFFF8DB8 = 0;
 
 			if (ZRO(word_FFFF8D9E, 7))

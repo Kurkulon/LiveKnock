@@ -107,7 +107,8 @@ static void CRANK5_sub_2A684();
 static void CRANK5_sub_2AAA2();
 static void CRANK5_sub_2AC5C();
 static void CRANK5_sub_2AEE4();
-static void CRANK5_sub_C990(u16 v);
+
+extern "C" void CRANK5_sub_C990(u16 v);
 
 
 
@@ -3256,27 +3257,27 @@ static void CRANK5_sub_2AEE4()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void CRANK5_sub_C990(u16 v)
-{
-	__disable_irq();
-
-	u32 r13 = v;
-
-	v -= reg_TCNT2A + 2;
-
-	if (v & 0x8000)
-	{
-		r13 = reg_TCNT2A + 2;
-	};
-
-	reg_GR2H = r13;
-
-	CLR(reg_TSR2A, 0x80);
-
-	reg_TIOR2D = reg_TIOR2D & 0x8F | 0x10;
-
-	__enable_irq();
-}
+//static void CRANK5_sub_C990(u16 v)
+//{
+//	__disable_irq();
+//
+//	u32 r13 = v;
+//
+//	v -= reg_TCNT2A + 2;
+//
+//	if (v & 0x8000)
+//	{
+//		r13 = reg_TCNT2A + 2;
+//	};
+//
+//	reg_GR2H = r13;
+//
+//	CLR(reg_TSR2A, 0x80);
+//
+//	reg_TIOR2D = reg_TIOR2D & 0x8F | 0x10;
+//
+//	__enable_irq();
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

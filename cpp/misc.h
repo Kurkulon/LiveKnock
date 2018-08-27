@@ -631,6 +631,8 @@ extern const u16 hiIgnMapData[];
 extern Map3D_B enrichCoolantMapRAM;
 extern Map3D_W kAirMapRAM;
 
+extern u32 __DMAOPFLAG;
+
 extern "C" u16 Interpolate_my(u16,u16,u16);
 extern "C" u16 interpolate_r4_r5_r6_my(u16,u16,u16);
 

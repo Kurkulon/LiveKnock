@@ -339,8 +339,8 @@
 
 struct S_SCI
 {
-	byte SMR;
-	byte BRR;
+	u16	 SMR_BRR;
+//	byte BRR;
 	byte SCR;
 	byte TDR;
 	byte SSR;

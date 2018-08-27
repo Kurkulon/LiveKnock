@@ -21,6 +21,8 @@
 
 #define	word_8AD4				((const u16*)0x8AD4)                                                     
 
+#define	off_8AE4				((u16**)0x8AE4)                                                     
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 extern "C" void SysInit_ADC();
@@ -54,14 +56,16 @@ extern "C" void sub_C8E0();
 extern "C" void sub_CAA8();                                          
 extern "C" void Init_ATU_6_7();                                      
 extern "C" void sub_D008();                                          
-extern "C" void sub_D99A();                                          
+static void sub_D99A();                                          
 extern "C" void sub_DE24();                                          
 extern "C" void sub_E3EA();                                          
 extern "C" void Init_ATU_Counters_Control_sub_E4D0();                
 extern "C" void sub_E5FC();                                          
 extern "C" void sub_A324();                                          
 extern "C" void GetADC(byte r1, u16 *r2, u16 *r8);
-extern "C" void SetDuty_6D(u16 v);
+
+//extern "C" void SetDuty_6D(u16 v);
+static void SetDuty_6D(u16 v);
 
 extern "C" bool sub_C2CC();
 extern "C" bool sub_C304();
@@ -76,7 +80,10 @@ extern "C" void Ign_handler(u16 mask);
 static u16 GetADC0(byte r1);
 static u16 GetADC1(byte r1);
 
+extern "C" void COM_TX_Get();
+extern "C" void COM_SCI0_RXI0();
 
+extern "C" void sub_D56E();
 
 
 
@@ -701,16 +708,16 @@ extern "C" void Knock_Output_Calc_sub_AC96()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void sub_ACD4()
-{
-	__disable_irq();
-
-//	word_FFFF8868 = (KNOCK_FLAG2_FFFF887A & 4) ? 1 : 0;
-
-	word_FFFF8868 = ((u32)KNOCK_FLAG2_FFFF887A >> 2) & 1;
-
-	__enable_irq();
-}
+//extern "C" void sub_ACD4()
+//{
+//	__disable_irq();
+//
+////	word_FFFF8868 = (KNOCK_FLAG2_FFFF887A & 4) ? 1 : 0;
+//
+//	word_FFFF8868 = ((u32)KNOCK_FLAG2_FFFF887A >> 2) & 1;
+//
+//	__enable_irq();
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -941,7 +948,7 @@ extern "C" void Read_Ports_And_Registers_sub_B114()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SysInit_ADC()
+static void SysInit_ADC()
 {
 	reg_ADCSR1 = 0;
 
@@ -1054,7 +1061,7 @@ extern "C" void SysInit_ATU_0_DMA_2()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void Init_ATU_0_DMA_2()
+static void Init_ATU_0_DMA_2()
 {
 	__disable_irq();
 
@@ -1069,10 +1076,10 @@ extern "C" void Init_ATU_0_DMA_2()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void sub_B4F2()
-{
-
-}
+//extern "C" void sub_B4F2()
+//{
+//
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -1127,11 +1134,11 @@ static void dmac2_dei2_B618()
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-extern "C" void sub_B6D0()
-{
-
-
-}
+//extern "C" void sub_B6D0()
+//{
+//
+//
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -1152,7 +1159,7 @@ extern "C" void dmac2_dei2()
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-extern "C" void SysInit_HCAN()
+static void SysInit_HCAN()
 {
 	CLR(reg_MCR, 0x80);
 
@@ -1165,7 +1172,7 @@ extern "C" void SysInit_HCAN()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void Init_HCAN()
+static void Init_HCAN()
 {
 	__disable_irq();
 
@@ -1182,7 +1189,7 @@ extern "C" void Init_HCAN()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SysInit_ATU_2A_2B_3_4_5_8_10()
+static void SysInit_ATU_2A_2B_3_4_5_8_10()
 {
 	__disable_irq();
 
@@ -1224,7 +1231,7 @@ extern "C" void SysInit_ATU_2A_2B_3_4_5_8_10()
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-extern "C" void Init_ATU_2A_2B_3_4_5_8_10()
+static void Init_ATU_2A_2B_3_4_5_8_10()
 {
 	__disable_irq();
 
@@ -1337,7 +1344,7 @@ extern "C" void WaitDownTimer801()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SysInit_ATU_2E_2F_2G_out()
+static void SysInit_ATU_2E_2F_2G_out()
 {
 	__disable_irq();
 
@@ -1363,7 +1370,7 @@ extern "C" void SysInit_ATU_2E_2F_2G_out()
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-extern "C" void Init_ATU_2E_2F_2G_out()
+static void Init_ATU_2E_2F_2G_out()
 {
 	__disable_irq();
 
@@ -1600,7 +1607,7 @@ extern "C" u16 Get_Coil_charge_status()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SysInit_HW_C0CC()
+static void SysInit_HW_C0CC()
 {
 	reg_SYSCR = 3;
 
@@ -1640,7 +1647,7 @@ extern "C" void SysInit_HW_C0CC()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void Init_HW_C164()
+static void Init_HW_C164()
 {
 	__disable_irq();
 
@@ -1681,7 +1688,7 @@ extern "C" void Init_HW_C164()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SysInit_ICR_C204()
+static void SysInit_ICR_C204()
 {
 	__disable_irq();
 
@@ -1694,7 +1701,7 @@ extern "C" void SysInit_ICR_C204()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void sub_C234()
+static void sub_C234()
 {
 	__disable_irq();
 
@@ -1725,7 +1732,7 @@ extern "C" bool Reset_IRQ0F()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" bool sub_C2CC()
+static bool sub_C2CC()
 {
 	bool r1 = false;
 
@@ -1745,7 +1752,7 @@ extern "C" bool sub_C2CC()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" bool sub_C304()
+static bool sub_C304()
 {
 	bool r1 = false;
 
@@ -1765,7 +1772,7 @@ extern "C" bool sub_C304()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" bool sub_C33C()
+static bool sub_C33C()
 {
 	bool r1 = false;
 
@@ -1785,14 +1792,14 @@ extern "C" bool sub_C33C()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void Nop4()
+static void Nop4()
 {
 
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void Nop5()
+static void Nop5()
 {
 
 }
@@ -1842,7 +1849,7 @@ extern "C" void PHDR_Stuff_sub_C388()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SysInit_ATU_C476()
+static void SysInit_ATU_C476()
 {
 	__disable_irq();
 
@@ -1871,7 +1878,7 @@ extern "C" void SysInit_ATU_C476()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void sub_C4EE()
+static void sub_C4EE()
 {
 	__disable_irq();
 
@@ -1946,7 +1953,7 @@ extern "C" void Init_ATU_sub_C5D2()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void sub_C646()
+static void sub_C646()
 {
 	__disable_irq();
 
@@ -2015,7 +2022,7 @@ extern "C" u16 atu22_Get_DSTR_0x3C00()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SysInit_sub_C87C()
+static void SysInit_sub_C87C()
 {
 	__disable_irq();
 
@@ -2038,7 +2045,7 @@ extern "C" void SysInit_sub_C87C()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void sub_C8E0()
+static void sub_C8E0()
 {
 	__disable_irq();
 
@@ -2071,254 +2078,842 @@ extern "C" void Timer_Counter_Related_sub_C928()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void CRANK5_sub_C990()
+extern "C" void CRANK5_sub_C990(u16 v)
 {
+	__disable_irq();
 
+	u32 r13 = v;
+
+	v -= reg_TCNT2A + 2;
+
+	if (v & 0x8000)
+	{
+		r13 = reg_TCNT2A + 2;
+	};
+
+	reg_GR2H = r13;
+
+	CLR(reg_TSR2A, 0x80);
+
+	reg_TIOR2D = reg_TIOR2D & 0x8F | 0x10;
+
+	__enable_irq();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void sub_C9E4()
-{
+//extern "C" void sub_C9E4(u16 v)
+//{
+//	__disable_irq();
+//
+//	u32 r13 = v;
+//
+//	v -= reg_TCNT2A + 2;
+//
+//	if (v & 0x8000)
+//	{
+//		r13 = reg_TCNT2A + 2;
+//	};
+//
+//	reg_GR2H = r13;
+//
+//	CLR(reg_TSR2A, 0x80);
+//
+//	SET(word_FFFF9AFC, 1);
+//
+//	__enable_irq();
+//}
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void SysInit_ATU_CA34()
+{
+	CLR(reg_TIER3, 7);
+
+	reg_TIOR3A = 0x44;
+
+	reg_TIOR3B = reg_TIOR3B & 0xF0 | 4;
+
+	CLR(reg_TSR3, 7);
+
+	CLR(reg_TIER9, 0x3E);
+
+	reg_TCR9B = 0x20;
+
+	reg_TCR9C = 0x22;
+
+	reg_GR9F = ~0;
+
+	reg_GR9E = ~0;
+
+	reg_GR9D = ~0;
+
+	reg_ECNT9F = 0;
+	reg_ECNT9E = 0;
+	reg_ECNT9D = 0;
+
+	CLR(reg_TSR9, 0x38);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SysInit_ATU_CA34()
+static void sub_CAA8()
 {
+	__disable_irq();
 
+	CLR(reg_TIER3, 7);
+
+	reg_TIOR3A = 0x44;
+
+	reg_TIOR3B = reg_TIOR3B & 0xF0 | 4;
+
+	CLR(reg_TIER9, 0x3E);
+
+	reg_TCR9B = 0x20;
+
+	reg_TCR9C = 0x22;
+
+	reg_GR9F = ~0;
+
+	reg_GR9E = ~0;
+
+	reg_GR9D = ~0;
+
+	__enable_irq();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void sub_CAA8()
-{
+//extern "C" u16 sub_CB06()
+//{
+//
+//}
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//extern "C" void sub_CB9C()
+//{
+//
+//}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//extern "C" void sub_CBE8()
+//{
+//
+//}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void SysInit_ATU_6_7()
+{
+	__disable_irq();
+
+    // peripheral clock = 16MHz
+    // PSCR2 = PSCR3 = 16MHz;
+
+	reg_PSCR2 = 0;
+	reg_PSCR3 = 0;
+
+	// TCLK6A = TCLK6B = 16MHz
+
+	reg_TCR6A = 0;
+
+	// TCLK6C = TCLK7A = 16MHz; TCLK6D = TCLK7B = 500kHz
+
+	reg_TCR6B = 0x50;
+	reg_TCR7A = 0x50;
+
+	// TCLK7C = TCLK7D = 500kHz
+
+	reg_TCR7B = 0x55;
+
+	reg_PMDR = 0;
+	reg_TIER6 = 0;
+	reg_TIER7 = 0;
+
+	// CYLR6A = CYLR6B = CYLR6C = CYLR7A = 4096; 3906.25Hz
+
+	reg_CYLR6C = 4096;
+	reg_CYLR6B = 4096;
+	reg_CYLR6A = 4096;
+	reg_CYLR7A = 4096;
+
+	// CYLR6D = 128; 3906.25Hz
+
+	reg_CYLR6D = 0x80;
+
+	reg_DTR6C = 0;
+	reg_DTR6B = 0;
+	reg_DTR6A = 0;
+	reg_DTR7C = 0;
+	reg_DTR7B = 0;
+	reg_DTR7A = 0;
+	reg_DTR6D = 0;
+	reg_DTR7D = 0;
+
+	reg_BFR6C = 0;
+	reg_BFR6B = 0;
+	reg_BFR6A = 0;
+	reg_BFR7C = 0;
+	reg_BFR7B = 0;
+	reg_BFR7A = 0;
+	reg_BFR6D = 0;
+	reg_BFR7D = 0;
+
+	reg_TCNT6A = 0;
+	reg_TCNT6B = 683;
+	reg_TCNT6C = 1366;
+	reg_TCNT6D = 0;
+	reg_TCNT7A = 2049;
+	reg_TCNT7B = 2732;
+	reg_TCNT7C = 3415;
+	reg_TCNT7D = 0;
+
+	reg_TSTR2 = ~0;
+
+	__enable_irq();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void sub_CB06()
+static void Init_ATU_6_7()
 {
+	__disable_irq();
 
+    // peripheral clock = 16MHz
+    // PSCR2 = PSCR3 = 16MHz;
+
+	reg_PSCR2 = 0;
+	reg_PSCR3 = 0;
+
+	// TCLK6A = TCLK6B = 16MHz
+
+	reg_TCR6A = 0;
+
+	// TCLK6C = TCLK7A = 16MHz; TCLK6D = TCLK7B = 500kHz
+
+	reg_TCR6B = 0x50;
+	reg_TCR7A = 0x50;
+
+	// TCLK7C = TCLK7D = 500kHz
+
+	reg_TCR7B = 0x55;
+
+	reg_PMDR = 0;
+	reg_TIER6 = 0;
+	reg_TIER7 = 0;
+
+	// CYLR6A = CYLR6B = CYLR6C = CYLR7A = 4096; 3906.25Hz
+
+	reg_CYLR6C = 4096;
+	reg_CYLR6B = 4096;
+	reg_CYLR6A = 4096;
+	reg_CYLR7A = 4096;
+
+	// CYLR6D = 128; 3906.25Hz
+
+	reg_CYLR6D = 0x80;
+
+	reg_TSTR2 = ~0;
+
+	__enable_irq();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void sub_CB9C()
-{
+//extern "C" void sub_CE28()
+//{
+//
+//}
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//extern "C" void sub_CE56()
+//{
+//
+//}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//extern "C" void sub_CE84()
+//{
+//
+//}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void SetDuty_6D(u16 v)
+{
+	__disable_irq();
+
+	reg_BFR6D = v >> 1;
+
+	__enable_irq();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void sub_CBE8()
-{
+//extern "C" void sub_CEE2()
+//{
+//
+//}
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//extern "C" void sub_CF10()
+//{
+//
+//}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//extern "C" void sub_CF3E()
+//{
+//
+//}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void SysInit_SCI_CF6C()
+{
+	reg_SCI0->SCR = 0;
+
+	CLR(reg_SCI0->SDCR, 8);
+
+	reg_SCI0->SMR_BRR = 0x13F;
+
+	reg_SCI0->SCR = 0x30;
+
+
+	reg_SCI1->SCR = 0;
+
+	CLR(reg_SCI1->SDCR, 8);
+
+	reg_SCI1->SMR_BRR = 0x13F;
+
+	reg_SCI1->SCR = 0x70;
+
+
+	reg_SCI2->SCR = 0;
+
+	CLR(reg_SCI2->SDCR, 8);
+
+	reg_SCI2->SMR_BRR = 0x13F;
+
+	reg_SCI2->SCR = 0xB0;
+
+
+	reg_SCI3->SCR = 0;
+
+	CLR(reg_SCI3->SDCR, 8);
+
+	reg_SCI3->SMR_BRR = 0x13F;
+
+	reg_SCI3->SCR = 0;
+
+
+	reg_SCI4->SCR = 0;
+
+	CLR(reg_SCI4->SDCR, 8);
+
+	reg_SCI4->SMR_BRR = 0x13F;
+
+	reg_SCI4->SCR = 0;
+
+	reg_DMATCR0 = 0;
+	reg_DMATCR1 = 0;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SysInit_ATU_6_7()
+static void sub_D008()
 {
+	u32 r1 = 0x13F;
 
-}
+	u32 r13 = 0x13F;
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	u32 r14_8;
 
-extern "C" void Init_ATU_6_7()
-{
+	__disable_irq();
 
-}
+	CLR(reg_SCI0->SDCR, 8);
+	CLR(reg_SCI1->SDCR, 8);
+	CLR(reg_SCI2->SDCR, 8);
+	CLR(reg_SCI3->SDCR, 8);
+	CLR(reg_SCI4->SDCR, 8);
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	if (baudrateFlags_FFFF8882 & 2)
+	{
+		r13 = 0x2F;
+	}
+	else if (baudrateFlags_FFFF8882 & 4)
+	{
+		r13 = 0x1F;
+	}
+	else if (baudrateFlags_FFFF8882 & 8)
+	{
+		r13 = 7;
+	};
 
-extern "C" void sub_CE28()
-{
+	if (reg_SCI0->SMR_BRR != r13)
+	{
+		reg_SCI0->SMR_BRR = r13;
+	};
 
-}
+	// loc_D0F2
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	if (__DMAOPFLAG != 0x37 && ZRO(reg_CHCR1, 1)) 
+	{
+		r13 = 0x70;
 
-extern "C" void sub_CE56()
-{
+		if (ZRO(TRANSMIT_FLAG_FFFF8E3E, 1))
+		{
+			r14_8 = reg_SCI0->RDR;
+			CLR(reg_SCI0->SSR, 0x78);
 
-}
+			r13 = 0x30;
+		};
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		if (reg_SCI0->SCR != r13)
+		{
+			reg_SCI0->SCR = r13;
+		};
+	};
 
-extern "C" void sub_CE84()
-{
+	// loc_D12E
 
-}
+	if (reg_SCI1->SMR_BRR != r1)
+	{
+		reg_SCI1->SMR_BRR = r1;
+	};
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	if (reg_SCI1->SCR != 0x70)
+	{
+		reg_SCI1->SCR = 0x70;
+	};
 
-extern "C" void SetDuty_6D(u16 v)
-{
+	if (reg_SCI2->SMR_BRR != 0x1F)
+	{
+		reg_SCI2->SMR_BRR = 0x1F;
+	};
 
-}
+	if (reg_SCI3->SMR_BRR != r1)
+	{
+		reg_SCI3->SMR_BRR = r1;
+	};
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	if (reg_SCI3->SCR != 0)
+	{
+		reg_SCI3->SCR = 0;
+	};
 
-extern "C" void sub_CEE2()
-{
+	if (reg_SCI4->SMR_BRR != r1)
+	{
+		reg_SCI4->SMR_BRR = r1;
+	};
 
-}
+	if (reg_SCI4->SCR != 0)
+	{
+		reg_SCI4->SCR = 0;
+	};
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	if (ZRO(MUT_VAR_9_FFFF8DFC, 0xF000) && ZRO(word_FFFF8DFE, 0x8080))
+	{
+		CLR(MUT_VAR_9_FFFF8DFC, 0x200);
+	};
 
-extern "C" void sub_CF10()
-{
-
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-extern "C" void sub_CF3E()
-{
-
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-extern "C" void SysInit_SCI_CF6C()
-{
-
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-extern "C" void sub_D008()
-{
-
+	__enable_irq();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 extern "C" void COM_sub_D1CC()
 {
+	mut_sended_len = 0;
 
+	COM_TX_Get();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 extern "C" void COM_Update_TX()
 {
-
+	if (reg_SCI0->SSR & 0x80)
+	{
+		COM_TX_Get();
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void COM_TX_Get()
+static void COM_TX_Get()
 {
+	u32 len = mut_sended_len;
 
+	if ((TRANSMIT_FLAG_FFFF8E3E & 1) && len < mut_max_send_len && len < 15)
+	{
+		reg_SCI0->TDR = mut_send_buf[len];
+
+		CLR(reg_SCI0->SSR, 0x80);
+
+		mut_sended_len += 1;
+
+		SET(TRANSMIT_FLAG_FFFF8E3E, 0x80);
+
+		mut_timeout = 0;
+	}
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma interrupt(sci0_eri0)
 
 extern "C" void sci0_eri0()
 {
+	u32 r14_8;
 
+	if ((__DMAOPFLAG & 1) || (reg_CHCR1 & 1))
+	{
+		__disable_irq();
+
+		r14_8 = reg_SCI0->RDR;
+
+		CLR(reg_SCI0->SSR, 0x78);
+
+		CLR(reg_SCI0->SCR, 0x40);
+
+		word_FFFF9AD0 = 1;
+
+		__enable_irq();
+	}
+	else
+	{
+		COM_SCI0_RXI0();
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 extern "C" void COM_SCI0_RXI0()
 {
+	__disable_irq();
 
+	byte r13 = reg_SCI0->SSR;
+
+	byte r1 = reg_SCI0->RDR;
+
+	CLR(reg_SCI0->SSR, 0x78);
+
+	if(ZRO(TRANSMIT_FLAG_FFFF8E3E, 1))
+	{
+		CLR(TRANSMIT_FLAG_FFFF8E3E, 0xA0);
+
+		mut_received_Len = 0;
+		mut_timeout = 0;
+	}
+	else
+	{
+		if (r13 & 0x38)
+		{
+			SET(TRANSMIT_FLAG_FFFF8E3E, 0x20);
+		};
+
+		if (TRANSMIT_FLAG_FFFF8E3E & 0x80)
+		{
+			CLR(TRANSMIT_FLAG_FFFF8E3E, 0x80);
+
+			mut_received_Len = 0;
+			mut_timeout = 0;
+		}
+		else
+		{
+			u32 len = mut_received_Len;
+
+			if (len < 11)
+			{
+				mut_receive_buf[len] = r1;
+
+				SET(TRANSMIT_FLAG_FFFF8E3E, 0x40);
+
+				mut_received_Len += 1;
+				mut_timeout = 0;
+			};
+		};
+	};
+
+	__enable_irq();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 extern "C" void sub_D3E4()
 {
+	__disable_irq();
 
+	u32 r11 = **off_8AE4;
+
+	reg_SCI2->TDR = r11;
+
+	CLR(reg_SCI2->SSR, 0x80);
+
+	reg_SCI2->SCR = 0xB0;
+
+	word_FFFF8D94 = r11;
+
+	word_FFFF8DB6 = 1;
+
+	__enable_irq();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+#pragma interrupt(sci2_txi2)
+
 extern "C" void sci2_txi2()
 {
+	__disable_irq();
 
+	if (word_FFFF8DB6 < 7)
+	{
+		u32 r12 = *(off_8AE4[word_FFFF8DB6]);
+
+		reg_SCI2->TDR = r12;
+
+		CLR(reg_SCI2->SCR, 0x80);
+
+		word_FFFF8D94 += r12;
+
+		word_FFFF8DB6 += 1;
+	}
+	else
+	{
+		CLR(reg_SCI2->SCR, 0x80);
+	};
+
+	__enable_irq();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 extern "C" void sub_D4E4()
 {
+	__disable_irq();
 
+	u32 r3 = reg_SCI2->SSR;
+
+	if (r3 & 0x78)
+	{
+		byte r1 = reg_SCI2->RDR;
+
+		CLR(reg_SCI2->SSR, 0x78);
+
+		u32 r13 = word_FFFF8DB4;
+
+		if (r13 < 5 && ZRO(r3, 0x38))
+		{
+			word_FFFF8DA8[r13] = r1;
+
+			word_FFFF8DB4 += 1;
+		};
+	};
+
+	__enable_irq();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 extern "C" void SCI1_TransStart()
 {
+	sci1_transCount = 0;
 
+	sub_D56E();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 extern "C" void SCI1_TransNext()
 {
-
+	if (reg_SCI1->SSR & 0x80)
+	{
+		sub_D56E();
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void sub_D56E()
+static void sub_D56E()
 {
+	if (word_FFFF8E40 & 1)
+	{
+		u32 r13 = sci1_transCount;
 
+		if (r13 < word_FFFF8EAA && r13 < 7)
+		{
+			reg_SCI1->TDR = word_FFFF8E92[r13];
+
+			CLR(reg_SCI1->SSR, 0x80);
+
+			sci1_transCount += 1;
+
+			SET(word_FFFF8E40, 0x80);
+
+			word_FFFF8EAE = 0;
+		};
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma interrupt(sci1_eri1)
 
 extern "C" void sci1_eri1()
 {
+	__disable_irq();
 
+	byte r13 = reg_SCI1->SSR;
+
+	byte r1 = reg_SCI1->RDR;
+
+	CLR(reg_SCI1->SSR, 0x78);
+
+	if(ZRO(word_FFFF8E40, 1))
+	{
+		CLR(word_FFFF8E40, 0xA0);
+
+		word_FFFF8EA2 = 0;
+		word_FFFF8EAE = 0;
+	}
+	else
+	{
+		if (r13 & 0x38)
+		{
+			SET(word_FFFF8E40, 0x20);
+		};
+
+		if (word_FFFF8E40 & 0x80)
+		{
+			CLR(word_FFFF8E40, 0x80);
+
+			word_FFFF8EA2 = 0;
+			word_FFFF8EAE = 0;
+		}
+		else
+		{
+			u32 len = word_FFFF8EA2;
+
+			if (len < 7)
+			{
+				word_FFFF8E84[len] = r1;
+
+				SET(word_FFFF8E40, 0x40);
+
+				word_FFFF8EA2 += 1;
+				word_FFFF8EAE = 0;
+			};
+		};
+	};
+
+	__enable_irq();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SCI0_Transmit_DMA0_Enable()
+extern "C" void SCI0_Transmit_DMA0_Enable(u16 r1, u16 r2)
 {
+	__disable_irq();
 
+	CLR(reg_CHCR0, 3);
+
+	reg_SAR0 = sci0_transmit_buf + r1 * 52 + 2;
+
+	reg_DAR0 = &reg_SCI0->TDR;
+
+	reg_DMATCR0 = r2;
+
+	reg_SCI0->SCR = reg_SCI0->SCR & 0x1B | 0xA0;
+
+
+	CLR(reg_CHCR1, 1);
+
+	reg_CHCR0 = 0x11000;
+
+	reg_SCI0->TDR = sci0_transmit_buf[r1 * 52 + 1];
+
+	CLR(reg_SCI0->SSR, 0x80);
+
+	SET(reg_CHCR0, 1);
+
+	__enable_irq();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SCI0_Recieve_DMA0_Enable()
+extern "C" void SCI0_Recieve_DMA0_Enable(u16 r1)
 {
+	__disable_irq();
 
+	SET(reg_SCI0->SCR , 0x10);
+
+	u32 r14_8 = reg_SCI0->RDR;
+
+	CLR(reg_SCI0->SSR, 0x78);
+
+	word_FFFF9AD0 = 0;
+
+	CLR(reg_CHCR1, 3);
+
+	reg_SAR1 = &reg_SCI0->RDR;
+
+	reg_DAR1 = recieve_buffer_0 + r1 * 52 + 1;
+
+	reg_DMATCR1 = 0x33;
+
+	reg_SCI0->SCR = reg_SCI0->SCR & 0x3B | 0x40;
+
+	CLR(reg_CHCR0, 1);
+	
+	reg_CHCR1 = 0x20100;
+
+	SET(reg_CHCR1, 1);
+
+	__enable_irq();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SCI0_Check_Transfer_End()
+extern "C" bool SCI0_Check_Transfer_End()
 {
-
+	return reg_DMATCR0 == 0 && reg_DMATCR1 == 0;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SCI0_Check_Errors()
+extern "C" bool SCI0_Check_Errors()
 {
-
+	return (reg_SCI0->SSR & 0x38) || word_FFFF9AD0 != 0; 
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SCI0_Check_PA7()
+extern "C" bool SCI0_Check_PA7()
 {
-
+	return ZRO(reg_PADRH, 0x80);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 extern "C" void COM_SCI0_Disable_Transmit_sub_D8C4()
 {
+	__disable_irq();
 
+	CLR(reg_SCI0->SCR , 0x80);
+
+	CLR(reg_CHCR0, 1);
+
+	CLR(reg_CHCR1, 1);
+
+	__enable_irq();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -2330,23 +2925,61 @@ extern "C" void Nop6()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SysInit_Reset_Crank_Flags()
+static void SysInit_Reset_Crank_Flags()
 {
-
+	crank_Flags = 0;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 extern "C" void Init_ATU_0_2B()
 {
+	__disable_irq();
 
+	CLR(crank_Flags, 3);
+
+	CLR(reg_TSR0, 1);
+
+	CLR(reg_TSR2B, 0x40);
+
+	reg_TIOR0 = reg_TIOR0 & ~0x33 | 3;
+
+	SET(reg_TIER0, 1);
+
+	CLR(reg_TIER0, 0x14);
+
+	SET(reg_TIER2B, 0x40);
+
+	crankHT_75 = ~0;
+
+	crankHT_5 = ~0;
+
+	null_crank_dt_ICR0AH_5 = ~0;
+
+	crank_dt_ICR0AH_5 = ~0;
+
+	timer_up_FFFF8522 = ~0;
+
+	timer_up_FFFF8524 = ~0;
+
+	__enable_irq();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void sub_D99A()
+static void sub_D99A()
 {
+	__disable_irq();
 
+	reg_TIOR0 = reg_TIOR0 & ~0x33 | 3;
+
+	SET(reg_TIER0, 1);
+
+	CLR(reg_TIER0, 0x14);
+
+	SET(reg_TIER2B, 0x40);
+
+	__enable_irq();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
