@@ -1,4 +1,4 @@
-#pragma section _atu02_ici0A
+
 
 #include <smachine.h>
 
@@ -26,18 +26,131 @@
 #pragma interrupt(atu22_imi2G)
 #pragma interrupt(atu22_imi2H)
 
-
-#define Read_Ports_And_Registers_sub_B114				((void(*)(void))0xB114)
+extern "C" void Read_Ports_And_Registers_sub_B114();
+//#define Read_Ports_And_Registers_sub_B114				((void(*)(void))0xB114)
 
 extern "C" void atu22_IMF2G_event();
+
 
 
 static void CRANK75_root_sub_DB40(u16 osbr, u32 icr);
 static void CRANK5_root_sub_DC18(u16 osbr, u32 icr);
 
-extern void CRANK5_Main_sub_24AF0();
-extern void CRANK75_Main_sub_232A0();
+//extern void CRANK5_Main_sub_24AF0();
+//extern void CRANK75_Main_sub_232A0();
 
+#define  CRANK5_Main_sub_24AF0		((void(*)(void))0x24AF0)
+#define  CRANK75_Main_sub_232A0		((void(*)(void))0x232A0)
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void atu02_ici0A();
+#pragma address v_atu02_ici0A=0x150
+const void *v_atu02_ici0A = atu02_ici0A;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" bool sub_DCB4();
+#pragma address off_26A40=0x26A40
+const void *off_26A40 = sub_DCB4;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void atu21_imi2C();
+extern "C" void atu21_imi2D();
+
+#pragma address v_atu21_imi2C=0x1B8
+#pragma address v_atu21_imi2D=0x1BC
+
+const void *v_atu21_imi2C = atu21_imi2C;
+const void *v_atu21_imi2D = atu21_imi2D;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" bool sub_E294();
+#pragma address off_1D3F0=0x1D3F0
+const void *off_1D3F0 = sub_E294;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void sub_E300();
+#pragma address off_1D410=0x1D410
+const void *off_1D410 = sub_E300;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void sub_E356();
+#pragma address off_1D40C=0x1D40C
+const void *off_1D40C = sub_E356;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" u16 sub_E44C();
+#pragma address off_26DE0=0x26DE0
+const void *off_26DE0 = sub_E44C;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void sub_E478();
+#pragma address off_269A4=0x269A4
+const void *off_269A4 = sub_E478;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void atu11_imi1A();
+extern "C" void atu11_imi1B();
+extern "C" void atu11_imi1C();
+extern "C" void atu12_imi1E();
+
+#pragma address v_atu11_imi1A=0x180
+#pragma address v_atu11_imi1B=0x184
+#pragma address v_atu11_imi1C=0x188
+#pragma address v_atu12_imi1E=0x190
+
+const void *v_atu11_imi1A = atu11_imi1A;
+const void *v_atu11_imi1B = atu11_imi1B;
+const void *v_atu11_imi1C = atu11_imi1C;
+const void *v_atu12_imi1E = atu12_imi1E;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void atu82_osi8G();
+#pragma address v_atu82_osi8G=0x278
+const void *v_atu82_osi8G = atu82_osi8G;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void cmti1();
+#pragma address v_cmti1=0x300
+const void *v_cmti1 = cmti1;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void atu11_imi11B();
+#pragma address v_atu11_imi11B=0x2E8
+const void *v_atu11_imi11B = atu11_imi11B;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void int_nmi_E9AE();
+#pragma address v_int_nmi_2C=0x2C
+const void *v_int_nmi_2C = int_nmi_E9AE;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void atu22_imi2G();
+extern "C" void atu22_imi2H();
+
+#pragma address v_atu22_imi2G=0x1C8
+#pragma address v_atu22_imi2H=0x1CC
+
+const void *v_atu22_imi2G = atu22_imi2G;
+const void *v_atu22_imi2H = atu22_imi2H;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//#pragma section _atu02_ici0A
+#pragma section _9D18
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

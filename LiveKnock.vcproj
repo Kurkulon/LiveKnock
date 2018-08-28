@@ -142,7 +142,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\cpp\WTF.asm"
+				RelativePath=".\cpp\Reset_init.asm"
 				>
 			</File>
 		</Filter>

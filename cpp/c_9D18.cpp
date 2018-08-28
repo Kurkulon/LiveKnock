@@ -1,5 +1,3 @@
-#pragma section _9D18
-
 #include <smachine.h>
 
 //#include "ext_ram_vars.h"
@@ -21,7 +19,14 @@
 
 #define	word_8AD4				((const u16*)0x8AD4)                                                     
 
-#define	off_8AE4				((u16**)0x8AE4)                                                     
+#define	off_8AE4				((u16**)0x8AE4)  
+
+#define	byte_3FB40				((byte*)0x3FB40)                                                     
+#define	word_3FB3C				(*(u16*)0x3FB3C)  
+
+struct S9884 { u16 v1; byte v2; byte v3; byte v4; byte v5;  };
+
+#define	byte_9884				((S9884*)0x9884)                                                     
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -71,11 +76,15 @@ extern "C" bool sub_C2CC();
 extern "C" bool sub_C304();
 extern "C" bool sub_C33C();
 
-extern "C" void HUGE_Method_801_6_Hz();
+//extern "C" void HUGE_Method_801_6_Hz();
+#define  HUGE_Method_801_6_Hz		((void(*)(void))0x2686C)
 
 extern "C" void SysInit_HW_C0CC();
 
-extern "C" void Ign_handler(u16 mask);
+//extern "C" void Ign_handler(u16 mask);
+#define  Ign_handler		((void(*)(u16))0x2636C)
+#define  MUT_sub_34A2C		((void(*)(byte*,byte*,u16))0x34A2C)
+#define  sub_34C2C			((byte(*)(byte*,u16))0x34C2C)
 
 static u16 GetADC0(byte r1);
 static u16 GetADC1(byte r1);
@@ -86,10 +95,358 @@ extern "C" void COM_SCI0_RXI0();
 extern "C" void sub_D56E();
 
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void sub_A324();
+#pragma address off_1D414=0x1D414
+const void *off_1D414 = sub_A324;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void PADR_Stuff_sub_A5F8();
+#pragma address off_269A8=0x269A8
+const void *off_269A8 = PADR_Stuff_sub_A5F8;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" bool PEDR_LO_Check_sub_A790();
+
+#pragma address off_12268=0x12268
+#pragma address off_2587C=0x2587C
+
+const void *off_12268 = PEDR_LO_Check_sub_A790;
+const void *off_2587C = PEDR_LO_Check_sub_A790;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" bool Check_Starter_signal();
+
+#pragma address off_1FBBC=0x1FBBC
+#pragma address off_235C0=0x235C0
+#pragma address off_24EC8=0x24EC8
+
+const void *off_1FBBC = Check_Starter_signal;
+const void *off_235C0 = Check_Starter_signal;
+const void *off_24EC8 = Check_Starter_signal;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" bool CRANK_CheckCamshaft_sub_A7C0();
+
+#pragma address off_234D8=0x234D8
+#pragma address off_24BEC=0x24BEC
+
+const void *off_234D8 = CRANK_CheckCamshaft_sub_A7C0;
+const void *off_24BEC = CRANK_CheckCamshaft_sub_A7C0;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" bool Check_PEDRL_1();
+#pragma address off_23504=0x23504
+const void *off_23504 = Check_PEDRL_1;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void Get_ADC_Bat_TPS_oxigen();
+#pragma address off_270BC=0x270BC
+const void *off_270BC = Get_ADC_Bat_TPS_oxigen;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void Get_ADC_Knock();
+#pragma address off_2409C=0x2409C
+const void *off_2409C = Get_ADC_Knock;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void Get_Manifold_AbsPressure();
+#pragma address off_2803C=0x2803C
+const void *off_2803C = Get_Manifold_AbsPressure;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void UpdateOutputSync();
+#pragma address off_28034=0x28034
+const void *off_28034 = UpdateOutputSync;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void Knock_Output_Calc_sub_AC96();
+
+#pragma address off_16E7C=0x16E7C
+#pragma address off_24734=0x24734
+
+const void *off_16E7C = Knock_Output_Calc_sub_AC96;
+const void *off_24734 = Knock_Output_Calc_sub_AC96;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void Update_Gen_G_output();
+
+#pragma address off_2408C=0x2408C
+#pragma address off_26DA8=0x26DA8
+
+const void *off_2408C = Update_Gen_G_output;
+const void *off_26DA8 = Update_Gen_G_output;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void PDIOR_Stuff_sub_AD3C();
+#pragma address off_27404=0x27404
+const void *off_27404 = PDIOR_Stuff_sub_AD3C;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void sub_AD94();
+#pragma address off_27524=0x27524
+const void *off_27524 = sub_AD94;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void PWM_EGR_EVAP_O2H();
+#pragma address off_28030=0x28030
+const void *off_28030 = PWM_EGR_EVAP_O2H;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void sub_B0BC(u16 r1);
+#pragma address off_1D404=0x1D404
+const void *off_1D404 = sub_B0BC;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void Read_Ports_And_Registers_sub_B114();
+#pragma address off_273FC=0x273FC
+const void *off_273FC = Read_Ports_And_Registers_sub_B114;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void dmac2_dei2();
+#pragma address v_dmac2_dei2=0x130
+const void *v_dmac2_dei2 = dmac2_dei2;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void cmti0();
+#pragma address v_cmti0=0x2F0
+const void *v_cmti0 = cmti0;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void atu41_imi4B();
+#pragma address v_atu41_imi4B=0x204
+const void *v_atu41_imi4B = atu41_imi4B;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void SetIgnCoilChargeStartTime(u16 mask, u16 v);
+#pragma address off_238B4=0x238B4
+const void *off_238B4 = SetIgnCoilChargeStartTime;
+#pragma address off_24E8C=0x24E8C
+const void *off_24E8C = SetIgnCoilChargeStartTime;
+#pragma address off_26630=0x26630
+const void *off_26630 = SetIgnCoilChargeStartTime;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void SetIgnSparkStartTime(u16 mask, u16 v);
+#pragma address off_238CC=0x238CC
+const void *off_238CC = SetIgnSparkStartTime;
+#pragma address off_25268=0x25268
+const void *off_25268 = SetIgnSparkStartTime;
+#pragma address off_26624=0x26624
+const void *off_26624 = SetIgnSparkStartTime;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void Disable_Ign_Handler(u16 v);
+#pragma address off_238B0=0x238B0
+const void *off_238B0 = Disable_Ign_Handler;
+#pragma address off_26620=0x26620
+const void *off_26620 = Disable_Ign_Handler;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void Start_Coil_Charge(u16 mask);
+#pragma address off_24744=0x24744
+const void *off_24744 = Start_Coil_Charge;
+#pragma address off_24D88=0x24D88
+const void *off_24D88 = Start_Coil_Charge;
+#pragma address off_26A50=0x26A50
+const void *off_26A50 = Start_Coil_Charge;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void Disable_Coil_Charge(u16 mask);
+#pragma address off_25254=0x25254
+const void *off_25254 = Disable_Coil_Charge;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void atu22_imi2E();
+#pragma address v_atu22_imi2E=0x1C0
+const void *v_atu22_imi2E = atu22_imi2E;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void atu22_imi2F();
+#pragma address v_atu22_imi2F=0x1C4
+const void *v_atu22_imi2F = atu22_imi2F;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" u16 Get_Coil_charge_status();
+#pragma address off_236FC=0x236FC
+const void *off_236FC = Get_Coil_charge_status;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" bool Reset_IRQ0F();
+#pragma address off_26350=0x26350
+const void *off_26350 = Reset_IRQ0F;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void PHDR_Stuff_sub_C388();
+#pragma address off_269BC=0x269BC
+const void *off_269BC = PHDR_Stuff_sub_C388;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" u16 atu22_Get_ECNT9A();
+#pragma address off_23F88=0x23F88
+const void *off_23F88 = atu22_Get_ECNT9A;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void InjOpenStart(u16 v, u16 mask);
+#pragma address off_23F6C=0x23F6C
+const void *off_23F6C = InjOpenStart;
+#pragma address off_262B0=0x262B0
+const void *off_262B0 = InjOpenStart;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void atu21_imi2A();
+#pragma address v_atu21_imi2A=0x1B0
+const void *v_atu21_imi2A = atu21_imi2A;
 
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+extern "C" u16 atu22_Get_DSTR_0x3C00();
+#pragma address off_26354=0x26354
+const void *off_26354 = atu22_Get_DSTR_0x3C00;
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void Timer_Counter_Related_sub_C928();
+#pragma address off_170D4=0x170D4
+const void *off_170D4 = Timer_Counter_Related_sub_C928;
+#pragma address off_241F4=0x241F4
+const void *off_241F4 = Timer_Counter_Related_sub_C928;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void CRANK5_sub_C990(u16 v);
+#pragma address off_24EAC=0x24EAC
+const void *off_24EAC = CRANK5_sub_C990;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void COM_sub_D1CC();
+#pragma address off_209EC=0x209EC
+#pragma address off_214D0=0x214D0
+#pragma address off_230E0=0x230E0
+#pragma address off_339A4=0x339A4
+const void *off_209EC = COM_sub_D1CC;
+const void *off_214D0 = COM_sub_D1CC;
+const void *off_230E0 = COM_sub_D1CC;
+const void *off_339A4 = COM_sub_D1CC;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void COM_Update_TX();
+#pragma address off_20898=0x20898
+const void *off_20898 = COM_Update_TX;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void sci0_eri0();
+#pragma address v_sci0_eri0=0x320
+const void *v_sci0_eri0 = sci0_eri0;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void sub_D3E4();
+#pragma address off_27778=0x27778
+const void *off_27778 = sub_D3E4;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void sci2_txi2();
+#pragma address v_sci2_txi2=0x348
+const void *v_sci2_txi2 = sci2_txi2;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void sub_D4E4();
+#pragma address off_26D98=0x26D98
+const void *off_26D98 = sub_D4E4;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void SCI1_TransStart();
+#pragma address off_223EC=0x223EC
+#pragma address off_22E70=0x22E70
+const void *off_223EC = SCI1_TransStart;
+const void *off_22E70 = SCI1_TransStart;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void SCI1_TransNext();
+#pragma address off_223F4=0x223F4
+#pragma address off_22DF0=0x22DF0
+const void *off_223F4 = SCI1_TransNext;
+const void *off_22DF0 = SCI1_TransNext;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void sci1_eri1();
+#pragma address v_sci1_eri1=0x330
+#pragma address v_sci1_rxi1=0x334
+const void *v_sci1_eri1 = sci1_eri1;
+const void *v_sci1_rxi1 = sci1_eri1;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void SCI0_Recieve_DMA0_Enable(u16 r1);
+extern "C" void SCI0_Transmit_DMA0_Enable(u16 r1, u16 r2);
+extern "C" bool SCI0_Check_Transfer_End();
+extern "C" bool SCI0_Check_Errors();
+extern "C" bool SCI0_Check_PA7();
+
+struct SCI0_func
+{
+	void (*Recieve)(u16);
+	void (*Transmit)(u16,u16);
+	bool (*Check_Errors)();
+	bool (*Check_PA7)();
+	bool (*Check_Transfer_End)();
+};
+
+#pragma address sci0_func_table=0x9870
+const SCI0_func sci0_func_table = { SCI0_Recieve_DMA0_Enable, SCI0_Transmit_DMA0_Enable, SCI0_Check_Errors, SCI0_Check_PA7, SCI0_Check_Transfer_End };
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void COM_SCI0_Disable_Transmit_sub_D8C4();
+#pragma address off_218A8=0x218A8
+const void *off_218A8 = COM_SCI0_Disable_Transmit_sub_D8C4;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma section _9D18
 
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -2984,3 +3341,116 @@ static void sub_D99A()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+extern "C" void SysInit_sub_8000()
+{
+	recieve_buffer_1_2 = 0;
+
+	memcpy(byte_3FB40, byte_FFFF9C00, word_3FB3C);
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     
+extern "C" void COM_sub_8026(u16 r1)
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+         
+extern "C" void MUT2B_800Hz_sub_85E0(u16 r1)
+{
+	if (r1 >= 1) return;
+
+	u32 r8 = recieve_buffer_1_2;
+
+	//bool c1 = r8 & 0x101;
+	//bool c2 = sci0_func_table.Check_PA7();
+	//bool c3 = r8 & 0x200;
+	//bool c4 = r8 & 0x400;
+	//bool c5 = sci0_func_table.Check_Errors();
+
+	if (ZRO(r8, 0x101) && !sci0_func_table.Check_PA7() && (ZRO(r8, 0x200) || (ZRO(r8, 0x400) && sci0_func_table.Check_Errors())))
+	{
+		sci0_func_table.Recieve(r1);
+		r8 = 0x200;
+	};
+
+	recieve_buffer_1_2 = r8;
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 
+extern "C" void COM_sub_86BC(u16 r1, u16 r5)
+{
+//	byte *var_10;
+
+	u32 r8 = r1;
+
+	byte *r9 = sci0_transmit_buf + 52 * r1;
+
+	S9884 *r2 = byte_9884 + r5;
+
+	if (r1 >= 1) return;
+
+	if ((reg_TCNT2A - recieve_buffer_1) < r2->v1) return;
+
+	if (sci0_func_table.Check_PA7())
+	{
+		recieve_buffer_1_2 = 0;
+	}
+	else
+	{
+//		u32 r10 = r2->v4;
+//		u32 r11 = r10;
+//		u32 r12 = r2->v3;
+
+//		r10 *= r12;
+
+		u16 var_1C = r2->v4 * r2->v3;
+//		u32 var_18 = r11;
+
+//		u32 var_14 = r12;
+
+	//	byte *var_10 = r9 + 2;
+
+		MUT_sub_34A2C(recieve_buffer_0 + 2, r9 + 2, r2->v4);
+
+		r9[1] = r2->v2;
+
+		//u32 var_C = var_1C + 1;
+
+		r9[var_1C + 2] = sub_34C2C(r9 + 1, var_1C + 1);
+
+		r9[var_1C + 3] = 13;
+
+		__disable_irq();
+
+		sci0_func_table.Transmit(r8, var_1C + 2);
+
+		recieve_buffer_1 = reg_TCNT2A;
+
+		__enable_irq();
+	};
+
+
+
+	
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+         
+extern "C" void MUT2B_800Hz_sub_87CC()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 
+extern "C" void COM_MUT2B_sub_895C()
+{
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+   

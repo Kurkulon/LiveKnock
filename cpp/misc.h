@@ -511,6 +511,7 @@ struct Map3D_W
 #define mem_incr										((void(*)(void*,void*))0x562)
 #define mem_decr										((void(*)(void*,void*))0x53E)
 #define memsetz											((void(*)(void*,void*))0x52C)
+#define memcpy											((void(*)(void*,void*,u16))0x34C94)
 
 #define Interpolate										((u16(*)(u16,u16,u16))0xD7A)
 #define interpolate_r4_r5_r6							((u16(*)(u16,u16,u16))0xB16)

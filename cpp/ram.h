@@ -1799,6 +1799,7 @@
 #define      word_FFFF9AEC                  							(*(u16*)0xFFFF9AEC)                                                        
 #define      dword_FFFF9AF8                 							(*(u32*)0xFFFF9AF8)                                                        
 #define      word_FFFF9AFC                  							(*(u16*)0xFFFF9AFC)                                                        
+#define      byte_FFFF9C00                  							((byte*)0xFFFF9C00)                                                        
 																							  
 																							  
 																							  
