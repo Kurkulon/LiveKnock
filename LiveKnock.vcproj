@@ -85,6 +85,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cpp\com.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\cpp\crank.cpp"
 				>
 			</File>
