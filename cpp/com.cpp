@@ -24,8 +24,9 @@ struct S9884 { u16 v1; byte v2; byte v3; byte v4; byte v5;  };
 
 #define	byte_9884				((S9884*)0x9884)                                                     
 
-#define  MUT_sub_34A2C		((void(*)(byte*,byte*,u16))0x34A2C)
-#define  sub_34C2C			((byte(*)(byte*,u16))0x34C2C)
+#define  MUT_sub_34A2C							((void(*)(byte*,byte*,u16))0x34A2C)
+#define  sub_34C2C								((byte(*)(byte*,u16))0x34C2C)
+#define  COM_SCI0_Disable_Transmit_sub_D8C4		((void(*)())0xD8C4)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -217,7 +218,7 @@ extern "C" void MUT2B_800Hz_sub_87CC(u16 r1)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  
-extern "C" void COM_MUT2B_sub_895C()
+extern "C" void COM_MUT2B_sub_895C(u16 r1)
 {
 
 }
@@ -378,7 +379,137 @@ extern "C" void OBD10_sub_21386()
                     
 extern "C" void COM_root_sub_21564()
 {
+	wMUT80_ECU_ID_Type = word_F44[wMUT34_Map_Index];
+	wMUT82_ECU_ID_Version = ECU_Internal_ID_1;
+	bMUTD5 = word_F56;
+	bMUTFF_END_MUT = word_F3C;
 
+	if (byte_1076/*0*/ != 0)
+	{
+		// loc_215A0
+
+		if (timer_down_TXFLAG3_FFFF8574 == 0)
+		{
+			CLR(mutorobd_FFFF8E08, 0x4000);
+		}
+		else if (timer_up_FFFF852C > 200)
+		{
+			WFLAG(mutorobd_FFFF8E08, 0x8000, mutorobd_FFFF8E08 & 0x4000);
+		}
+		else
+		{
+			if (recieve_buffer_1_2 & 1)
+			{
+				SET(mutorobd_FFFF8E08, 0x4000);
+			};
+
+			SET(mutorobd_FFFF8E08, 0x8000);
+		};
+
+		// loc_215F8
+
+		if (_highbaudflag_F30 & 1)
+		{
+			HIGHBAUDFLAG_FFFF93D8 = _highbaudflag_F30/*2*/;
+		}
+		else
+		{
+			byte r13 = _highbaudflag_F30;
+
+			WFLAG(r13, 1, mutorobd_FFFF8E08 & 0x8000);
+
+			HIGHBAUDFLAG_FFFF93D8 = r13;
+		};
+	}
+	else
+	{
+		// loc_21624
+
+		CLR(mutorobd_FFFF8E08, 0xC000);
+
+		HIGHBAUDFLAG_FFFF93D8 = _highbaudflag_F30/*2*/;
+	};
+
+	// loc_21638
+
+	if (HIGHBAUDFLAG_FFFF93D8 & 1)
+	{
+		if (mutorobd_FFFF8E08 & 0x1FF)
+		{
+			recieve_buffer_1_2 = 0;
+
+			COM_SCI0_Disable_Transmit_sub_D8C4();
+		}
+		else
+		{
+			COM_sub_8026(0);
+
+			if (AND(recieve_buffer_1_2, 3))
+			{
+				COM_sub_86BC(0, 0);
+			}
+			else if (rpm_x125div32_B < 102 && AND(recieve_buffer_1_2, 0x21))
+			{
+				COM_MUT2B_sub_895C(0);
+			};
+		};
+	}
+	else
+	{
+		COM_SCI0_Disable_Transmit_sub_D8C4();
+	};
+
+	// loc_216F2
+
+	if (HIGHBAUDFLAG_FFFF93D8 & 2)
+	{
+		if (wMUTD1_BitMap_FAA & FAA_3_IMMO)
+		{
+			word_FFFF9A5E = 0;
+		}
+		else
+		{
+			COM_sub_8026(1);
+
+			if (AND(word_FFFF9A5E, 3))
+			{
+				COM_sub_86BC(1, 0);
+			}
+			else if (rpm_x125div32_B < 102 && AND(word_FFFF9A5E, 0x21))
+			{
+				COM_MUT2B_sub_895C(1);
+			};
+		};
+	};
+
+	// loc_2174E
+
+	WFLAG(wMUTA0_Sensor_Pins, 0x10, wMUT9A_Ligths_Bit_Array & 1);
+
+	WFLAG(wMUTA0_Sensor_Pins, 2, wMUT9B_Output_Pins & 1);
+
+	// loc_2178A
+
+	if (recieve_buffer_1_2 & 0xE)
+	{
+		u16 *p = (u16*)recieve_buffer_0;
+
+		word_FFFF99E4 = (p[1] >> 8) | (p[1] << 8);
+		word_FFFF99E6 = (p[2] >> 8) | (p[2] << 8);
+		word_FFFF99E8 = (p[3] >> 8) | (p[3] << 8);
+		word_FFFF99EA = (p[4] >> 8) | (p[4] << 8);
+		word_FFFF99EC = (p[5] >> 8) | (p[5] << 8);
+		word_FFFF99EE = (p[6] >> 8) | (p[6] << 8);
+
+		word_FFFF99D8 = (p[13] >> 8) | (p[13] << 8);
+		word_FFFF99DA = (p[14] >> 8) | (p[14] << 8);
+		word_FFFF99DC = (p[15] >> 8) | (p[15] << 8);
+		word_FFFF99DE = (p[16] >> 8) | (p[16] << 8);
+		word_FFFF99E0 = (p[17] >> 8) | (p[17] << 8);
+		word_FFFF99E2 = (p[18] >> 8) | (p[18] << 8);
+
+
+	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
