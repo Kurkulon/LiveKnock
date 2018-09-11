@@ -19,7 +19,7 @@
 #define F500_InitManifoldVars	((void(*)(void))0x23244)
 
 
-#define ENGINE_MAIN_VARIABLES_DIM_off_9198		((EnVars*)0x9198)
+//#define ENGINE_MAIN_VARIABLES_DIM_off_9198		((EnVars*)0x9198)
 
 #pragma regsave(F500_root_sub)
 //#pragma regsave(F500_Init_BitMap_Flags_New)
@@ -50,7 +50,7 @@ static void F500_Update_IAT_Sensor();
 static void F500_Update_Air_Temp_Scaled();
 static void F500_sub_10188();
 static void F500_sub_10220();
-static void F500_O22_Manipulations_sub_1023C(EnVars* ev);
+static void F500_O22_Manipulations_sub_1023C(/*EnVars* ev*/);
 static void F500_TPS_Load_RPM_Calcs();
 static void F500_TPS_sub_103DA();
 static void F500_sub_1044C();
@@ -882,19 +882,19 @@ void F500_sub_10220()
 {
 	if (timeEvents & EVT_0_25ms)
 	{
-		F500_O22_Manipulations_sub_1023C(ENGINE_MAIN_VARIABLES_DIM_off_9198);
+		F500_O22_Manipulations_sub_1023C(/*ENGINE_MAIN_VARIABLES_DIM_off_9198*/);
 	};
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-void F500_O22_Manipulations_sub_1023C(EnVars* ev)
+void F500_O22_Manipulations_sub_1023C(/*EnVars* ev*/)
 {
-	if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 8) == 0 || (*ev->_176_word_FFFF9296 & 4) == 0)
+	if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 8) == 0 || (word_FFFF9296 & 4) == 0)
 	{
 		O2_SECONDARY_SENSOR_VOLTAGE_SHLL8_CLIPPED_FFFF88D0 = Interpolate_256(O2_SECONDARY_SENSOR_VOLTAGE_SHLL8_CLIPPED_FFFF88D0, wMUT3C_Rear_O2_ADC8bit << 8, t1_unk_16FE/*250*/);
 
-		*ev->_40_wMUT5C_ADC_Rear_02_Voltage = Div_256_R(O2_SECONDARY_SENSOR_VOLTAGE_SHLL8_CLIPPED_FFFF88D0);
+		wMUT5C_ADC_Rear_02_Voltage = Div_256_R(O2_SECONDARY_SENSOR_VOLTAGE_SHLL8_CLIPPED_FFFF88D0);
 	};
 }
 

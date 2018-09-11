@@ -12,13 +12,13 @@
 #include "hwreg.h"
 #include "F500.h"
 #include "ML02.h"
+#include "FU03.h"
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #define sub_206A4					((void(*)(void))0x206A4)
 #define WaitDownTimer801			((void(*)(void))0xBB36)
 #define COM_root_sub_21564			((void(*)(void))0x21564)
-#define FU03_root_sub				((void(*)(void))0x13BF4)
 #define IG04_root_Update_Ignition	((void(*)(void))0x16E90)
 #define AA05_root_sub_19096			((void(*)(void))0x19096)
 #define BC06_root_sub_1BF7A			((void(*)(void))0x1BF7A)
@@ -31,7 +31,6 @@
 #define PDIOR_Stuff_sub_AD3C		((void(*)(void))0xAD3C)
 
 #define SysInit_NVRAM_266DC			((void(*)(void))0x266DC)
-#define SysInit_NVRAM_Trims			((void(*)(void))0x13AB8)
 #define SysInit_NVRAM_OctaneNum		((void(*)(void))0x16D50)
 #define SysInit_NVRAM_18F80			((void(*)(void))0x18F80)
 #define SysInit_NVRAM_1F3E0			((void(*)(void))0x1F3E0)
@@ -56,7 +55,6 @@
 #define PADR_Stuff_sub_A5F8								((void(*)(void))0xA5F8)
 #define sub_A374										((void(*)(void))0xA374)
 #define SysInit_sub_266FC								((void(*)(void))0x266FC)
-#define SysInit_sub_13B04								((void(*)(void))0x13B04)
 #define SysInit_sub_16D74								((void(*)(void))0x16D74)
 #define SysInit_sub_19014								((void(*)(void))0x19014)
 #define SysInit_sub_1BEFE								((void(*)(void))0x1BEFE)
@@ -155,6 +153,17 @@ static void WaitTimer()
 	deltaTimer_FFFF886A = reg_TCNT2A - prevTimer_FFFF886C;
 
 	WaitDownTimer801();
+
+	//for(;;)
+	//{
+	//	if (downTimer_801 == 0 || downTimer_801 > 8) break;
+	//};
+
+	//__disable_irq();
+
+	//downTimer_801 = 8;
+
+	//__enable_irq();
 
 	prevTimer_FFFF886C = reg_TCNT2A;
 }

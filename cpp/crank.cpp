@@ -2970,7 +2970,7 @@ u16 INJECTOR_RESCALED_sub_26174(u16 v)
 {
 	if (v <= 260)
 	{
-		v = Add_Lim_FFFF(v, Div_R4_R5__R0(byte_342F[v>>2], 2));
+		v = Add_Lim_FFFF(v, Div_R4_R5__R0(byte_342F[(u32)v>>2], 2));
 	};
 
 	// loc_261AC

@@ -180,6 +180,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cpp\FU03.h"
+				>
+			</File>
+			<File
 				RelativePath=".\cpp\hwreg.h"
 				>
 			</File>

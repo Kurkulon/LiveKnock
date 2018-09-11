@@ -1787,7 +1787,7 @@
 #define      word_FFFF9AD2                  							(*(u16*)0xFFFF9AD2)                                                        
 #define      word_FFFF9AD4                  							(*(u16*)0xFFFF9AD4)                                                        
 #define      word_FFFF9AD6                  							(*(u16*)0xFFFF9AD6)                                                        
-#define      downTimer_801                  							(*(u16*)0xFFFF9AD8)                                                        
+#define      downTimer_801                  							(*(volatile u16*)0xFFFF9AD8)                                                        
 #define      word_FFFF9ADA                  							(*(u16*)0xFFFF9ADA)                                                        
 #define      ufix8_FFFF9ADE                 							(*(u16*)0xFFFF9ADE)                                                        
 #define      ufix8_FFFF9AE0                 							(*(u16*)0xFFFF9AE0)                                                        

@@ -23,6 +23,13 @@
 
 #define OBD_P0031_P0032_P0037_P0038_sub_2EF5A	((u16(*)(void))0x2EF5A)
 
+#define sub_E294			((u16(*)())0xE294)
+#define sub_A324			((u16(*)())0xA324)
+#define sub_B0BC			((void(*)(u16))0xB0BC)
+#define sub_E356			((void(*)())0xE356)
+#define sub_E300			((void(*)())0xE300)
+
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
@@ -811,8 +818,8 @@ static u16 BC06_sub_1D268()
 
 static void BC06_sub_1D2BC()
 {
-	u32 r9 = 0x8000;
-	u32 r8 = 0x100;
+	//u32 r9 = 0x8000;
+	//u32 r8 = 0x100;
 
 	u32 r2 = sub_E294();
 
