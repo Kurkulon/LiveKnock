@@ -17,7 +17,7 @@
 
 //#define sub_A374			((void(*)(void))0xA374)
 //#define F500_Get_All_ADC	((void(*)(void))0xA7F0)
-#define sub_21D9C		((bool(*)(void))0x21D9C)
+//#define sub_21D9C		((bool(*)(void))0x21D9C)
 
 #define ENGINE_MAIN_VARIABLES_DIM_off_9198		((EnVars*)0x9198)
 
@@ -399,12 +399,14 @@ static void ML02_sub_11570()
 		if (RPM_FLAGS_FFFF8A00 & RPM1250)
 		{
 			r13 = 2;
+
+			if (RPM_FLAGS_FFFF8A00 & RPM2125)
+			{
+				r13 = 3;
+			};
 		};
 
-		if (RPM_FLAGS_FFFF8A00 & RPM2125)
-		{
-			r13 = 3;
-		};
+		// loc_1183A
 
 		if (RPM_FLAGS_FFFF8A00 & LOAD32)
 		{
@@ -503,7 +505,7 @@ static bool ML02_Return_0()
 static bool ML02_sub_119DC()
 {
 	if (ZRO(RT_FLAG1_FFFF8888, RT_5_ALWAYS_1) || wMUT73_TPS_Open_Delta >= word_1A58 || rpm_x125div32_B >= (rpm_1A5C/*192*/<<2) 
-		|| wMUT2E_Vehicle_Speed_Frequency >= word_1A54/*10*/ || (SPEED_FLAGS & SPD_6_40) || wMUT1C_ECU_Load >= word_1A5A/*255*/)
+		|| wMUT2E_Vehicle_Speed_Frequency >= word_1A54/*10*/ || (SPEED_FLAGS & SPD_6_40) || wMUT1C_ECU_Load < word_1A5A/*255*/)
 	{
 		timer_FFFF858E = word_1A56/*80*/;
 	};
@@ -1684,12 +1686,12 @@ static void ML02_sub_13120()
 
 	SET(r1, MUT1E_5_ALWAYS_1);
 
-	if (sub_21D9C())
-	{
-		CLR(r1, UPDATE_OXIGEN_TRIM|CLOSED_LOOP_GENERIC);
-		CLR(r2, 0x800);
-		SET(wMUT18_Open_Loop_Bit_Array, MUT18_12_1000);
-	};
+	//if (sub_21D9C())
+	//{
+	//	CLR(r1, UPDATE_OXIGEN_TRIM|CLOSED_LOOP_GENERIC);
+	//	CLR(r2, 0x800);
+	//	SET(wMUT18_Open_Loop_Bit_Array, MUT18_12_1000);
+	//};
 
 	wMUT1E_MAF_RESET_FLAG = r1;
 
