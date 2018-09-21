@@ -630,6 +630,7 @@ extern u16	rpmTimeRAM[];
 extern const u16 hiIgnMapData[];
 
 extern Map3D_B enrichCoolantMapRAM;
+extern Map3D_W kAirMap;
 extern Map3D_W kAirMapRAM;
 
 extern u32 __DMAOPFLAG;

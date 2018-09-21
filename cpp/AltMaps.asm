@@ -1,11 +1,11 @@
 
 	.INCLUDE "cpp\def.inc"
 
-;DEF_ENRICH_COOL_AIR_MAPS:	.DEFINE		"1"
+DEF_ENRICH_COOL_AIR_MAPS:	.DEFINE		"1"
 TEST_INTERPOLATE:			.DEFINE		"1"
 ;DEF_NO_KNOCK_RETARD:		.DEFINE		"1"
 
-;DEF_SIMULATION:				.DEFINE		"1"
+DEF_SIMULATION:				.DEFINE		"1"
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -214,23 +214,6 @@ Knock_retard_hook_loc1:
 	
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	.AIFDEF	DEF_ENRICH_COOL_AIR_MAPS
-
-;k_InAirTemp
-
-	.SECTION C_1011C, CODE, LOCATE=H'1011C
-	
-			nop   	                                                        
-			nop   	                                                        
-			nop   	                                                        
-			nop   	                                                        
-			nop   	                                                        
-			nop   	                                                        
-
-	.AENDI
-	
-;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 	.SECTION C_6746, DATA, LOCATE=H'6748
 
 		.DATA.W		_axis_fu_RPM                                    
@@ -428,18 +411,26 @@ enrichCoolantMapDataRAM .EQU enrichCoolantMapData + RAM - ROM
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+	.EXPORT	_kAirMap
+	
 			.align 4
 
-kAirMap:
-			.DATA.W 	2
+_kAirMap:
+			.DATA.W 	3
 			.DATA.W 	0                                                  
 			.DATA.L 	_axis_fu_RPM
 			.DATA.L 	axisIndex_7_InAirTemp
 			.DATA.W 	14
 kAirMapData:
-			.DATA.W 	H'8F00, H'8800, H'8400, H'8000, H'7D00, H'7A00, H'7600
+			.DATA.W 	H'8F00, H'8F00, H'8F00, H'8F00, H'8F00, H'8F00, H'8F00, H'8F00, H'8F00, H'8F00, H'8F00, H'8F00, H'8F00, H'8F00 
+			.DATA.W 	H'8800, H'8800, H'8800, H'8800, H'8800, H'8800, H'8800, H'8800, H'8800, H'8800, H'8800, H'8800, H'8800, H'8800 
+			.DATA.W 	H'8400, H'8400, H'8400, H'8400, H'8400, H'8400, H'8400, H'8400, H'8400, H'8400, H'8400, H'8400, H'8400, H'8400 
+			.DATA.W 	H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000 
+			.DATA.W 	H'7D00, H'7D00, H'7D00, H'7D00, H'7D00, H'7D00, H'7D00, H'7D00, H'7D00, H'7D00, H'7D00, H'7D00, H'7D00, H'7D00 
+			.DATA.W 	H'7A00, H'7A00, H'7A00, H'7A00, H'7A00, H'7A00, H'7A00, H'7A00, H'7A00, H'7A00, H'7A00, H'7A00, H'7A00, H'7A00 
+			.DATA.W 	H'7600,	H'7600,	H'7600, H'7600, H'7600, H'7600, H'7600, H'7600, H'7600, H'7600, H'7600, H'7600, H'7600, H'7600
 						
-kAirMapRAM		.EQU kAirMap + RAM - ROM
+kAirMapRAM		.EQU _kAirMap + RAM - ROM
 kAirMapDataRAM	.EQU kAirMapData + RAM - ROM
 
 	.AENDI
