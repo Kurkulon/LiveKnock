@@ -151,22 +151,22 @@ _frameCount:		.RES.L      1					;	.EQU H'FFFF8462
 
 	.IMPORT	_FU03_HI_LO_Octan
 
-	.SECTION P_141C8, CODE, LOCATE=H'141C8
+;	.SECTION P_141C8, CODE, LOCATE=H'141C8
 
-			mov.l	#_FU03_HI_LO_Octan, r0                           
-			jmp   	@r0                                                             
-			nop   	                                                        
+;			mov.l	#_FU03_HI_LO_Octan, r0                           
+;			jmp   	@r0                                                             
+;			nop   	                                                        
 	
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	.IMPORT	_FU03_VE_map_sub_14620
 
-	.SECTION P_14620, CODE, LOCATE=H'14620
+;	.SECTION P_14620, CODE, LOCATE=H'14620
 	
-			mov.l	#_FU03_VE_map_sub_14620, r0                           
-			jmp   	@r0                                                             
-			nop   	                                                        
+;			mov.l	#_FU03_VE_map_sub_14620, r0                           
+;			jmp   	@r0                                                             
+;			nop   	                                                        
 	
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

@@ -1,5 +1,5 @@
-//#pragma section _FU03
-#pragma section _main
+#pragma section _FU03
+//#pragma section _main
 
 #include <umachine.h>
 
@@ -9,7 +9,7 @@
 #include "ram.h"
 //#include "EnVars.h"
 
-#include "FU03.h"
+//#include "FU03.h"
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -152,6 +152,7 @@ extern "C" void SysInit_NVRAM_Trims();
 extern "C" void FU03_Init_Trims();
 extern "C" void SysInit_sub_13B04();
 extern "C" void FU03_root_sub();
+static void FU03_sub_13CE4_hook();
 static void FU03_sub_13CE4();
 static void FU03_sub_13D8C();
 static void FU03_sub_13DA2();
@@ -405,7 +406,7 @@ extern "C" void SysInit_sub_13B04()
 
 extern "C" void FU03_root_sub()
 {
-	FU03_sub_13CE4();
+	FU03_sub_13CE4_hook();
 	FU03_Oxygen_root();
 	FU03_InjPulseWidthLimpHome();
 	FU03_sub_159DC();
@@ -420,6 +421,41 @@ extern "C" void FU03_root_sub()
 	FU03_O2_B1_B2_sub_16958();
 	FU03_sub_16AA8();
 	FU03_sub_16C60();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void FU03_sub_13CE4_hook()
+{
+	FU03_sub_13DCA();
+		
+	WFLAG(FUEL_CUT_FLAG_FFFF8A5E, FCF_400, (wMUTD1_BitMap_FAA & FAA_4_CLOSED_LOOP) == 0 && FU03_Check_13E4A()); //FU03_Check_13E12();
+	
+	WFLAG(FUEL_CUT_FLAG_FFFF8A5E, FCF_800, (bMUTD2_FBA_MAF_MAP_FLAG & 1) && FU03_sub_13EE6()); //FU03_Check_13EAE();
+
+	FU03_Coolant_Air_Calcs_sub_14088(/*ENGINE_MAIN_VARIABLES_DIM_off_9198*/);
+
+	WFLAG(FUEL_CUT_FLAG_FFFF8A5E, FCF_100, FU03_sub_14138()); //FU03_sub_14108();
+	
+	WFLAG(FUEL_CUT_FLAG_FFFF8A5E, FCF_4000, (wMUTD1_BitMap_FAA & FAA_7_HIGH_IGN) && wMUT1C_ECU_Load >= word_180C/*80*/ && MUT21_RPM_x125div4 >= word_180A/*128*/); //FU03_sub_14174();
+
+	FU03_HI_LO_Octan();
+
+	word_FFFF8AB0 = Mul_Div_R(word_1502/*867*/, GET_FROM_MASSIVE_byte(AFRTMP_302A)/*131*/ * INJSZ_150C, 0x8000); // 406 //FU03_sub_14300();
+	
+	FU03_sub_14380();
+	FU03_sub_144E0();
+	
+	word_FFFF8AF0 = 0x80; //FU03_sub_14610();
+	
+	FU03_VE_map_sub_14620();
+
+	FU03_Fuel_Knock_Reaction(/*ENGINE_MAIN_VARIABLES_DIM_off_9198*/);
+	FU03_sub_149E0(/*ENGINE_MAIN_VARIABLES_DIM_off_9198*/);
+
+	wMUT58_AFR_CT_Adder = Lim_FF(Mul_Div_R(wMUT32_Air_To_Fuel_Ratio * enrichmentWarmUp, (word_FFFF8AEE << 1) + 0x80, 0x4000));
+	
+	FU03_sub_16BFE();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1030,6 +1066,22 @@ static void EVO_sub_150A0(/*EnVars* ev*/) //FU03_sub_149E0(EnVars* ev)
 }
 
 #endif
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void FU03_Oxygen_root_Hook()
+{
+	FU03_sub_14B7E();
+	FU03_sub_14CBC();
+
+	FU03_Calc_Limits_O2FT(/*ev*/);
+	FU03_sub_Oxygen_Feedback_Trim(/*ev*/);
+
+	FU03_sub_15300(/*ev->_432_word_8DB0*/);
+
+	FU03_Calc_MUT52(/*ev*/);
+	FU03_Calc_MUT50_LFTB(/*ev*/);
+}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

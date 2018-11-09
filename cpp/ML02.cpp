@@ -72,27 +72,58 @@ static void ML02_sub_11300();
 static void ML02_sub_11332();
 static void ML02_sub_11390();
 static bool ML02_sub_113C6();
+
+
+#ifdef ML02_TEST
+
 static void ML02_sub_114B4();
-static bool ML02_sub_114E2();
 static void ML02_sub_11528();
 static void ML02_sub_11570();
 static void ML02_sub_118B0();
 static void ML02_sub_118E2();
-static void ML02_sub_11910();
-static bool ML02_Return_0();
-static bool ML02_sub_119DC();
-static bool ML02_sub_11A4E();
 static void ML02_sub_11A98();
 static void ML02_sub_11AEC();
 static void ML02_sub_11B36();
-static bool ML02_sub_11B74();
-static bool ML02_sub_11D48();
 static void ML02_sub_11D82();
-static bool ML02_sub_11DBA();
 static void ML02_sub_11E00();
 static void ML02_sub_11E14();
 static void ML02_sub_11EE8();
 static void ML02_sub_11F88();
+static void ML02_sub_13398();
+static void ML02_sub_139A8();
+static void ML02_sub_139C4();
+
+#else
+
+#define ML02_sub_114B4	((void(*)(void))0x114B4)
+#define ML02_sub_11528	((void(*)(void))0x11528)
+#define ML02_sub_11570	((void(*)(void))0x11570)
+#define ML02_sub_118B0	((void(*)(void))0x118B0)
+#define ML02_sub_118E2	((void(*)(void))0x118E2)
+#define ML02_sub_11A98	((void(*)(void))0x11A98)
+#define ML02_sub_11AEC	((void(*)(void))0x11AEC)
+#define ML02_sub_11B36	((void(*)(void))0x11B36)
+#define ML02_sub_11D82	((void(*)(void))0x11D82)
+#define ML02_sub_11E00	((void(*)(void))0x11E00)
+#define ML02_sub_11E14	((void(*)(void))0x11E14)
+#define ML02_sub_11EE8	((void(*)(void))0x11EE8)
+#define ML02_sub_11F88	((void(*)(void))0x11F88)
+#define ML02_sub_13398	((void(*)(void))0x13398)
+#define ML02_sub_139A8	((void(*)(void))0x139A8)
+#define ML02_sub_139C4	((void(*)(void))0x139C4)
+
+#endif 
+
+
+
+static bool ML02_sub_114E2();
+static void ML02_sub_11910();
+static bool ML02_Return_0();
+static bool ML02_sub_119DC();
+static bool ML02_sub_11A4E();
+static bool ML02_sub_11B74();
+static bool ML02_sub_11D48();
+static bool ML02_sub_11DBA();
 static void ML02_Update_STALL_Flag();
 static bool ML02_Check_STALL();
 static void ML02_Update_CRANKING_Flag();
@@ -122,15 +153,12 @@ static bool ML02_sub_130BC(/*EnVars* ev*/);
 static void ML02_sub_13120();
 static void ML02_sub_131EC();
 static void ML02_sub_13320();
-static void ML02_sub_13398();
 static void ML02_sub_133BC();
 static bool ML02_sub_1359C(/*EnVars* ev*/);
 static bool ML02_sub_13602();
 static void ML02_sub_1364C(/*EnVars* ev*/);
 static void ML02_sub_1376C(/*EnVars* ev*/);
 static void ML02_Fuel_Knock_Reaction(/*EnVars* ev*/);
-static void ML02_sub_139A8();
-static void ML02_sub_139C4();
 
 
 
@@ -230,7 +258,8 @@ void ML02_root_sub_1123E()
 {
 	ML02_sub_11300();                    
 	ML02_sub_11332();                    
-	ML02_sub_11390();                    
+	ML02_sub_11390();  
+
 	ML02_sub_114B4();                    
 	ML02_sub_11528();                    
 	ML02_sub_11570();                    
@@ -314,6 +343,8 @@ static bool ML02_sub_113C6()
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#ifdef ML02_TEST
 
 static void ML02_sub_114B4()
 {
@@ -2070,3 +2101,4 @@ static void ML02_sub_139C4()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+#endif

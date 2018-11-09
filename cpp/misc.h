@@ -132,7 +132,7 @@ struct Map3D_W
 #define RPM_8_bit						0x100
 #define RPM_9_wtf_cranking				0x200
 #define RPM_10_bit						0x400
-#define RPM_11_UPDATE_OXIGEN_TRIM				0x800
+#define RPM_11_UPDATE_OXIGEN_TRIM		0x800
 #define RPM_12_bit						0x1000
 #define RPM_13_CRANKING_SYNC_INJECT		0x2000
 #define RPM_14_bit						0x4000
