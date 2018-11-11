@@ -151,23 +151,85 @@ _frameCount:		.RES.L      1					;	.EQU H'FFFF8462
 
 	.IMPORT	_FU03_HI_LO_Octan
 
-;	.SECTION P_141C8, CODE, LOCATE=H'141C8
+	.SECTION P_141C8, CODE, LOCATE=H'141C8
 
-;			mov.l	#_FU03_HI_LO_Octan, r0                           
-;			jmp   	@r0                                                             
-;			nop   	                                                        
+			mov.l	#_FU03_HI_LO_Octan, r0                           
+			jmp   	@r0                                                             
+			nop   	                                                        
 	
+	.EXPORT	_Mul32_Fix15
+	
+_Mul32_Fix15:										
+												
+			extu.w	r5, r5	
+							
+			dmulu.l	r4, r5					
+			
+			sts		mach, r4					
+			sts		macl, r0
+			
+			mov.w	#16384, r5				
+
+			clrt
+			addc	r5, r0
+			mov		#0, r5
+			addc	r5, r4		
+
+			mov.w	#32767, r5				
+			cmp/hi	r5, r4					
+			bt		?0001	
+					
+			shll	r0
+			rotcl	r4
+			
+			rts								
+			xtrct	r4, r0			
+?0001:										
+			rts								
+			mov	#h'FFFFFFFF, r0             
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	.IMPORT	_FU03_VE_map_sub_14620
 
-;	.SECTION P_14620, CODE, LOCATE=H'14620
+	.SECTION P_14620, CODE, LOCATE=H'14620
 	
-;			mov.l	#_FU03_VE_map_sub_14620, r0                           
-;			jmp   	@r0                                                             
-;			nop   	                                                        
+			mov.l	#_FU03_VE_map_sub_14620, r0                           
+			jmp   	@r0                                                             
+			nop   	                                                        
 	
+	.EXPORT	_Mul32_Fix14
+	
+_Mul32_Fix14:										
+												
+			extu.w	r5, r5	
+							
+			dmulu.l	r4, r5					
+			
+			sts		mach, r4					
+			sts		macl, r0
+			
+			mov.w	#8192, r5				
+			
+			clrt
+			addc	r5, r0
+			mov		#0, r5
+			addc	r5, r4		
+			
+			mov.w	#16383, r5				
+			cmp/hi	r5, r4					
+			bt		?0001	
+					
+			shll	r0
+			rotcl	r4			
+			shll	r0
+			rotcl	r4	
+					
+			rts								
+			xtrct	r4, r0			
+?0001:										
+			rts								
+			mov	#h'FFFFFFFF, r0             
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -176,6 +238,85 @@ _frameCount:		.RES.L      1					;	.EQU H'FFFF8462
 	.SECTION C_19454, CODE, LOCATE=H'19454
 	
 		.DATA.L		_Hook_ForcedIdleRPM                                    
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	.IMPORT	_FU03_sub_149E0_Hook
+
+	.SECTION P_149E0, CODE, LOCATE=H'149E0
+	
+			mov.l	#_FU03_sub_149E0_Hook, r0                           
+			jmp   	@r0                                                             
+			nop  
+			
+	.EXPORT	_Mul32_Fix23
+	
+_Mul32_Fix23:										
+												
+			extu.w	r5, r5	
+							
+			dmulu.l	r4, r5					
+			
+			sts		mach, r4					
+			sts		macl, r0
+			
+			mov.l	#H'400000, r5				
+			
+			clrt
+			addc	r5, r0
+			mov		#0, r5
+			addc	r5, r4		
+			
+			mov.l	#H'800000, r5				
+			cmp/hi	r5, r4					
+			bt		?0001	
+					
+			shll	r0
+			rotcl	r4			
+			
+			shlr16	r0
+			shlr8	r0
+			
+			shll8	r4
+					
+			rts								
+			or		r4, r0			
+?0001:										
+			rts								
+			mov	#h'FFFFFFFF, r0             
+
+	.EXPORT	_Mul32_Fix24
+	
+_Mul32_Fix24:										
+												
+			extu.w	r5, r5	
+							
+			dmulu.l	r4, r5					
+			
+			sts		mach, r4					
+			sts		macl, r0
+			
+			mov.l	#H'800000, r5				
+			
+			clrt
+			addc	r5, r0
+			mov		#0, r5
+			addc	r5, r4		
+			
+			mov.l	#H'1000000, r5				
+			cmp/hi	r5, r4					
+			bt		?0001	
+					
+			shlr16	r0
+			shlr8	r0
+			
+			shll8	r4
+					
+			rts								
+			or		r4, r0			
+?0001:										
+			rts								
+			mov	#h'FFFFFFFF, r0             
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

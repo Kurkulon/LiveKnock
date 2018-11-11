@@ -638,6 +638,11 @@ extern u32 __DMAOPFLAG;
 extern "C" u16 Interpolate_my(u16,u16,u16);
 extern "C" u16 interpolate_r4_r5_r6_my(u16,u16,u16);
 
+extern "C" u32 Mul32_Fix15(u32,u16);
+extern "C" u32 Mul32_Fix14(u32,u16);
+extern "C" u32 Mul32_Fix23(u32,u16);
+extern "C" u32 Mul32_Fix24(u32,u16);
+
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 struct TM32

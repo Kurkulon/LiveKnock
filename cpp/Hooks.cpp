@@ -9,9 +9,11 @@
 
 #define CEL7_692E							((Axis*)0x692E)
 #define mapInletAirTemp_Scaling				((Axis*)0x9B82)
+#define BAR5_6D66							((Axis*)0x6D66)
 
 #define CORFUELAIR_33A6						((Map3D_B *)0x33A6)
 #define byte_9B00							((Map3D_B *)0x9B00)
+#define unk034_3EFA							((Map3D_B *)0x3EFA)
 
 //#define F500_Update_Air_Temp_Scaled	((void(*)(void))0x1014A)
 
@@ -83,6 +85,42 @@ extern "C" u16 Hook_ForcedIdleRPM(u16 v)
 	return (forcedIdleRPM != 0) ? forcedIdleRPM : v;
 }
 
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//#pragma noregalloc(FU03_sub_149E0_Hook)
+
+extern "C" void FU03_sub_149E0_Hook()
+{
+//	u32 r9 = enrichmentWarmUp;
+	//u32 r8 = word_FFFF8AB0 << 16; //Mult_R4_65536(word_FFFF8AB0/*406*/); // 26607616
+
+	TRG(ZERO_8_IGNITION_FLAGS, 0x20, wMUT15_Barometric_Pressure, word_1772/*189(94.5)*/, word_1772/*189(94.5)*/ + word_1774/*3*/);
+
+	u32 r2 = 0x80;
+
+	if (ZRO(ZERO_8_IGNITION_FLAGS, 0x20))
+	{
+		Table_Lookup_Axis(BAR5_6D66);				// 125,141,157,173,189
+		r2 = Table_Lookup_byte_2D_3D(unk034_3EFA);	// 151,142,140,136,130
+	};
+
+	u32 r0 = Mul32_Fix8(word_FFFF8AB0 << 16, Add_Lim_FFFF(wMUT31_Volumetric_Efficiency/*210(82)*/, word_1524/*48(18.75)*/)); // 26815488
+
+	r0 = Mul32_Fix15(r0, __k_AirMult);
+
+	r0 = Mul32_Fix14(r0, k_InAirTemp/*128*/ * r2/*128*/); //Mul_DW_Div(r0, k_InAirTemp/*128*/ * r2/*128*/, 0x4000); // 26815488
+
+	r0 = Mul32_Fix14(r0, fuelTrim_FFFF8ADC/*128*/ * enrichmentWarmUp/*128*/);//Mul_DW_Div(r0, fuelTrim_FFFF8ADC/*128*/ * enrichmentWarmUp/*128*/, 0x4000); // 26815488
+
+	r0 = Mul32_Fix7(r0, (word_FFFF8AEE/*0*/ << 1) + 0x80);  // 26815488
+
+	r0 = Mul32_Fix7(r0, fuelTrim_FFFF8AE4/*128*/); // 26815488
+
+	bMUTC7 = Mul32_Fix23(r0, wMUT32_Air_To_Fuel_Ratio/*150(12.5)*/); // 31424400 
+
+	//bMUTC7 = Div_65536_R(r0); // 479
+}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
