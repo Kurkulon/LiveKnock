@@ -841,9 +841,9 @@ void F500_Update_IAT_Sensor()
 	k_InAirTemp = Table_Lookup_byte_2D_3D(CORFUELAIR_33A6);	// 143, 136, 132, 128, 125, 122, 118
 															//			, 1.252, 1.192, 
 
-	Table_Lookup_Axis(RPM14_6746);
+//	Table_Lookup_Axis(RPM14_6746);
 
-	__k_AirMult = Mul_Fix7_R(k_InAirTemp, Table_Lookup_word_2D_3D((__DEADloc != 0xDEAD) ? &kAirMap : &kAirMapRAM));	
+//	__k_AirMult = Mul_Fix7_R(k_InAirTemp, Table_Lookup_word_2D_3D((__DEADloc != 0xDEAD) ? &kAirMap : &kAirMapRAM));	
 
 	//EVO
 	//   8,  33,  49,  63,  78,  96, 125, 155

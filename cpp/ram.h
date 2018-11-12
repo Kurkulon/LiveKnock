@@ -792,6 +792,7 @@
 #define      word_FFFF8AAA                  							(*(u16*)0xFFFF8AAA)                                                        
 #define      word_FFFF8AB0                  							(*(u16*)0xFFFF8AB0)                                                        
 #define      null_bMUT28                    					       (*(byte*)0xFFFF8AB3)                                                     
+#define      __k_trimVE	            									(*(u16*)0xFFFF8AB4)                                                        
 #define      __k_AirMult            									(*(u16*)0xFFFF8AB6)                                                        
 #define      wMUT31_Volumetric_Efficiency   							(*(u16*)0xFFFF8AB8)                                                        
 #define      k_InAirTemp            									(*(u16*)0xFFFF8ABA)                                                        

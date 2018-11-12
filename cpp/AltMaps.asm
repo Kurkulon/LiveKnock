@@ -1,11 +1,14 @@
 
 	.INCLUDE "cpp\def.inc"
 
-DEF_ENRICH_COOL_AIR_MAPS:	.DEFINE		"1"
+;DEF_ENRICH_COOL_AIR_MAPS:	.DEFINE		"1"
 TEST_INTERPOLATE:			.DEFINE		"1"
 ;DEF_NO_KNOCK_RETARD:		.DEFINE		"1"
 
-DEF_SIMULATION:				.DEFINE		"1"
+;DEF_SIMULATION:				.DEFINE		"1"
+
+;DEF_VEMAP16:				.DEFINE		"1"
+;DEF_IGNMAP16:				.DEFINE		"1"
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -188,6 +191,37 @@ _Mul32_Fix15:
 			rts								
 			mov	#h'FFFFFFFF, r0             
 
+	.EXPORT	_Mul_Fix30
+	
+_Mul_Fix30:										
+			dmulu.l	r4, r5					
+			
+			sts		mach, r0					
+			sts		macl, r4
+			
+			mov.l	#H'10000000, r5				
+
+			clrt
+			addc	r5, r4
+			mov		#0, r5
+			addc	r5, r0		
+			bt		?0001	
+
+			mov.l	#H'20000000, r5				
+			cmp/hi	r5, r0					
+			bt		?0001	
+					
+			shll	r4
+			rotcl	r0
+			
+			shll	r4
+
+			rts		
+			rotcl	r0
+?0001:										
+			rts								
+			mov	#h'FFFFFFFF, r0             
+
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	.IMPORT	_FU03_VE_map_sub_14620
@@ -242,6 +276,8 @@ _Mul32_Fix14:
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	.IMPORT	_FU03_sub_149E0_Hook
+	
+	.AIFDEF DEF_FU03_sub_149E0_Hook
 
 	.SECTION P_149E0, CODE, LOCATE=H'149E0
 	
@@ -316,7 +352,9 @@ _Mul32_Fix24:
 			or		r4, r0			
 ?0001:										
 			rts								
-			mov	#h'FFFFFFFF, r0             
+			mov	#h'FFFFFFFF, r0     
+			
+	.AENDI        
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -467,10 +505,12 @@ hiFuelMapRAM .EQU hiFuelMapData + RAM - ROM
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-			.align 4
 
 	.EXPORT	 _hiIgnMapData
 
+	.AIFDEF DEF_IGNMAP16
+	
+			.align 4
 hiIgnMap:
 			.DATA.W 	3                                                  
 			.DATA.W 	0                                                  
@@ -485,16 +525,44 @@ _hiIgnMapData:
             .DATA.W  H'1D00, H'1E00, H'1E00, H'1E00, H'1E00, H'2100, H'2500, H'2C00, H'2E00, H'3200, H'3200, H'3200, H'3200, H'3200, H'3400, H'3600, H'3800, H'3A00, H'3A00, H'3A00, H'3A00
             .DATA.W  H'1B00, H'1C00, H'1E00, H'1E00, H'1E00, H'2100, H'2500, H'2800, H'2800, H'2B00, H'2E00, H'2F00, H'2F00, H'3000, H'3000, H'3100, H'3200, H'3400, H'3400, H'3400, H'3400
             .DATA.W  H'1600, H'1700, H'1900, H'1B00, H'1D00, H'1F00, H'2200, H'2400, H'2700, H'2900, H'2B00, H'2C00, H'2D00, H'2E00, H'2D00, H'2E00, H'2F00, H'3400, H'3400, H'3400, H'3400
-            .DATA.W   H'D00,  H'E00, H'1300, H'1500, H'1700, H'1A00, H'1D00, H'1E00, H'2300, H'2500, H'2800, H'2B00, H'2B00, H'2B00, H'2A00, H'2B00, H'2D00, H'3300, H'3300, H'3300, H'3300
-            .DATA.W   H'C00,  H'D00, H'1200, H'1400, H'1600, H'1900, H'1C00, H'1E00, H'2200, H'2300, H'2600, H'2900, H'2900, H'2900, H'2800, H'2800, H'2B00, H'3200, H'3200, H'3200, H'3200
-            .DATA.W   H'C00,  H'D00, H'1200, H'1400, H'1600, H'1800, H'1A00, H'1C00, H'2200, H'2200, H'2500, H'2800, H'2800, H'2800, H'2700, H'2700, H'2A00, H'3100, H'3100, H'3100, H'3100
-            .DATA.W   H'A00,  H'B00, H'1000, H'1200, H'1400, H'1600, H'1800, H'1A00, H'1E00, H'1E00, H'2100, H'2600, H'2600, H'2600, H'2500, H'2500, H'2800, H'2F00, H'2F00, H'2F00, H'2F00
-            .DATA.W   H'A00,  H'A00,  H'D00,  H'F00, H'1100, H'1300, H'1500, H'1800, H'1800, H'1A00, H'1D00, H'2200, H'2200, H'2200, H'2100, H'2100, H'2400, H'2C00, H'2C00, H'2C00, H'2C00
+            .DATA.W  H'0D00, H'0E00, H'1300, H'1500, H'1700, H'1A00, H'1D00, H'1E00, H'2300, H'2500, H'2800, H'2B00, H'2B00, H'2B00, H'2A00, H'2B00, H'2D00, H'3300, H'3300, H'3300, H'3300
+            .DATA.W  H'0C00, H'0D00, H'1200, H'1400, H'1600, H'1900, H'1C00, H'1E00, H'2200, H'2300, H'2600, H'2900, H'2900, H'2900, H'2800, H'2800, H'2B00, H'3200, H'3200, H'3200, H'3200
+            .DATA.W  H'0C00, H'0D00, H'1200, H'1400, H'1600, H'1800, H'1A00, H'1C00, H'2200, H'2200, H'2500, H'2800, H'2800, H'2800, H'2700, H'2700, H'2A00, H'3100, H'3100, H'3100, H'3100
+            .DATA.W  H'0A00, H'0B00, H'1000, H'1200, H'1400, H'1600, H'1800, H'1A00, H'1E00, H'1E00, H'2100, H'2600, H'2600, H'2600, H'2500, H'2500, H'2800, H'2F00, H'2F00, H'2F00, H'2F00
+            .DATA.W  H'0A00, H'0A00, H'0D00, H'0F00, H'1100, H'1300, H'1500, H'1800, H'1800, H'1A00, H'1D00, H'2200, H'2200, H'2200, H'2100, H'2100, H'2400, H'2C00, H'2C00, H'2C00, H'2C00
+            
+	.AELSE
+	
+			.align 4
+			.DATA.W		H'FFFF
+			
+hiIgnMap:
+			.DATA.W 	H'300                                                   
+			.DATA.L 	_axis_ig_RPM
+			.DATA.L 	_axis_ig_LOAD
+			.DATA.B 	21
+_hiIgnMapData:
+            .DATA.B  H'1C, H'1D, H'1D, H'1D, H'1D, H'20, H'24, H'2B, H'34, H'35, H'35, H'35, H'36, H'37, H'39, H'3A, H'3B, H'3B, H'3B, H'3B, H'3B
+            .DATA.B  H'1D, H'1E, H'1E, H'1E, H'1E, H'21, H'25, H'2C, H'35, H'36, H'36, H'36, H'36, H'37, H'39, H'3B, H'3C, H'3C, H'3C, H'3C, H'3C
+            .DATA.B  H'1D, H'1E, H'1E, H'1E, H'1E, H'21, H'25, H'2C, H'35, H'36, H'36, H'37, H'37, H'37, H'38, H'3A, H'3D, H'3D, H'3D, H'3D, H'3C
+            .DATA.B  H'1D, H'1E, H'1E, H'1E, H'1E, H'21, H'25, H'2C, H'33, H'34, H'34, H'34, H'34, H'34, H'37, H'3A, H'3C, H'3C, H'3C, H'3C, H'3C
+            .DATA.B  H'1D, H'1E, H'1E, H'1E, H'1E, H'21, H'25, H'2C, H'2E, H'32, H'32, H'32, H'32, H'32, H'34, H'36, H'38, H'3A, H'3A, H'3A, H'3A
+            .DATA.B  H'1B, H'1C, H'1E, H'1E, H'1E, H'21, H'25, H'28, H'28, H'2B, H'2E, H'2F, H'2F, H'30, H'30, H'31, H'32, H'34, H'34, H'34, H'34
+            .DATA.B  H'16, H'17, H'19, H'1B, H'1D, H'1F, H'22, H'24, H'27, H'29, H'2B, H'2C, H'2D, H'2E, H'2D, H'2E, H'2F, H'34, H'34, H'34, H'34
+            .DATA.B  H'0D, H'0E, H'13, H'15, H'17, H'1A, H'1D, H'1E, H'23, H'25, H'28, H'2B, H'2B, H'2B, H'2A, H'2B, H'2D, H'33, H'33, H'33, H'33
+            .DATA.B  H'0C, H'0D, H'12, H'14, H'16, H'19, H'1C, H'1E, H'22, H'23, H'26, H'29, H'29, H'29, H'28, H'28, H'2B, H'32, H'32, H'32, H'32
+            .DATA.B  H'0C, H'0D, H'12, H'14, H'16, H'18, H'1A, H'1C, H'22, H'22, H'25, H'28, H'28, H'28, H'27, H'27, H'2A, H'31, H'31, H'31, H'31
+            .DATA.B  H'0A, H'0B, H'10, H'12, H'14, H'16, H'18, H'1A, H'1E, H'1E, H'21, H'26, H'26, H'26, H'25, H'25, H'28, H'2F, H'2F, H'2F, H'2F
+            .DATA.B  H'0A, H'0A, H'0D, H'0F, H'11, H'13, H'15, H'18, H'18, H'1A, H'1D, H'22, H'22, H'22, H'21, H'21, H'24, H'2C, H'2C, H'2C, H'2C
+	.AENDI	
 
 hiIgnMapRAM .EQU _hiIgnMapData + RAM - ROM
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+
+	.AIFDEF DEF_VEMAP16
+	
 			.align 4
 			
 veMap:                    
@@ -515,6 +583,31 @@ veMapData:
             .DATA.W  H'7DD3, H'7DD3, H'82B0, H'8D2F, H'B4DD, H'A78D, H'AA5E, H'AB23, H'AEB8, H'BF5C, H'BE98, H'BB02, H'BB44, H'BE56, H'C810, H'C4FE, H'C168, H'AEFA, H'A3F8
             .DATA.W  H'8021, H'8021, H'82B0, H'8D2F, H'B4DD, H'A78D, H'AA5E, H'AB23, H'B45A, H'C4FE, H'C687, H'CCEE, H'BB44, H'BE56, H'C810, H'C70A, H'C168, H'AEFA, H'A3F8
             .DATA.W  H'82B0, H'82B0, H'82B0, H'8D2F, H'B4DD, H'A78D, H'AA5E, H'AB23, H'B45A, H'C4FE, H'C687, H'CCEE, H'BB44, H'BE56, H'C810, H'C70A, H'C168, H'AEFA, H'A3F8
+            
+	.AELSE
+	
+			.align 4
+			.DATA.W		H'FFFF
+			
+veMap:                    
+			.DATA.W 	H'300                                                   
+			.DATA.L 	_axis_ve_RPM
+			.DATA.L 	_axis_ve_LOAD
+			.DATA.B 	19
+veMapData:                    
+            .DATA.B  H'58, H'58, H'5A, H'5E, H'57, H'88, H'81, H'7D, H'74, H'91, H'7C, H'6C, H'84, H'95, H'97, H'95, H'7C, H'70, H'63
+            .DATA.B  H'5A, H'5A, H'5A, H'64, H'67, H'8B, H'75, H'82, H'8D, H'88, H'9C, H'76, H'8A, H'98, H'A0, H'9B, H'8A, H'7D, H'70
+            .DATA.B  H'5C, H'64, H'67, H'64, H'6F, H'87, H'8B, H'7F, H'7A, H'95, H'9E, H'92, H'91, H'9D, H'AA, H'A2, H'97, H'8A, H'7C
+            .DATA.B  H'63, H'6E, H'71, H'6B, H'77, H'90, H'97, H'83, H'84, H'97, H'9F, H'8C, H'92, H'A3, H'B2, H'AD, H'A1, H'96, H'8B
+            .DATA.B  H'73, H'73, H'76, H'7B, H'80, H'94, H'9B, H'8C, H'91, H'A1, H'A7, H'90, H'A0, H'AA, H'B8, H'B3, H'A7, H'9D, H'93
+            .DATA.B  H'76, H'76, H'79, H'81, H'89, H'9A, H'A2, H'8E, H'9D, H'AA, H'A8, H'A9, H'AC, H'B5, H'C1, H'BE, H'AE, H'A4, H'9B
+            .DATA.B  H'78, H'78, H'7C, H'85, H'A1, H'A1, H'AA, H'9B, H'A3, H'B3, H'A9, H'AA, H'B3, H'B2, H'C4, H'BF, H'B5, H'A9, H'9C
+            .DATA.B  H'7B, H'7B, H'7F, H'89, H'A4, H'A7, H'AA, H'A3, H'A9, H'B9, H'B6, H'B0, H'BB, H'C0, H'C6, H'C2, H'B8, H'AB, H'9F
+            .DATA.B  H'7D, H'7D, H'82, H'8D, H'B4, H'A7, H'AA, H'AB, H'AE, H'BF, H'BE, H'BB, H'BB, H'BE, H'C8, H'C4, H'C1, H'AE, H'A3
+            .DATA.B  H'80, H'80, H'82, H'8D, H'B4, H'A7, H'AA, H'AB, H'B4, H'C4, H'C6, H'CC, H'BB, H'BE, H'C8, H'C7, H'C1, H'AE, H'A3
+            .DATA.B  H'82, H'82, H'82, H'8D, H'B4, H'A7, H'AA, H'AB, H'B4, H'C4, H'C6, H'CC, H'BB, H'BE, H'C8, H'C7, H'C1, H'AE, H'A3
+				  
+	.AENDI
 				  
 veMapRAM .EQU veMapData + RAM - ROM
 
@@ -563,19 +656,49 @@ _kAirMap:
 			.DATA.L 	axisIndex_7_InAirTemp
 			.DATA.W 	14
 kAirMapData:
-			.DATA.W 	H'8F00, H'8F00, H'8F00, H'8F00, H'8F00, H'8F00, H'8F00, H'8F00, H'8F00, H'8F00, H'8F00, H'8F00, H'8F00, H'8F00 
-			.DATA.W 	H'8800, H'8800, H'8800, H'8800, H'8800, H'8800, H'8800, H'8800, H'8800, H'8800, H'8800, H'8800, H'8800, H'8800 
-			.DATA.W 	H'8400, H'8400, H'8400, H'8400, H'8400, H'8400, H'8400, H'8400, H'8400, H'8400, H'8400, H'8400, H'8400, H'8400 
-			.DATA.W 	H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000 
-			.DATA.W 	H'7D00, H'7D00, H'7D00, H'7D00, H'7D00, H'7D00, H'7D00, H'7D00, H'7D00, H'7D00, H'7D00, H'7D00, H'7D00, H'7D00 
-			.DATA.W 	H'7A00, H'7A00, H'7A00, H'7A00, H'7A00, H'7A00, H'7A00, H'7A00, H'7A00, H'7A00, H'7A00, H'7A00, H'7A00, H'7A00 
-			.DATA.W 	H'7600,	H'7600,	H'7600, H'7600, H'7600, H'7600, H'7600, H'7600, H'7600, H'7600, H'7600, H'7600, H'7600, H'7600
+			.DATA.W 	H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
+			.DATA.W 	H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
+			.DATA.W 	H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
+			.DATA.W 	H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
+			.DATA.W 	H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
+			.DATA.W 	H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
+			.DATA.W 	H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
 						
 kAirMapRAM		.EQU _kAirMap + RAM - ROM
 kAirMapDataRAM	.EQU kAirMapData + RAM - ROM
 
-	.AENDI
 	
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	.EXPORT	_trimVeMap
+	
+			.align 4
+			
+_trimVeMap:                    
+
+			.DATA.W 	3
+			.DATA.W 	0                                                  
+			.DATA.L 	_axis_ve_RPM
+			.DATA.L 	_axis_ve_LOAD
+			.DATA.W 	19
+trimVeMapData:                    
+            .DATA.W  H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
+            .DATA.W  H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
+            .DATA.W  H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
+            .DATA.W  H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
+            .DATA.W  H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
+            .DATA.W  H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
+            .DATA.W  H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
+            .DATA.W  H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
+            .DATA.W  H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
+            .DATA.W  H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
+            .DATA.W  H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
+            
+trimVeMapRAM		.EQU _trimVeMap + RAM - ROM
+trimVeMapDataRAM	.EQU trimVeMapData + RAM - ROM
+
+	.AENDI
+
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	.EXPORT		_hiFuelMapRAM, _hiIgnMapRAM, _veMapRAM, _rpmTimeRAM
@@ -586,7 +709,7 @@ _hiFuelMapRAM:		.RES.B      1
 	
 	.SECTION    sec_hiIgnMapRAM,	DATA, LOCATE=hiIgnMapRAM
 
-_hiIgnMapRAM:		.RES.W      1
+_hiIgnMapRAM:		.RES.B      1
 
 	.SECTION    sec_veMapRAM,		DATA, LOCATE=veMapRAM
 
@@ -596,11 +719,12 @@ _veMapRAM:			.RES.B      1
 
 _rpmTimeRAM:		.RES.B      1
 
+
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	.AIFDEF DEF_ENRICH_COOL_AIR_MAPS
 	
-	.EXPORT		_enrichCoolantMapRAM, _kAirMapRAM
+	.EXPORT		_enrichCoolantMapRAM, _kAirMapRAM, _enrichCoolantMapDataRAM, _kAirMapDataRAM, _trimVeMapRAM, _trimVeMapDataRAM
 
 	.SECTION    sec_enrichCoolantMapRAM, DATA, LOCATE=enrichCoolantMapRAM
 
@@ -613,6 +737,12 @@ _enrichCoolantMapDataRAM:	.RES.B      1
 _kAirMapRAM:		.RES.w      5
 					.RES.B      1
 _kAirMapDataRAM:	.RES.B      1
+
+	.SECTION    sec_trimVeMapRAM,		DATA, LOCATE=trimVeMapRAM
+
+_trimVeMapRAM:		.RES.w      5
+					.RES.B      1
+_trimVeMapDataRAM:	.RES.B      1
 
 	.AENDI
 	

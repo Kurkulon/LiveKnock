@@ -24,6 +24,7 @@ debug_compiler_options =  -OPtimize=1 -SIze -SHIft=Inline
 debug_linker_options = 
 lbgsh_options = 
 libsuffix=d
+define_options = DEF_SIMULATION="1" #,DEF_IGNMAP16="1",DEF_VEMAP16="1"
 
 !else
 
@@ -31,6 +32,7 @@ debug_compiler_options = -OPtimize=1 -SIze -SHIft=Inline
 debug_linker_options = 
 lbgsh_options = 
 libsuffix=r
+define_options = # DEF_IGNMAP16="1",DEF_VEMAP16="1"
 
 !endif
 
@@ -67,11 +69,11 @@ delimiter = ____________________________________________________________________
 
 ##################################################################################################
 
-compiler_options = $(debug_compiler_options) -NOLOGO -CPu=sh2 -RTnext -ENAble_register -macsave=0 -ALIAS=ANSI
+compiler_options = $(debug_compiler_options) -NOLOGO -CPu=sh2 -RTnext -ENAble_register -macsave=0 -ALIAS=ANSI -DEFIne=$(define_options)
 
 ##################################################################################################
 
-asm_options = -NOLOGO -CPu=sh2
+asm_options = -NOLOGO -CPu=sh2 -DEFIne=$(define_options)
 
 ##################################################################################################
 

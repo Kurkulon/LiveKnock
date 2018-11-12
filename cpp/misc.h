@@ -559,15 +559,37 @@ struct Map3D_W
 
 
 
+#ifdef DEF_IGNMAP16
 
 extern Map3D_W* HighIgn_7C48[8];		//#define HighIgn_7C48	((void*)0x7C48)
+extern u16	hiIgnMapRAM[];
+extern const u16 hiIgnMapData[];
+
+#else
+
+extern Map3D_B* HighIgn_7C48[8];		//#define HighIgn_7C48	((void*)0x7C48)
+extern byte	hiIgnMapRAM[];
+extern const byte hiIgnMapData[];
+
+#endif
+
+#ifdef DEF_VEMAP16
+
+extern Map3D_W* veMapArray[8];		
+extern u16	veMapRAM[];
+
+#else
+
+extern Map3D_B* veMapArray[8];		
+extern byte	veMapRAM[];
+
+#endif
 
 #define RPM14_6746										((Axis*)0x6746)
 #define LOAD9_676C										((Axis*)0x676C)
 #define LowOctFMp_7AA8									((Map3D_B**)0x7AA8)
 
 extern Map3D_B* HIGHOKTF_7A88[8];		//#define HIGHOKTF_7A88	((void*)0x7A88)
-extern Map3D_W* veMapArray[8];		
 
 //#define AFR_OctanInt									(*(u16*)0xFFFF8ACA)
 
@@ -624,14 +646,13 @@ extern u16 timeRPM;
 extern byte no_knock_retard;	
 
 extern byte hiFuelMapRAM[];
-extern u16	hiIgnMapRAM[];
-extern u16	veMapRAM[];
 extern u16	rpmTimeRAM[];
-extern const u16 hiIgnMapData[];
 
 extern Map3D_B enrichCoolantMapRAM;
 extern Map3D_W kAirMap;
 extern Map3D_W kAirMapRAM;
+extern Map3D_W trimVeMap;
+extern Map3D_W trimVeMapRAM;
 
 extern u32 __DMAOPFLAG;
 
@@ -642,6 +663,7 @@ extern "C" u32 Mul32_Fix15(u32,u16);
 extern "C" u32 Mul32_Fix14(u32,u16);
 extern "C" u32 Mul32_Fix23(u32,u16);
 extern "C" u32 Mul32_Fix24(u32,u16);
+extern "C" u32 Mul_Fix30(u32,u32);
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
