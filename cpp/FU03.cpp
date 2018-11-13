@@ -1,5 +1,5 @@
-#pragma section _FU03
-//#pragma section _main
+//#pragma section _FU03
+#pragma section _main
 
 #include <umachine.h>
 

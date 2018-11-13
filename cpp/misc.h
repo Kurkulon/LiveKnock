@@ -674,21 +674,21 @@ struct TM32
 
 //#define ramHiIgnMap						(*(Map3D_W*)0xFFFFA000)
 
-#define kPa2load(v) (v*2)
+#define kPa2load(v) ((v)*2)
 
-#define rpm2mut(v) (v*4/125)
+#define rpm2mut(v) ((v)*4/125)
 
-#define TPS(v) ((u32)(v*255/100+0.5))
+#define TPS(v) ((u32)((v)*255/100+0.5))
 
-#define AFR(v) ((u32)(14.7*128/v+0.5))
-#define WB02(v) ((u32)((v-7.35)*255/(22.39-7.35)+0.5))
+#define AFR(v) ((u32)(14.7*128/(v)+0.5))
+#define WB02(v) ((u32)(((v)-7.35)*255/(22.39-7.35)+0.5))
 
-#define LAMBDA(v) ((u32)(128*v+0.5))
+#define LAMBDA(v) ((u32)(128*(v)+0.5))
 
-#define OXIGEN(v) ((u32)(v/0.0195+0.5))
+#define OXIGEN(v) ((u32)((v)/0.0195+0.5))
 
-#define VE8(v)	((u32)(v*2.56-48))
-#define VE16(v) ((u32)((v*2.56-48)*256))
+#define VE8(v)	((u32)((v)*2.56-48))
+#define VE16(v) ((u32)(((v)*2.56-48)*256))
 
 #define SET(v, m) (v |= m)
 #define CLR(v, m) (v &= ~(m))
