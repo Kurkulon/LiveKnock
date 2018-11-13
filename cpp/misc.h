@@ -559,31 +559,16 @@ struct Map3D_W
 
 
 
-#ifdef DEF_IGNMAP16
 
 extern Map3D_W* HighIgn_7C48[8];		//#define HighIgn_7C48	((void*)0x7C48)
 extern u16	hiIgnMapRAM[];
 extern const u16 hiIgnMapData[];
 
-#else
 
-extern Map3D_B* HighIgn_7C48[8];		//#define HighIgn_7C48	((void*)0x7C48)
-extern byte	hiIgnMapRAM[];
-extern const byte hiIgnMapData[];
-
-#endif
-
-#ifdef DEF_VEMAP16
 
 extern Map3D_W* veMapArray[8];		
 extern u16	veMapRAM[];
 
-#else
-
-extern Map3D_B* veMapArray[8];		
-extern byte	veMapRAM[];
-
-#endif
 
 #define RPM14_6746										((Axis*)0x6746)
 #define LOAD9_676C										((Axis*)0x676C)
@@ -706,16 +691,16 @@ struct TM32
 #define VE16(v) ((u32)((v*2.56-48)*256))
 
 #define SET(v, m) (v |= m)
-#define CLR(v, m) (v &= ~m)
+#define CLR(v, m) (v &= ~(m))
 #define NOT(v, m) (v ^= m)
-#define WFLAG(f, m, c) {if (c) { f |= m; } else { f &= ~m; }}
+#define WFLAG(f, m, c) {if (c) { f |= m; } else { f &= ~(m); }}
 
-#define ONE(v, m) ((v & m) != 0)
-#define ZRO(v, m) ((v & m) == 0)
-#define AND(v, m) ((v & m) == m)
+#define ONE(v, m) ((v & (m)) != 0)
+#define ZRO(v, m) ((v & (m)) == 0)
+#define AND(v, m) ((v & (m)) == (m))
 
 
-#define WBIT(v, m, c) { v &= ~m; if (c) v |= m; }
+#define WBIT(v, m, c) { v &= ~(m); if (c) v |= m; }
 
 
 #define INCLIM(v) { if (v < 0xFFFF) {v += 1;}; }
@@ -734,7 +719,7 @@ inline u32 MAX(u32 a, u32 b) { return (a >= b) ? a : b; }
 //#define ABSDIF(a, b) (((a) >= (b)) ? ((a) - (b)) : ((b) - (a)))
 inline u32 ABSDIF(u32 a, u32 b) { return (a >= b) ? (a - b) : (b - a); }
 
-#define TRG(f, m, v, l, h) { /*u16 rf = f; u16 rv = v;*/ if (f & m) { if (v <= l) { CLR(f, m); }; } else { if (v > h) { SET(f, m); }; }; /*f = rf;*/ }
+#define TRG(f, m, v, l, h) { /*u16 rf = f; u16 rv = v;*/ if (f & (m)) { if (v <= l) { CLR(f, m); }; } else { if (v > h) { SET(f, m); }; }; /*f = rf;*/ }
 
 //inline void TRG(u16& f, u16 m, i32 v, i32 l, i32 h)
 //{

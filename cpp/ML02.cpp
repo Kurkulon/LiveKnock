@@ -11,6 +11,35 @@
 #include "ram.h"
 #include "EnVars.h"
 
+
+//cranking_end_timer_up; //528
+//word_FFFF86B0;
+//RAM_VAR_1065_FFFF86B2;
+//word_FFFF86C2;
+//timer_FFFF8792;
+//word_FFFF8828;
+//word_FFFF882A;
+//word_FFFF89E8;
+//wMUT1E_MAF_RESET_FLAG;
+//prev_MUT1E_FLAGS;
+//word_FFFF8A34;
+//RPM_FLAGS;
+//FUEL_CUT_FLAG_FFFF8A5E;
+//prev_FUEL_CUT_FLAG_FFFF8A5E;
+
+//ipw_crank_DuringCranking;
+//word_FFFF8B32;
+//word_FFFF8B3A;
+//ipwDuringCranking;
+//ipw_crank_DuringCrankingSync;
+//idle_FLAGS;
+//wMUT24_Target_Idle_RPM;
+//min_Idle_RPM;
+//word_FFFF8D5A;
+//word_FFFF8D5E;
+
+
+
 //#undef F500_Init_Load_ECU_Info_And_BitMap_Flags
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -67,6 +96,7 @@
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+#define ML02_TEST
 
 static void ML02_sub_11300();
 static void ML02_sub_11332();

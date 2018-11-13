@@ -790,6 +790,7 @@
 #define      dword_FFFF8AA0                 							(*(u32*)0xFFFF8AA0)                                                        
 #define      dword_FFFF8AA4                 							(*(u32*)0xFFFF8AA4)                                                        
 #define      word_FFFF8AAA                  							(*(u16*)0xFFFF8AAA)                                                        
+#define      __VE16			                  							(*(u16*)0xFFFF8AAC)                                                        
 #define      word_FFFF8AB0                  							(*(u16*)0xFFFF8AB0)                                                        
 #define      null_bMUT28                    					       (*(byte*)0xFFFF8AB3)                                                     
 #define      __k_trimVE	            									(*(u16*)0xFFFF8AB4)                                                        

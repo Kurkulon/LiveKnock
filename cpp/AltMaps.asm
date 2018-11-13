@@ -7,8 +7,8 @@ TEST_INTERPOLATE:			.DEFINE		"1"
 
 ;DEF_SIMULATION:				.DEFINE		"1"
 
-;DEF_VEMAP16:				.DEFINE		"1"
-;DEF_IGNMAP16:				.DEFINE		"1"
+DEF_VEMAP16:				.DEFINE		"1"
+DEF_IGNMAP16:				.DEFINE		"1"
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -152,13 +152,7 @@ _frameCount:		.RES.L      1					;	.EQU H'FFFF8462
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	.IMPORT	_FU03_HI_LO_Octan
-
-	.SECTION P_141C8, CODE, LOCATE=H'141C8
-
-			mov.l	#_FU03_HI_LO_Octan, r0                           
-			jmp   	@r0                                                             
-			nop   	                                                        
+	.SECTION P_35500, CODE, LOCATE=H'35500
 	
 	.EXPORT	_Mul32_Fix15
 	
@@ -221,16 +215,6 @@ _Mul_Fix30:
 ?0001:										
 			rts								
 			mov	#h'FFFFFFFF, r0             
-
-;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-	.IMPORT	_FU03_VE_map_sub_14620
-
-	.SECTION P_14620, CODE, LOCATE=H'14620
-	
-			mov.l	#_FU03_VE_map_sub_14620, r0                           
-			jmp   	@r0                                                             
-			nop   	                                                        
 	
 	.EXPORT	_Mul32_Fix14
 	
@@ -265,26 +249,6 @@ _Mul32_Fix14:
 			rts								
 			mov	#h'FFFFFFFF, r0             
 
-;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-	.IMPORT	_Hook_ForcedIdleRPM
-
-	.SECTION C_19454, CODE, LOCATE=H'19454
-	
-		.DATA.L		_Hook_ForcedIdleRPM                                    
-
-;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-	.IMPORT	_FU03_sub_149E0_Hook
-	
-	.AIFDEF DEF_FU03_sub_149E0_Hook
-
-	.SECTION P_149E0, CODE, LOCATE=H'149E0
-	
-			mov.l	#_FU03_sub_149E0_Hook, r0                           
-			jmp   	@r0                                                             
-			nop  
-			
 	.EXPORT	_Mul32_Fix23
 	
 _Mul32_Fix23:										
@@ -353,6 +317,48 @@ _Mul32_Fix24:
 ?0001:										
 			rts								
 			mov	#h'FFFFFFFF, r0     
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	.IMPORT	_FU03_HI_LO_Octan
+
+	.SECTION P_141C8, CODE, LOCATE=H'141C8
+
+			mov.l	#_FU03_HI_LO_Octan, r0                           
+			jmp   	@r0                                                             
+			nop   	                                                        
+	
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	.IMPORT	_FU03_VE_map_sub_14620
+
+	.SECTION P_14620, CODE, LOCATE=H'14620
+	
+			mov.l	#_FU03_VE_map_sub_14620, r0                           
+			jmp   	@r0                                                             
+			nop   	                                                        
+	
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	.IMPORT	_Hook_ForcedIdleRPM
+
+	.SECTION C_19454, CODE, LOCATE=H'19454
+	
+		.DATA.L		_Hook_ForcedIdleRPM                                    
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	.IMPORT	_FU03_sub_149E0_Hook
+	
+	.AIFDEF DEF_FU03_sub_149E0_Hook
+
+	.SECTION P_149E0, CODE, LOCATE=H'149E0
+	
+			mov.l	#_FU03_sub_149E0_Hook, r0                           
+			jmp   	@r0                                                             
+			nop  
 			
 	.AENDI        
 

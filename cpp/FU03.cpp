@@ -678,7 +678,7 @@ static u16 FU03_sub_142DC()
 
 static void FU03_sub_14300()
 {
-	word_FFFF8AB0 = Mul_Div_R(word_1502/*867*/, GET_FROM_MASSIVE_byte(AFRTMP_302A)/*131*/ * INJSZ_150C, 0x8000); // 406
+	word_FFFF8AB0 = Mul_Div_R(word_1502/*867*/, GET_FROM_MASSIVE_byte(AFRTMP_302A)/*131*/ * INJSZ_150C/*117*/, 0x8000); // 406
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -866,11 +866,7 @@ static void FU03_VE_map_sub_14620()
 
 	Table_Lookup_Axis(LOAD11_6D1E);
 
-	#ifdef DEF_VEMAP16
-		wMUT31_Volumetric_Efficiency = Table_Lookup_word_2D_3D(veMapArray[veMapIndex&7]) >> 8;
-	#else
-		wMUT31_Volumetric_Efficiency = Table_Lookup_byte_2D_3D(veMapArray[veMapIndex&7]);
-	#endif
+	wMUT31_Volumetric_Efficiency = Table_Lookup_word_2D_3D(veMapArray[veMapIndex&7]) >> 8;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
