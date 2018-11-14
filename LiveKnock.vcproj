@@ -192,6 +192,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cpp\idle.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cpp\Ignition.h"
+				>
+			</File>
+			<File
 				RelativePath=".\cpp\libsfunc_exp.inc"
 				>
 			</File>

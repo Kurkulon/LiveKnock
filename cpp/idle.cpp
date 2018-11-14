@@ -1,4 +1,5 @@
-#pragma section _idle
+//#pragma section _idle
+#pragma section _main
 
 #include <umachine.h>
 
@@ -119,9 +120,10 @@
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void SysInit_NVRAM_18F80();
-static void SysInit_sub_19014();
+extern "C" void SysInit_NVRAM_18F80();
+extern "C" void SysInit_sub_19014();
 extern "C" void AA05_root_sub_19096();
+
 static void AA05_sub_19188();
 static void AA05_sub_19260();
 static void AA05_sub_1929C();
@@ -208,7 +210,7 @@ static u16 sub_220B4();
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void SysInit_NVRAM_18F80()
+extern "C" void SysInit_NVRAM_18F80()
 {
 	trim_Idle_Control_AC_2 = word_1936/*0x8D00*/;
 
@@ -229,7 +231,7 @@ static void SysInit_NVRAM_18F80()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void SysInit_sub_19014()
+extern "C" void SysInit_sub_19014()
 {
 	if (wMUT22_ISCV & (M22_FORCED_OPEN|M22_INIT_ISCV) /*0xA0*/)
 	{

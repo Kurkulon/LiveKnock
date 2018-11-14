@@ -10,6 +10,10 @@ TEST_INTERPOLATE:			.DEFINE		"1"
 DEF_VEMAP16:				.DEFINE		"1"
 DEF_IGNMAP16:				.DEFINE		"1"
 
+DEF_IGNITION_HOOKS:			.DEFINE		"1"
+DEF_FU03_HOOKS:			.DEFINE		"1"
+DEF_IDLE_HOOKS:				.DEFINE		"1"
+
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	.AIFDEF	DEF_SIMULATION
@@ -119,6 +123,8 @@ _frameCount:		.RES.L      1					;	.EQU H'FFFF8462
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+	.AIFDEF DEF_IGNITION_HOOKS
+	
 	.IMPORT	_IG04_Update_OctanEgrIgnTiming
 
 	.SECTION P_1801E, CODE, LOCATE=H'1801E
@@ -126,6 +132,8 @@ _frameCount:		.RES.L      1					;	.EQU H'FFFF8462
 			mov.l	#_IG04_Update_OctanEgrIgnTiming, r0                           
 			jmp   	@r0                                                             
 			nop   	                                                        
+			
+	.AENDI
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -320,6 +328,8 @@ _Mul32_Fix24:
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+	.AIFDEF	DEF_FU03_HOOKS
+
 	.IMPORT	_FU03_HI_LO_Octan
 
 	.SECTION P_141C8, CODE, LOCATE=H'141C8
@@ -338,9 +348,12 @@ _Mul32_Fix24:
 			mov.l	#_FU03_VE_map_sub_14620, r0                           
 			jmp   	@r0                                                             
 			nop   	                                                        
-	
+
+	.AENDI
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	.AIFDEF	DEF_IDLE_HOOKS
 
 	.IMPORT	_Hook_ForcedIdleRPM
 
@@ -348,6 +361,8 @@ _Mul32_Fix24:
 	
 		.DATA.L		_Hook_ForcedIdleRPM                                    
 
+	.AENDI
+	
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	.IMPORT	_FU03_sub_149E0_Hook

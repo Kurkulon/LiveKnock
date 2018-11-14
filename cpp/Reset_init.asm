@@ -1,13 +1,47 @@
 
 	.IMPORT	_Main_Engine_Control_Loop
 
-reset_stack_pointer:						.EQU	H'FFFFAB00
-StatusRegisterStack:						.EQU	H'FFFFABA0
+stack_end:									.EQU	H'FFFFAFFF
+stack_size:									.EQU	H'200
+status_stack_size:							.EQU	H'80
+stack_start:								.EQU	(stack_end - stack_size - status_stack_size + 3) & H'FFFFFFFC
+;reset_stack_pointer:						.EQU	H'FFFFAB00
+;StatusRegisterStack:						.EQU	H'FFFFABA0
 dword_FFFF9AF8:								.EQU	H'FFFF9AF8
 reg_DMAOR:									.EQU	H'FFFFECB0
 
+
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+	.SECTION    B_STACK, STACK, LOCATE=stack_start
+	
+	.RES.L	(stack_size+3)/4
+	
+reset_stack_pointer:
+
+	.RES.L	(status_stack_size+3)/4-1
+	
+StatusRegisterStack:
+
+	.RES.L	1	
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	.SECTION C_9CBC, CODE, LOCATE=H'9CBC
+	
+		.DATA.L		reset_stack_pointer
+		.DATA.L		StatusRegisterStack
+		.DATA.L		StatusRegisterStack
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	.SECTION C_450, CODE, LOCATE=H'450
+	
+		.DATA.L		StatusRegisterStack                                    
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	.AIFDEF DEF_RESET
 
 	.SECTION INIT_9CA4, CODE, LOCATE=H'9CA4
 
@@ -347,4 +381,5 @@ v_wdt_iti:                      .data.l reset_ADIO
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+	.AENDI
 	.END

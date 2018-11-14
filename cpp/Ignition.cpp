@@ -1,4 +1,5 @@
-#pragma section _Ignition
+//#pragma section _Ignition
+#pragma section _main
 
 #include <umachine.h>
 
@@ -52,7 +53,7 @@ static void IG04_Update_MUT04_Timing_Advance_Interpolated();
 static void Update_MUT33_Corrected_Timing_Advance();
 static u16 	IG04_Update_OctanEgrIgnTiming();
 static u16 	GetLoadCorrectedDeltaTPS();
-static u16 	IG04_GetLoad_sub_1821E(); // inlined in GetLoadCorrectedDeltaTPS
+//static u16 	IG04_GetLoad_sub_1821E(); // inlined in GetLoadCorrectedDeltaTPS
 static u16 	IG04_Ign_Temp_Correct(u16 v);
 static u16 	IG04_IGNIT_TESTS_183E8(u16 v);
 static bool IG04_sub_18464();
@@ -140,7 +141,7 @@ extern "C" void SysInit_sub_16D74()
 	timingAdv_75 = 160;
 
 	ignCoilTime_4us = IGNCOILCHGTIME1_3A3E->m2d.data[0] << 4; // byte_3A44 << 4;
-	ignCoil_MaxCrankDegrees = IGNCOILCHGTIME3_3A5E->m2d.data[0] << 4; // byte_3A64 << 4;
+	ignCoil_MaxCrankDegrees = IGNCOILCHGTIME3_3A5E->m2d.data[0]; // byte_3A64;
 
 	IG04_Init_knock_sub_16DB2();
 
@@ -1017,7 +1018,36 @@ static void Update_MUT33_Corrected_Timing_Advance()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+inline u16 Lookup_HiIgnMap()
+{
+	return ((u32)(Table_Lookup_word_2D_3D(HighIgn_7C48[hiIgnMapIndex&7]) + 0x80)) >> 8;
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+inline u16 GetLoadCorrectedDeltaTPS()
+{
+	return load_x2_deltaTPS_corrected = ECU_Load_x2_FFFF895C + Mul_Fix8_R(abs_Delta_TPS * TPS_Multiplier_Delta, Table_Lookup_byte_2D_3D(table_2D_39D2));
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 static u16 IG04_Update_OctanEgrIgnTiming()
+{
+	wMUTB4_lookup_value = GetLoadCorrectedDeltaTPS();
+
+	Table_Lookup_Axis(RPM21_6788_IGN);
+
+	Table_Lookup_Axis(LOAD12_67BC_IGN);
+
+	ignition_FFFF8BC4 = egrHighOctIgn = Lookup_HiIgnMap();
+
+	return octanEgrIgnTiming = interpolate_r4_r5_r6(egrHighOctIgn, egrLowOctIgn = Query_byte_2D_3D_Table(LowIgn_7C68), (no_knock_retard != 0) ? 255 : wMUT27_Octane_Number);
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static u16 IG04_Update_OctanEgrIgnTiming_stock()
 {
 	register u16 loIgn, /*ignAdd,*/ hiIgn, octIgn, ign; 
 
@@ -1071,17 +1101,21 @@ static u16 IG04_Update_OctanEgrIgnTiming()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static u16 GetLoadCorrectedDeltaTPS()
-{
-	return load_x2_deltaTPS_corrected = IG04_GetLoad_sub_1821E() /*ECU_Load_x2_FFFF895C*/ + Mul_Fix8_R(abs_Delta_TPS * TPS_Multiplier_Delta, Table_Lookup_byte_2D_3D(table_2D_39D2));
-}
+// stock version
+
+//static u16 GetLoadCorrectedDeltaTPS()
+//{
+//	return load_x2_deltaTPS_corrected = IG04_GetLoad_sub_1821E() /*ECU_Load_x2_FFFF895C*/ + Mul_Fix8_R(abs_Delta_TPS * TPS_Multiplier_Delta, Table_Lookup_byte_2D_3D(table_2D_39D2));
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static u16 	IG04_GetLoad_sub_1821E()
-{
-	return ECU_Load_x2_FFFF895C;
-}
+// stock version
+
+//static u16 	IG04_GetLoad_sub_1821E()
+//{
+//	return ECU_Load_x2_FFFF895C;
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
