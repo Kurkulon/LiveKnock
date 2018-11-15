@@ -1,3 +1,8 @@
+##################################################################################################
+
+variant = IDLE
+
+STACK_REPLACE = 0
 
 ##################################################################################################
 
@@ -24,7 +29,7 @@ debug_compiler_options =  -OPtimize=1 -SIze -SHIft=Inline
 debug_linker_options = 
 lbgsh_options = 
 libsuffix=d
-define_options = DEF_SIMULATION="1" #,DEF_IGNMAP16="1",DEF_VEMAP16="1"
+define_options = DEF_SIMULATION="1" 
 
 !else
 
@@ -32,7 +37,51 @@ debug_compiler_options = -OPtimize=1 -SIze -SHIft=Inline
 debug_linker_options = 
 lbgsh_options = 
 libsuffix=r
-define_options = # DEF_IGNMAP16="1",DEF_VEMAP16="1"
+define_options =
+
+!endif
+
+##################################################################################################
+
+var_opt = DEF_IGNMAP16="1",DEF_VEMAP16="1"
+var_obj = 
+
+!ifeq variant MAIN
+
+var_opt = $(var_opt),DEF_IGNITION_HOOKS="1",DEF_FU03_HOOKS="1",DEF_IDLE_HOOKS="1"
+var_obj = $(var_obj) Hooks.o
+
+!else ifeq variant F500
+
+var_opt = $(var_opt),DEF_F500="1",DEF_IGNITION_HOOKS="1",DEF_FU03_HOOKS="1",DEF_IDLE_HOOKS="1"
+var_obj = $(var_obj) F500.o Hooks.o
+
+!else ifeq variant ML02
+
+var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_IGNITION_HOOKS="1",DEF_FU03_HOOKS="1",DEF_IDLE_HOOKS="1"
+var_obj = $(var_obj) F500.o Hooks.o ML02.o
+
+!else ifeq variant FU03
+
+var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION_HOOKS="1",DEF_IDLE_HOOKS="1"
+var_obj = $(var_obj) F500.o Hooks.o ML02.o FU03.o
+
+!else ifeq variant IGNITION
+
+var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE_HOOKS="1"
+var_obj = $(var_obj) F500.o Hooks.o ML02.o FU03.o ignition.o
+
+!else ifeq variant IDLE
+
+var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1"
+var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o
+
+!endif
+
+!ifeq STACK_REPLACE 1
+
+var_opt = $(var_opt),DEF_STACK_REPLACE="1"
+var_obj = $(var_obj) Reset_init.o
 
 !endif
 
@@ -69,11 +118,11 @@ delimiter = ____________________________________________________________________
 
 ##################################################################################################
 
-compiler_options = $(debug_compiler_options) -NOLOGO -CPu=sh2 -RTnext -ENAble_register -macsave=0 -ALIAS=ANSI -DEFIne=$(define_options)
+compiler_options = $(debug_compiler_options) -NOLOGO -CPu=sh2 -RTnext -ENAble_register -macsave=0 -ALIAS=ANSI -DEFIne=$(define_options),$(var_opt)
 
 ##################################################################################################
 
-asm_options = -NOLOGO -CPu=sh2 -DEFIne=$(define_options)
+asm_options = -NOLOGO -CPu=sh2 -DEFIne=$(define_options),$(var_opt)
 
 ##################################################################################################
 
@@ -89,9 +138,10 @@ $(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs $(objdir)\stock.abs
 
 ##################################################################################################
 
-$(objdir)\LiveKnock.abs : Reset_init.o LiveMap.o AltMaps.o Hooks.o LiveKnock.o main.o F500.o # ML02.o FU03.o # Ignition.o idle.o # crank.o ,P_Ignition/39000,P_crank/3C000
-	@echo Linking $^@ ...
-	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P_main/EB04,P_Hooks/2CC0,P/39000,B/FFFF8480,P_9D18/9D18 -LIBrary=$(libname) -OUtput="$^@" $<
+$(objdir)\LiveKnock.abs : LiveMap.o AltMaps.o LiveKnock.o main.o $(var_obj)
+	@echo Linking $^@ ... $<
+	@echo $(var_opt)
+	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P_main/EB04,P_Hooks/2CC0,P/39000,B/FFFF8480 -LIBrary=$(libname) -OUtput="$^@" $<
 	@echo $(delimiter)	
 
 ##################################################################################################

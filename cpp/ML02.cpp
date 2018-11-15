@@ -1497,7 +1497,7 @@ static void ML02_sub_12D9C(/*EnVars* ev*/)
 	{
 		word_FFFF8A12 = word_FFFF8A12 & ~0x40;
 
-		wMUT0C_Fuel_Trim_Low = word_2902/*20*/;
+		word_FFFF8714 = word_2902/*20*/;
 	};
 
 	if (ZRO(prev_MUT1E_FLAGS, STALL) && (((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 8) && (word_FFFF9296 & 4)) || cranking_end_timer_up <= (t1_off_1592*20)))

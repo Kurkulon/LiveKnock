@@ -239,7 +239,7 @@
 #define      starter_timer_up              								(*(u16*)0xFFFF852A)                                                        
 #define      timer_up_FFFF852C              							(*(u16*)0xFFFF852C)                                                        
 #define      cranking_stall_timer_up              						(*(u16*)0xFFFF852E)                                                        
-#define      timer_up_useless_IGN_BOOL_FLAG2_FFFF8530					(*(u32*)0xFFFF8530)                                               
+#define      timer_up_useless_IGN_BOOL_FLAG2_FFFF8530					(*(u16*)0xFFFF8530)                                               
 #define      timer_up_FFFF8534              							(*(u16*)0xFFFF8534)                                                        
 #define      timer_up_FFFF8536              							(*(u16*)0xFFFF8536)                                                        
 #define      timer_up_FFFF853C              							(*(u16*)0xFFFF853C)                                                        

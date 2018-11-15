@@ -7,12 +7,12 @@ TEST_INTERPOLATE:			.DEFINE		"1"
 
 ;DEF_SIMULATION:				.DEFINE		"1"
 
-DEF_VEMAP16:				.DEFINE		"1"
-DEF_IGNMAP16:				.DEFINE		"1"
+;DEF_VEMAP16:				.DEFINE		"1"
+;DEF_IGNMAP16:				.DEFINE		"1"
 
-DEF_IGNITION_HOOKS:			.DEFINE		"1"
-DEF_FU03_HOOKS:			.DEFINE		"1"
-DEF_IDLE_HOOKS:				.DEFINE		"1"
+;DEF_IGNITION_HOOKS:			.DEFINE		"1"
+;DEF_FU03_HOOKS:			.DEFINE		"1"
+;DEF_IDLE_HOOKS:				.DEFINE		"1"
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -43,6 +43,14 @@ DEF_IDLE_HOOKS:				.DEFINE		"1"
 	.SECTION P_BF7C, CODE, LOCATE=H'BF7C
 
 			nop  
+
+	.SECTION    C_FAA, DATA, LOCATE=H'FAA
+
+			.DATA.W      H'56CA
+
+	.SECTION    C_FCA, DATA, LOCATE=H'FCA
+
+			.DATA.W      H'81F7
 			
 	.AENDI 	                                                        
 

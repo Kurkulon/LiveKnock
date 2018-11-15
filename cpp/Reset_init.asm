@@ -13,6 +13,8 @@ reg_DMAOR:									.EQU	H'FFFFECB0
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+	.AIFDEF	DEF_STACK_REPLACE
+
 	.SECTION    B_STACK, STACK, LOCATE=stack_start
 	
 	.RES.L	(stack_size+3)/4
@@ -24,20 +26,22 @@ reset_stack_pointer:
 StatusRegisterStack:
 
 	.RES.L	1	
+	
 
-;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	.SECTION C_9CBC, CODE, LOCATE=H'9CBC	;++++++++++++++++++++++++++++
 
-	.SECTION C_9CBC, CODE, LOCATE=H'9CBC
 	
 		.DATA.L		reset_stack_pointer
 		.DATA.L		StatusRegisterStack
 		.DATA.L		StatusRegisterStack
 
-;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	.SECTION C_450, CODE, LOCATE=H'450
+	.SECTION C_450, CODE, LOCATE=H'450	;+++++++++++++++++++++++++++++++
+
 	
-		.DATA.L		StatusRegisterStack                                    
+		.DATA.L		StatusRegisterStack
+		
+	.AENDI
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

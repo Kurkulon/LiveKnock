@@ -218,7 +218,7 @@ static void IG04_Set_Load_ECU_Ignintion()
 
 static void IG04_Check_Ign_16F1A()
 {
-	WFLAG(IGN_FLAG9_FFFF8BB6, IGN_F9_40, Query_byte_2D_3D_Table(arr_Load_2D_RPM11) >= load_ECU_Ignintion);
+	WFLAG(IGN_FLAG9_FFFF8BB6, IGN_F9_40, load_ECU_Ignintion >= Query_byte_2D_3D_Table(arr_Load_2D_RPM11));
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -905,6 +905,13 @@ static void IG04_sub_17D04()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+inline u16 Barometric_Correction_sub_22084()
+{
+	return IGN_BARO_COMP_FFFF8BD6 = 0x80; //Sub_Lim_0(0x80, 0);
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 static void IG04_Update_MUT04_Timing_Advance_Interpolated()
 {
 	Update_MUT33_Corrected_Timing_Advance();
@@ -951,7 +958,7 @@ static void IG04_Update_MUT04_Timing_Advance_Interpolated()
 
 	r2 = r2 + IG04_sub_1876E() - 0x80;
 
-//	r2 = r2 + Barometric_Correction_sub_22084() - 0x80;
+	r2 = r2 + Barometric_Correction_sub_22084() - 0x80;
 
 	tAdv = r2 + IG04_RPM_CORR_sub_18952() - 0x80;
 

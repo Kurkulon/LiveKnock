@@ -270,6 +270,33 @@ locret_55E:
 
 ; End of function mem_decr
 
+mem_decr2:										
+												
+				bra		?0003
+				mov.l	r0, @-r15				
+
+?0001:										
+				stc		sr, r0						
+				mov.l	r0, @-r15				
+				or		#h'F0, r0                   
+				ldc		r0, sr						
+
+				mov.w	@r4, r0					
+				
+				tst		r0, r0					
+				bt		?0002						
+
+				add		#-1, r0						
+				mov.w	r0, @r4					
+?0002:										
+				ldc.l	@r15+, sr				
+				add		#2, r4		
+?0003:										
+				cmp/hs	r5, r4					
+				bf		?0001					
+								
+				rts								
+				mov.l	@r15+, r0				
 
 ;+++++++++++++++++++++++++++++++++++++++++++++++
 ;	.NOPOOL

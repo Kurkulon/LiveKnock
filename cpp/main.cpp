@@ -85,6 +85,8 @@ extern void LiveKnock();
 
 static void WaitTimer();
 
+static void Simulation();
+
 
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -145,16 +147,43 @@ extern "C" void Main_Engine_Control_Loop()
 		UpdateFanOutputDuty();
 
 #ifdef DEF_SIMULATION
-		trapa(188);
-		trapa(188);
-		trapa(188);
-		trapa(188);
-		trapa(188);
-		trapa(188);
-		trapa(188);
-		trapa(188);
+
+		Simulation();
+
 #endif
 	};
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void Simulation()
+{
+		// atu02_ici0A
+
+		reg_TCNT2A += 2500;
+		reg_OSBR2 = reg_TCNT2A;
+
+		reg_ICR0A += 2500*16;
+
+		reg_PADRL ^= 1;
+
+		trapa(84);
+
+		// atu22_CMF2G_event
+
+		SET(reg_TSR2B, 0x40);
+		trapa(114);
+
+		//HUGE_Method_801_6_Hz
+
+		trapa(188);
+		trapa(188);
+		trapa(188);
+		trapa(188);
+		trapa(188);
+		trapa(188);
+		trapa(188);
+		trapa(188);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
