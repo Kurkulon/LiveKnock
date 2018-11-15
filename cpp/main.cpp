@@ -49,8 +49,6 @@
 #define SysInit_sub_9D2C			((void(*)(void))0x9D2C)
 
 
-#define F500_Get_All_ADC								((void(*)(void))0xA7F0)
-#define Get_ADC_Bat_TPS_oxigen							((void(*)(void))0xA8DC)
 #define Get_ADC_Knock									((void(*)(void))0xA92C)
 #define Get_Manifold_AbsPressure						((void(*)(void))0xA95A)
 #define PHDR_Stuff_sub_C388								((void(*)(void))0xC388)
@@ -68,7 +66,19 @@
 
 #define Disable_Coil_Charge								((void(*)(u16))0xBED8)
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+#ifdef DEF_SIMULATION
+
+extern "C" void F500_Get_All_ADC();
+extern "C" void Get_ADC_Bat_TPS_oxigen();
+
+#else
+
+#define F500_Get_All_ADC								((void(*)(void))0xA7F0)
+#define Get_ADC_Bat_TPS_oxigen							((void(*)(void))0xA8DC)
+
+#endif
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -184,6 +194,45 @@ static void Simulation()
 		trapa(188);
 		trapa(188);
 		trapa(188);
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void F500_Get_All_ADC()
+{
+	wMUT07_CoolTemp_ADC8bit = (u32)(adc_CoolTemp_10bit_MUTCF = 512) >> 2;
+
+	wMUT3A_AirTemp_ADC8bit = (u32)(adc_AirTemp_10bit = 512) >> 2;
+
+	wMUT13_Front_O2_ADC8bit = OXIGEN(0.5);
+
+	wMUT3C_Rear_O2_ADC8bit = OXIGEN(0.5);
+
+	ADC_07_8bit = 10;
+
+	ADC_08_8bit = 10;
+
+	wMUT38_Manifold_DiffPressure_ADC8bit = 0;
+
+	wMUT39_Fuel_Tank_Pressure_ADC8bit = (u32)(fuel_Tank_Pressure_ADC10bit = 512) >> 2;
+
+	wMUT87_Fuel_Temp_ADC8bit = (u32)(fuel_Temp_ADC10bit = 512) >> 2;
+
+	wMUT88_Fuel_Level_ADC8bit = 128;
+
+	wMUT97_ADC_8_8bit = 10;
+
+	wMUT83_ADC_15_8bit = 10;
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void Get_ADC_Bat_TPS_oxigen()
+{
+	wMUT14_Battery_Level_ADC8bit = 128;
+	wMUT17_TPS_ADC8bit = 50;
+	oxigen_ADC8bit = OXIGEN(0.5);
+	null_ADC_7_8bit = 0;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

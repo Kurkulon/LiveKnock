@@ -139,8 +139,7 @@ $(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs $(objdir)\stock.abs
 ##################################################################################################
 
 $(objdir)\LiveKnock.abs : LiveMap.o AltMaps.o LiveKnock.o main.o $(var_obj)
-	@echo Linking $^@ ... $<
-	@echo $(var_opt)
+	@echo Linking $^@ ...
 	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P_main/EB04,P_Hooks/2CC0,P/39000,B/FFFF8480 -LIBrary=$(libname) -OUtput="$^@" $<
 	@echo $(delimiter)	
 

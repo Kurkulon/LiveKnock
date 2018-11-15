@@ -44,9 +44,17 @@ TEST_INTERPOLATE:			.DEFINE		"1"
 
 			nop  
 
+	.SECTION P_BE60, CODE, LOCATE=H'BE60
+
+			nop  
+
+	.SECTION P_BE8A, CODE, LOCATE=H'BE8A
+
+			nop  
+			
 	.SECTION    C_FAA, DATA, LOCATE=H'FAA
 
-			.DATA.W      H'56CA
+			.DATA.W      H'56C2
 
 	.SECTION    C_FCA, DATA, LOCATE=H'FCA
 
