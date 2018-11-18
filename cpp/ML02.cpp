@@ -869,7 +869,7 @@ static void ML02_sub_12180()
 		r1 |= MUT1E_8_bit|FUEL_CUT;
 	};
 
-	if (PEDR_LO_Check_sub_A790())
+	if (!PEDR_LO_Check_sub_A790())
 	{
 		r1 |= MUT1E_9_bit|FUEL_CUT;
 	};
@@ -1123,7 +1123,7 @@ static void ML02_Open_And_Closed_Loop_Calcs()
 
 static void ML02_Open_andor_Closed_Loop_Fuel_Calcs()
 {
-	u32 load = wMUT1C_ECU_Load;
+	u32 load = ECU_Load_1;//wMUT1C_ECU_Load;
 
 	if (ZRO(wMUTD0_BitMap1, 1) && wMUT15_Barometric_Pressure >= Closed_Loop_Minimal_Pressure_Const)
 	{
@@ -1149,7 +1149,7 @@ static void ML02_Open_andor_Closed_Loop_Fuel_Calcs()
 
 		if (load <= r1)
 		{
-			if (RAM_VAR_15A0_FFFF879C != 0)
+			if (RAM_VAR_15A0_FFFF879C == 0)
 			{
 				if (RAM_VAR_15A2_FFFF8A38 < t1_unk_15A2/*50*/ && t1_unk_15A0/*14*/ != 0)
 				{
@@ -1622,7 +1622,7 @@ static void ML02_sub_12D9C(/*EnVars* ev*/)
 
 			r9 ^= r13;
 
-			if (ZRO(r9, 0x40) || ((r13 & 0x40) && word_FFFF8714 == 0))
+			if (ONE(r9, 0x40) || ((r13 & 0x40) && word_FFFF8714 == 0))
 			{
 				// loc_12FC4
 

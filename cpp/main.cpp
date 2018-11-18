@@ -18,6 +18,9 @@
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+#define      adc_Hooked_value ((u16*)0xFFFF8000)                                                        
+
+
 #define sub_206A4					((void(*)(void))0x206A4)
 #define WaitDownTimer801			((void(*)(void))0xBB36)
 #define COM_root_sub_21564			((void(*)(void))0x21564)
@@ -68,17 +71,10 @@
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#ifdef DEF_SIMULATION
-
-extern "C" void F500_Get_All_ADC();
-extern "C" void Get_ADC_Bat_TPS_oxigen();
-
-#else
-
 #define F500_Get_All_ADC								((void(*)(void))0xA7F0)
 #define Get_ADC_Bat_TPS_oxigen							((void(*)(void))0xA8DC)
 
-#endif
+
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -168,71 +164,59 @@ extern "C" void Main_Engine_Control_Loop()
 
 static void Simulation()
 {
-		// atu02_ici0A
+	// atu02_ici0A
 
-		reg_TCNT2A += 2500;
-		reg_OSBR2 = reg_TCNT2A;
+	reg_TCNT2A += 2500;
+	reg_OSBR2 = reg_TCNT2A;
 
-		reg_ICR0A += 2500*16;
+	reg_ICR0A += 2500*16;
 
-		reg_PADRL ^= 1;
+	reg_PADRL ^= 1;
 
-		trapa(84);
+	trapa(84);
 
-		// atu22_CMF2G_event
+	// atu22_CMF2G_event
 
-		SET(reg_TSR2B, 0x40);
-		trapa(114);
+	SET(reg_TSR2B, 0x40);
+	trapa(114);
 
-		//HUGE_Method_801_6_Hz
+	//HUGE_Method_801_6_Hz
 
-		trapa(188);
-		trapa(188);
-		trapa(188);
-		trapa(188);
-		trapa(188);
-		trapa(188);
-		trapa(188);
-		trapa(188);
+	trapa(188);
+	trapa(188);
+	trapa(188);
+	trapa(188);
+	trapa(188);
+	trapa(188);
+	trapa(188);
+	trapa(188);
+
+	adc_Hooked_value[0] = 0;
+	adc_Hooked_value[1] = 13.8/0.0733*4;			// wMUT14_Battery_Level_ADC8bit
+	adc_Hooked_value[2] = (139.74 - 80)/1.468*4;	// wMUT07_CoolTemp_ADC8bit
+	adc_Hooked_value[3] = (139.74 - 20)/1.468*4;	// wMUT3A_AirTemp_ADC8bit
+	adc_Hooked_value[4] = 60*4;					// wMUT1A_Manifold_AbsPressure_ADC8bit
+	adc_Hooked_value[5] = 40*4;					// wMUT17_TPS_ADC8bit
+	adc_Hooked_value[6] = 0;					// wMUT30_Knock_Voltage
+	adc_Hooked_value[7] = 0;					// null_ADC_7_8bit
+	adc_Hooked_value[8] = 0;					// ADC_08_8bit
+	adc_Hooked_value[9] = 0;					// oxigen_ADC8bit
+	adc_Hooked_value[10] = 0;					// wMUT3C_Rear_O2_ADC8bit
+	adc_Hooked_value[11] = 0;					// wMUT38_Manifold_DiffPressure_ADC8bit
+	adc_Hooked_value[12] = 0;					// wMUT39_Fuel_Tank_Pressure_ADC8bit
+	adc_Hooked_value[13] = 0;					// wMUT88_Fuel_Level_ADC8bit
+	adc_Hooked_value[14] = 0;					// wMUT87_Fuel_Temp_ADC8bit
+	adc_Hooked_value[15] = 0;					// wMUT83_ADC_15_8bit
+
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void F500_Get_All_ADC()
+extern "C" u16 GetADC_hook(byte ch, u16 *res8, u16 *res10)
 {
-	wMUT07_CoolTemp_ADC8bit = (u32)(adc_CoolTemp_10bit_MUTCF = 512) >> 2;
+	u16 *v = adc_Hooked_value;
 
-	wMUT3A_AirTemp_ADC8bit = (u32)(adc_AirTemp_10bit = 512) >> 2;
-
-	wMUT13_Front_O2_ADC8bit = OXIGEN(0.5);
-
-	wMUT3C_Rear_O2_ADC8bit = OXIGEN(0.5);
-
-	ADC_07_8bit = 10;
-
-	ADC_08_8bit = 10;
-
-	wMUT38_Manifold_DiffPressure_ADC8bit = 0;
-
-	wMUT39_Fuel_Tank_Pressure_ADC8bit = (u32)(fuel_Tank_Pressure_ADC10bit = 512) >> 2;
-
-	wMUT87_Fuel_Temp_ADC8bit = (u32)(fuel_Temp_ADC10bit = 512) >> 2;
-
-	wMUT88_Fuel_Level_ADC8bit = 128;
-
-	wMUT97_ADC_8_8bit = 10;
-
-	wMUT83_ADC_15_8bit = 10;
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-extern "C" void Get_ADC_Bat_TPS_oxigen()
-{
-	wMUT14_Battery_Level_ADC8bit = 128;
-	wMUT17_TPS_ADC8bit = 50;
-	oxigen_ADC8bit = OXIGEN(0.5);
-	null_ADC_7_8bit = 0;
+	return *res8 = (*res10 = v[ch]) >> 2;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

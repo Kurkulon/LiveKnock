@@ -1,6 +1,6 @@
 ##################################################################################################
 
-variant = IDLE
+variant = IGNITION
 
 STACK_REPLACE = 0
 
@@ -140,7 +140,7 @@ $(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs $(objdir)\stock.abs
 
 $(objdir)\LiveKnock.abs : LiveMap.o AltMaps.o LiveKnock.o main.o $(var_obj)
 	@echo Linking $^@ ...
-	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P_main/EB04,P_Hooks/2CC0,P/39000,B/FFFF8480 -LIBrary=$(libname) -OUtput="$^@" $<
+	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P_main/EB04,C_main/36000,P_Hooks/2CC0,P/39000,B/FFFF8480 -LIBrary=$(libname) -OUtput="$^@" $<
 	@echo $(delimiter)	
 
 ##################################################################################################

@@ -320,7 +320,10 @@ static bool IG04_Check_17074()
 		Table_Lookup_Axis(CEL8_7100);
 
 		word_FFFF9942 = Table_Lookup_byte_2D_3D(unk048_6354);
+	};
 
+	if (wMUT1E_MAF_RESET_FLAG & (CRANKING|STALL))
+	{
 		return false;
 	};
 
@@ -339,7 +342,7 @@ static bool IG04_Check_17074()
 		return false;
 	};
 
-	if (cranking_end_timer_up >= (word_FFFF9942 << 2))
+	if (cranking_end_timer_up < (word_FFFF9942 << 2))
 	{
 		return false;
 	};
@@ -843,7 +846,7 @@ static bool IG04_sub_17C9C()
 {
 	TRG(IGN_FLAG9_FFFF8BB6, IGN_F9_02, MUT21_RPM_x125div4, word_17B4/*58*/, word_17B2/*64*/);
 
-	if (RT_FLAG1_FFFF8888 & RT_7_bit)
+	if (ZRO(RT_FLAG1_FFFF8888, RT_7_bit))
 	{
 		return false;
 	};
@@ -918,7 +921,7 @@ static void IG04_Update_MUT04_Timing_Advance_Interpolated()
 
 	u16 tAdv = wMUT33_Corrected_Timing_Advance;
 
-	if (IGN_FLAG9_FFFF8BB6 & IGN_F9_2000 && tAdv >= (word_18B0/*10*/+20))
+	if ((IGN_FLAG9_FFFF8BB6 & IGN_F9_2000) && tAdv >= (word_18B0/*10*/+20))
 	{
 		tAdv = word_18B0 + 20;
 	};
@@ -939,7 +942,7 @@ static void IG04_Update_MUT04_Timing_Advance_Interpolated()
 
 	r13 = r2;
 
-	if (r2 < tAdv)
+	if (r2 > tAdv)
 	{
 		r13 = tAdv;
 	};
@@ -1310,7 +1313,7 @@ static u16 IG04_Airtemp_Ignition_Compensation_sub_185FC()
 		r1 = Sub_Lim_0(r1, t1_unk_1758);
 	};
 
-	if (IGN_FLAG9_FFFF8BB6 & IGN_F9_10)
+	if (IGN_FLAG9_FFFF8BB6 & IGN_F9_100)
 	{
 		r1 = Sub_Lim_0(r1, word_1868);
 	};

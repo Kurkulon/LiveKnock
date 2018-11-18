@@ -59,6 +59,15 @@ TEST_INTERPOLATE:			.DEFINE		"1"
 	.SECTION    C_FCA, DATA, LOCATE=H'FCA
 
 			.DATA.W      H'81F7
+
+	.SECTION P_B2B6, CODE, LOCATE=H'B2B6
+
+			.IMPORT	_GetADC_hook
+
+			mov.l	#_GetADC_hook, r0                           
+			jmp   	@r0                                                             
+			nop   	
+			
 			
 	.AENDI 	                                                        
 
