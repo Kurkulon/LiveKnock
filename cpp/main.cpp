@@ -15,6 +15,7 @@
 #include "FU03.h"
 #include "Ignition.h"
 #include "idle.h"
+#include "huge.h"
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -33,9 +34,9 @@
 #define UpdateOutputAsync			((void(*)(void))0xA98A)
 #define UpdateFanOutputDuty			((void(*)(void))0xB096)
 
-#define PDIOR_Stuff_sub_AD3C		((void(*)(void))0xAD3C)
+//#define PDIOR_Stuff_sub_AD3C		((void(*)(void))0xAD3C)
 
-#define SysInit_NVRAM_266DC			((void(*)(void))0x266DC)
+//#define SysInit_NVRAM_266DC			((void(*)(void))0x266DC)
 
 //#define SysInit_NVRAM_18F80			((void(*)(void))0x18F80)
 #define SysInit_NVRAM_1F3E0			((void(*)(void))0x1F3E0)
@@ -54,10 +55,9 @@
 
 #define Get_ADC_Knock									((void(*)(void))0xA92C)
 #define Get_Manifold_AbsPressure						((void(*)(void))0xA95A)
-#define PHDR_Stuff_sub_C388								((void(*)(void))0xC388)
-#define PADR_Stuff_sub_A5F8								((void(*)(void))0xA5F8)
+
 #define sub_A374										((void(*)(void))0xA374)
-#define SysInit_sub_266FC								((void(*)(void))0x266FC)
+//#define SysInit_sub_266FC								((void(*)(void))0x266FC)
 //#define SysInit_sub_16D74								((void(*)(void))0x16D74)
 //#define SysInit_sub_19014								((void(*)(void))0x19014)
 #define SysInit_sub_1BEFE								((void(*)(void))0x1BEFE)
@@ -72,7 +72,7 @@
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #define F500_Get_All_ADC								((void(*)(void))0xA7F0)
-#define Get_ADC_Bat_TPS_oxigen							((void(*)(void))0xA8DC)
+//#define Get_ADC_Bat_TPS_oxigen							((void(*)(void))0xA8DC)
 
 
 
@@ -509,4 +509,3 @@ static void sub_F164()
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-

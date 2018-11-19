@@ -1271,20 +1271,23 @@ static u16 IG04_sub_1859E()
 
 	if ((IGN_FLAG9_FFFF8BB6 & IGN_F9_2000) == 0)
 	{
-		Map3D_B *t;
+		//Map3D_B *t;
 
-		if (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1)
-		{
-			Table_Lookup_Axis(CEL8_79AE);
-			t = AFRAIRTEMP1_630A;
-		}
-		else
-		{
-			Table_Lookup_Axis(CEL8_79AE);
-			t = AFRAIRTEMP1_630A;
-		};
+		//if (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1)
+		//{
+		//	Table_Lookup_Axis(CEL8_79AE);
+		//	t = AFRAIRTEMP1_630A;
+		//}
+		//else
+		//{
+		//	Table_Lookup_Axis(CEL8_79AE);
+		//	t = AFRAIRTEMP1_630A;
+		//};
 
-		r = Table_Lookup_byte_2D_3D(t);
+		//r = Table_Lookup_byte_2D_3D(t);
+		
+		Table_Lookup_Axis(CEL8_79AE);
+		r = Table_Lookup_byte_2D_3D(AFRAIRTEMP1_630A);
 	};
 
 	return word_FFFF8BCC = r;

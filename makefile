@@ -1,6 +1,6 @@
 ##################################################################################################
 
-variant = IDLE
+variant = HUGE
 
 STACK_REPLACE = 0
 
@@ -76,6 +76,11 @@ var_obj = $(var_obj) F500.o Hooks.o ML02.o FU03.o ignition.o
 var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1"
 var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o
 
+!else ifeq variant HUGE
+
+var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1",DEF_HUGE="1"
+var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o huge.o
+
 !endif
 
 !ifeq STACK_REPLACE 1
@@ -140,7 +145,7 @@ $(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs $(objdir)\stock.abs
 
 $(objdir)\LiveKnock.abs : LiveMap.o AltMaps.o LiveKnock.o main.o $(var_obj)
 	@echo Linking $^@ ...
-	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P_main/EB04,C_main/36000,P_Hooks/2CC0,P/39000,B/FFFF8480 -LIBrary=$(libname) -OUtput="$^@" $<
+	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P_main/EB04,P_Hooks/2CC0,P_HUGE/3A000,P/39000,B/FFFF8480 -LIBrary=$(libname) -OUtput="$^@" $<
 	@echo $(delimiter)	
 
 ##################################################################################################

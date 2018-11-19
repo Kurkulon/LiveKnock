@@ -1,5 +1,3 @@
-#pragma section _HUGE
-
 #include <umachine.h>
 
 #include "misc.h"
@@ -8,6 +6,10 @@
 #include "ram.h"
 #include "EnVars.h"
 #include "hwreg.h"
+
+
+#define	off_8AE4				((u16**)0x8AE4)  
+#define	word_8AD4				((const u16*)0x8AD4)                                                     
 
 //#undef BC06_sub_1E2D0
 
@@ -18,26 +20,31 @@
 
 #define ENGINE_MAIN_VARIABLES_DIM_off_9198		((EnVars*)0x9198)
 
-#define Get_ADC_Bat_TPS_oxigen				((void(*)(void))0xA8DC)
-#define Read_Ports_And_Registers_sub_B114	((void(*)(void))0xB114)
-#define PDIOR_Stuff_sub_AD3C				((void(*)(void))0xAD3C)
-#define PHDR_Stuff_sub_C388					((void(*)(void))0xC388)
-#define sub_D3E4							((void(*)(void))0xD3E4)
-#define PADR_Stuff_sub_A5F8					((void(*)(void))0xA5F8)
-#define sub_E478							((void(*)(void))0xE478)
-#define sub_DCB4							((bool(*)(void))0xDCB4)
-#define sub_D4E4							((bool(*)(void))0xD4E4)
+//#define Get_ADC_Bat_TPS_oxigen				((void(*)(void))0xA8DC)
+//#define Read_Ports_And_Registers_sub_B114	((void(*)(void))0xB114)
+
+//#define PDIOR_Stuff_sub_AD3C				((void(*)(void))0xAD3C)
+//extern "C" void PDIOR_Stuff_sub_AD3C();
+
+//#define PHDR_Stuff_sub_C388					((void(*)(void))0xC388)
+//extern "C" void PHDR_Stuff_sub_C388();
+
+//#define sub_D3E4							((void(*)(void))0xD3E4)
+//#define PADR_Stuff_sub_A5F8					((void(*)(void))0xA5F8)
+//#define sub_E478							((void(*)(void))0xE478)
+//#define sub_DCB4							((bool(*)(void))0xDCB4)
+//#define sub_D4E4							((bool(*)(void))0xD4E4)
 #define Start_Coil_Charge					((void(*)(u16))0xBE1C)
-#define sub_AD94							((void(*)(void))0xAD94)
+//#define sub_AD94							((void(*)(void))0xAD94)
 
-extern "C" void Update_Gen_G_output();
+//extern "C" void Update_Gen_G_output();
 
-//#define Update_Gen_G_output					((void(*)(void))0xAD06)
+#define Update_Gen_G_output					((void(*)(void))0xAD06)
 //#define MUT98_sub_329C6						((void(*)(void))0x329C6)
 #define IMMO_sub_2212E						((void(*)(void))0x2212E)
 #define COM_MUT_sub_207F0					((void(*)(void))0x207F0)
 #define sub_34664							((void(*)(void))0x34664)
-#define Get_Manifold_AbsPressure			((void(*)(void))0xA95A)
+//#define Get_Manifold_AbsPressure			((void(*)(void))0xA95A)
 
 #define sub_21A72							((u16(*)(u16))0x21A72)
 #define sub_21A52							((u16(*)(u16))0x21A52)
@@ -54,6 +61,7 @@ extern "C" void Update_Gen_G_output();
 #define word_98DE							((const u16*)0x98DE)
 #define asyncAccelMulTPS_Delta				((const byte*)0x3559)
 
+#define GetADC								((u16(*)(byte, u16*, u16*))0xB2B6)
 
 
 //#define CEL8_685C							((Axis*)0x685C)
@@ -84,10 +92,15 @@ extern "C" void Update_Gen_G_output();
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern u16 INJECTOR_RESCALED_sub_26174(u16 v);
-extern void StartInjectAsync(u16 v, u16 mask);
-extern void StartInjectSync(u16 v, u16 mask);
+//extern u16 INJECTOR_RESCALED_sub_26174(u16 v);
+//extern void StartInjectAsync(u16 v, u16 mask);
+//extern void StartInjectSync(u16 v, u16 mask);
 
+#define INJECTOR_RESCALED_sub_26174						((u16(*)(u16))0x26174)
+#define StartInjectAsync								((void(*)(u16,u16))0x261CA)
+#define StartInjectSync									((void(*)(u16,u16))0x26218)
+
+static void HUGE_Method_801_6_Hz();
 
 static void Huge_400_Hz();
 static void Huge_200_Hz();
@@ -98,8 +111,10 @@ static void Huge_50_Hz();
 static void Huge_800_Hz_27F62();
 
 static void Update_MAP_Avrg();
-extern "C" u16 sub_E44C();
+static u16 sub_E44C();
 static void MUT98_sub_329C6();
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -145,7 +160,470 @@ static void MUT98_sub_329C6();
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void HUGE_Method_801_6_Hz()
+extern "C" void cmti0();
+#pragma address v_cmti0=0x2F0
+const void * v_cmti0 = cmti0;
+
+#pragma section _HUGE
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma interrupt(cmti0)
+#pragma regsave(cmti0)
+
+extern "C" void cmti0()
+{
+	__disable_irq();
+
+	word_FFFF9AD6 = reg_TCNT2A;
+
+	CLR(reg_CMCSR0, 0x80);
+
+	DECLIM(downTimer_801);
+
+	word_FFFF9AD2 += 312;
+
+	if ((word_FFFF9AD2 - reg_TCNT2A) & 0x8000)
+	{
+		word_FFFF9AD2 += 312;
+
+		__enable_irq();
+
+		HUGE_Method_801_6_Hz();
+
+		HUGE_Method_801_6_Hz();
+	}
+	else
+	{
+		__enable_irq();
+
+		HUGE_Method_801_6_Hz();
+
+		word_FFFF9AD4 = reg_TCNT2A - word_FFFF9AD6;
+	};
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void SysInit_NVRAM_266DC()
+{
+	Barometric_FFFF8024 = barometric_sens_err_val;
+	TPS_NVRAM_FFFF802A = const_TPS_206C;
+	NVRAM_FFFF802C = 1;
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void SysInit_sub_266FC()
+{
+	SPEED_PULSES_FFFF89C4 = ~0;
+
+	if (portA_state & 2)
+	{
+		SET(huge_timeEvents, EVT_15_8000);
+	};
+
+	word_FFFF8566 = 6;
+
+	SET(huge_timeEvents, EVT_0_25ms);
+
+	word_FFFF856A = 100;
+
+	prev_TPS_Corrected = wMUT8A_TPS_Corrected = Lim_FF(Sub_Lim_0(wMUT1B_TPS_Idle_Adder + wMUT17_TPS_ADC8bit, 128));
+
+	word_FFFF8B48 = prev_TPS_1 = prev_TPS_2 = prev_TPS_3 = prev_TPS_4 = prev_TPS_5 = wMUT17_TPS_ADC8bit;
+
+	word_FFFF8DB6 = 0xFF;
+
+	word_FFFF85F4 = 20;
+
+	word_FFFF8DDE = 0x80;
+
+	word_FFFF8DE2 = 0;
+
+	word_FFFF8DE0 = ~0;
+
+	word_FFFF8D80 = 0xC0;
+
+	word_FFFF8D78 = 24;
+
+	enInjMask = ~0;
+
+	word_FFFF8556 = word_1764;
+
+	word_FFFF8558 = word_175E;
+
+	curMinMAP = 255;
+
+	SET(NVRAM_FFFF802C, 1);
+
+	word_FFFF8924 = const_TPS_206C;
+
+	timer_FFFF8584 = t1_unk_2070;
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void PDIOR_Stuff_sub_AD3C()
+{
+	__disable_irq();
+
+	//u32 r11 = reg_PDDRH & 1 ^ 1;
+
+	//u32 r12 = reg_PDDRH & ~1;
+
+	//reg_PDDRH = r11 & 1 | r12;
+	
+	reg_PDDRH ^= 1;
+
+	__enable_irq();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void PHDR_Stuff_sub_C388()
+{
+	__disable_irq();
+
+	CLR(reg_PHDRL, 2);
+
+	u32 t = 1;
+
+	while (--t);
+
+	bMUTB7 = ((u32)(RPDR16(reg_PHDRH)) << 1) >> 8;
+
+	SET(reg_PHDRL, 2);
+	CLR(reg_PHDRL, 1);
+
+	t = 1;
+
+	while (--t);
+
+	bMUTB8 = ((u32)(RPDR16(reg_PHDRH)) << 1) >> 8;
+
+	CLR(reg_PHDRL, 2);
+	SET(reg_PHDRL, 1);
+
+	t = 1;
+
+	while (--t);
+
+	bMUTB9 = ((u32)(RPDR16(reg_PHDRH)) << 1) >> 8;
+
+	SET(reg_PHDRL, 3);
+
+	t = 1;
+
+	while (--t);
+
+	bMUTBA = ((u32)(RPDR16(reg_PHDRH)) << 1) >> 8;
+
+	__enable_irq();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void sub_AD94()
+{
+	__disable_irq();
+
+	WPDR16(reg_PEDRH, RPDR16(reg_PEDRH) & 0xF3FF | word_8AD4[stepperPinOutIndex & 3]);
+
+	__enable_irq();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static bool sub_C2CC()
+{
+	bool r1 = false;
+
+	__disable_irq();
+
+	if (reg_ISR & 0x40)
+	{
+		CLR(reg_ISR, 0x40);
+
+		r1 = true;
+	};
+
+	__enable_irq();
+
+	return r1;
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static bool sub_C304()
+{
+	bool r1 = false;
+
+	__disable_irq();
+
+	if (reg_ISR & 0x20)
+	{
+		CLR(reg_ISR, 0x20);
+
+		r1 = true;
+	};
+
+	__enable_irq();
+
+	return r1;
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static bool sub_C33C()
+{
+	bool r1 = false;
+
+	__disable_irq();
+
+	if (reg_ISR & 0x10)
+	{
+		CLR(reg_ISR, 0x10);
+
+		r1 = true;
+	};
+
+	__enable_irq();
+
+	return r1;
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void sub_D3E4()
+{
+	__disable_irq();
+
+	u32 r11 = **off_8AE4;
+
+	reg_SCI2->TDR = r11;
+
+	CLR(reg_SCI2->SSR, 0x80);
+
+	reg_SCI2->SCR = 0xB0;
+
+	word_FFFF8D94 = r11;
+
+	word_FFFF8DB6 = 1;
+
+	__enable_irq();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static bool sub_DCB4()
+{
+	return ZRO(reg_TSR0, 1) && ZRO(crank_Flags, 2) && ZRO(reg_TSR2B, 0x40);
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void sub_D4E4()
+{
+	__disable_irq();
+
+	u32 r3 = reg_SCI2->SSR;
+
+	if (r3 & 0x78)
+	{
+		byte r1 = reg_SCI2->RDR;
+
+		CLR(reg_SCI2->SSR, 0x78);
+
+		u32 r13 = word_FFFF8DB4;
+
+		if (r13 < 5 && ZRO(r3, 0x38))
+		{
+			word_FFFF8DA8[r13] = r1;
+
+			word_FFFF8DB4 += 1;
+		};
+	};
+
+	__enable_irq();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void PADR_Stuff_sub_A5F8()
+{
+	__disable_irq();
+
+	u32 r1 = portA_state;
+
+	WBIT(r1, 1, ZRO(reg_PADRL, 1));
+
+	WBIT(r1, 2, ZRO(reg_PADRL, 0x80));
+
+	WBIT(r1, 8, ZRO(bMUTB7, 2));
+
+	WBIT(r1, 4, ZRO(bMUTB8, 2));
+
+	WBIT(r1, 0x20, ONE(reg_PADRH, 0x80));
+
+	WBIT(r1, 0x40, ZRO(reg_PEDRL, 4));
+
+	WBIT(r1, 0x80, ONE(bMUTBA, 4));
+
+	WBIT(r1, 0x100, ONE(bMUTB9, 2));
+
+	WBIT(r1, 0x400, sub_C2CC());
+
+	WBIT(r1, 0x800, sub_C304());
+
+	WBIT(r1, 0x1000, ONE(bMUTB7, 4));
+
+	WBIT(r1, 0x2000, true);
+
+	portA_state = r1;
+
+	__enable_irq();
+
+	__disable_irq();
+
+	WBIT(word_FFFF93CC, 0x800, sub_C33C());
+
+	__enable_irq();
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void Read_Ports_And_Registers_sub_B114()
+{
+	__disable_irq();
+
+	reg_DCNT8P = 0;
+	reg_DCNT8O = 0;
+	reg_DCNT8N = 0;
+	reg_DCNT8M = 0;
+	reg_DCNT8L = 0;
+	reg_DCNT8K = 0;
+
+	CLR(reg_SYSCR, 1);
+
+	reg_PJIOR = 0;
+	reg_PHIOR = 0;
+	reg_PGIOR = 0;
+	reg_PFIOR = 0;
+	reg_PEIOR = 0;
+	reg_PDIOR = 0;
+	reg_PCIOR = 0;
+	reg_PBIOR = 0;
+	reg_PAIOR = 0;
+
+	reg_PKCRL = 0;
+	reg_PKCRH = 0;
+	reg_PJCRL = 0;
+	reg_PJCRH = 0;
+
+	reg_PJCRL = 0;
+	reg_PJCRH = 0;
+
+	reg_PHCR = 0;
+	reg_PGCR = 0;
+
+	reg_PFCRL = 0;
+	reg_PFCRH = 0;
+
+	reg_PECR = 0;
+	reg_PCCR = 0;
+
+	reg_PDCRL = 0;
+	reg_PDCRH = 0;
+
+	reg_PBCRL = 0;
+	reg_PBCRH = 0;
+
+	reg_PACRL = 0;
+	reg_PACRH = 0;
+
+	for (;;);
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static u16 sub_E44C()
+{
+	__disable_irq();
+
+	u32 r1 = word_FFFF9ACC;
+
+	word_FFFF9ACC = 0;
+
+	__enable_irq();
+
+	return r1;
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void sub_E478()
+{
+	__disable_irq();
+
+	if (reg_TSR3 & 8)
+	{
+		CLR(reg_TSR3, 8);
+
+		if (word_FFFF9ACC < 255)
+		{
+			word_FFFF9ACC += 1;
+		};
+
+		word_FFFF9ACE += 1;
+	};
+
+	__enable_irq();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma regsave(Get_ADC_Bat_TPS_oxigen)
+
+extern "C" void Get_ADC_Bat_TPS_oxigen()
+{
+	u16 res;//, res1, res2;
+
+	GetADC(1, &wMUT14_Battery_Level_ADC8bit, &res);
+
+//	GetADC(5, &res1, &res);
+
+//	wMUT17_TPS_ADC8bit = res1;
+
+//	TPS_ADC10bit = res;
+
+	GetADC(5, &wMUT17_TPS_ADC8bit, &TPS_ADC10bit);
+
+	GetADC(9, &oxigen_ADC8bit, &res);
+
+	GetADC(7, &null_ADC_7_8bit, &res);
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma regsave(Get_Manifold_AbsPressure)
+
+extern "C" void Get_Manifold_AbsPressure()
+{
+	u16 res;
+
+	GetADC(4, &wMUT1A_Manifold_AbsPressure_ADC8bit, &res);
+
+	wMUT8C_Manifold_AbsPressure_ADC8bit = wMUT1A_Manifold_AbsPressure_ADC8bit;
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma noregsave(HUGE_Method_801_6_Hz)
+
+static void HUGE_Method_801_6_Hz()
 {
 	__disable_irq();
 
