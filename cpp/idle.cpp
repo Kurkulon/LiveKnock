@@ -571,10 +571,10 @@ static void AA05_Calc_Min_Idle_RPM()
 
 	if (wMUT1E_MAF_RESET_FLAG & CRANKING)
 	{
-		WFLAG(idle_FLAGS, IDLF_20, wMUT11_Intake_Air_Temperature_Scaled > word_1A26/*120*/)
-	};
+		WFLAG(idle_FLAGS, IDLF_20, wMUT11_Intake_Air_Temperature_Scaled > word_1A26/*120*/);
 
-	word_FFFF86C2 = (wMUT11_Intake_Air_Temperature_Scaled > word_1A20/*91*/) ? word_1A24/*30*/ * 80 : 0;
+		word_FFFF86C2 = (wMUT10_Coolant_Temperature_Scaled > word_1A20/*91*/) ? word_1A24/*30*/ * 80 : 0;
+	};
 
 	if (word_FFFF86C2 != 0 && (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1))
 	{
@@ -927,7 +927,7 @@ static void AA05_sub_19B98()
 
 	if (RT_FLAG1_FFFF8888 & RT_7_bit)
 	{
-		if (MUT21_RPM_x125div4 > (wMUT24_Target_Idle_RPM + word_1902/*6*/))
+		if (MUT21_RPM_x125div4 > (((u32)wMUT24_Target_Idle_RPM>>2) + word_1902/*6*/))
 		{
 			word_FFFF85CC = word_1900;
 		};
@@ -1370,13 +1370,13 @@ static void AA05_sub_1A5A8()
 
 	WFLAG(wMUT23, M23_08, r1 >= rpm_x125div32_B && (r1 - rpm_x125div32_B) >= word_19E4/*26(101)*/);
 
-	if ((byte_1050 == 1 && (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1)) 
+	if ((byte_1050/*0*/ == 1 && (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1)) 
 		|| ZRO(RT_FLAG1_FFFF8888, RT_7_bit) 
 		|| (byte_1050 == 2 && (MUT21_RPM_x125div4 <= word_298A || wMUT2E_Vehicle_Speed_Frequency > word_298C || ZRO(RT_FLAG1_FFFF8888, 8))))
 	{
 		word_FFFF85D6 = 0;
 	}
-	else
+	else if (wMUT23 & 8)
 	{
 		word_FFFF85D6 = word_19DE;
 	};
