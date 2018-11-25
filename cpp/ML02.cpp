@@ -10,6 +10,7 @@
 #include "constword.h"
 #include "ram.h"
 #include "EnVars.h"
+#include "hardware.h"
 
 
 //cranking_end_timer_up; //528

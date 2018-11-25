@@ -25,6 +25,7 @@ extern "C" bool Reset_IRQ0F();
 #define sub_21B50					((u16(*)(u16))0x21B50)
 
 #define COM_MUT2B_sub_895C			((void(*)(u16))0x895C)
+#define PEDR_LO_Check_sub_A790			((bool(*)(void))0xA790)
 
 
 //#define CRANK75_Knock_sub_24AC0		((void(*)(void))0x24AC0)

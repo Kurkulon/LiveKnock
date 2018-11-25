@@ -11,10 +11,11 @@
 #include "ram.h"
 #include "EnVars.h"
 #include "hwreg.h"
+#include "hardware.h"
 
 #undef F500_Init_Load_ECU_Info_And_BitMap_Flags
 
-#define F500_Get_All_ADC		((void(*)(void))0xA7F0)
+//#define F500_Get_All_ADC		((void(*)(void))0xA7F0)
 #define F500_sub_21C80			((bool(*)(void))0x21C80)
 #define F500_InitManifoldVars	((void(*)(void))0x23244)
 
@@ -25,8 +26,6 @@
 //#pragma regsave(F500_Init_BitMap_Flags_New)
 //#pragma noregsave(F500_Init_Load_ECU_Info_And_BitMap_Flags)
 
-#define sub_A374									((void(*)(void))0xA374)
-//extern "C" void sub_A374();
 
 void F500_root_sub();
 

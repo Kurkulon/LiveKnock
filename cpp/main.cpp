@@ -16,14 +16,15 @@
 #include "Ignition.h"
 #include "idle.h"
 #include "huge.h"
+#include "hardware.h"
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#define      adc_Hooked_value ((u16*)0xFFFF8000)                                                        
+//#define      adc_Hooked_value ((u16*)0xFFFF8000)                                                        
+
 
 
 #define sub_206A4					((void(*)(void))0x206A4)
-#define WaitDownTimer801			((void(*)(void))0xBB36)
 #define COM_root_sub_21564			((void(*)(void))0x21564)
 
 //#define AA05_root_sub_19096			((void(*)(void))0x19096)
@@ -31,10 +32,7 @@
 #define EF07_root_sub_1F428			((void(*)(void))0x1F428)
 #define OBD_root_sub_2B8AC			((void(*)(void))0x2B8AC)
 #define IMMO_root_sub_226E4			((void(*)(void))0x226E4)
-#define UpdateOutputAsync			((void(*)(void))0xA98A)
-#define UpdateFanOutputDuty			((void(*)(void))0xB096)
 
-//#define PDIOR_Stuff_sub_AD3C		((void(*)(void))0xAD3C)
 
 //#define SysInit_NVRAM_266DC			((void(*)(void))0x266DC)
 
@@ -44,19 +42,9 @@
 #define SysInit_NVRAM_220D8			((void(*)(void))0x220D8)
 
 
-#define sub_AD72					((void(*)(void))0xAD72)
-#define sub_A078					((void(*)(void))0xA078)
-#define Init_ATU_sub_C5D2			((void(*)(void))0xC5D2)
-#define SysInit_ATU_0_DMA_2			((void(*)(void))0xB458)
-#define Init_ATU_0_2B				((void(*)(void))0xD918)
 #define sub_23180					((void(*)(void))0x23180)
-#define SysInit_sub_9D2C			((void(*)(void))0x9D2C)
 
 
-#define Get_ADC_Knock									((void(*)(void))0xA92C)
-#define Get_Manifold_AbsPressure						((void(*)(void))0xA95A)
-
-#define sub_A374										((void(*)(void))0xA374)
 //#define SysInit_sub_266FC								((void(*)(void))0x266FC)
 //#define SysInit_sub_16D74								((void(*)(void))0x16D74)
 //#define SysInit_sub_19014								((void(*)(void))0x19014)
@@ -67,12 +55,9 @@
 #define SysInit_sub_22100								((void(*)(void))0x22100)
 #define SysInit_sub_8000								((void(*)(void))0x8000)
 
-#define Disable_Coil_Charge								((void(*)(u16))0xBED8)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#define F500_Get_All_ADC								((void(*)(void))0xA7F0)
-//#define Get_ADC_Bat_TPS_oxigen							((void(*)(void))0xA8DC)
 
 
 
@@ -212,12 +197,16 @@ static void Simulation()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+#ifndef DEF_HARDWARE
+
 extern "C" u16 GetADC_hook(byte ch, u16 *res8, u16 *res10)
 {
 	u16 *v = adc_Hooked_value;
 
 	return *res8 = (*res10 = v[ch]) >> 2;
 }
+
+#endif
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

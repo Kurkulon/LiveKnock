@@ -105,6 +105,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cpp\hardware.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\cpp\Hooks.cpp"
 				>
 			</File>
@@ -181,6 +185,10 @@
 			</File>
 			<File
 				RelativePath=".\cpp\FU03.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cpp\hardware.h"
 				>
 			</File>
 			<File

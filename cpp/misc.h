@@ -5,7 +5,11 @@
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+#ifndef __GNUC__
 #pragma pack 4
+#else
+#pragma pack(4)
+#endif
 
 struct IndexResult
 {
@@ -72,7 +76,11 @@ struct Map3D_W
 	i16 data[4];
 };
 
+#ifndef __GNUC__
 #pragma unpack
+#else
+#pragma pack()
+#endif
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -532,11 +540,11 @@ struct Map3D_W
 //#define F500_Init_Load_ECU_Info_And_BitMap_Flags		((void(*)(void))0xF58C)
 
 #define Timer_Counter_Related_sub_C928					((void(*)(void))0xC928)
-#define Knock_Output_Calc_sub_AC96						((void(*)(void))0xAC96)
+//#define Knock_Output_Calc_sub_AC96						((void(*)(void))0xAC96)
 
 #define sub_21E84										((bool(*)(void))0x21E84)
 #define BC06_sub_1E2D0									((void(*)(void))0x1E2D0)
-#define PEDR_LO_Check_sub_A790							((bool(*)(void))0xA790)
+//#define PEDR_LO_Check_sub_A790							((bool(*)(void))0xA790)
 
 	
 #define Set_Intterupt_Mask								((void(*)(u16))0x430)

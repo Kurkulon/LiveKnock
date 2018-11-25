@@ -229,9 +229,9 @@ const void *v_dmac2_dei2 = dmac2_dei2;
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//extern "C" void cmti0();
-//#pragma address v_cmti0=0x2F0
-//const void *v_cmti0 = cmti0;
+extern "C" void cmti0();
+#pragma address v_cmti0=0x2F0
+const void *v_cmti0 = cmti0;
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -1618,39 +1618,39 @@ static void Init_ATU_2A_2B_3_4_5_8_10()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//#pragma interrupt(cmti0)
-//
-//extern "C" void cmti0()
-//{
-//	__disable_irq();
-//
-//	word_FFFF9AD6 = reg_TCNT2A;
-//
-//	CLR(reg_CMCSR0, 0x80);
-//
-//	DECLIM(downTimer_801);
-//
-//	word_FFFF9AD2 += 312;
-//
-//	if ((word_FFFF9AD2 - reg_TCNT2A) & 0x8000)
-//	{
-//		word_FFFF9AD2 += 312;
-//
-//		__enable_irq();
-//
-//		HUGE_Method_801_6_Hz();
-//
-//		HUGE_Method_801_6_Hz();
-//	}
-//	else
-//	{
-//		__enable_irq();
-//
-//		HUGE_Method_801_6_Hz();
-//
-//		word_FFFF9AD4 = reg_TCNT2A - word_FFFF9AD6;
-//	};
-//}
+#pragma interrupt(cmti0)
+
+extern "C" void cmti0()
+{
+	__disable_irq();
+
+	word_FFFF9AD6 = reg_TCNT2A;
+
+	CLR(reg_CMCSR0, 0x80);
+
+	DECLIM(downTimer_801);
+
+	word_FFFF9AD2 += 312;
+
+	if ((word_FFFF9AD2 - reg_TCNT2A) & 0x8000)
+	{
+		word_FFFF9AD2 += 312;
+
+		__enable_irq();
+
+		HUGE_Method_801_6_Hz();
+
+		HUGE_Method_801_6_Hz();
+	}
+	else
+	{
+		__enable_irq();
+
+		HUGE_Method_801_6_Hz();
+
+		word_FFFF9AD4 = reg_TCNT2A - word_FFFF9AD6;
+	};
+}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

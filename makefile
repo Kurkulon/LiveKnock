@@ -1,8 +1,9 @@
 ##################################################################################################
 
-variant = HUGE
+variant = HARDWARE
 
 STACK_REPLACE = 0
+GNU_HARDWARE = 0
 
 ##################################################################################################
 
@@ -76,10 +77,10 @@ var_obj = $(var_obj) F500.o Hooks.o ML02.o FU03.o ignition.o
 var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1"
 var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o
 
-!else ifeq variant HUGE
+!else ifeq variant HARDWARE
 
-var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1",DEF_HUGE="1"
-var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o huge.o
+var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1",DEF_HARDWARE="1"
+var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o hardware.o
 
 !endif
 
@@ -121,9 +122,9 @@ delimiter = ____________________________________________________________________
 	@call buildnum.bat
 	@echo $(delimiter)	
 
-##################################################################################################
+################################################################################################## -ENAble_register
 
-compiler_options = $(debug_compiler_options) -NOLOGO -CPu=sh2 -RTnext -ENAble_register -macsave=0 -ALIAS=ANSI -DEFIne=$(define_options),$(var_opt)
+compiler_options = $(debug_compiler_options) -NOLOGO -CPu=sh2 -RTnext  -macsave=0 -ALIAS=ANSI -DEFIne=$(define_options),$(var_opt)
 
 ##################################################################################################
 
@@ -145,8 +146,34 @@ $(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs $(objdir)\stock.abs
 
 $(objdir)\LiveKnock.abs : LiveMap.o AltMaps.o LiveKnock.o main.o $(var_obj)
 	@echo Linking $^@ ...
-	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P_main/EB04,P_Hooks/2CC0,P_HUGE/3A000,P/39000,B/FFFF8480 -LIBrary=$(libname) -OUtput="$^@" $<
+	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P_main/EB04,P_Hooks/2CC0,P_HARDWARE/9D18,P/39000,B/FFFF8480 -LIBrary=$(libname) -OUtput="$^@" $<
 	@echo $(delimiter)	
+
+##################################################################################################
+
+!ifeq GNU_HARDWARE 1
+
+hardware.o : hardware.cpp
+	@echo Compiling asm $[. ...
+	@sh-elf-gcc $(gnu_compiler_options) -D DEF_HARDWARE -o "$(objdir)\$^." $[@
+	@sh-elf-gcc -fno-show-column -m2 -S -fno-diagnostics-show-option -Os -D DEF_HARDWARE -o "$(objdir)\hardware.s" $[@
+	@echo $(delimiter)	
+
+!else
+
+$(objdir)\hardware.s : hardware.cpp
+	@echo Compiling asm $[. ...
+	@shcpp $(compiler_options) -code=asmcode -List="$(objdir)\$^&.lst" -OBjectfile="$(objdir)\$^." $[@
+	@echo $(delimiter)	
+
+##################################################################################################
+
+hardware.o : $(objdir)\hardware.s
+	@echo Compiling $[. ...
+	@asmsh $(asm_options)  -OBject="$(objdir)\$^." $[@
+	@echo $(delimiter)	
+
+!endif
 
 ##################################################################################################
 

@@ -7,6 +7,7 @@
 #include "constbyte.h"
 #include "constword.h"
 #include "ram.h"
+#include "hardware.h"
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
