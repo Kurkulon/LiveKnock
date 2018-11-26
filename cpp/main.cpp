@@ -406,6 +406,8 @@ static bool SysInit_Check_Saved_Params()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+#pragma noregalloc(SysInit_sub_EFB2)
+
 static void SysInit_sub_EFB2()           
 {
 	memsetz(&__word_FFFF851E, dword_FFFF9A60);

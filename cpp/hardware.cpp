@@ -14,9 +14,11 @@
 //#define SysInit_ADC							((void(*)(void))0xB284)
 static void SysInit_ADC();
 
-#define SysInit_ATU_0_DMA_2					((void(*)(void))0xB458)
-#define SysInit_HCAN						((void(*)(void))0xB77C)
-#define SysInit_ATU_2A_2B_3_4_5_8_10		((void(*)(void))0xB7E0)
+//#define SysInit_ATU_0_DMA_2					((void(*)(void))0xB458)
+//#define SysInit_HCAN						((void(*)(void))0xB77C)
+static void SysInit_HCAN();
+//#define SysInit_ATU_2A_2B_3_4_5_8_10		((void(*)(void))0xB7E0)
+static void SysInit_ATU_2A_2B_3_4_5_8_10();
 #define SysInit_ATU_2E_2F_2G_out			((void(*)(void))0xBB6C)
 
 #define  SysInit_ICR_C204					((void(*)(void))0xC204)
@@ -56,9 +58,13 @@ static void SysInit_ADC();
 #define Init_ATU_Counters_Control_sub_E4D0	((void(*)(void))0xE4D0)
 #define Init_HW_C164						((void(*)(void))0xC164)
 	
-#define Init_ATU_0_DMA_2         			((void(*)(void))0xB4B4)
-#define Init_HCAN                			((void(*)(void))0xB7A6)
-#define Init_ATU_2A_2B_3_4_5_8_10			((void(*)(void))0xB8A0)
+//#define Init_ATU_0_DMA_2         			((void(*)(void))0xB4B4)
+static void Init_ATU_0_DMA_2();
+
+//#define Init_HCAN                			((void(*)(void))0xB7A6)
+static void Init_HCAN();
+//#define Init_ATU_2A_2B_3_4_5_8_10			((void(*)(void))0xB8A0)
+static void Init_ATU_2A_2B_3_4_5_8_10();
 #define Init_ATU_2E_2F_2G_out 				((void(*)(void))0xBBD6)
 #define Init_ATU_6_7						((void(*)(void))0xCD58)
 
@@ -191,6 +197,12 @@ extern "C" void Read_Ports_And_Registers_sub_B114();
 #pragma address off_E9D8=0xE9D8
 const void *off_273FC = (const void *)Read_Ports_And_Registers_sub_B114;
 const void *off_E9D8 = (const void *)Read_Ports_And_Registers_sub_B114;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void dmac2_dei2();
+#pragma address v_dmac2_dei2=0x130
+const void *v_dmac2_dei2 = dmac2_dei2;
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -1261,3 +1273,245 @@ static u16 GetADC1(byte r1)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+extern "C" void SysInit_ATU_0_DMA_2()
+{
+	__disable_irq();
+
+	CLR(reg_TSR0, 2);
+
+	reg_TIOR0 = reg_TIOR0 & 0xC | 8;
+
+	CLR(reg_TIER0, 2);
+
+	CLR(reg_CHCR2, 5);
+
+	word_FFFF898C = 0;
+
+	word_FFFF89B6 = 0;
+
+	word_FFFF9AB0 = 0;
+
+	word_FFFF89AE = 0;
+
+	__enable_irq();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void Init_ATU_0_DMA_2()
+{
+	__disable_irq();
+
+	CLR(reg_TIER0, 2);
+
+	CLR(reg_CHCR2, 5);
+
+	reg_TIOR0 = reg_TIOR0 & 0xC | 8;
+
+	__enable_irq();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//extern "C" void sub_B4F2()
+//{
+//
+//}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+static void dmac2_dei2_B618()
+{
+//	void *r2 = dword_FFFF9A60;
+
+	__disable_irq();
+
+	CLR(reg_CHCR2, 3);
+
+	u32 r14_8 = 1;
+
+	while(--r14_8);
+
+	u16 r13 = reg_DMATCR2;
+
+	if (r13 >= word_FFFF9AB2)
+	{
+		word_FFFF9AB0 += word_FFFF9AB2 - r13;	
+	};
+
+	u32 r1 = r13;
+
+	if (r13 <= 16)
+	{
+		u32 r10 = 16 - r13;
+
+		dword_FFFF9A60[0] = dword_FFFF9A60[r10];
+		dword_FFFF9A60[1] = dword_FFFF9A60[r10+1];
+		reg_DAR2 = dword_FFFF9A60 + 2;
+
+		reg_DMATCR2 = 16;
+
+		r1 = 16;
+	};
+
+	word_FFFF9AB2 = r1;
+
+	word_FFFF9AB4 = r1;
+
+	reg_SAR2 = &reg_ICR0BH;
+
+	reg_CHCR2 = 0x120124;
+
+	SET(reg_CHCR2, 1);
+
+	__enable_irq();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+//extern "C" void sub_B6D0()
+//{
+//
+//
+//}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+#pragma interrupt(dmac2_dei2)
+
+extern "C" void dmac2_dei2()
+{
+	__disable_irq();
+
+	CLR(reg_CHCR2, 3);
+
+	__enable_irq();
+
+	dmac2_dei2_B618();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void SysInit_HCAN()
+{
+	CLR(reg_MCR, 0x80);
+
+	SET(reg_MCR, 0x20);
+
+	reg_IMR = ~0x100;
+
+	reg_MBIMR = ~0;
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void Init_HCAN()
+{
+	__disable_irq();
+
+	CLR(reg_MCR, 0x80);
+
+	SET(reg_MCR, 0x20);
+
+	reg_IMR = ~0x100;
+
+	reg_MBIMR = ~0;
+
+	__enable_irq();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void SysInit_ATU_2A_2B_3_4_5_8_10()
+{
+	__disable_irq();
+
+	reg_PSCR1 = 3; // 4 MHz
+
+	reg_PSCR4 = 3; // 4 MHz
+
+	reg_TCR2A = 0x34; // 250kHz
+	reg_TCR2B = 0x34;
+	reg_TCR3 = 0x34;
+	reg_TCR4 = 0x34;
+	reg_TCR5 = 0x34;
+
+	reg_TCR8 = reg_TCR8 & 0xF | 0x50;
+
+	reg_TIOR10 = 0x30;
+	reg_TCR10 = 0;
+	reg_TIER10 = 0x10;
+	reg_TMDR = 0;
+	reg_TSTR1 = reg_TSTR1 & 2 | 0x7D;
+
+	reg_CMCOR0 = 2495; // period
+	reg_CMCSR0 = 0x40; // Pô/8 = 2MHz
+	CLR(reg_CMCSR0, 0x80); // reset irq
+	SET(reg_CMSTR, 1);		// start CMT0
+
+	word_FFFF9AD2 = reg_TCNT2A + 312;
+
+	CLR(reg_TIER3, 0x3A0);
+
+	reg_TIOR4A = 0x11;
+	reg_TIOR4B = 0x11;
+	CLR(reg_TIER3, 0x40);
+
+	downTimer_801 = 1;
+
+	__enable_irq();
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void Init_ATU_2A_2B_3_4_5_8_10()
+{
+	__disable_irq();
+
+	reg_PSCR1 = reg_PSCR4 = 3;	// 4 MHz
+
+	reg_TCR2A = 0x34;	// internal clock 250 kHz
+	reg_TCR2B = 0x34;
+	reg_TCR3 = 0x34;
+	reg_TCR4 = 0x34;
+	reg_TCR5 = 0x34;
+
+	reg_TCR8 = reg_TCR8 & 0xF | 0x50;
+
+	reg_TIOR10 = 0x30;
+
+	reg_TCR10 = 0;
+
+	reg_TIER10 = 0x10;
+
+	reg_TMDR = 0;
+
+	reg_TSTR1 = reg_TSTR1 & 2 | 0x7D;
+
+    // peripheral clock = 16MHz
+    // CMT0 CLK = 2 MHz
+    // CMT0 Period = 2000000 / 2495 = 801.6 Hz
+
+	reg_CMCOR0 = 2495;
+
+	reg_CMCSR0 = reg_CMCSR0 & ~0x43 | 0x40;
+
+	SET(reg_CMSTR, 1);
+
+	word_FFFF9AD2 = reg_TCNT2A + 312;
+
+	CLR(reg_TIER3, 0x3A0);
+
+	reg_TIOR4A = 0x11;
+	reg_TIOR4B = 0x11;
+
+	CLR(reg_TIER3, 0x40);
+
+	__enable_irq();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

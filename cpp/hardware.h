@@ -29,6 +29,7 @@ extern "C" void PWM_EGR_EVAP_O2H();
 extern "C" void UpdateFanOutputDuty();
 extern "C" void sub_B0BC(u16 r1);
 extern "C" void Read_Ports_And_Registers_sub_B114();
+extern "C" void SysInit_ATU_0_DMA_2();
 
 #else
 
@@ -59,21 +60,20 @@ extern "C" void Read_Ports_And_Registers_sub_B114();
 #define UpdateFanOutputDuty					((void(*)(void))0xB096)
 #define sub_B0BC							((void(*)(u16))0xB0BC)
 #define Read_Ports_And_Registers_sub_B114	((void(*)(void))0xB114)
+#define SysInit_ATU_0_DMA_2					((void(*)(void))0xB458)
 
 #endif
 
-#define SysInit_ATU_0_DMA_2			((void(*)(void))0xB458)
 
 
-#define WaitDownTimer801			((void(*)(void))0xBB36)
-#define Init_ATU_sub_C5D2			((void(*)(void))0xC5D2)
-#define SysInit_ATU_0_DMA_2			((void(*)(void))0xB458)
-#define Init_ATU_0_2B				((void(*)(void))0xD918)
-//#define Get_ADC_Knock				((void(*)(void))0xA92C)
-//#define Get_Manifold_AbsPressure	((void(*)(void))0xA95A)
-#define Disable_Coil_Charge			((void(*)(u16))0xBED8)
-//#define F500_Get_All_ADC			((void(*)(void))0xA7F0)
-//#define Get_ADC_Bat_TPS_oxigen		((void(*)(void))0xA8DC)
+#define WaitDownTimer801					((void(*)(void))0xBB36)
+#define Init_ATU_sub_C5D2					((void(*)(void))0xC5D2)
+#define Init_ATU_0_2B						((void(*)(void))0xD918)
+//#define Get_ADC_Knock						((void(*)(void))0xA92C)
+//#define Get_Manifold_AbsPressure			((void(*)(void))0xA95A)
+#define Disable_Coil_Charge					((void(*)(u16))0xBED8)
+//#define F500_Get_All_ADC					((void(*)(void))0xA7F0)
+//#define Get_ADC_Bat_TPS_oxigen			((void(*)(void))0xA8DC)
 
 #define      adc_Hooked_value ((u16*)0xFFFF8000)                                                        
 
