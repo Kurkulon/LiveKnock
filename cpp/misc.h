@@ -703,9 +703,9 @@ struct TM32
 #define NOT(v, m) (v ^= m)
 #define WFLAG(f, m, c) {if (c) { f |= m; } else { f &= ~(m); }}
 
-#define ONE(v, m) ((v & (m)) != 0)
-#define ZRO(v, m) ((v & (m)) == 0)
-#define AND(v, m) ((v & (m)) == (m))
+#define ONE(v, m) (((v) & (m)) != 0)
+#define ZRO(v, m) (((v) & (m)) == 0)
+#define AND(v, m) (((v) & (m)) == (m))
 
 
 #define WBIT(v, m, c) { v &= ~(m); if (c) v |= m; }

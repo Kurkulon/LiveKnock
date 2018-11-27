@@ -1,6 +1,6 @@
 ##################################################################################################
 
-variant = HARDWARE
+variant = BC06
 
 STACK_REPLACE = 0
 GNU_HARDWARE = 0
@@ -77,10 +77,15 @@ var_obj = $(var_obj) F500.o Hooks.o ML02.o FU03.o ignition.o
 var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1"
 var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o
 
+!else ifeq variant BC06
+
+var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1",DEF_BC06="1"
+var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o bc06.o
+
 !else ifeq variant HARDWARE
 
-var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1",DEF_HARDWARE="1"
-var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o hardware.o
+var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1",DEF_BC06="1",DEF_HARDWARE="1"
+var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o bc06.o hardware.o
 
 !endif
 

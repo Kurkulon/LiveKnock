@@ -1708,7 +1708,6 @@ static void SysInit_ATU_2E_2F_2G_out()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-
 static void Init_ATU_2E_2F_2G_out()
 {
 	__disable_irq();

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="8,00"
 	Name="LiveKnock"
 	ProjectGUID="{AB9A6019-E9B2-45AE-83D4-26DD4067F158}"
 	RootNamespace="LiveKnock"
@@ -159,6 +159,10 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\cpp\BC06.h"
+				>
+			</File>
 			<File
 				RelativePath=".\cpp\constbyte.h"
 				>

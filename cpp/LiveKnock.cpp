@@ -49,7 +49,7 @@ extern "C" void Test_Interpolate()
 
 //#pragma noregsave(LiveKnock)
 
-void LiveKnock()
+extern "C" void LiveKnock()
 {
 //	__disable_irq();
 

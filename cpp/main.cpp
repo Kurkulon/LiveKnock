@@ -17,6 +17,7 @@
 #include "idle.h"
 #include "huge.h"
 #include "hardware.h"
+#include "BC06.h"
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -28,7 +29,6 @@
 #define COM_root_sub_21564			((void(*)(void))0x21564)
 
 //#define AA05_root_sub_19096			((void(*)(void))0x19096)
-#define BC06_root_sub_1BF7A			((void(*)(void))0x1BF7A)
 #define EF07_root_sub_1F428			((void(*)(void))0x1F428)
 #define OBD_root_sub_2B8AC			((void(*)(void))0x2B8AC)
 #define IMMO_root_sub_226E4			((void(*)(void))0x226E4)
@@ -48,7 +48,6 @@
 //#define SysInit_sub_266FC								((void(*)(void))0x266FC)
 //#define SysInit_sub_16D74								((void(*)(void))0x16D74)
 //#define SysInit_sub_19014								((void(*)(void))0x19014)
-#define SysInit_sub_1BEFE								((void(*)(void))0x1BEFE)
 #define SysInit_sub_1F408								((void(*)(void))0x1F408)
 #define Init_sub_2B474									((void(*)(void))0x2B474)
 #define SysInit_sub_230FA								((void(*)(void))0x230FA)
@@ -72,7 +71,7 @@ static void SysInit_sub_F148();
 static void sub_F164();
 
 extern "C" void LiveMap();
-extern void LiveKnock();
+extern "C" void LiveKnock();
 
 static void WaitTimer();
 
@@ -82,7 +81,7 @@ static void Simulation();
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#pragma noregsave(Main_Engine_Control_Loop)
+#pragma noregalloc(Main_Engine_Control_Loop)
 
 extern "C" void Main_Engine_Control_Loop()
 {
@@ -92,6 +91,14 @@ extern "C" void Main_Engine_Control_Loop()
 
 	while(1)
 	{
+#ifdef DEF_SIMULATION
+
+		if (frameCount == 0x100)
+		{
+			while(1);
+		};
+
+#endif
 		sub_206A4();
 
 		//deltaTimer_FFFF886A = reg_TCNT2A - prevTimer_FFFF886C;

@@ -37,7 +37,7 @@ extern "C" void SysInit_ATU_0_DMA_2();
 #define sub_A078							((void(*)(void))0xA078)
 #define sub_A324							((void(*)(void))0xA324)
 #define sub_A374							((void(*)(void))0xA374)
-#define PADR_Stuff_sub_A5F8					((void(*)(void))0xA374)
+#define PADR_Stuff_sub_A5F8					((void(*)(void))0xA5F8)
 
 #define PEDR_LO_Check_sub_A790				((bool(*)(void))0xA790)
 

@@ -73,6 +73,9 @@ static void GetADC(byte r1, u16 *r2, u16 *r8);
 static u16 GetADC0(byte r1);
 static u16 GetADC1(byte r1);
 	
+//extern "C" void HUGE_Method_801_6_Hz();
+#define  HUGE_Method_801_6_Hz		((void(*)(void))0x2686C)
+
 #ifdef __GNUC__
 extern "C" void SysInit_sub_9D2C() __attribute__ ((section ("P_HARDWARE")));
 #endif
@@ -203,6 +206,18 @@ const void *off_E9D8 = (const void *)Read_Ports_And_Registers_sub_B114;
 extern "C" void dmac2_dei2();
 #pragma address v_dmac2_dei2=0x130
 const void *v_dmac2_dei2 = dmac2_dei2;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void cmti0();
+#pragma address v_cmti0=0x2F0
+const void *v_cmti0 = cmti0;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void atu41_imi4B();
+#pragma address v_atu41_imi4B=0x204
+const void *v_atu41_imi4B = atu41_imi4B;
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -413,7 +428,7 @@ extern "C" void SysInit_sub_9D2C()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//#pragma regsave(sub_xxx)
+#pragma noregalloc(sub_xxx)
 
 static void sub_xxx()
 {
@@ -1320,7 +1335,6 @@ static void Init_ATU_0_DMA_2()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-
 static void dmac2_dei2_B618()
 {
 //	void *r2 = dword_FFFF9A60;
@@ -1502,14 +1516,62 @@ static void Init_ATU_2A_2B_3_4_5_8_10()
 
 	SET(reg_CMSTR, 1);
 
-	word_FFFF9AD2 = reg_TCNT2A + 312;
-
 	CLR(reg_TIER3, 0x3A0);
 
 	reg_TIOR4A = 0x11;
 	reg_TIOR4B = 0x11;
 
 	CLR(reg_TIER3, 0x40);
+
+	__enable_irq();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma interrupt(cmti0)
+#pragma regsave(cmti0)
+
+extern "C" void cmti0()
+{
+	__disable_irq();
+
+	word_FFFF9AD6 = reg_TCNT2A;
+
+	CLR(reg_CMCSR0, 0x80);
+
+	DECLIM(downTimer_801);
+
+	word_FFFF9AD2 += 312;
+
+	if ((word_FFFF9AD2 - reg_TCNT2A) & 0x8000)
+	{
+		word_FFFF9AD2 += 312;
+
+		__enable_irq();
+
+		HUGE_Method_801_6_Hz();
+
+		HUGE_Method_801_6_Hz();
+	}
+	else
+	{
+		__enable_irq();
+
+		HUGE_Method_801_6_Hz();
+
+		word_FFFF9AD4 = reg_TCNT2A - word_FFFF9AD6;
+	};
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma interrupt(atu41_imi4B)
+
+extern "C" void atu41_imi4B()
+{
+	__disable_irq();
+
+	CLR(reg_TSR3, 64);
 
 	__enable_irq();
 }
