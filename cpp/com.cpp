@@ -1,4 +1,4 @@
-#include <smachine.h>
+#include <machine.h>
 
 //#include "ext_ram_vars.h"
 
@@ -494,21 +494,19 @@ extern "C" void COM_root_sub_21564()
 	{
 		u16 *p = (u16*)recieve_buffer_0;
 
-		word_FFFF99E4 = (p[1] >> 8) | (p[1] << 8);
-		word_FFFF99E6 = (p[2] >> 8) | (p[2] << 8);
-		word_FFFF99E8 = (p[3] >> 8) | (p[3] << 8);
-		word_FFFF99EA = (p[4] >> 8) | (p[4] << 8);
-		word_FFFF99EC = (p[5] >> 8) | (p[5] << 8);
-		word_FFFF99EE = (p[6] >> 8) | (p[6] << 8);
+		word_FFFF99E4 = swapb(p[1]);//(p[1] >> 8) | (p[1] << 8);
+		word_FFFF99E6 = swapb(p[2]);//(p[2] >> 8) | (p[2] << 8);
+		word_FFFF99E8 = swapb(p[3]);//(p[3] >> 8) | (p[3] << 8);
+		word_FFFF99EA = swapb(p[4]);//(p[4] >> 8) | (p[4] << 8);
+		word_FFFF99EC = swapb(p[5]);//(p[5] >> 8) | (p[5] << 8);
+		word_FFFF99EE = swapb(p[6]);//(p[6] >> 8) | (p[6] << 8);
 
-		word_FFFF99D8 = (p[13] >> 8) | (p[13] << 8);
-		word_FFFF99DA = (p[14] >> 8) | (p[14] << 8);
-		word_FFFF99DC = (p[15] >> 8) | (p[15] << 8);
-		word_FFFF99DE = (p[16] >> 8) | (p[16] << 8);
-		word_FFFF99E0 = (p[17] >> 8) | (p[17] << 8);
-		word_FFFF99E2 = (p[18] >> 8) | (p[18] << 8);
-
-
+		word_FFFF99D8 = swapb(p[13]);//(p[13] >> 8) | (p[13] << 8);
+		word_FFFF99DA = swapb(p[14]);//(p[14] >> 8) | (p[14] << 8);
+		word_FFFF99DC = swapb(p[15]);//(p[15] >> 8) | (p[15] << 8);
+		word_FFFF99DE = swapb(p[16]);//(p[16] >> 8) | (p[16] << 8);
+		word_FFFF99E0 = swapb(p[17]);//(p[17] >> 8) | (p[17] << 8);
+		word_FFFF99E2 = swapb(p[18]);//(p[18] >> 8) | (p[18] << 8);
 	};
 }
 
