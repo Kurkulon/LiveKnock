@@ -543,29 +543,6 @@ sub_B4F2:
 	.POOL
 ;+++++++++++++++++++++++++++++++++++++++++++++++
 
-;word_B53C:			.data.w	h'4B0                           
-;					.data.w	h'FFFF
-;off_B540:			.data.l	unk_FFFFF859					
-;off_B544:			.data.l	unk_FFFFF858					
-;off_B548:			.data.l	reg_PHDRL						
-;off_B54C:			.data.l	reg_ADCR0						
-;off_B550:			.data.l	reg_ADCSR0						
-;off_B554:			.data.l	reg_ADDR0H						
-;off_B558:			.data.l	reg_ADCR1						
-;off_B55C:			.data.l	reg_ADCSR1						
-;off_B560:			.data.l	word_FFFF89B6					
-;off_B564:			.data.l	word_FFFF898C					
-;off_B568:			.data.l	reg_TSR0						
-;off_B56C:			.data.l	__enable_irq					
-;off_B570:			.data.l	reg_TIOR0						
-;off_B574:			.data.l	reg_CHCR2						
-;off_B578:			.data.l	reg_TIER0						
-;off_B57C:			.data.l	__disable_irq					
-;dword_B580:			.data.l	h'80000000                      
-;off_B584:			.data.l	word_FFFF89B2					
-;off_B588:			.data.l	Lim_FFFF						
-;off_B58C:			.data.l	dword_FFFF9A60					
-
 ; ---------------------------------------------------------------------------
 
 loc_B590:											
@@ -596,9 +573,6 @@ loc_B590:
 ;+++++++++++++++++++++++++++++++++++++++++++++++
 	.POOL
 ;+++++++++++++++++++++++++++++++++++++++++++++++
-
-;off_B5BC:			.data.l	word_FFFF89AE		
-;off_B5C0:			.data.l	word_FFFF89AC		
 
 ; -----------------------------------------------
 
@@ -659,9 +633,6 @@ loc_B602:
 ;+++++++++++++++++++++++++++++++++++++++++++++++
 	.POOL
 ;+++++++++++++++++++++++++++++++++++++++++++++++
-
-;				.data.w	h'FFFF
-;off_B614:		.data.l	word_FFFF9AB0		
 												
 
 ; =============== S U B	R O U T	I N E ==========
@@ -908,21 +879,16 @@ dmac2_dei2:
 SysInit_HCAN:									
 												
 				mov.l	r14, @-r15				
-				mov	r15, r14					
-				mov.l	#reg_MCR, r0			
-				mov.b	@r0, r0					
-				and	#h'7F, r0                   
+				mov		r15, r14					
 				mov.l	#reg_MCR, r10			
-				mov.b	r0, @r10				
-				mov.l	#reg_MCR, r0			
-				mov.b	@r0, r0					
-				or	#h'20, r0                   
-				mov.l	#reg_MCR, r10			
+				mov.b	@r10, r0					
+				and		#h'7F, r0                   
+				or		#h'20, r0                   
 				mov.b	r0, @r10				
 				mov.w	#h'FFFFFEFF, r10        
 				mov.l	#reg_IMR, r11			
 				mov.w	r10, @r11				
-				mov	#h'FFFFFFFF, r10            
+				mov		#h'FFFFFFFF, r10            
 				mov.l	#reg_MBIMR, r11			
 				mov.w	r10, @r11				
 				mov.l	@r15+, r14				
@@ -942,29 +908,25 @@ Init_HCAN:
 												
 				sts.l	pr, @-r15				
 				mov.l	r14, @-r15				
-				mov	r15, r14					
+				mov		r15, r14					
 				mov.l	#__disable_irq,	r10		
-				jsr	@r10 ; __disable_irq		
+				jsr		@r10 ; __disable_irq		
 				nop								
 
-				mov.l	#reg_MCR, r0			
-				mov.b	@r0, r0					
-				and	#h'7F, r0                   
 				mov.l	#reg_MCR, r10			
-				mov.b	r0, @r10				
-				mov.l	#reg_MCR, r0			
-				mov.b	@r0, r0					
-				or	#h'20, r0                   
-				mov.l	#reg_MCR, r10			
-				mov.b	r0, @r10				
+				mov.b	@r10, r0					
+				and		#h'7F, r0                   
+				or		#h'20, r0                   
+				mov.b	r0, @r10
+								
 				mov.w	#h'FFFFFEFF, r10        
 				mov.l	#reg_IMR, r11			
 				mov.w	r10, @r11				
-				mov	#h'FFFFFFFF, r10            
+				mov		#h'FFFFFFFF, r10            
 				mov.l	#reg_MBIMR, r11			
 				mov.w	r10, @r11				
 				mov.l	#__enable_irq, r10		
-				jsr	@r10 ; __enable_irq			
+				jsr		@r10 ; __enable_irq			
 				nop								
 
 				mov.l	@r15+, r14				
@@ -985,14 +947,14 @@ SysInit_ATU_2A_2B_3_4_5_8_10:
 												
 				sts.l	pr, @-r15				
 				mov.l	r14, @-r15				
-				mov	r15, r14					
+				mov		r15, r14					
 				mov.l	#__disable_irq,	r10		
-				jsr	@r10 ; __disable_irq		
+				jsr		@r10 ; __disable_irq		
 				nop								
 
 
 ;PSCR1=PSCR4 = 4	MHz
-				mov	#3, r10						
+				mov		#3, r10						
 				mov.l	#reg_PSCR1, r11			
 				mov.b	r10, @r11				
 				mov.l	#reg_PSCR4, r11			
@@ -1000,7 +962,7 @@ SysInit_ATU_2A_2B_3_4_5_8_10:
 
 ;TCR2A=TCR2B=TCR3=TCR4=TCR5 = internal clock 250	kHz
 
-				mov	#h'34, r10 ; '4'          
+				mov		#h'34, r10 ; '4'          
 				mov.l	#reg_TCR2A, r11		
 				mov.b	r10, @r11			
 				mov.l	#reg_TCR2B, r11		
@@ -1014,26 +976,26 @@ SysInit_ATU_2A_2B_3_4_5_8_10:
 
 				mov.l	#reg_TCR8, r0		
 				mov.b	@r0, r0				
-				and	#h'F, r0                  
-				or	#h'50, r0                 
+				and		#h'F, r0                  
+				or		#h'50, r0                 
 				mov.l	#reg_TCR8, r10		
 				mov.b	r0, @r10			
-				mov	#h'30, r10 ; '0'          
+				mov		#h'30, r10 ; '0'          
 				mov.l	#reg_TIOR10, r11	
 				mov.b	r10, @r11			
-				mov	#0, r10					
+				mov		#0, r10					
 				mov.l	#reg_TCR10, r11		
 				mov.b	r10, @r11			
-				mov	#h'10, r10                
+				mov		#h'10, r10                
 				mov.l	#reg_TIER10, r11	
 				mov.w	r10, @r11			
-				mov	#0, r10					
+				mov		#0, r10					
 				mov.l	#reg_TMDR, r11		
 				mov.b	r10, @r11			
 				mov.l	#reg_TSTR1, r0		
 				mov.b	@r0, r0				
-				and	#2, r0					
-				or	#h'7D, r0                 
+				and		#2, r0					
+				or		#h'7D, r0                 
 				mov.l	#reg_TSTR1, r10		
 				mov.b	r0, @r10			
 
@@ -1044,49 +1006,49 @@ SysInit_ATU_2A_2B_3_4_5_8_10:
 				mov.w	#2495, r10				
 				mov.l	#reg_CMCOR0, r11		
 				mov.w	r10, @r11				
-				mov	#h'40, r10 ; '@'            
+				mov		#h'40, r10 ; '@'            
 				mov.l	#reg_CMCSR0, r11		
 				mov.w	r10, @r11				
 				mov.w	#~h'80, r0              
 				mov.l	#reg_CMCSR0, r10		
 				mov.w	@r10, r10				
-				and	r0, r10						
+				and		r0, r10						
 				mov.l	#reg_CMCSR0, r11		
 				mov.w	r10, @r11				
 				mov.l	#reg_CMSTR, r0			
 				mov.w	@r0, r0					
-				or	#1, r0						
+				or		#1, r0						
 				mov.l	#reg_CMSTR, r10			
 				mov.w	r0, @r10				
 
 				mov.l	#reg_TCNT2A, r10		
 				mov.w	@r10, r10				
 				mov.w	#312, r11				
-				add	r11, r10					
+				add		r11, r10					
 				mov.l	#word_FFFF9AD2,	r12		
 				mov.w	r10, @r12				
 				mov.w	#~h'3A0, r0             
 				mov.l	#reg_TIER3, r10			
 				mov.w	@r10, r10				
-				and	r0, r10						
+				and		r0, r10						
 				mov.l	#reg_TIER3, r11			
 				mov.w	r10, @r11				
-				mov	#h'11, r10                  
+				mov		#h'11, r10                  
 				mov.l	#reg_TIOR4A, r11		
 				mov.b	r10, @r11				
 				mov.l	#reg_TIOR4B, r11		
 				mov.b	r10, @r11				
-				mov	#~h'40, r0                  
+				mov		#~h'40, r0                  
 				mov.l	#reg_TIER3, r10			
 				mov.w	@r10, r10				
-				and	r0, r10						
+				and		r0, r10						
 				mov.l	#reg_TIER3, r11			
 				mov.w	r10, @r11				
-				mov	#1, r10						
+				mov		#1, r10						
 				mov.l	#downTimer_801,	r11		
 				mov.w	r10, @r11				
 				mov.l	#__enable_irq, r10		
-				jsr	@r10 ; __enable_irq			
+				jsr		@r10 ; __enable_irq			
 				nop								
 
 				mov.l	@r15+, r14				
@@ -1115,7 +1077,7 @@ Init_ATU_2A_2B_3_4_5_8_10:
 
 ;PSCR1=PSCR4 = 4	MHz
 
-				mov	#3, r10						
+				mov		#3, r10						
 				mov.l	#reg_PSCR1, r11			
 				mov.b	r10, @r11				
 				mov.l	#reg_PSCR4, r11			
@@ -1124,7 +1086,7 @@ Init_ATU_2A_2B_3_4_5_8_10:
 
 ;TCR2A=TCR2B=TCR3=TCR4=TCR5 = internal clock 250	kHz
 
-				mov	#h'34, r10 ; '4'                 
+				mov		#h'34, r10 ; '4'                 
 				mov.l	#reg_TCR2A, r11				
 				mov.b	r10, @r11					
 				mov.l	#reg_TCR2B, r11				
@@ -1138,28 +1100,28 @@ Init_ATU_2A_2B_3_4_5_8_10:
 
 				mov.l	#reg_TCR8, r0				
 				mov.b	@r0, r0						
-				and	#h'F, r0                         
-				or	#h'50, r0                        
+				and		#h'F, r0                         
+				or		#h'50, r0                        
 				mov.l	#reg_TCR8, r10				
 				mov.b	r0, @r10					
-				mov	#h'30, r10 ; '0'                 
+				mov		#h'30, r10 ; '0'                 
 				mov.l	#reg_TIOR10, r11			
 				mov.b	r10, @r11				
-				mov	#0, r10						
+				mov		#0, r10						
 				mov.l	#reg_TCR10, r11			
 				mov.b	r10, @r11				
-				mov	#h'10, r10                  
+				mov		#h'10, r10                  
 				mov.l	#reg_TIER10, r11		
 				mov.w	r10, @r11				
-				mov	#0, r10						
+				mov		#0, r10						
 				mov.l	#reg_TMDR, r11			
 				mov.b	r10, @r11				
 				mov.l	#reg_TSTR1, r0			
 
 loc_B8F2:										
 				mov.b	@r0, r0					
-				and	#2, r0						
-				or	#h'7D, r0                   
+				and		#2, r0						
+				or		#h'7D, r0                   
 				mov.l	#reg_TSTR1, r10			
 				mov.b	r0, @r10				
 				mov.w	#2495, r10				
@@ -1168,35 +1130,35 @@ loc_B8F2:
 				mov.l	#reg_CMCSR0, r10		
 				mov.w	@r10, r10				
 				mov.l	#~h'FFFF0043, r11       
-				and	r11, r10					
-				mov	r10, r0						
-				or	#h'40, r0                   
+				and		r11, r10					
+				mov		r10, r0						
+				or		#h'40, r0                   
 				mov.l	#reg_CMCSR0, r10		
 				mov.w	r0, @r10				
 				mov.l	#reg_CMSTR, r0			
 				mov.w	@r0, r0					
-				or	#1, r0						
+				or		#1, r0						
 				mov.l	#reg_CMSTR, r10			
 				mov.w	r0, @r10				
 				mov.w	#h'FFFFFC5F, r0         
 				mov.l	#reg_TIER3, r10			
 				mov.w	@r10, r10				
-				and	r0, r10						
+				and		r0, r10						
 				mov.l	#reg_TIER3, r11			
 				mov.w	r10, @r11				
-				mov	#h'11, r10                  
+				mov		#h'11, r10                  
 				mov.l	#reg_TIOR4A, r11		
 				mov.b	r10, @r11				
 				mov.l	#reg_TIOR4B, r11		
 				mov.b	r10, @r11				
-				mov	#h'FFFFFFBF, r0             
+				mov		#h'FFFFFFBF, r0             
 				mov.l	#reg_TIER3, r10			
 				mov.w	@r10, r10				
-				and	r0, r10						
+				and		r0, r10						
 				mov.l	#reg_TIER3, r11			
 				mov.w	r10, @r11				
 				mov.l	#__enable_irq, r10		
-				jsr	@r10 ; __enable_irq			
+				jsr		@r10 ; __enable_irq			
 				nop								
 
 				mov.l	@r15+, r14				
@@ -1212,45 +1174,6 @@ loc_B8F2:
 	.POOL
 ;+++++++++++++++++++++++++++++++++++++++++++++++
 
-;word_B94C:			.data.w	h'FEFF                 
-;word_B94E:			.data.w	h'138                  
-;word_B950:			.data.w	h'FF7F                 
-;word_B952:			.data.w	h'9BF                  
-;word_B954:			.data.w	h'FC5F                 
-;					.data.w	h'FFFF
-;off_B958:			.data.l	word_FFFF89AC		
-;off_B95C:			.data.l	word_FFFF89AE		
-;off_B960:			.data.l	word_FFFF9AB0		
-;off_B964:			.data.l	timer_up_FFFF8520	
-;off_B968:			.data.l	Lim_FFFF			
-;off_B96C:			.data.l	word_FFFF89B4		
-;off_B970:			.data.l	word_FFFF89B2		
-;off_B974:			.data.l	reg_DAR2			
-;off_B978:			.data.l	dword_FFFF9A60+4	
-;off_B97C:			.data.l	dword_FFFF9A60		
-;dword_B980:			.data.l	h'120124               
-;off_B984:			.data.l	reg_SAR2			
-;off_B988:			.data.l	reg_ICR0DH			
-;off_B98C:			.data.l	word_FFFF9AB2		
-;off_B990:			.data.l	reg_DMATCR2			
-;off_B994:			.data.l	__disable_irq		
-;off_B998:			.data.l	word_FFFF9AB4		
-;off_B99C:			.data.l	word_FFFF89B0		
-;off_B9A0:			.data.l	timer_FFFF8580		
-;off_B9A4:			.data.l	word_1BF8			
-;off_B9A8:			.data.l	reg_CHCR2			
-;off_B9AC:			.data.l	reg_MBIMR			
-;off_B9B0:			.data.l	reg_IMR				
-;off_B9B4:			.data.l	reg_MCR				
-;off_B9B8:			.data.l	downTimer_801		
-;off_B9BC:			.data.l	word_FFFF9AD2		
-;off_B9C0:			.data.l	reg_TCNT2A			
-;off_B9C4:			.data.l	reg_CMSTR			
-;off_B9C8:			.data.l	reg_TIER3			
-;off_B9CC:			.data.l	reg_TIOR4A			
-;off_B9D0:			.data.l	reg_TIOR4B			
-;off_B9D4:			.data.l	__enable_irq		
-
 ; =============== S U B	R O U T	I N E ============
 
 ; 801.6	Hz
@@ -1258,7 +1181,7 @@ loc_B8F2:
 cmti0:											
 				sts.l	pr, @-r15				
 				mov.l	r14, @-r15				
-				mov	r15, r14					
+				mov		r15, r14					
 				sts.l	macl, @-r15				
 				sts.l	mach, @-r15				
 				mov.l	r10, @-r15				
@@ -1272,7 +1195,7 @@ cmti0:
 				mov.l	r7, @-r15				
 				mov.l	r0, @-r15				
 				mov.l	#__disable_irq,	r10		
-				jsr	@r10 ; __disable_irq		
+				jsr		@r10 ; __disable_irq		
 				nop								; 
 
 				mov.l	#reg_TCNT2A, r10		
@@ -1282,17 +1205,17 @@ cmti0:
 				mov.w	#~h'80, r0                
 				mov.l	#reg_CMCSR0, r10		
 				mov.w	@r10, r10				
-				and	r0, r10						
+				and		r0, r10						
 				mov.l	#reg_CMCSR0, r11		
 				mov.w	r10, @r11				
 				mov.l	#downTimer_801,	r10		
 				mov.w	@r10, r10				
-				tst	r10, r10					
-				bt	loc_BA20					
+				tst		r10, r10					
+				bt		loc_BA20					
 
 				mov.l	#downTimer_801,	r10		
 				mov.w	@r10, r0				
-				add	#-1, r0						
+				add		#-1, r0						
 				mov.w	r0, @r10				
 
 
@@ -1300,33 +1223,33 @@ loc_BA20:
 				mov.l	#word_FFFF9AD2,	r10		
 				mov.w	@r10, r0				
 				mov.w	#312, r11				
-				add	r11, r0						
+				add		r11, r0						
 				mov.w	r0, @r10				
 				mov.l	#word_FFFF9AD2,	r10		
 				mov.w	@r10, r10				
 				mov.l	#reg_TCNT2A, r11		
 				mov.w	@r11, r11				
-				sub	r11, r10					
+				sub		r11, r10					
 				extu.w	r10, r0					
 				shlr8	r0						
-				tst	#h'80, r0                     
-				bt	loc_BA5C					
+				tst		#h'80, r0                     
+				bt		loc_BA5C					
 
 				mov.l	#word_FFFF9AD2,	r10		
 				mov.w	@r10, r0				
 				mov.w	#312, r11				
-				add	r11, r0						
+				add		r11, r0						
 				mov.w	r0, @r10				
 				mov.l	#__enable_irq, r10		
-				jsr	@r10 ; __enable_irq			
+				jsr		@r10 ; __enable_irq			
 				nop								 
 
 				mov.l	#HUGE_Method_801_6_Hz, r10
-				jsr	@r10 ; HUGE_Method_801_6_Hz	
+				jsr		@r10 ; HUGE_Method_801_6_Hz	
 				nop								
 
 				mov.l	#HUGE_Method_801_6_Hz, r10
-				jsr	@r10 ; HUGE_Method_801_6_Hz	
+				jsr		@r10 ; HUGE_Method_801_6_Hz	
 				nop								 
 
 				bra	loc_BA76					
@@ -1338,18 +1261,18 @@ loc_BA20:
 
 loc_BA5C:										
 				mov.l	#__enable_irq, r10		
-				jsr	@r10 ; __enable_irq			
+				jsr		@r10 ; __enable_irq			
 				nop								
 
 				mov.l	#HUGE_Method_801_6_Hz, r10
-				jsr	@r10 ; HUGE_Method_801_6_Hz	
+				jsr		@r10 ; HUGE_Method_801_6_Hz	
 				nop								
 
 				mov.l	#reg_TCNT2A, r10		
 				mov.w	@r10, r10				
 				mov.l	#word_FFFF9AD6,	r11		
 				mov.w	@r11, r11				
-				sub	r11, r10					
+				sub		r11, r10					
 				mov.l	#word_FFFF9AD4,	r12		
 				mov.w	r10, @r12				
 
@@ -1379,27 +1302,6 @@ loc_BA76:
 ;+++++++++++++++++++++++++++++++++++++++++++++++
 	.POOL
 ;+++++++++++++++++++++++++++++++++++++++++++++++
-
-;word_BA96:			.data.w	h'FF7F                 
-;word_BA98:			.data.w	h'138                  
-;					.data.w	h'FFFF
-;dword_BA9C:			.data.l	h'FFBC             
-;off_BAA0:			.data.l	reg_CMCOR0			
-;off_BAA4:			.data.l	reg_TSTR1			
-;off_BAA8:			.data.l	reg_TMDR			
-;off_BAAC:			.data.l	reg_TIER10			
-;off_BAB0:			.data.l	reg_TCR10			
-;off_BAB4:			.data.l	reg_TIOR10			
-;off_BAB8:			.data.l	reg_TCR8			
-;off_BABC:			.data.l	reg_TCR5			
-;off_BAC0:			.data.l	reg_TCR4			
-;off_BAC4:			.data.l	reg_TCR3			
-;off_BAC8:			.data.l	reg_TCR2B			
-;off_BACC:			.data.l	reg_TCR2A			
-;off_BAD0:			.data.l	reg_PSCR4			
-;off_BAD4:			.data.l	reg_PSCR1			
-;off_BAD8:			.data.l	reg_CMCSR0			
-;off_BADC:			.data.l	__disable_irq		
 
 ;+++++++++++++++++++++++++++++++++++++++++++++++
 
