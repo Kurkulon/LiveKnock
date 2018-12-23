@@ -492,7 +492,7 @@ struct Map3D_W
 #define SHLR8											((byte(*)(u32))0x864)
 #define Mult_R4_65536									((u32(*)(u16))0x876)
 #define SwapBytes16										((u16(*)(byte))0x8B8)
-
+#define ChkSum											((u16(*)(void*, u16))0x34C5C)
 #define Add_Lim_FFFF									((u32(*)(u16,u16))0x500)
 #define Add_Lim_FFFFFFFF								((u32(*)(u32,u32))0x51C)
 #define Add_R4w_R5w										((u32(*)(u16,u16))0x514)

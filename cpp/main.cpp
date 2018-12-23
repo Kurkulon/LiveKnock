@@ -18,6 +18,7 @@
 #include "huge.h"
 #include "hardware.h"
 #include "BC06.h"
+#include "EF07.h"
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -29,7 +30,7 @@
 #define COM_root_sub_21564			((void(*)(void))0x21564)
 
 //#define AA05_root_sub_19096			((void(*)(void))0x19096)
-#define EF07_root_sub_1F428			((void(*)(void))0x1F428)
+//#define EF07_root_sub_1F428			((void(*)(void))0x1F428)
 #define OBD_root_sub_2B8AC			((void(*)(void))0x2B8AC)
 #define IMMO_root_sub_226E4			((void(*)(void))0x226E4)
 
@@ -37,7 +38,7 @@
 //#define SysInit_NVRAM_266DC			((void(*)(void))0x266DC)
 
 //#define SysInit_NVRAM_18F80			((void(*)(void))0x18F80)
-#define SysInit_NVRAM_1F3E0			((void(*)(void))0x1F3E0)
+//#define SysInit_NVRAM_1F3E0			((void(*)(void))0x1F3E0)
 #define Init_NVRAM_2B364			((void(*)(void))0x2B364)
 #define SysInit_NVRAM_220D8			((void(*)(void))0x220D8)
 
@@ -48,7 +49,7 @@
 //#define SysInit_sub_266FC								((void(*)(void))0x266FC)
 //#define SysInit_sub_16D74								((void(*)(void))0x16D74)
 //#define SysInit_sub_19014								((void(*)(void))0x19014)
-#define SysInit_sub_1F408								((void(*)(void))0x1F408)
+//#define SysInit_sub_1F408								((void(*)(void))0x1F408)
 #define Init_sub_2B474									((void(*)(void))0x2B474)
 #define SysInit_sub_230FA								((void(*)(void))0x230FA)
 #define SysInit_sub_22100								((void(*)(void))0x22100)
