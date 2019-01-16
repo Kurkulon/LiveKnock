@@ -938,7 +938,7 @@
 #define      word_FFFF8BFC                  						   (*(byte*)0xFFFF8BFC)                                                     
 #define      word_FFFF8BFE                  							(*(u16*)0xFFFF8BFE)                                                        
 #define      IGNP_FFFF8C06                 								(*(u16*)0xFFFF8C06)                                                        
-#define      word_FFFF8C0A                  							(*(u16*)0xFFFF8C0A)                                                        
+#define      startIgnInterpolator                  							(*(u16*)0xFFFF8C0A)                                                        
 #define      IGNITION_FINAL3_FFFF8C0C       							(*(u16*)0xFFFF8C0C)                                                        
 #define      ignCoil_MaxCrankDegrees                  							(*(u16*)0xFFFF8C0E)                                                        
 #define      ignCoilTime_4us                  							(*(u16*)0xFFFF8C10)                                                        

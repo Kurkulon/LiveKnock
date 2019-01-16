@@ -930,7 +930,7 @@ word_FFFF8BFA                  							.EQU H'FFFF8BFA
 word_FFFF8BFC                  						   .EQU H'FFFF8BFC                                                     
 word_FFFF8BFE                  							.EQU H'FFFF8BFE                                                        
 IGNP_FFFF8C06                 								.EQU H'FFFF8C06                                                        
-word_FFFF8C0A                  							.EQU H'FFFF8C0A                                                        
+startIgnInterpolator                  							.EQU H'FFFF8C0A                                                        
 IGNITION_FINAL3_FFFF8C0C       							.EQU H'FFFF8C0C                                                        
 ignCoil_MaxCrankDegrees                  							.EQU H'FFFF8C0E                                                        
 ignCoilTime_4us                  							.EQU H'FFFF8C10                                                        

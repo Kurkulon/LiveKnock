@@ -1044,7 +1044,7 @@ u16 	word_FFFF8BFE;
 byte	unused_byte_FFFF8C00[6];
 u16 	IGNP_FFFF8C06;
 byte	unused_byte_FFFF8C08[2];
-u16 	word_FFFF8C0A;
+u16 	startIgnInterpolator;
 u16 	IGNITION_FINAL3_FFFF8C0C;
 u16 	ignCoil_MaxCrankDegrees;
 u16 	ignCoilTime_4us;

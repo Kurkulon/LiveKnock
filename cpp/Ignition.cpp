@@ -72,7 +72,7 @@ static void IG04_sub_18B48();
 static void IG04_SetMaxKnockSumControl();
 static void IG04_Ignition_coil_charge_sub_18BD4();
 static void IG04_UpdateTimingMUT();
-static void IG04_sub_18C86();
+static void IG04_UpdateStartIgnInterpolator();
 static void IG04_sub_18D84();
 
 static u16 	IG04_sub_21DCE(u16 v);
@@ -916,6 +916,37 @@ inline u16 Barometric_Correction_sub_22084()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+static u16 IG04_StartIgnInterpolator(u16 tAdv)
+{
+	if (wMUT1E_MAF_RESET_FLAG & (CRANKING|STALL))
+	{
+		startIgnInterpolator = (wMUT10_Coolant_Temperature_Scaled > word_24F8/*50(10)*/) ? 0xFF : 0;
+	}
+	else
+	{
+		if (timeEvents & EVT_1_50ms)
+		{
+			startIgnInterpolator = Add_Lim_FFFF(startIgnInterpolator, word_24FA/*6*/);
+
+			if (startIgnInterpolator >= 0xFF)
+			{
+				startIgnInterpolator = 0xFF;
+			};
+		};
+
+		tAdv = interpolate_r4_r5_r6(tAdv, 25, startIgnInterpolator);
+
+		if (startIgnInterpolator != 255 && tAdv < 25)
+		{
+			tAdv = 25;
+		};
+	};
+
+	return tAdv;
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 static void IG04_Update_MUT04_Timing_Advance_Interpolated()
 {
 	Update_MUT33_Corrected_Timing_Advance();
@@ -997,13 +1028,13 @@ static void IG04_Update_MUT04_Timing_Advance_Interpolated()
 
 	IGNITION_FINAL3_FFFF8C0C = tAdv;
 
-	IG04_sub_18C86(); // update word_FFFF8C0A
+	IG04_UpdateStartIgnInterpolator(); // update startIgnInterpolator
 
 	if ((wMUT1E_MAF_RESET_FLAG & (CRANKING|STALL)) == 0)
 	{
-		tAdv = interpolate_r4_r5_r6(tAdv, 25, word_FFFF8C0A);
+		tAdv = interpolate_r4_r5_r6(tAdv, 25, startIgnInterpolator);
 
-		if (word_FFFF8C0A != 255 && tAdv < 25)
+		if (startIgnInterpolator != 255 && tAdv < 25)
 		{
 			tAdv = 25;
 		};
@@ -1518,19 +1549,19 @@ static void IG04_UpdateTimingMUT()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void IG04_sub_18C86()
+static void IG04_UpdateStartIgnInterpolator()
 {
 	if (wMUT1E_MAF_RESET_FLAG & (CRANKING|STALL))
 	{
-		word_FFFF8C0A = (wMUT10_Coolant_Temperature_Scaled > word_24F8) ? 0xFF : 0;
+		startIgnInterpolator = (wMUT10_Coolant_Temperature_Scaled > word_24F8/*50(10)*/) ? 0xFF : 0;
 	}
 	else if (timeEvents & EVT_1_50ms)
 	{
-		word_FFFF8C0A = Add_Lim_FFFF(word_FFFF8C0A, word_24FA);
+		startIgnInterpolator = Add_Lim_FFFF(startIgnInterpolator, word_24FA/*6*/);
 
-		if (word_FFFF8C0A >= 0xFF)
+		if (startIgnInterpolator >= 0xFF)
 		{
-			word_FFFF8C0A = 0xFF;
+			startIgnInterpolator = 0xFF;
 		};
 	};
 }

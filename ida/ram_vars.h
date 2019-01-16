@@ -1044,7 +1044,7 @@ extern	u16 	word_FFFF8BFE;
 extern	byte	unused_byte_FFFF8C00[6];
 extern	u16 	IGNP_FFFF8C06;
 extern	byte	unused_byte_FFFF8C08[2];
-extern	u16 	word_FFFF8C0A;
+extern	u16 	startIgnInterpolator;
 extern	u16 	IGNITION_FINAL3_FFFF8C0C;
 extern	u16 	ignCoil_MaxCrankDegrees;
 extern	u16 	ignCoilTime_4us;
