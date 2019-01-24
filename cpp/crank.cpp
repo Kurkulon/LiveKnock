@@ -950,11 +950,11 @@ void CRANK75_Main_sub_232A0()
 
 	// loc_23ACE
 
-	if (IGN_0xA_FFFF8BE8 == 0 && IGNITION_FINAL2_FFFF8BE6 < 0x80)
+	if (IGN_0xA_FFFF8BE8 == 0 && ign_lim_dec_fuel_cut < 0x80)
 	{
-		IGNITION_FINAL2_FFFF8BE6 += 1;
+		ign_lim_dec_fuel_cut += 1;
 
-		IGN_0xA_FFFF8BE8 = word_17C2;
+		IGN_0xA_FFFF8BE8 = word_17C2/*3*/;
 	};
 
 	DECLIM(timer_Delta_TPS);

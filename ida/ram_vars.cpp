@@ -1028,7 +1028,7 @@ u16 	wMUT05_Timing_Advance_Scaled;
 u16 	timingAdvScaled;
 u16 	abs_Delta_TPS;
 u16 	timer_Delta_TPS;
-u16 	IGNITION_FINAL2_FFFF8BE6;
+u16 	ign_lim_dec_fuel_cut;
 u16 	IGN_0xA_FFFF8BE8;
 u16 	word_FFFF8BEA;
 u16 	word_FFFF8BEC;

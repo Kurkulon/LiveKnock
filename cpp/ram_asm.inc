@@ -916,7 +916,7 @@ wMUT05_Timing_Advance_Scaled   							.EQU H'FFFF8BDE
 timingAdvScaled                							.EQU H'FFFF8BE0                                                        
 abs_Delta_TPS                  							.EQU H'FFFF8BE2                                                        
 timer_Delta_TPS                  							.EQU H'FFFF8BE4                                                        
-IGNITION_FINAL2_FFFF8BE6       							.EQU H'FFFF8BE6                                                        
+ign_lim_dec_fuel_cut       							.EQU H'FFFF8BE6                                                        
 IGN_0xA_FFFF8BE8               							.EQU H'FFFF8BE8                                                        
 word_FFFF8BEA                  							.EQU H'FFFF8BEA                                                        
 word_FFFF8BEC                  							.EQU H'FFFF8BEC                                                        

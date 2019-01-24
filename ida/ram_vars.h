@@ -1028,7 +1028,7 @@ extern	u16 	wMUT05_Timing_Advance_Scaled;
 extern	u16 	timingAdvScaled;
 extern	u16 	abs_Delta_TPS;
 extern	u16 	timer_Delta_TPS;
-extern	u16 	IGNITION_FINAL2_FFFF8BE6;
+extern	u16 	ign_lim_dec_fuel_cut;
 extern	u16 	IGN_0xA_FFFF8BE8;
 extern	u16 	word_FFFF8BEA;
 extern	u16 	word_FFFF8BEC;

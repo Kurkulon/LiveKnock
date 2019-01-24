@@ -924,7 +924,7 @@
 #define      timingAdvScaled                							(*(u16*)0xFFFF8BE0)                                                        
 #define      abs_Delta_TPS                  							(*(u16*)0xFFFF8BE2)                                                        
 #define      timer_Delta_TPS                  							(*(u16*)0xFFFF8BE4)                                                        
-#define      IGNITION_FINAL2_FFFF8BE6       							(*(u16*)0xFFFF8BE6)                                                        
+#define      ign_lim_dec_fuel_cut       							(*(u16*)0xFFFF8BE6)                                                        
 #define      IGN_0xA_FFFF8BE8               							(*(u16*)0xFFFF8BE8)                                                        
 #define      word_FFFF8BEA                  							(*(u16*)0xFFFF8BEA)                                                        
 #define      word_FFFF8BEC                  							(*(u16*)0xFFFF8BEC)                                                        
