@@ -1,6 +1,6 @@
 ##################################################################################################
 
-variant = F500
+variant = ML02
 
 STACK_REPLACE = 0
 GNU_HARDWARE = 0
@@ -30,7 +30,7 @@ debug_compiler_options =  -OPtimize=1 -SIze -SHIft=Inline
 debug_linker_options = 
 lbgsh_options = 
 libsuffix=d
-define_options = DEF_SIMULATION="1" 
+define_options = DEF_SIMULATION="1"
 
 !else
 
@@ -38,7 +38,7 @@ debug_compiler_options = -OPtimize=1 -SIze -SHIft=Inline
 debug_linker_options = 
 lbgsh_options = 
 libsuffix=r
-define_options =
+define_options = DEF_RELEASE="1"
 
 !endif
 

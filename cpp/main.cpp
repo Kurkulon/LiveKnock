@@ -82,7 +82,7 @@ static void Simulation();
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#pragma noregalloc(Main_Engine_Control_Loop)
+#pragma noregsave(Main_Engine_Control_Loop)
 
 extern "C" void Main_Engine_Control_Loop()
 {
@@ -155,6 +155,8 @@ extern "C" void Main_Engine_Control_Loop()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+#ifdef DEF_SIMULATION
+
 static void Simulation()
 {
 	// atu02_ici0A
@@ -215,6 +217,8 @@ extern "C" u16 GetADC_hook(byte ch, u16 *res8, u16 *res10)
 }
 
 #endif
+
+#endif // #ifdef DEF_SIMULATION
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -414,7 +418,7 @@ static bool SysInit_Check_Saved_Params()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#pragma noregalloc(SysInit_sub_EFB2)
+//#pragma noregalloc(SysInit_sub_EFB2)
 
 static void SysInit_sub_EFB2()           
 {

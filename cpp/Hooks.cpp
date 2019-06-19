@@ -33,6 +33,8 @@ inline u16 GetLoadCorrectedDeltaTPS()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+#ifdef DEF_IGNITION_HOOKS
+
 #pragma noregsave(IG04_Update_OctanEgrIgnTiming)
 
 extern "C" u16 IG04_Update_OctanEgrIgnTiming()
@@ -48,7 +50,11 @@ extern "C" u16 IG04_Update_OctanEgrIgnTiming()
 	return octanEgrIgnTiming = interpolate_r4_r5_r6(egrHighOctIgn, egrLowOctIgn = Query_byte_2D_3D_Table(LowIgn_7C68), (no_knock_retard != 0) ? 255 : wMUT27_Octane_Number);
 }
 
+#endif
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#ifdef DEF_FU03_HOOKS
 
 #pragma noregsave(FU03_HI_LO_Octan)
 
@@ -80,7 +86,11 @@ extern "C" void FU03_VE_map_sub_14620()
 	//__k_trimVE = Table_Lookup_word_2D_3D((__DEADloc != 0xDEAD) ? &trimVeMap : &trimVeMapRAM);
 }
 
+#endif
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#ifdef DEF_IDLE_HOOKS
 
 #pragma noregsave(Hook_ForcedIdleRPM)
 
@@ -89,8 +99,11 @@ extern "C" u16 Hook_ForcedIdleRPM(u16 v)
 	return (forcedIdleRPM != 0) ? forcedIdleRPM : v;
 }
 
+#endif
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#ifdef DEF_FU03_sub_149E0_Hook
 
 //#pragma noregalloc(FU03_sub_149E0_Hook)
 
@@ -127,6 +140,8 @@ extern "C" void FU03_sub_149E0_Hook()
 
 	//bMUTC7 = Div_65536_R(r0); // 479
 }
+
+#endif
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

@@ -20,43 +20,43 @@ TEST_INTERPOLATE:			.DEFINE		"1"
 
 ;Simulation test 
 
-	.SECTION P_B3A0, CODE, LOCATE=H'B3A0
+	.SECTION SIM_P_B3A0, CODE, LOCATE=H'B3A0
 
 			nop   	                                                        
 
-	.SECTION P_B426, CODE, LOCATE=H'B426
+	.SECTION SIM_P_B426, CODE, LOCATE=H'B426
 
 			nop   	                                                        
 
-	.SECTION P_BB50, CODE, LOCATE=H'BB50
+	.SECTION SIM_P_BB50, CODE, LOCATE=H'BB50
 
 			nop   	                                                        
 
-	.SECTION P_BF1C, CODE, LOCATE=H'BF1C
+	.SECTION SIM_P_BF1C, CODE, LOCATE=H'BF1C
 
 			nop   	                                                        
 
-	.SECTION P_BF4C, CODE, LOCATE=H'BF4C
+	.SECTION SIM_P_BF4C, CODE, LOCATE=H'BF4C
 
 			nop   	                                                        
 
-	.SECTION P_BF7C, CODE, LOCATE=H'BF7C
+	.SECTION SIM_P_BF7C, CODE, LOCATE=H'BF7C
 
 			nop  
 
-	.SECTION P_BE60, CODE, LOCATE=H'BE60
+	.SECTION SIM_P_BE60, CODE, LOCATE=H'BE60
 
 			nop  
 
-	.SECTION P_BE8A, CODE, LOCATE=H'BE8A
+	.SECTION SIM_P_BE8A, CODE, LOCATE=H'BE8A
 
 			nop  
 			
-	.SECTION    C_FAA, DATA, LOCATE=H'FAA
+	.SECTION    SIM_C_FAA, DATA, LOCATE=H'FAA
 
 			.DATA.W      H'56C2
 
-	.SECTION    C_FCA, DATA, LOCATE=H'FCA
+	.SECTION    SIM_C_FCA, DATA, LOCATE=H'FCA
 
 			.DATA.W      H'81F7
 
@@ -64,7 +64,7 @@ TEST_INTERPOLATE:			.DEFINE		"1"
 		
 		.AELSE
 		
-			.SECTION P_B2B6, CODE, LOCATE=H'B2B6
+			.SECTION SIM_P_B2B6, CODE, LOCATE=H'B2B6
 
 				.IMPORT	_GetADC_hook
 
@@ -114,7 +114,7 @@ _timeRPM:			.RES.W      1
 	
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	.SECTION    C_2CC0_2FFF_LIM, DATA, LOCATE=H'2FFF
+	.SECTION    HOOKS_C_2CC0_2FFF_LIM, DATA, LOCATE=H'2FFF
 
 					.DATA.B      H'FF
 
@@ -158,7 +158,7 @@ _frameCount:		.RES.L      1					;	.EQU H'FFFF8462
 	
 	.IMPORT	_IG04_Update_OctanEgrIgnTiming
 
-	.SECTION P_1801E, CODE, LOCATE=H'1801E
+	.SECTION HOOKS_P_1801E, CODE, LOCATE=H'1801E
 	
 			mov.l	#_IG04_Update_OctanEgrIgnTiming, r0                           
 			jmp   	@r0                                                             
@@ -191,7 +191,9 @@ _frameCount:		.RES.L      1					;	.EQU H'FFFF8462
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	.SECTION P_35500, CODE, LOCATE=H'35500
+	.AIFDEF DEF_FU03_sub_149E0_Hook
+	
+	.SECTION HOOKS_P_35500, CODE, LOCATE=H'35500
 	
 	.EXPORT	_Mul32_Fix15
 	
@@ -357,13 +359,15 @@ _Mul32_Fix24:
 			rts								
 			mov	#h'FFFFFFFF, r0     
 
+	.AENDI
+
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	.AIFDEF	DEF_FU03_HOOKS
 
 	.IMPORT	_FU03_HI_LO_Octan
 
-	.SECTION P_141C8, CODE, LOCATE=H'141C8
+	.SECTION HOOKS_P_141C8, CODE, LOCATE=H'141C8
 
 			mov.l	#_FU03_HI_LO_Octan, r0                           
 			jmp   	@r0                                                             
@@ -374,7 +378,7 @@ _Mul32_Fix24:
 
 	.IMPORT	_FU03_VE_map_sub_14620
 
-	.SECTION P_14620, CODE, LOCATE=H'14620
+	.SECTION HOOKS_P_14620, CODE, LOCATE=H'14620
 	
 			mov.l	#_FU03_VE_map_sub_14620, r0                           
 			jmp   	@r0                                                             
@@ -388,19 +392,19 @@ _Mul32_Fix24:
 
 	.IMPORT	_Hook_ForcedIdleRPM
 
-	.SECTION C_19454, CODE, LOCATE=H'19454
+	.SECTION HOOKS_C_19454, CODE, LOCATE=H'19454
 	
 		.DATA.L		_Hook_ForcedIdleRPM                                    
 
 	.AENDI
 	
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-	.IMPORT	_FU03_sub_149E0_Hook
 	
 	.AIFDEF DEF_FU03_sub_149E0_Hook
+	
+	.IMPORT	_FU03_sub_149E0_Hook
 
-	.SECTION P_149E0, CODE, LOCATE=H'149E0
+	.SECTION HOOKS_P_149E0, CODE, LOCATE=H'149E0
 	
 			mov.l	#_FU03_sub_149E0_Hook, r0                           
 			jmp   	@r0                                                             
@@ -412,7 +416,7 @@ _Mul32_Fix24:
 
 ;	.IMPORT	_Hook_Update_IAT_Sensor
 
-;	.SECTION C_100DC, CODE, LOCATE=H'100DC
+;	.SECTION HOOKS_C_100DC, CODE, LOCATE=H'100DC
 	
 ;			mov.l	#_Hook_Update_IAT_Sensor, r0                           
 ;			jmp   	@r0                                                             
@@ -445,26 +449,26 @@ Knock_retard_hook_loc1:
 	
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	.SECTION C_6746, DATA, LOCATE=H'6748
+	.SECTION ALTMAPS_C_6746, DATA, LOCATE=H'6748
 
 		.DATA.W		_axis_fu_RPM                                    
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	.SECTION C_676C, DATA, LOCATE=H'676C
+	.SECTION ALTMAPS_C_676C, DATA, LOCATE=H'676C
 
 		.DATA.L		_axis_fu_LOAD                                    
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	.SECTION C_5380, DATA, LOCATE=H'5380
+	.SECTION ALTMAPS_C_5380, DATA, LOCATE=H'5380
 
 		.DATA.L		_axis_fu_LOAD                                    
 		.DATA.L		_axis_fu_RPM                                    
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	.SECTION C_540A, DATA, LOCATE=H'540C
+	.SECTION ALTMAPS_C_540A, DATA, LOCATE=H'540C
 
 		.DATA.W		_axis_ig_LOAD 
 		.DATA.W		H'FFFF                                   
@@ -472,33 +476,33 @@ Knock_retard_hook_loc1:
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	.SECTION C_6788, DATA, LOCATE=H'6788
+	.SECTION ALTMAPS_C_6788, DATA, LOCATE=H'6788
 
 		.DATA.L		_axis_ig_RPM                                    
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	.SECTION C_67BC, DATA, LOCATE=H'67BC
+	.SECTION ALTMAPS_C_67BC, DATA, LOCATE=H'67BC
 
 		.DATA.L		_axis_ig_LOAD                                    
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	.SECTION C_6CEE, DATA, LOCATE=H'6CEE
+	.SECTION ALTMAPS_C_6CEE, DATA, LOCATE=H'6CEE
 
 		.DATA.W		H'FFFF                                   
 		.DATA.W		_axis_ve_RPM                                    
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	.SECTION C_6D1E, DATA, LOCATE=H'6D1E
+	.SECTION ALTMAPS_C_6D1E, DATA, LOCATE=H'6D1E
 
 		.DATA.W		H'FFFF                                   
 		.DATA.W		_axis_ve_LOAD                                    
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	.SECTION C_MUT, DATA, LOCATE=H'1400
+	.SECTION ALTMAPS_C_MUT, DATA, LOCATE=H'1400
 	
 			.align 4
 
@@ -528,7 +532,7 @@ altMUT:
 			
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	.SECTION C, DATA, LOCATE=H'38000
+	.SECTION ALTMAPS_C, DATA, LOCATE=H'38000
 	
 	.EXPORT	 ROM
 
@@ -755,19 +759,19 @@ trimVeMapDataRAM	.EQU trimVeMapData + RAM - ROM
 
 	.EXPORT		_hiFuelMapRAM, _hiIgnMapRAM, _veMapRAM, _rpmTimeRAM
 
-	.SECTION    sec_hiFuelMapRAM,	DATA, LOCATE=hiFuelMapRAM
+	.SECTION    ALTMAPS_hiFuelMapRAM,	DATA, LOCATE=hiFuelMapRAM
 	
 _hiFuelMapRAM:		.RES.B      1
 	
-	.SECTION    sec_hiIgnMapRAM,	DATA, LOCATE=hiIgnMapRAM
+	.SECTION    ALTMAPS_hiIgnMapRAM,	DATA, LOCATE=hiIgnMapRAM
 
 _hiIgnMapRAM:		.RES.B      1
 
-	.SECTION    sec_veMapRAM,		DATA, LOCATE=veMapRAM
+	.SECTION    ALTMAPS_veMapRAM,		DATA, LOCATE=veMapRAM
 
 _veMapRAM:			.RES.B      1
 
-	.SECTION    sec_rpmTimeRAM,		DATA, LOCATE=rpmTimeRAM
+	.SECTION    ALTMAPS_rpmTimeRAM,		DATA, LOCATE=rpmTimeRAM
 
 _rpmTimeRAM:		.RES.B      1
 
@@ -778,19 +782,19 @@ _rpmTimeRAM:		.RES.B      1
 	
 	.EXPORT		_enrichCoolantMapRAM, _kAirMapRAM, _enrichCoolantMapDataRAM, _kAirMapDataRAM, _trimVeMapRAM, _trimVeMapDataRAM
 
-	.SECTION    sec_enrichCoolantMapRAM, DATA, LOCATE=enrichCoolantMapRAM
+	.SECTION    ALTMAPS_enrichCoolantMapRAM, DATA, LOCATE=enrichCoolantMapRAM
 
 _enrichCoolantMapRAM:		.RES.w      5
 							.RES.B      1
 _enrichCoolantMapDataRAM:	.RES.B      1
 
-	.SECTION    sec_kAirMapRAM,		DATA, LOCATE=kAirMapRAM
+	.SECTION    ALTMAPS_kAirMapRAM,		DATA, LOCATE=kAirMapRAM
 
 _kAirMapRAM:		.RES.w      5
 					.RES.B      1
 _kAirMapDataRAM:	.RES.B      1
 
-	.SECTION    sec_trimVeMapRAM,		DATA, LOCATE=trimVeMapRAM
+	.SECTION    ALTMAPS_trimVeMapRAM,		DATA, LOCATE=trimVeMapRAM
 
 _trimVeMapRAM:		.RES.w      5
 					.RES.B      1
@@ -805,7 +809,7 @@ _trimVeMapDataRAM:	.RES.B      1
 ;ROM:0001421E 00C     jsr     @r10 ; Query_byte_2D_3D_Table                           ; Jump to Subroutine
 ;ROM:00014220 00C     nop                                                             ; No Operation
 
-	.SECTION C_7A88, DATA, LOCATE=H'7A88
+	.SECTION ALTMAPS_C_7A88, DATA, LOCATE=H'7A88
 
 	.EXPORT		_HIGHOKTF_7A88
 
@@ -827,7 +831,7 @@ _HIGHOKTF_7A88:
 ;ROM:00018110 010 		jsr     @r10 ; Query_byte_2D_3D_Table                           ; Jump to Subroutine
 ;ROM:00018112 010 		nop                                                             ; No Operation
 
-	.SECTION C_7C48, DATA, LOCATE=H'7C48
+	.SECTION ALTMAPS_C_7C48, DATA, LOCATE=H'7C48
 
 	.EXPORT		_HighIgn_7C48
 
@@ -865,8 +869,7 @@ _veMapArray:
 
 	.AIFDEF TEST_INTERPOLATE
 
-	.SECTION P_D7A, CODE, LOCATE=H'D7A
-;	.SECTION P, CODE
+	.SECTION TEST_INTERPOLATE_P_D7A, CODE, LOCATE=H'D7A
 
 	.EXPORT	_Interpolate_my
 
@@ -921,8 +924,7 @@ loc_D9C:
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-	.SECTION P_B16, CODE, LOCATE=H'B16
-;	.SECTION P, CODE
+	.SECTION TEST_INTERPOLATE_P_B16, CODE, LOCATE=H'B16
 
 	.EXPORT	_interpolate_r4_r5_r6_my
 	
@@ -980,7 +982,7 @@ loc_B26:
 
 ;	.IMPORT	_Test_Interpolate
 	
-;	.SECTION C_9CC8, DATA, LOCATE=H'9CC8
+;	.SECTION TEST_INTERPOLATE_C_9CC8, DATA, LOCATE=H'9CC8
 
 ;		.DATA.L		_Test_Interpolate                                    
 

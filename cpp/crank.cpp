@@ -2603,7 +2603,6 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 			{
 				inj_mask = 0;
 			};
-
 		}
 		else if (inj_mode == INJ_3)
 		{
