@@ -14,6 +14,7 @@
 	</romid>
 
 	<include>lancer9base</include>
+	<scaling name="myVE" units="units" toexpr="x/2.56" frexpr="x*2.56" format="%.01f" min="0" max="255" inc="1" storagetype="uint8" endian="big"/>
 
 	<table name="VE 16bit Map" category="AltMode" address="382a2" type="3D" swapxy="true" scaling="VE16">
 		<table name="Load" address="6d28" type="X Axis" elements="11" scaling="Load"/>
@@ -37,7 +38,7 @@
 	<table name="OBD-II Codes" address="96b0">
 	</table>
 
-	<table name="VE1Map_NO_EGR_IA" address="303d">
+	<table name="VE1Map_NO_EGR_IA" address="303d" scaling="myVE">
 		<table name="Load" address="6d28"/>
 		<table name="RPM" address="6cf8"/>
 	</table>

@@ -866,9 +866,11 @@ static void FU03_VE_map_sub_14620()
 
 	Table_Lookup_Axis(LOAD11_6D1E);
 
-	__VE16 = Table_Lookup_word_2D_3D(veMapArray[veMapIndex&7]);
+	wMUT31_Volumetric_Efficiency = ((u32)Table_Lookup_word_2D_3D(veMapArray[veMapIndex&7])+128)>>8;
 
-	wMUT31_Volumetric_Efficiency = ((u32)__VE16 + 128) >> 8;
+	//__VE16 = Table_Lookup_word_2D_3D(veMapArray[veMapIndex&7]);
+
+	//wMUT31_Volumetric_Efficiency = ((u32)__VE16 + 128) >> 8;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
