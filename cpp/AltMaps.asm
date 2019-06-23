@@ -93,6 +93,7 @@ _forcedIdleRPM:		.RES.B      1
 	.ALIGN 2	
 	
 	.EXPORT		_axis_ig_RPM, _axis_ig_LOAD, _axis_fu_RPM, _axis_fu_LOAD, _axis_ve_RPM, _axis_ve_LOAD, _ve_index, _fb_VE, _ve_timer, _timeRPM, _no_knock_retard
+	.EXPORT		_knock_mul_low, _knock_mul_high
 
 _axis_ig_RPM:		.RES.W      1					
 _axis_ig_LOAD:		.RES.W      1					
@@ -105,6 +106,8 @@ _ve_index:			.RES.B      1
 _ve_timer:			.RES.B      1					
 _no_knock_retard:	.RES.B      1					
 _timeRPM:			.RES.W      1					
+_knock_mul_low:		.RES.W      1					
+_knock_mul_high:	.RES.W      1					
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -188,6 +191,13 @@ _frameCount:		.RES.L      1					;	.EQU H'FFFF8462
 
 ;			nop   	                                                        
 
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+	.SECTION ALTMAPS_C_24208, DATA, LOCATE=H'24208
+
+		.DATA.L		_knock_mul_high                                    
+		.DATA.L		_knock_mul_low                                    
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

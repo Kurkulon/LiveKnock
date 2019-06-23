@@ -2,6 +2,7 @@
 
 #include "ram.h"
 #include "misc.h"
+#include "constword.h"
 
 // Disable Front/Rear O2 heater check: clear bit 11 address 0xFCA
 
@@ -10,6 +11,7 @@ static void TimeRPM();
 static void FeedBack_WBO2_v2();
 
 static void FeedBack_O2F();
+static void FeedBack_WBO2_O2F();
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 /*
@@ -67,6 +69,9 @@ extern "C" void LiveKnock()
 		openLoop = true;
 		forcedIdleRPM = 0;
 		no_knock_retard = 0;
+
+		knock_mul_high = t1_knock_control__17CC;
+		knock_mul_low = t1_knock_control__17CE;
 	};
 
 	//if (openLoop)
@@ -128,7 +133,7 @@ extern "C" void LiveKnock()
 		//	};
 		//};
 
-		FeedBack_O2F();
+		FeedBack_WBO2_O2F();
 
 		TimeRPM();
 

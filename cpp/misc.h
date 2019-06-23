@@ -637,6 +637,8 @@ extern byte forcedIdleRPM;
 extern u32 frameCount;
 extern u16 timeRPM;	
 extern byte no_knock_retard;	
+extern u16 knock_mul_low;	
+extern u16 knock_mul_high;	
 
 extern byte hiFuelMapRAM[];
 extern u16	rpmTimeRAM[];
