@@ -147,7 +147,7 @@ extern "C" void LiveKnock()
 
 static void FeedBack_WBO2_O2F()
 {
-	const byte LDT = 20;
+	const byte LDT = 32;
 
 	if (veMapIndex == 15 && wMUT4A_Purge_Control_Duty == 0 && (wMUT1E_MAF_RESET_FLAG & (DECELERATION_FUEL_CUT|FUEL_CUT|MAP_error)) == 0)
 	{
@@ -165,9 +165,9 @@ static void FeedBack_WBO2_O2F()
 
 				if (d > AFR(18) && d < AFR(9))
 				{
-					d -= wMUT32_Air_To_Fuel_Ratio;
+					d = wMUT32_Air_To_Fuel_Ratio - d;
 
-					if (d < -5) d = -5; else if (d > 5) d = 5;
+					//if (d < -5) d = -5; else if (d > 5) d = 5;
 				}
 				else
 				{
@@ -227,7 +227,7 @@ static void FeedBack_WBO2_O2F()
 				};
 			};
 
-			ve_timer = LDT;
+			ve_timer = LDT - ((u32)MUT21_RPM_x125div4 >> 3);
 		}
 		else
 		{
