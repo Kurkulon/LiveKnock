@@ -113,7 +113,7 @@ struct Map3D_W
 #define RACING					0x04
 #define POWER_STEERING			0x08
 #define AC_SWITCH				0x10
-#define RT_5_ALWAYS_1			0x20
+#define DRIVE_ALWAYS_1			0x20	// 1 - DRIVE; 0 - NEUTRAL
 #define STARTER					0x40
 #define RT_7_bit				0x80
 #define RT_8_bit				0x100

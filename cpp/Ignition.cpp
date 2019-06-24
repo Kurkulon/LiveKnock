@@ -638,7 +638,7 @@ static bool IG04_sub_17770()
 		return false;
 	};
 
-	if ((RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) == 0 && byte_1036/*1*/ != 2)
+	if ((RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1) == 0 && byte_1036/*1*/ != 2)
 	{
 		return false;
 	};
@@ -737,7 +737,7 @@ static void IG04_sub_17A4E()
 
 static bool IG04_sub_17A7E()
 {
-	if ((RT_FLAG1_FFFF8888 & RT_7_bit) || (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) == 0)
+	if ((RT_FLAG1_FFFF8888 & RT_7_bit) || (RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1) == 0)
 	{
 		return false;
 	};
@@ -786,7 +786,7 @@ static bool IG04_sub_17BEC()
 		return false;
 	};
 
-	if ((RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) == 0 && byte_1074/*0*/ == 0)
+	if ((RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1) == 0 && byte_1074/*0*/ == 0)
 	{
 		return false;
 	};
@@ -897,7 +897,7 @@ static void IG04_sub_17D04()
 		WFLAG(IGN_FLAG9_FFFF8BB6, IGN_F9_2000, coolantTempDuringCranking < word_18B2/*39*/ 
 			&& wMUT10_Coolant_Temperature_Scaled < word_18AE/*115*/ 
 			&& (IGN_FLAG9_FFFF8BB6 & IGN_F9_4000) == 0 
-			&& (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) 
+			&& (RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1) 
 			&& MUT21_RPM_x125div4 < rpm 
 			&& load_ECU_Ignintion < load);
 	}
@@ -1272,7 +1272,7 @@ static u16 IG04_Lim_Deceleration_Fuel_Cut()
 		__enable_irq();
 	};
 
-	if (((RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) || byte_1075/*0*/ != 0) && (wMUT1E_MAF_RESET_FLAG & DECELERATION_FUEL_CUT))
+	if (((RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1) || byte_1075/*0*/ != 0) && (wMUT1E_MAF_RESET_FLAG & DECELERATION_FUEL_CUT))
 	{
 		u16 r1 = word_17BE/*0*/ + 20;
 
@@ -1309,7 +1309,7 @@ static u16 IG04_sub_1859E()
 	{
 		//Map3D_B *t;
 
-		//if (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1)
+		//if (RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1)
 		//{
 		//	Table_Lookup_Axis(CEL8_79AE);
 		//	t = AFRAIRTEMP1_630A;
@@ -1487,7 +1487,7 @@ static u16 IG04_sub_18A2E()
 
 		__enable_irq();
 	}
-	else if ((RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) 
+	else if ((RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1) 
 			&& wMUT10_Coolant_Temperature_Scaled >= word_1890 
 			&& (RT_FLAG1_FFFF8888 & RACING)
 			&& Sub_Lim_0(RPM_DELTA_per_100ms, 0x80) >= word_1892)

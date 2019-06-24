@@ -535,7 +535,7 @@ static void F500_sub_F834()
 
 	if ((wMUT1E_MAF_RESET_FLAG & (CRANKING|STALL)) || starter_timer_up < word_18B6/*20*/)
 	{
-		SET(rtf, RT_5_ALWAYS_1);
+		SET(rtf, DRIVE_ALWAYS_1);
 	};
 
 	if (wMUT10_Coolant_Temperature_Scaled <= word_18BA/*60*/)
@@ -1071,7 +1071,7 @@ void F500_MAP_Coolant_Calcs()
 		u32 RTF = ((RT_FLAG1_COPY_FFFF888A ^ RT_FLAG1_FFFF8888) & RT_FLAG1_COPY_FFFF888A);
 
 		if (word_FFFF8AE2 != 0 
-			|| ((RTF & RT_7_bit) == 0 && (RTF & RT_5_ALWAYS_1) == 0 && (byte_105C/*0*/ == 0 || (RTF & POWER_STEERING) == 0))
+			|| ((RTF & RT_7_bit) == 0 && (RTF & DRIVE_ALWAYS_1) == 0 && (byte_105C/*0*/ == 0 || (RTF & POWER_STEERING) == 0))
 			|| (enrichmentWarmUp >= enrichCoolant && COOLANT_REL_6_FFFF8AC2 == 0 && COOLANT_REL_7_FFFF8AEC == 0))
 		{
 			// loc_106BC
@@ -1149,7 +1149,7 @@ bool F500_sub_10820()
 		return false;
 	};
 
-	if ((RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) == 0) // Engine Running
+	if ((RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1) == 0) // Engine Running
 	{
 		return false;
 	};
@@ -1550,7 +1550,7 @@ static void sub_A374()
 
 	WBIT(r13, AC_SWITCH, ZRO(bMUTB8, 1));
 
-	SET(r13, RT_5_ALWAYS_1);
+	SET(r13, DRIVE_ALWAYS_1);
 
 	WBIT(r13, STARTER, ZRO(reg_PEDRL, 4));
 

@@ -337,7 +337,7 @@ static void AA05_Idle_root()
 
 		Table_Lookup_Axis(BAR5_66E2);
 
-		baro_Idle_Control_Init = Table_Lookup_byte_2D_3D((RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) ? ICSVADDBARO_3BB4 : ICSVADDBARO_3BB4);
+		baro_Idle_Control_Init = Table_Lookup_byte_2D_3D((RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1) ? ICSVADDBARO_3BB4 : ICSVADDBARO_3BB4);
 
 	AA05_sub_1A4A6();
 
@@ -470,7 +470,7 @@ static void AA05_Init_MUT09_MUT0B()
 {
 	u32 r3, r13;
 
-	if (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) // Engine Running
+	if (RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1) // Engine Running
 	{
 		r3 = word_1926;
 		r13 = word_1928;
@@ -492,7 +492,7 @@ static void AA05_Calc_Target_Idle_RPM()
 {
 	u16 r1;
 
-	if (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) // Engine Running
+	if (RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1) // Engine Running
 	{
 		if (SPEED_FLAGS & SPD_2_ALWAYS_0)
 		{
@@ -521,7 +521,7 @@ static void AA05_Calc_Target_Idle_RPM()
 	{
 		u16 r13;
 
-		if (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) 
+		if (RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1) 
 		{
 			if (RT_FLAG1_FFFF8888 & RT_0_bit) 
 			{
@@ -576,7 +576,7 @@ static void AA05_Calc_Min_Idle_RPM()
 		word_FFFF86C2 = (wMUT10_Coolant_Temperature_Scaled > word_1A20/*91*/) ? word_1A24/*30*/ * 80 : 0;
 	};
 
-	if (word_FFFF86C2 != 0 && (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1))
+	if (word_FFFF86C2 != 0 && (RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1))
 	{
 		u16 r1 = 0;
 
@@ -633,7 +633,7 @@ static void AA05_sub_195A2()
 		{
 			SET(wMUT23, M23_1000);
 
-			r13 = (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1/*Engine Running*/) ? word_18D0 : word_18D2;
+			r13 = (RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1/*Engine Running*/) ? word_18D0 : word_18D2;
 
 			if (r13 > word_FFFF854A)
 			{
@@ -654,7 +654,7 @@ static void AA05_sub_195A2()
 		{
 			r13 = word_FFFF8CD2;
 		}
-		else if ((RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) == 0)
+		else if ((RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1) == 0)
 		{
 			r13 = word_18CA/*33*/;
 		}
@@ -667,7 +667,7 @@ static void AA05_sub_195A2()
 		{
 			if ((wMUT23 & (M23_1000|M23_8000)) == M23_1000)
 			{
-				if (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1)
+				if (RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1)
 				{
 					word_FFFF85D0 = word_18DA/*6*/;
 				}
@@ -686,7 +686,7 @@ static void AA05_sub_195A2()
 
 		if (wMUT23 & M23_800)
 		{
-			u32 r3 = (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) ? word_18D4/*7*/ : word_18D6/*7*/;
+			u32 r3 = (RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1) ? word_18D4/*7*/ : word_18D6/*7*/;
 			
 			if (r13 < r3)
 			{
@@ -910,9 +910,9 @@ static void AA05_sub_19B98()
 		AA05_sub_19E10(word_18EC/*80*/);
 	};
 
-	if (r1 & RT_5_ALWAYS_1)
+	if (r1 & DRIVE_ALWAYS_1)
 	{
-		AA05_sub_19E10((RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) ? word_18F2/*80*/ : word_18F0/*80*/);
+		AA05_sub_19E10((RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1) ? word_18F2/*80*/ : word_18F0/*80*/);
 	};
 
 	if (wMUT73_TPS_Open_Delta >= word_18FA/*4*/)
@@ -1121,11 +1121,11 @@ static u16 AA05_sub_1A068()
 
 	if (RT_FLAG1_FFFF8888 & RT_7_bit)
 	{
-		return (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) ? word_1940 : word_1942;
+		return (RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1) ? word_1940 : word_1942;
 	}
 	else
 	{
-		return (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) ? word_193A : word_193C;
+		return (RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1) ? word_193A : word_193C;
 	};
 }
 
@@ -1166,7 +1166,7 @@ static void AA05_sub_1A11C()
 		{
 			Map3D_B *p;
 
-			if (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1)
+			if (RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1)
 			{
 				p = (RT_FLAG1_FFFF8888 & AC_SWITCH) ? DECFUCUTDEL3_63EA : DECFUCUTDEL1_6362;
 			}
@@ -1200,11 +1200,11 @@ static void AA05_sub_1A11C()
 
 			if (wMUT2E_Vehicle_Speed_Frequency >= word_2CAC/*6*/)
 			{
-				p = (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) ? unk140_6472 : unk141_6480;
+				p = (RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1) ? unk140_6472 : unk141_6480;
 			}
 			else
 			{
-				p = (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) ? unk142_648E : unk143_649C;
+				p = (RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1) ? unk142_648E : unk143_649C;
 			};
 
 			word_FFFF9962 = Table_Lookup_byte_2D_3D(p);
@@ -1300,7 +1300,7 @@ static void AA05_sub_1A476()
 {
 	Table_Lookup_Axis(BAR5_66E2);
 
-	baro_Idle_Control_Init = Table_Lookup_byte_2D_3D((RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) ? ICSVADDBARO_3BB4 : ICSVADDBARO_3BB4);
+	baro_Idle_Control_Init = Table_Lookup_byte_2D_3D((RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1) ? ICSVADDBARO_3BB4 : ICSVADDBARO_3BB4);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1325,7 +1325,7 @@ static bool AA05_sub_1A4F2()
 {
 	u32 RTF = RT_FLAG1_COPY_FFFF888A ^ RT_FLAG1_FFFF8888;
 
-	if ((RTF & RT_FLAG1_FFFF8888 & AC_SWITCH) || (RTF & RT_FLAG1_COPY_FFFF888A & RT_5_ALWAYS_1))
+	if ((RTF & RT_FLAG1_FFFF8888 & AC_SWITCH) || (RTF & RT_FLAG1_COPY_FFFF888A & DRIVE_ALWAYS_1))
 	{
 		word_FFFF85C2 = word_1976/*4*/;
 	};
@@ -1370,7 +1370,7 @@ static void AA05_sub_1A5A8()
 
 	WFLAG(wMUT23, M23_08, r1 >= rpm_x125div32_B && (r1 - rpm_x125div32_B) >= word_19E4/*26(101)*/);
 
-	if ((byte_1050/*0*/ == 1 && (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1)) 
+	if ((byte_1050/*0*/ == 1 && (RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1)) 
 		|| ZRO(RT_FLAG1_FFFF8888, RT_7_bit) 
 		|| (byte_1050 == 2 && (MUT21_RPM_x125div4 <= word_298A || wMUT2E_Vehicle_Speed_Frequency > word_298C || ZRO(RT_FLAG1_FFFF8888, 8))))
 	{
@@ -1620,7 +1620,7 @@ static void AA05_MAP_Error()
 
 static bool AA05_Check_Speed_Adjust()
 {
-	if ((wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING)) || (wMUT22_ISCV & (M22_FORCED_OPEN|M22_INIT_ISCV|M22_STALL|M22_MAP_ERROR)/*0xB8*/) || (RT_FLAG1_FFFF8888 & (RT_5_ALWAYS_1|RACING) ) != RT_5_ALWAYS_1 || (RT_FLAG1_FFFF8888 & (SPEED_ADJUST|FIX_TIMING)) != (SPEED_ADJUST|FIX_TIMING))
+	if ((wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING)) || (wMUT22_ISCV & (M22_FORCED_OPEN|M22_INIT_ISCV|M22_STALL|M22_MAP_ERROR)/*0xB8*/) || (RT_FLAG1_FFFF8888 & (DRIVE_ALWAYS_1|RACING) ) != DRIVE_ALWAYS_1 || (RT_FLAG1_FFFF8888 & (SPEED_ADJUST|FIX_TIMING)) != (SPEED_ADJUST|FIX_TIMING))
 	{
 		timer_Check_Idle_SAC = word_1A02/*8*/;
 	};
@@ -1780,7 +1780,7 @@ static void AA05_Idle_Control_Feedback_RPM()
 
 			Table_Lookup_Axis(RPM9_65A4);
 
-			u32 r3 = Table_Lookup_byte_2D_3D((RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) ? IDLEERRNORM_3BC0 : IDLEERRA_CON_3BD0);
+			u32 r3 = Table_Lookup_byte_2D_3D((RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1) ? IDLEERRNORM_3BC0 : IDLEERRA_CON_3BD0);
 
 			u32 r13 = wMUT25_Target_Idle_Steps;
 
@@ -1805,7 +1805,7 @@ static void AA05_Idle_Control_Feedback_RPM()
 
 static u16 AA05_sub_1B0BC()
 {
-	return (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) ? word_1910/*10(4%)*/ : word_1912/*10(4%)*/;
+	return (RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1) ? word_1910/*10(4%)*/ : word_1912/*10(4%)*/;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1979,7 +1979,7 @@ static u16 AA05_sub_1B470()
 {
 	u32 r13;
 
-	if (ZRO(RT_FLAG1_FFFF8888, RT_5_ALWAYS_1))
+	if (ZRO(RT_FLAG1_FFFF8888, DRIVE_ALWAYS_1))
 	{
 		r13 = Query_byte_2D_3D_Table(unk0067ICSVACOFFDRV1_7A68);
 	}

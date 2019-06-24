@@ -275,7 +275,7 @@ static bool BC06_sub_1C14A()
 
 	// loc_1C24E
 
-	if (byte_1048/*0xF*/ == 0 || (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) || ((byte_1048/*0xF*/ & 4) && wMUT11_Intake_Air_Temperature_Scaled > word_20F0))
+	if (byte_1048/*0xF*/ == 0 || (RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1) || ((byte_1048/*0xF*/ & 4) && wMUT11_Intake_Air_Temperature_Scaled > word_20F0))
 	{
 		// loc_1C292
 
@@ -292,7 +292,7 @@ static bool BC06_sub_1C14A()
 
 	// loc_1C2C2
 
-	if ((ZRO(byte_1048, 8) && (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1))
+	if ((ZRO(byte_1048, 8) && (RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1))
 		|| ZRO(r13, 1) 
 		|| (ZRO(byte_1048, 2) && word_FFFF86D2 != 0))
 	{
@@ -1042,7 +1042,7 @@ static bool BC06_sub_1D77A()
 		u32 r14_8 = (wMUT85_EGR_Solenoid != 0) ? word_1B82 : word_1B84;
 		u32 r1, r2;
 
-		if (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1)
+		if (RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1)
 		{
 			r1 = Table_Lookup_byte_2D_3D(table_2D_3E8A);
 			r2 = Table_Lookup_byte_2D_3D(table_2D_3EAE);
@@ -1134,7 +1134,7 @@ static u16 BC06_EGR_HI_LO()
 	{
 		Map3D_B *r1 = EGR_LO_3E06;
 
-		if (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1)
+		if (RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1)
 		{
 			r1 = EGR_HI_3DA0;
 		};

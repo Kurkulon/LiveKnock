@@ -374,7 +374,7 @@ static bool ML02_sub_113C6()
 {
 	TRG(wMUT19_Startup_Check_Bits, 0x800, wMUT2E_Vehicle_Speed_Frequency, word_19B2/*255*/, word_19B0/*255*/);
 
-	return (wMUT19_Startup_Check_Bits & 0x800) && (RT_FLAG1_FFFF8888 & RT_15_bit) && (portA_state & 0x1000) && (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1);
+	return (wMUT19_Startup_Check_Bits & 0x800) && (RT_FLAG1_FFFF8888 & RT_15_bit) && (portA_state & 0x1000) && (RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -415,7 +415,7 @@ static void ML02_sub_11528()
 		r13 = 1;
 	};
 
-	if (ZRO(RT_FLAG1_FFFF8888, RT_5_ALWAYS_1))
+	if (ZRO(RT_FLAG1_FFFF8888, DRIVE_ALWAYS_1))
 	{
 		r13 +=2;
 	};
@@ -436,7 +436,7 @@ static void ML02_sub_11570()
 {
 	u32 r13 = 0;
 
-	if (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1)
+	if (RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1)
 	{
 		TRG(RPM_FLAGS_FFFF8A00, RPM1125, 	MUT21_RPM_x125div4, word_1608/*34*/, word_160A/*37*/); // 1125 
 		TRG(RPM_FLAGS_FFFF8A00, RPM1250, 	MUT21_RPM_x125div4, word_160C/*38*/, word_160E/*41*/); // 1250
@@ -572,7 +572,7 @@ static bool ML02_Return_0()
 
 static bool ML02_sub_119DC()
 {
-	if (ZRO(RT_FLAG1_FFFF8888, RT_5_ALWAYS_1) || wMUT73_TPS_Open_Delta >= word_1A58 || rpm_x125div32_B >= (rpm_1A5C/*192*/<<2) 
+	if (ZRO(RT_FLAG1_FFFF8888, DRIVE_ALWAYS_1) || wMUT73_TPS_Open_Delta >= word_1A58 || rpm_x125div32_B >= (rpm_1A5C/*192*/<<2) 
 		|| wMUT2E_Vehicle_Speed_Frequency >= word_1A54/*10*/ || (SPEED_FLAGS & SPD_6_40) || wMUT1C_ECU_Load < word_1A5A/*255*/)
 	{
 		timer_FFFF858E = word_1A56/*80*/;
@@ -666,7 +666,7 @@ static bool ML02_sub_11B74()
 
 	bool r8 = false;
 
-	if (((open_Loop_disable/*1*/ != 2 && (RT_FLAG1_FFFF8888 & (RT_7_bit|RT_5_ALWAYS_1|AC_SWITCH)) == RT_7_bit) || (open_Loop_disable == 2 && (RT_FLAG1_FFFF8888 & (RT_7_bit|AC_SWITCH)) == RT_7_bit)) && MUT21_RPM_x125div4 > r2)
+	if (((open_Loop_disable/*1*/ != 2 && (RT_FLAG1_FFFF8888 & (RT_7_bit|DRIVE_ALWAYS_1|AC_SWITCH)) == RT_7_bit) || (open_Loop_disable == 2 && (RT_FLAG1_FFFF8888 & (RT_7_bit|AC_SWITCH)) == RT_7_bit)) && MUT21_RPM_x125div4 > r2)
 	{
 		if (ZRO(RT_FLAG1_COPY_FFFF888A, RT_7_bit))
 		{
@@ -748,7 +748,7 @@ static void ML02_sub_11EE8()
 {
 	TRG(word_FFFF8A10, 2, wMUT2F_Vehicle_Speed, word_FFFF947A, word_FFFF947C);
 
-	if (byte_107E/*0*/ != 0 && (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) 
+	if (byte_107E/*0*/ != 0 && (RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1) 
 		&& ZRO(wMUT71_Sensor_Error, MUT71_4_bit|MUT71_0_COOLANT) 
 		&& (RT_FLAG1_FFFF8888 & RACING) 
 		&& ZRO(word_FFFF8A10, 2)
@@ -973,7 +973,7 @@ static u16 ML02_Get_Idle_RPM_lim_123E0()
 		timer_FFFF8788 = word_1562/*1*/;
 	};
 
-	if (ZRO(RT_FLAG1_FFFF8888, RT_5_ALWAYS_1))
+	if (ZRO(RT_FLAG1_FFFF8888, DRIVE_ALWAYS_1))
 	{
 		r1 = 4;
 	}
@@ -1002,7 +1002,7 @@ static u16 ML02_Get_Idle_RPM_lim_123E0()
 
 		__enable_irq();
 
-		if (ZRO(RT_FLAG1_FFFF8888, RT_5_ALWAYS_1) || (prev_MUT1E_FLAGS & DECELERATION_FUEL_CUT))
+		if (ZRO(RT_FLAG1_FFFF8888, DRIVE_ALWAYS_1) || (prev_MUT1E_FLAGS & DECELERATION_FUEL_CUT))
 		{
 			r1 += 1;
 		};
@@ -1183,7 +1183,7 @@ static void ML02_Open_andor_Closed_Loop_Fuel_Calcs()
 
 				if (RAM_VAR_15A2_FFFF8A38 != 0)
 				{
-					if (RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1)
+					if (RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1)
 					{
 						Table_Lookup_Axis(RPM14_79C8);
 
@@ -1215,7 +1215,7 @@ static void ML02_Open_Loop_Calc()
 {
 	Table_Lookup_Axis(RPM13_64CC);
 
-	u32 r13 = Table_Lookup_byte_2D_3D((RT_FLAG1_FFFF8888 & RT_5_ALWAYS_1) ? OPENLOOPLOV_332E : OPENLOOPHIV_3342);
+	u32 r13 = Table_Lookup_byte_2D_3D((RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1) ? OPENLOOPLOV_332E : OPENLOOPHIV_3342);
 
 	TRG(wMUT18_Open_Loop_Bit_Array, MUT18_8_100, wMUT8A_TPS_Corrected, Sub_Lim_0(r13, Open_Loop_TPS_FallBack_Const/*13*/), r13)
 }

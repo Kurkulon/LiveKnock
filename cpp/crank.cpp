@@ -1882,7 +1882,7 @@ void CRANK5_Main_sub_24AF0()
 			};
 		};
 	}
-	else if (ZRO(RT_FLAG1_FFFF8888, RT_5_ALWAYS_1))
+	else if (ZRO(RT_FLAG1_FFFF8888, DRIVE_ALWAYS_1))
 	{
 		crank5_FFFF8A36 = word_155E/*16*/;
 	}

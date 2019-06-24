@@ -690,7 +690,7 @@ extern "C" void sub_A374()
 
 	WBIT(r13, AC_SWITCH, ZRO(bMUTB8, 1));
 
-	SET(r13, RT_5_ALWAYS_1);
+	SET(r13, DRIVE_ALWAYS_1);
 
 	WBIT(r13, STARTER, ZRO(reg_PEDRL, 4));
 
