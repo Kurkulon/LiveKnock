@@ -663,7 +663,7 @@ static bool IG04_sub_17770()
 		return false;
 	};
 
-	u16 r1 = transmission_state;
+	u16 r1 = transaxle_state;
 
 	if (r1 >= word_1876/*1808*/ || r1 <= word_1878/*603*/)
 	{
@@ -757,7 +757,7 @@ static bool IG04_sub_17A7E()
 		return false;
 	};
 
-	if (transmission_state > word_233C/*7234*/ || transmission_state < word_233A/*2261*/)
+	if (transaxle_state > word_233C/*7234*/ || transaxle_state < word_233A/*2261*/)
 	{
 		return false;
 	};
@@ -821,12 +821,12 @@ static bool IG04_sub_17BEC()
 		return false;
 	};
 
-	if (transmission_state >= word_183C/*3288*/)
+	if (transaxle_state >= word_183C/*3288*/)
 	{
 		return false;
 	};
 
-	if (transmission_state <= word_183E/*0*/)
+	if (transaxle_state <= word_183E/*0*/)
 	{
 		return false;
 	};

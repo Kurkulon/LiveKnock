@@ -41,7 +41,7 @@ wMUT12_Coolant_Temperature_Min_81:							.EQU H'FFFF88AC
 wMUT13_Front_O2_ADC8bit:									.EQU H'FFFF88BC 
 wMUT14_Battery_Level_ADC8bit:								.EQU H'FFFF88E6 
 wMUT15_Barometric_Pressure:									.EQU H'FFFF88DC 
-wMUT16_cur_Idle_Steps:											.EQU H'FFFF80CA 
+wMUT16_cur_Idle_Steps:										.EQU H'FFFF80CA 
 wMUT17_TPS_ADC8bit:											.EQU H'FFFF88E8 
 wMUT18_Open_Loop_Bit_Array:									.EQU H'FFFF8A02 
 wMUT19_Startup_Check_Bits:									.EQU H'FFFF89FC 
@@ -51,7 +51,7 @@ wMUT1C_ECU_Load:											.EQU H'FFFF8952
 wMUT1D_Manifold_Absolute_Pressure_Mean:						.EQU H'FFFF8968 
 wMUT1E_MAF_RESET_FLAG:										.EQU H'FFFF89F4 
 wMUT1F_ECU_Load_Previous:									.EQU H'FFFF8954 
-wMUT22_ISCV:														.EQU H'FFFF80C6 
+wMUT22_ISCV:												.EQU H'FFFF80C6 
 wMUT23:														.EQU H'FFFF8C92 
 wMUT24_Target_Idle_RPM:										.EQU H'FFFF8CA2 
 wMUT25_Target_Idle_Steps:									.EQU H'FFFF8CAC 

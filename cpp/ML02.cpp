@@ -338,7 +338,7 @@ static void ML02_sub_11300()
 
 static void ML02_sub_11332()
 {
-	if (byte_105B == 0 || (RT_FLAG1_FFFF8888 & RACING))
+	if (byte_105B/*1*/ == 0 || (RT_FLAG1_FFFF8888 & RACING))
 	{
 		CLR(LAUNCH_TEST_FLAG_2_FFFF822E, 0x400);
 
@@ -358,7 +358,7 @@ static void ML02_sub_11332()
 
 static void ML02_sub_11390()
 {
-	if (byte_102C != 0 && ML02_sub_113C6())
+	if (byte_102C/*0*/ != 0 && ML02_sub_113C6())
 	{
 		SET(wMUT19_Startup_Check_Bits, 0x40);
 	}
@@ -536,17 +536,17 @@ static void ML02_sub_11910()
 {
 	u32 r13 = 0;
 
-	if (transmission_state < word_1A50/*0*/)
+	if (transaxle_state < word_1A50/*0*/)
 	{
 		r13 = SPD_6_40;
 	};
 
-	if (transmission_state < word_1A4E/*0*/)
+	if (transaxle_state < word_1A4E/*0*/)
 	{
 		r13 |= SPD_5_20;
 	};
 
-	if (transmission_state < word_1A4C/*3958*/)
+	if (transaxle_state < word_1A4C/*3958*/)
 	{
 		r13 |= SPD_4_10;
 	};

@@ -143,6 +143,7 @@ Lim_FF											.EQU	H'590
 ignition_FFFF8BC4								.EQU	H'FFFF8BC4
 axisIndex_10_CoolTempSc							.EQU	H'FFFF8848
 axisIndex_7_InAirTemp							.EQU	H'FFFF8852
+transaxle_state								.EQU	H'FFFF8A3C
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	.SECTION    B_FFFF851C,DATA, LOCATE=H'FFFF851C
@@ -524,7 +525,7 @@ altMUT:
 			.DATA.L		wMUT3A_AirTemp_ADC8bit+1
 			.DATA.L		wMUT10_Coolant_Temperature_Scaled+1
 			.DATA.L		wMUT3C_Rear_O2_ADC8bit+1
-			.DATA.L		_ve_index                   
+			.DATA.L		transaxle_state                   
 			.DATA.L		wMUT17_TPS_ADC8bit+1
 			.DATA.L		wMUT2A_Injector_Pulse_Width_us                          
 			.DATA.L		wMUT27_Octane_Number+1
@@ -539,6 +540,8 @@ altMUT:
 			.DATA.L		wMUT6B_Knock_Base+1
 			.DATA.L		_timeRPM
 			.DATA.L		_timeRPM+1
+			.DATA.L		wMUT25_Target_Idle_Steps+1
+			.DATA.L		wMUT24_Target_Idle_RPM+1
 			
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

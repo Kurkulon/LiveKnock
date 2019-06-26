@@ -1409,6 +1409,8 @@ void F500_MAP_Hz_Calc_sub_10E54()
 
 	u32 r13 = Div_WW(2260, r1);
 
+	// ; 4Hz = 1 km/h; km/h = value / 4;
+
 	wMUT2E_Vehicle_Speed_Frequency = (r13 < 254) ? r13 : 254;
 
 	// 4665 - 1 gear
@@ -1417,7 +1419,7 @@ void F500_MAP_Hz_Calc_sub_10E54()
 	// 1270 - 4 gear
 	// 1046 - 5 gear
 
-	transmission_state = Lim_FFFF((rpm_x125div32_B * r1) >> 2);
+	transaxle_state = Lim_FFFF((rpm_x125div32_B * r1) >> 2);
 
 	if (timer_down_TXFLAG3_FFFF8574 == 0)
 	{

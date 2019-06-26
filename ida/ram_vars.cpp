@@ -235,6 +235,8 @@ u16 	word_FFFF8384;
 u16 	word_FFFF8386;
 u16 	NVRAM_CheckWord_3;
 u16 	NVRAM_CheckWord_4;
+
+
 byte	unused_byte_FFFF838C[114];
 u16 	__word_FFFF83FE;
 byte	__byte_FFFF8400;
@@ -289,6 +291,8 @@ u16 	word_FFFF8494;
 u16 	word_FFFF8496;
 u16 	word_FFFF8498;
 byte	unused_byte_FFFF849A[132];
+
+
 u16 	__word_FFFF851E;
 u16 	timer_up_FFFF8520;
 u16 	timer_up_FFFF8522;
@@ -604,6 +608,8 @@ u16 	word_FFFF882C;
 u16 	word_FFFF882E;
 u16 	word_FFFF8830;
 u16 	word_FFFF8832;
+
+
 u16 	word_FFFF8834;
 u16 	wMUTB4_lookup_value;
 u16 	word_FFFF8838;
@@ -623,9 +629,13 @@ u16 	axisIndex_7_InAirTemp;
 u16 	VOLT123_FFFF8854;
 u16 	word_FFFF8856;
 u16 	word_FFFF8858;
+
 byte	unused_byte_FFFF885A[2];
+
 u16 	word_FFFF885C;
+
 byte	unused_byte_FFFF885E[2];
+
 u16 	CEL8_FFFF8860;
 u16 	word_FFFF8862;
 byte	bMUTB7;
@@ -852,7 +862,7 @@ u16 	word_FFFF8A34;
 u16 	crank5_FFFF8A36;
 u16 	RAM_VAR_15A2_FFFF8A38;
 u16 	word_FFFF8A3A;
-u16 	transmission_state;
+u16 	transaxle_state;
 byte	unused_byte_FFFF8A3E[10];
 u16 	word_FFFF8A48;
 u16 	word_FFFF8A4A;

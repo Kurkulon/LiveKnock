@@ -852,7 +852,7 @@ extern	u16 	word_FFFF8A34;
 extern	u16 	crank5_FFFF8A36;
 extern	u16 	RAM_VAR_15A2_FFFF8A38;
 extern	u16 	word_FFFF8A3A;
-extern	u16 	transmission_state;
+extern	u16 	transaxle_state;
 extern	byte	unused_byte_FFFF8A3E[10];
 extern	u16 	word_FFFF8A48;
 extern	u16 	word_FFFF8A4A;

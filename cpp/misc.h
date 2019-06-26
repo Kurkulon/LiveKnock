@@ -630,7 +630,7 @@ extern u16 axis_fu_RPM;
 extern u16 axis_fu_LOAD;	
 extern u16 axis_ve_RPM;	
 extern u16 axis_ve_LOAD;	
-extern byte ve_index;	
+//extern byte ve_index;	
 extern byte ve_timer;	
 extern i8 fb_VE;	
 extern byte forcedIdleRPM;	

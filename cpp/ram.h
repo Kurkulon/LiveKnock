@@ -517,6 +517,9 @@
 #define      word_FFFF882E                  							(*(u16*)0xFFFF882E)                                                        
 #define      word_FFFF8830                  							(*(u16*)0xFFFF8830)                                                        
 #define      word_FFFF8832                  							(*(u16*)0xFFFF8832)                                                        
+
+//  End Countdown timers FFFF8784 - FFFF8832
+
 #define      word_FFFF8834                  							(*(u16*)0xFFFF8834)                                                        
 #define      wMUTB4_lookup_value            							(*(u16*)0xFFFF8836)                                                        
 #define      word_FFFF8838                  							(*(u16*)0xFFFF8838)                                                        
@@ -536,7 +539,9 @@
 #define      VOLT123_FFFF8854               							(*(u16*)0xFFFF8854)                                                        
 #define      word_FFFF8856                  							(*(u16*)0xFFFF8856)                                                        
 #define      word_FFFF8858                  							(*(u16*)0xFFFF8858)                                                        
+
 #define      word_FFFF885C                  							(*(u16*)0xFFFF885C)                                                        
+
 #define      CEL8_FFFF8860                  							(*(u16*)0xFFFF8860)                                                        
 #define      word_FFFF8862                  							(*(u16*)0xFFFF8862)                                                        
 #define      bMUTB7                         						(*(byte*)   0xFFFF8864)                                                     
@@ -549,9 +554,11 @@
 #define      word_FFFF886E                  							(*(u16*)0xFFFF886E)                                                        
 #define      word_FFFF8870                  							(*(u16*)0xFFFF8870)                                                        
 #define      wMUT9A_Ligths_Bit_Array        							(*(u16*)0xFFFF8872)                                                        
+
 #define      OutPort_FFFF8876               							(*(u16*)0xFFFF8876)                                                        
 #define      wMUT9B_Output_Pins             							(*(u16*)0xFFFF8878)                                                        
 #define      KNOCK_FLAG2_FFFF887A           							(*(u16*)0xFFFF887A)                                                        
+
 #define      pwm_Counter                    							(*(u16*)0xFFFF887E)                                                        
 #define      baudrateFlags_FFFF8882         							(*(u16*)0xFFFF8882)                                                        
 #define      word_FFFF8884                  							(*(u16*)0xFFFF8884)                                                        
@@ -597,6 +604,7 @@
 #define      word_FFFF88D4                  							(*(u16*)0xFFFF88D4)                                                        
 #define      word_FFFF88D6                  							(*(u16*)0xFFFF88D6)                                                        
 #define      wMUT1A_Manifold_AbsPressure_ADC8bit						(*(u16*)0xFFFF88D8)                                                    
+
 #define      wMUT15_Barometric_Pressure     							(*(u16*)0xFFFF88DC)                                                        
 #define      Manifold_ADC8bit_1             							(*(u16*)0xFFFF88DE)                                                        
 #define      Manifold_ADC8bit_2             							(*(u16*)0xFFFF88E0)                                                        
@@ -628,12 +636,15 @@
 #define      ADC_UNK_PORT_0E_2BYTE_MULT8_FFFF8914						(*(u16*)0xFFFF8914)                                                   
 #define      word_FFFF8916                  							(*(u16*)0xFFFF8916)                                                        
 #define      word_FFFF8918                  							(*(u16*)0xFFFF8918)                                                        
+
 #define      wMUT88_Fuel_Level_ADC8bit      							(*(u16*)0xFFFF891E)                                                        
 #define      wMUT89_ADC_Channel_8_2         							(*(u16*)0xFFFF8920)                                                        
 #define      wMUT97_ADC_8_8bit              							(*(u16*)0xFFFF8922)                                                        
 #define      word_FFFF8924                  							(*(u16*)0xFFFF8924)                                                        
+
 #define      wMUT83_ADC_15_8bit             							(*(u16*)0xFFFF8928)                                                        
 #define      word_FFFF892A                  							(*(u16*)0xFFFF892A)                                                        
+
 #define      rpm_x125div32_B                							(*(u16*)0xFFFF893A)                                                        
 #define      rpm_x125div32_A                							(*(u16*)0xFFFF893C)                                                        
 #define      dif_rpm_x125div32_AB           							(*(u16*)0xFFFF893E)                                                        
@@ -654,7 +665,8 @@
 #define      ECU_Load_x2_FFFF895C           							(*(u16*)0xFFFF895C)                                                        
 #define      null_ECU_Load_x2_FFFF895E      							(*(u16*)0xFFFF895E)                                                        
 #define      null_ECU_Load_x2_FFFF8960      							(*(u16*)0xFFFF8960)                                                        
-#define      ECU_Load_x2_FFFF8962           							(*(u16*)0xFFFF8962)                                                        
+#define      ECU_Load_x2_FFFF8962           							(*(u16*)0xFFFF8962) 
+
 #define      word_FFFF8966                  							(*(u16*)0xFFFF8966)                                                        
 #define      wMUT1D_Manifold_Absolute_Pressure_Mean						(*(u16*)0xFFFF8968)                                                 
 #define      Manifold_AbsPressure_ADC8bit_avrg							(*(u16*)0xFFFF896A)                                                      
@@ -670,21 +682,26 @@
 #define      manifold_Sum_prev              							(*(u16*)0xFFFF897E)                                                        
 #define      TPS_MAP_Addition               							(*(u16*)0xFFFF8980)                                                        
 #define      word_FFFF8982                  							(*(u16*)0xFFFF8982)                                                        
-#define      word_FFFF8984                  							(*(u16*)0xFFFF8984)                                                        
+#define      word_FFFF8984                  							(*(u16*)0xFFFF8984)   
+
 #define      crank_cur_map                  						(*(u16*)0xFFFF8988)                                                        
+
 #define      word_FFFF898C                  							(*(u16*)0xFFFF898C)                                                        
 #define      crank_prev_4_cycle_map                  						(*(u16*)0xFFFF898E)                                                        
+
 #define      wMUT56_MAX_MAP_FALL_CHANGE     							(*(u16*)0xFFFF89A0)                                                        
 #define      MAX_MAP_FALL_CHANGE            							(*(u16*)0xFFFF89A2)                                                        
 #define      wMUT57_MAX_MAP_RISE_CHANGE     							(*(u16*)0xFFFF89A4)                                                        
 #define      MAX_MAP_RISE_CHANGE            							(*(u16*)0xFFFF89A6)                                                        
 #define      MAFSxMAF_MULTIPLIER_1_FFFF89A8 							(*(u16*)0xFFFF89A8)                                                        
+
 #define      word_FFFF89AC                  							(*(u16*)0xFFFF89AC)                                                        
 #define      word_FFFF89AE                  							(*(u16*)0xFFFF89AE)                                                        
 #define      word_FFFF89B0                  							(*(u16*)0xFFFF89B0)                                                        
 #define      word_FFFF89B2                  							(*(u16*)0xFFFF89B2)                                                        
 #define      word_FFFF89B4                  							(*(u16*)0xFFFF89B4)                                                        
-#define      word_FFFF89B6                  							(*(u16*)0xFFFF89B6)                                                        
+#define      word_FFFF89B6                  							(*(u16*)0xFFFF89B6)  
+
 #define      Manifold_AbsPressure_null      							(*(u16*)0xFFFF89BA)                                                        
 #define      MAF_MAP_Hz_FFFF89BC           							(*(u16*)0xFFFF89BC)                                                        
 #define      word_FFFF89BE                  							(*(u16*)0xFFFF89BE)                                                        
@@ -694,6 +711,7 @@
 #define      wMUT2E_Vehicle_Speed_Frequency /* 4Hz = 1 km/h */			(*(u16*)0xFFFF89C6)                                                        
 #define      wMUT2F_Vehicle_Speed           							(*(u16*)0xFFFF89C8)                                                        
 #define      obd_Add_Vehicle_Speed          							(*(u16*)0xFFFF89CA)                                                        
+
 #define      timer_down_FFFF89CE            							(*(u16*)0xFFFF89CE)                                                        
 #define      word_FFFF89D0                  							(*(u16*)0xFFFF89D0)                                                        
 #define      wMUTD0_BitMap1                 							(*(u16*)0xFFFF89D2)                                                        
@@ -705,6 +723,7 @@
 #define      maskedMapIndex                 							(*(u16*)0xFFFF89DE)                                                        
 #define      wMUT34_Map_Index               							(*(u16*)0xFFFF89E0)                                                        
 #define      wMUT71_Sensor_Error            							(*(u16*)0xFFFF89E2)                                                        
+
 #define      wMUT72_Knock_Present           							(*(u16*)0xFFFF89E6)                                                        
 #define      word_FFFF89E8                  							(*(u16*)0xFFFF89E8)                                                        
 #define      word_FFFF89EA                  							(*(u16*)0xFFFF89EA)                                                        
@@ -748,7 +767,8 @@
 #define      crank5_FFFF8A36                  							(*(u16*)0xFFFF8A36)                                                        
 #define      RAM_VAR_15A2_FFFF8A38          							(*(u16*)0xFFFF8A38)                                                        
 #define      word_FFFF8A3A                  							(*(u16*)0xFFFF8A3A)                                                        
-#define      transmission_state       									(*(u16*)0xFFFF8A3C)                                                        
+#define      transaxle_state       									(*(u16*)0xFFFF8A3C)  
+
 #define      word_FFFF8A48                  							(*(u16*)0xFFFF8A48)                                                        
 #define      word_FFFF8A4A                  							(*(u16*)0xFFFF8A4A)                                                        
 #define      word_FFFF8A4E                  							(*(u16*)0xFFFF8A4E)                                                        
@@ -790,7 +810,7 @@
 #define      dword_FFFF8AA0                 							(*(u32*)0xFFFF8AA0)                                                        
 #define      dword_FFFF8AA4                 							(*(u32*)0xFFFF8AA4)                                                        
 #define      word_FFFF8AAA                  							(*(u16*)0xFFFF8AAA)                                                        
-#define      __VE16			                  							(*(u16*)0xFFFF8AAC)                                                        
+
 #define      word_FFFF8AB0                  							(*(u16*)0xFFFF8AB0)                                                        
 #define      null_bMUT28                    					       (*(byte*)0xFFFF8AB3)                                                     
 #define      __k_trimVE	            									(*(u16*)0xFFFF8AB4)                                                        
@@ -807,7 +827,10 @@
 #define      AFR_OctanInt                   							(*(u16*)0xFFFF8ACA)                                                        
 #define      afr_closed_loop                   							(*(u16*)0xFFFF8ACC)                                                        
 #define      afr_closed_loop_interpolator                   			(*(u16*)0xFFFF8ACE)                                                        
-#define      word_FFFF8AD0                  							(*(u16*)0xFFFF8AD0)                                                        
+#define      word_FFFF8AD0                  							(*(u16*)0xFFFF8AD0) 
+
+#define      __VE16			                  							(*(u16*)0xFFFF8AD2)
+
 #define      word_FFFF8AD6                  							(*(u16*)0xFFFF8AD6)                                                        
 #define      AFR_CONST_FFFF8AD8           								(*(u16*)0xFFFF8AD8)                                                        
 #define      word_FFFF8ADA                  							(*(u16*)0xFFFF8ADA)                                                        

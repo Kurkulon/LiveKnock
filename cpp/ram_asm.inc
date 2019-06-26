@@ -739,7 +739,7 @@ word_FFFF8A34                  							.EQU H'FFFF8A34
 crank5_FFFF8A36                  							.EQU H'FFFF8A36                                                        
 RAM_VAR_15A2_FFFF8A38          							.EQU H'FFFF8A38                                                        
 word_FFFF8A3A                  							.EQU H'FFFF8A3A                                                        
-transmission_state       									.EQU H'FFFF8A3C                                                        
+transaxle_state       									.EQU H'FFFF8A3C                                                        
 word_FFFF8A48                  							.EQU H'FFFF8A48                                                        
 word_FFFF8A4A                  							.EQU H'FFFF8A4A                                                        
 word_FFFF8A4E                  							.EQU H'FFFF8A4E                                                        
