@@ -1,0 +1,1122 @@
+<rom>
+	<romid>
+		<xmlid>EMKS12</xmlid>
+		<internalidaddress>2fefa</internalidaddress>
+		<internalidstring>EMKS12</internalidstring>
+		<make>Mitsubishi</make>
+		<market>JDM</market>
+		<model>Galant/Legnum</model>
+		<submodel>VR-4</submodel>
+		<transmission>5MT</transmission>
+		<year>2002</year>
+		<flashmethod>mitsukernel</flashmethod>
+		<memmodel>H8539FA</memmodel>
+	</romid>
+
+	<include>KSModsBase</include>
+	<scaling name="NLTS_RPMLimit" units="RPM" toexpr="375000/x" frexpr="375000/x" format="%.0f" min="1500" max="10000" inc="6" storagetype="uint8" endian="big"/>
+	<scaling name="NLTS_Speed" units="Kph" toexpr="x*2" frexpr="x/2" format="%.0f" min="0" max="64000" inc="1" storagetype="uint16" endian="big"/>
+
+	<table name="Activation Lookup 1" category="KS Switched Configuration 1" address="10ef2" type="2D" level="4" scaling="RPM4_16bit">
+		<table name="Memory Address" address="10ef0" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 2" category="KS Switched Configuration 1" address="10ef6" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="10ef4" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 3" category="KS Switched Configuration 1" address="10efa" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="10ef8" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 4" category="KS Switched Configuration 1" address="10efe" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="10efc" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 5" category="KS Switched Configuration 1" address="10f02" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="10f00" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 6" category="KS Switched Configuration 1" address="10f06" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="10f04" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 7" category="KS Switched Configuration 1" address="10f0a" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="10f08" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 8" category="KS Switched Configuration 1" address="10f0e" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="10f0c" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 1" category="KS Switched Configuration 2" address="10f14" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="10f12" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 2" category="KS Switched Configuration 2" address="10f18" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="10f16" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 3" category="KS Switched Configuration 2" address="10f1c" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="10f1a" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 4" category="KS Switched Configuration 2" address="10f20" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="10f1e" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 5" category="KS Switched Configuration 2" address="10f24" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="10f22" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 6" category="KS Switched Configuration 2" address="10f28" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="10f26" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 7" category="KS Switched Configuration 2" address="10f2c" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="10f2a" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 8" category="KS Switched Configuration 2" address="10f30" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="10f2e" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 1" category="KS Switched Configuration 3" address="11eb2" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="11eb0" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 2" category="KS Switched Configuration 3" address="11eb6" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="11eb4" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 3" category="KS Switched Configuration 3" address="11eba" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="11eb8" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 4" category="KS Switched Configuration 3" address="11ebe" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="11ebc" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 5" category="KS Switched Configuration 3" address="11ec2" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="11ec0" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 6" category="KS Switched Configuration 3" address="11ec6" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="11ec4" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 7" category="KS Switched Configuration 3" address="11eca" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="11ec8" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 8" category="KS Switched Configuration 3" address="11ece" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="11ecc" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 1" category="KS Switched Configuration 4" address="11ed4" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="11ed2" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 2" category="KS Switched Configuration 4" address="11ed8" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="11ed6" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 3" category="KS Switched Configuration 4" address="11edc" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="11eda" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 4" category="KS Switched Configuration 4" address="11ee0" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="11ede" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 5" category="KS Switched Configuration 4" address="11ee4" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="11ee2" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 6" category="KS Switched Configuration 4" address="11ee8" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="11ee6" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 7" category="KS Switched Configuration 4" address="11eec" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="11eea" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 8" category="KS Switched Configuration 4" address="11ef0" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="11eee" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 1" category="KS Switched Configuration 5" address="11ef4" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="11ef2" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 2" category="KS Switched Configuration 5" address="11ef8" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="11ef6" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 3" category="KS Switched Configuration 5" address="11efc" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="11efa" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 4" category="KS Switched Configuration 5" address="11f00" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="11efe" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 5" category="KS Switched Configuration 5" address="11f04" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="11f02" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 6" category="KS Switched Configuration 5" address="11f08" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="11f06" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 7" category="KS Switched Configuration 5" address="11f0c" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="11f0a" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 8" category="KS Switched Configuration 5" address="11f10" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="11f0e" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 1" category="KS Switched Configuration 6" address="13f82" type="2D" level="4" scaling="TPS_Percent_16bit">
+		<table name="Memory Address" address="13f80" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 2" category="KS Switched Configuration 6" address="13f86" type="2D" level="4" scaling="NLTS_Speed">
+		<table name="Memory Address" address="13f84" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 3" category="KS Switched Configuration 6" address="13f8a" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="13f88" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 4" category="KS Switched Configuration 6" address="13f8e" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="13f8c" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 5" category="KS Switched Configuration 6" address="13f92" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="13f90" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 6" category="KS Switched Configuration 6" address="13f96" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="13f94" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 7" category="KS Switched Configuration 6" address="13f9a" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="13f98" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 8" category="KS Switched Configuration 6" address="13f9e" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="13f9c" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 1" category="KS Switched Configuration 7" address="13fa2" type="2D" level="4" scaling="TPS_Percent_16bit">
+		<table name="Memory Address" address="13fa0" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 2" category="KS Switched Configuration 7" address="13fa6" type="2D" level="4" scaling="RPM4_16bit">
+		<table name="Memory Address" address="13fa4" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 3" category="KS Switched Configuration 7" address="13faa" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="13fa8" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 4" category="KS Switched Configuration 7" address="13fae" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="13fac" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 5" category="KS Switched Configuration 7" address="13fb2" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="13fb0" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 6" category="KS Switched Configuration 7" address="13fb6" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="13fb4" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 7" category="KS Switched Configuration 7" address="13fba" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="13fb8" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activation Lookup 8" category="KS Switched Configuration 7" address="13fbe" type="2D" level="4" scaling="Hex16">
+		<table name="Memory Address" address="13fbc" type="X Axis" elements="1" scaling="Hex16"/>
+	</table>
+
+	<table name="Activate Bit Mask ON" category="KS Switched Configuration 1" address="10ec2" type="2D" scaling="EnableDisableBit">
+		<table name="Mask Bit Number" type="Static Y Axis" flipy="true" elements="16">
+			<data>bit.15, Unused                                         .</data>
+			<data>bit.14, Unused                                         .</data>
+			<data>bit.13, Unused                                         .</data>
+			<data>bit.12, Unused                                         .</data>
+			<data>bit.11  Unused                                         .</data>
+			<data>bit.10, Unused                                         .</data>
+			<data>bit.09, Unused                                         .</data>
+			<data>bit.08, D-21      ON = Connected to GND                .</data>
+			<data>bit.07, D-01      ON = Connected to +12v               .</data>
+			<data>bit.06, C-09      ON = Connected to +12v  (Not Working).</data>
+			<data>bit.05, C-07      ON = Connected to +12v               .</data>
+			<data>bit.04, C-02      ON = Connected to GND                .</data>
+			<data>bit.03, B-16      ON = Connected to GND                .</data>
+			<data>bit.02, B-15      ON = Connected to +12v               .</data>
+			<data>bit.01, B-14      ON = Connected to GND                .</data>
+			<data>bit.00, B-11      ON = Connected to GND                .</data>
+		</table>
+	</table>
+
+	<table name="Activate Bit Mask ON" category="KS Switched Configuration 2" address="10ec8" type="2D" scaling="EnableDisableBit">
+		<table name="Mask Bit Number" type="Static Y Axis" flipy="true" elements="16">
+			<data>bit.15, Unused                                         .</data>
+			<data>bit.14, Unused                                         .</data>
+			<data>bit.13, Unused                                         .</data>
+			<data>bit.12, Unused                                         .</data>
+			<data>bit.11  Unused                                         .</data>
+			<data>bit.10, Unused                                         .</data>
+			<data>bit.09, Unused                                         .</data>
+			<data>bit.08, D-21      ON = Connected to GND                .</data>
+			<data>bit.07, D-01      ON = Connected to +12v               .</data>
+			<data>bit.06, C-09      ON = Connected to +12v  (Not Working).</data>
+			<data>bit.05, C-07      ON = Connected to +12v               .</data>
+			<data>bit.04, C-02      ON = Connected to GND                .</data>
+			<data>bit.03, B-16      ON = Connected to GND                .</data>
+			<data>bit.02, B-15      ON = Connected to +12v               .</data>
+			<data>bit.01, B-14      ON = Connected to GND                .</data>
+			<data>bit.00, B-11      ON = Connected to GND                .</data>
+		</table>
+	</table>
+
+	<table name="Activate Bit Mask ON" category="KS Switched Configuration 3" address="10ece" type="2D" scaling="EnableDisableBit">
+		<table name="Mask Bit Number" type="Static Y Axis" flipy="true" elements="16">
+			<data>bit.15, Unused                                         .</data>
+			<data>bit.14, Unused                                         .</data>
+			<data>bit.13, Unused                                         .</data>
+			<data>bit.12, Unused                                         .</data>
+			<data>bit.11  Unused                                         .</data>
+			<data>bit.10, Unused                                         .</data>
+			<data>bit.09, Unused                                         .</data>
+			<data>bit.08, D-21      ON = Connected to GND                .</data>
+			<data>bit.07, D-01      ON = Connected to +12v               .</data>
+			<data>bit.06, C-09      ON = Connected to +12v  (Not Working).</data>
+			<data>bit.05, C-07      ON = Connected to +12v               .</data>
+			<data>bit.04, C-02      ON = Connected to GND                .</data>
+			<data>bit.03, B-16      ON = Connected to GND                .</data>
+			<data>bit.02, B-15      ON = Connected to +12v               .</data>
+			<data>bit.01, B-14      ON = Connected to GND                .</data>
+			<data>bit.00, B-11      ON = Connected to GND                .</data>
+		</table>
+	</table>
+
+	<table name="Activate Bit Mask ON" category="KS Switched Configuration 4" address="10ed4" type="2D" scaling="EnableDisableBit">
+		<table name="Mask Bit Number" type="Static Y Axis" flipy="true" elements="16">
+			<data>bit.15, Unused                                         .</data>
+			<data>bit.14, Unused                                         .</data>
+			<data>bit.13, Unused                                         .</data>
+			<data>bit.12, Unused                                         .</data>
+			<data>bit.11  Unused                                         .</data>
+			<data>bit.10, Unused                                         .</data>
+			<data>bit.09, Unused                                         .</data>
+			<data>bit.08, D-21      ON = Connected to GND                .</data>
+			<data>bit.07, D-01      ON = Connected to +12v               .</data>
+			<data>bit.06, C-09      ON = Connected to +12v  (Not Working).</data>
+			<data>bit.05, C-07      ON = Connected to +12v               .</data>
+			<data>bit.04, C-02      ON = Connected to GND                .</data>
+			<data>bit.03, B-16      ON = Connected to GND                .</data>
+			<data>bit.02, B-15      ON = Connected to +12v               .</data>
+			<data>bit.01, B-14      ON = Connected to GND                .</data>
+			<data>bit.00, B-11      ON = Connected to GND                .</data>
+		</table>
+	</table>
+
+	<table name="Activate Bit Mask ON" category="KS Switched Configuration 5" address="10eda" type="2D" scaling="EnableDisableBit">
+		<table name="Mask Bit Number" type="Static Y Axis" flipy="true" elements="16">
+			<data>bit.15, Unused                                         .</data>
+			<data>bit.14, Unused                                         .</data>
+			<data>bit.13, Unused                                         .</data>
+			<data>bit.12, Unused                                         .</data>
+			<data>bit.11  Unused                                         .</data>
+			<data>bit.10, Unused                                         .</data>
+			<data>bit.09, Unused                                         .</data>
+			<data>bit.08, D-21      ON = Connected to GND                .</data>
+			<data>bit.07, D-01      ON = Connected to +12v               .</data>
+			<data>bit.06, C-09      ON = Connected to +12v  (Not Working).</data>
+			<data>bit.05, C-07      ON = Connected to +12v               .</data>
+			<data>bit.04, C-02      ON = Connected to GND                .</data>
+			<data>bit.03, B-16      ON = Connected to GND                .</data>
+			<data>bit.02, B-15      ON = Connected to +12v               .</data>
+			<data>bit.01, B-14      ON = Connected to GND                .</data>
+			<data>bit.00, B-11      ON = Connected to GND                .</data>
+		</table>
+	</table>
+
+	<table name="Activate Bit Mask ON" category="KS Switched Configuration 6" address="10ee0" type="2D" scaling="EnableDisableBit">
+		<table name="Mask Bit Number" type="Static Y Axis" flipy="true" elements="16">
+			<data>bit.15, Unused                                         .</data>
+			<data>bit.14, Unused                                         .</data>
+			<data>bit.13, Unused                                         .</data>
+			<data>bit.12, Unused                                         .</data>
+			<data>bit.11  Unused                                         .</data>
+			<data>bit.10, Unused                                         .</data>
+			<data>bit.09, Unused                                         .</data>
+			<data>bit.08, D-21      ON = Connected to GND                .</data>
+			<data>bit.07, D-01      ON = Connected to +12v               .</data>
+			<data>bit.06, C-09      ON = Connected to +12v  (Not Working).</data>
+			<data>bit.05, C-07      ON = Connected to +12v               .</data>
+			<data>bit.04, C-02      ON = Connected to GND                .</data>
+			<data>bit.03, B-16      ON = Connected to GND                .</data>
+			<data>bit.02, B-15      ON = Connected to +12v               .</data>
+			<data>bit.01, B-14      ON = Connected to GND                .</data>
+			<data>bit.00, B-11      ON = Connected to GND                .</data>
+		</table>
+	</table>
+
+	<table name="Activate Bit Mask ON" category="KS Switched Configuration 7" address="10ee6" type="2D" scaling="EnableDisableBit">
+		<table name="Mask Bit Number" type="Static Y Axis" flipy="true" elements="16">
+			<data>bit.15, Unused                                         .</data>
+			<data>bit.14, Unused                                         .</data>
+			<data>bit.13, Unused                                         .</data>
+			<data>bit.12, Unused                                         .</data>
+			<data>bit.11  Unused                                         .</data>
+			<data>bit.10, Unused                                         .</data>
+			<data>bit.09, Unused                                         .</data>
+			<data>bit.08, D-21      ON = Connected to GND                .</data>
+			<data>bit.07, D-01      ON = Connected to +12v               .</data>
+			<data>bit.06, C-09      ON = Connected to +12v  (Not Working).</data>
+			<data>bit.05, C-07      ON = Connected to +12v               .</data>
+			<data>bit.04, C-02      ON = Connected to GND                .</data>
+			<data>bit.03, B-16      ON = Connected to GND                .</data>
+			<data>bit.02, B-15      ON = Connected to +12v               .</data>
+			<data>bit.01, B-14      ON = Connected to GND                .</data>
+			<data>bit.00, B-11      ON = Connected to GND                .</data>
+		</table>
+	</table>
+
+	<table name="Activate Bit Mask OFF" category="KS Switched Configuration 1" address="10ec4" type="2D" scaling="EnableDisableBit">
+		<table name="Mask Bit Number" type="Static Y Axis" flipy="true" elements="16">
+			<data>bit.15, Unused                                         .</data>
+			<data>bit.14, Unused                                         .</data>
+			<data>bit.13, Unused                                         .</data>
+			<data>bit.12, Unused                                         .</data>
+			<data>bit.11  Unused                                         .</data>
+			<data>bit.10, Unused                                         .</data>
+			<data>bit.09, Unused                                         .</data>
+			<data>bit.08, D-21      ON = Connected to GND                .</data>
+			<data>bit.07, D-01      ON = Connected to +12v               .</data>
+			<data>bit.06, C-09      ON = Connected to +12v  (Not Working).</data>
+			<data>bit.05, C-07      ON = Connected to +12v               .</data>
+			<data>bit.04, C-02      ON = Connected to GND                .</data>
+			<data>bit.03, B-16      ON = Connected to GND                .</data>
+			<data>bit.02, B-15      ON = Connected to +12v               .</data>
+			<data>bit.01, B-14      ON = Connected to GND                .</data>
+			<data>bit.00, B-11      ON = Connected to GND                .</data>
+		</table>
+	</table>
+
+	<table name="Activate Bit Mask OFF" category="KS Switched Configuration 2" address="10eca" type="2D" scaling="EnableDisableBit">
+		<table name="Mask Bit Number" type="Static Y Axis" flipy="true" elements="16">
+			<data>bit.15, Unused                                         .</data>
+			<data>bit.14, Unused                                         .</data>
+			<data>bit.13, Unused                                         .</data>
+			<data>bit.12, Unused                                         .</data>
+			<data>bit.11  Unused                                         .</data>
+			<data>bit.10, Unused                                         .</data>
+			<data>bit.09, Unused                                         .</data>
+			<data>bit.08, D-21      ON = Connected to GND                .</data>
+			<data>bit.07, D-01      ON = Connected to +12v               .</data>
+			<data>bit.06, C-09      ON = Connected to +12v  (Not Working).</data>
+			<data>bit.05, C-07      ON = Connected to +12v               .</data>
+			<data>bit.04, C-02      ON = Connected to GND                .</data>
+			<data>bit.03, B-16      ON = Connected to GND                .</data>
+			<data>bit.02, B-15      ON = Connected to +12v               .</data>
+			<data>bit.01, B-14      ON = Connected to GND                .</data>
+			<data>bit.00, B-11      ON = Connected to GND                .</data>
+		</table>
+	</table>
+
+	<table name="Activate Bit Mask OFF" category="KS Switched Configuration 3" address="10ed0" type="2D" scaling="EnableDisableBit">
+		<table name="Mask Bit Number" type="Static Y Axis" flipy="true" elements="16">
+			<data>bit.15, Unused                                         .</data>
+			<data>bit.14, Unused                                         .</data>
+			<data>bit.13, Unused                                         .</data>
+			<data>bit.12, Unused                                         .</data>
+			<data>bit.11  Unused                                         .</data>
+			<data>bit.10, Unused                                         .</data>
+			<data>bit.09, Unused                                         .</data>
+			<data>bit.08, D-21      ON = Connected to GND                .</data>
+			<data>bit.07, D-01      ON = Connected to +12v               .</data>
+			<data>bit.06, C-09      ON = Connected to +12v  (Not Working).</data>
+			<data>bit.05, C-07      ON = Connected to +12v               .</data>
+			<data>bit.04, C-02      ON = Connected to GND                .</data>
+			<data>bit.03, B-16      ON = Connected to GND                .</data>
+			<data>bit.02, B-15      ON = Connected to +12v               .</data>
+			<data>bit.01, B-14      ON = Connected to GND                .</data>
+			<data>bit.00, B-11      ON = Connected to GND                .</data>
+		</table>
+	</table>
+
+	<table name="Activate Bit Mask OFF" category="KS Switched Configuration 4" address="10ed6" type="2D" scaling="EnableDisableBit">
+		<table name="Mask Bit Number" type="Static Y Axis" flipy="true" elements="16">
+			<data>bit.15, Unused                                         .</data>
+			<data>bit.14, Unused                                         .</data>
+			<data>bit.13, Unused                                         .</data>
+			<data>bit.12, Unused                                         .</data>
+			<data>bit.11  Unused                                         .</data>
+			<data>bit.10, Unused                                         .</data>
+			<data>bit.09, Unused                                         .</data>
+			<data>bit.08, D-21      ON = Connected to GND                .</data>
+			<data>bit.07, D-01      ON = Connected to +12v               .</data>
+			<data>bit.06, C-09      ON = Connected to +12v  (Not Working).</data>
+			<data>bit.05, C-07      ON = Connected to +12v               .</data>
+			<data>bit.04, C-02      ON = Connected to GND                .</data>
+			<data>bit.03, B-16      ON = Connected to GND                .</data>
+			<data>bit.02, B-15      ON = Connected to +12v               .</data>
+			<data>bit.01, B-14      ON = Connected to GND                .</data>
+			<data>bit.00, B-11      ON = Connected to GND                .</data>
+		</table>
+	</table>
+
+	<table name="Activate Bit Mask OFF" category="KS Switched Configuration 5" address="10edc" type="2D" scaling="EnableDisableBit">
+		<table name="Mask Bit Number" type="Static Y Axis" flipy="true" elements="16">
+			<data>bit.15, Unused                                         .</data>
+			<data>bit.14, Unused                                         .</data>
+			<data>bit.13, Unused                                         .</data>
+			<data>bit.12, Unused                                         .</data>
+			<data>bit.11  Unused                                         .</data>
+			<data>bit.10, Unused                                         .</data>
+			<data>bit.09, Unused                                         .</data>
+			<data>bit.08, D-21      ON = Connected to GND                .</data>
+			<data>bit.07, D-01      ON = Connected to +12v               .</data>
+			<data>bit.06, C-09      ON = Connected to +12v  (Not Working).</data>
+			<data>bit.05, C-07      ON = Connected to +12v               .</data>
+			<data>bit.04, C-02      ON = Connected to GND                .</data>
+			<data>bit.03, B-16      ON = Connected to GND                .</data>
+			<data>bit.02, B-15      ON = Connected to +12v               .</data>
+			<data>bit.01, B-14      ON = Connected to GND                .</data>
+			<data>bit.00, B-11      ON = Connected to GND                .</data>
+		</table>
+	</table>
+
+	<table name="Activate Bit Mask OFF" category="KS Switched Configuration 6" address="10ee2" type="2D" scaling="EnableDisableBit">
+		<table name="Mask Bit Number" type="Static Y Axis" flipy="true" elements="16">
+			<data>bit.15, Unused                                         .</data>
+			<data>bit.14, Unused                                         .</data>
+			<data>bit.13, Unused                                         .</data>
+			<data>bit.12, Unused                                         .</data>
+			<data>bit.11  Unused                                         .</data>
+			<data>bit.10, Unused                                         .</data>
+			<data>bit.09, Unused                                         .</data>
+			<data>bit.08, D-21      ON = Connected to GND                .</data>
+			<data>bit.07, D-01      ON = Connected to +12v               .</data>
+			<data>bit.06, C-09      ON = Connected to +12v  (Not Working).</data>
+			<data>bit.05, C-07      ON = Connected to +12v               .</data>
+			<data>bit.04, C-02      ON = Connected to GND                .</data>
+			<data>bit.03, B-16      ON = Connected to GND                .</data>
+			<data>bit.02, B-15      ON = Connected to +12v               .</data>
+			<data>bit.01, B-14      ON = Connected to GND                .</data>
+			<data>bit.00, B-11      ON = Connected to GND                .</data>
+		</table>
+	</table>
+
+	<table name="Activate Bit Mask OFF" category="KS Switched Configuration 7" address="10ee8" type="2D" scaling="EnableDisableBit">
+		<table name="Mask Bit Number" type="Static Y Axis" flipy="true" elements="16">
+			<data>bit.15, Unused                                         .</data>
+			<data>bit.14, Unused                                         .</data>
+			<data>bit.13, Unused                                         .</data>
+			<data>bit.12, Unused                                         .</data>
+			<data>bit.11  Unused                                         .</data>
+			<data>bit.10, Unused                                         .</data>
+			<data>bit.09, Unused                                         .</data>
+			<data>bit.08, D-21      ON = Connected to GND                .</data>
+			<data>bit.07, D-01      ON = Connected to +12v               .</data>
+			<data>bit.06, C-09      ON = Connected to +12v  (Not Working).</data>
+			<data>bit.05, C-07      ON = Connected to +12v               .</data>
+			<data>bit.04, C-02      ON = Connected to GND                .</data>
+			<data>bit.03, B-16      ON = Connected to GND                .</data>
+			<data>bit.02, B-15      ON = Connected to +12v               .</data>
+			<data>bit.01, B-14      ON = Connected to GND                .</data>
+			<data>bit.00, B-11      ON = Connected to GND                .</data>
+		</table>
+	</table>
+
+	<table name="Injector Size" category="KS Switched Configuration 1" address="2d696" type="1D" level="4" scaling="InjectorSize_DSM"/>
+
+	<table name="Injector Size" category="KS Switched Configuration 2" address="2d698" type="1D" level="4" scaling="InjectorSize_DSM"/>
+
+	<table name="Injector Size" category="KS Switched Configuration 3" address="2d69a" type="1D" level="4" scaling="InjectorSize_DSM"/>
+
+	<table name="Injector Size" category="KS Switched Configuration 4" address="2d69c" type="1D" level="4" scaling="InjectorSize_DSM"/>
+
+	<table name="Injector Size" category="KS Switched Configuration 5" address="2d69e" type="1D" level="4" scaling="InjectorSize_DSM"/>
+
+	<table name="Injector Size" category="KS Switched Configuration 6" address="2d6a0" type="1D" level="4" scaling="InjectorSize_DSM"/>
+
+	<table name="Injector Size" category="KS Switched Configuration 7" address="2d6a2" type="1D" level="4" scaling="InjectorSize_DSM"/>
+
+	<table name="Injector Size" category="KS Switched Configuration 8" address="2d6a4" type="1D" level="4" scaling="InjectorSize_DSM"/>
+
+	<table name="RPM Limit" category="KS Switched Configuration 1" address="2d6a6" type="1D" level="4" scaling="RPMLimit_16bit"/>
+
+	<table name="RPM Limit" category="KS Switched Configuration 2" address="2d6a8" type="1D" level="4" scaling="RPMLimit_16bit"/>
+
+	<table name="RPM Limit" category="KS Switched Configuration 3" address="2d6aa" type="1D" level="4" scaling="RPMLimit_16bit"/>
+
+	<table name="RPM Limit" category="KS Switched Configuration 4" address="2d6ac" type="1D" level="4" scaling="RPMLimit_16bit"/>
+
+	<table name="RPM Limit" category="KS Switched Configuration 5" address="2d6ae" type="1D" level="4" scaling="RPMLimit_16bit"/>
+
+	<table name="RPM Limit" category="KS Switched Configuration 6" address="2d6b0" type="1D" level="4" scaling="RPMLimit_16bit"/>
+
+	<table name="RPM Limit" category="KS Switched Configuration 7" address="2d6b2" type="1D" level="4" scaling="RPMLimit_16bit"/>
+
+	<table name="Speed Limit On" category="KS Switched Configuration 1" address="2d6b6" type="1D" level="4" scaling="VehicleSpeed"/>
+
+	<table name="Speed Limit On" category="KS Switched Configuration 2" address="2d6b8" type="1D" level="4" scaling="VehicleSpeed"/>
+
+	<table name="Speed Limit On" category="KS Switched Configuration 3" address="2d6ba" type="1D" level="4" scaling="VehicleSpeed"/>
+
+	<table name="Speed Limit On" category="KS Switched Configuration 4" address="2d6bc" type="1D" level="4" scaling="VehicleSpeed"/>
+
+	<table name="Speed Limit On" category="KS Switched Configuration 5" address="2d6be" type="1D" level="4" scaling="VehicleSpeed"/>
+
+	<table name="Speed Limit On" category="KS Switched Configuration 6" address="2d6c0" type="1D" level="4" scaling="VehicleSpeed"/>
+
+	<table name="Speed Limit On" category="KS Switched Configuration 7" address="2d6c2" type="1D" level="4" scaling="VehicleSpeed"/>
+
+	<table name="Speed Limit On" category="KS Switched Configuration 8" address="2d6c4" type="1D" level="4" scaling="VehicleSpeed"/>
+
+	<table name="Speed Limit Off" category="KS Switched Configuration 1" address="2d6c6" type="1D" level="4" scaling="VehicleSpeed"/>
+
+	<table name="Speed Limit Off" category="KS Switched Configuration 2" address="2d6c8" type="1D" level="4" scaling="VehicleSpeed"/>
+
+	<table name="Speed Limit Off" category="KS Switched Configuration 3" address="2d6ca" type="1D" level="4" scaling="VehicleSpeed"/>
+
+	<table name="Speed Limit Off" category="KS Switched Configuration 4" address="2d6cc" type="1D" level="4" scaling="VehicleSpeed"/>
+
+	<table name="Speed Limit Off" category="KS Switched Configuration 5" address="2d6ce" type="1D" level="4" scaling="VehicleSpeed"/>
+
+	<table name="Speed Limit Off" category="KS Switched Configuration 6" address="2d6d0" type="1D" level="4" scaling="VehicleSpeed"/>
+
+	<table name="Speed Limit Off" category="KS Switched Configuration 7" address="2d6d2" type="1D" level="4" scaling="VehicleSpeed"/>
+
+	<table name="Speed Limit Off" category="KS Switched Configuration 8" address="2d6d4" type="1D" level="4" scaling="VehicleSpeed"/>
+
+	<table name="CEL On KnockSum" category="KS Switched Configuration 1" address="2d66e" type="1D" level="4" scaling="uint16"/>
+
+	<table name="CEL On KnockSum" category="KS Switched Configuration 2" address="2d670" type="1D" level="4" scaling="uint16"/>
+
+	<table name="CEL On KnockSum" category="KS Switched Configuration 3" address="2d672" type="1D" level="4" scaling="uint16"/>
+
+	<table name="CEL On KnockSum" category="KS Switched Configuration 4" address="2d674" type="1D" level="4" scaling="uint16"/>
+
+	<table name="CEL On KnockSum" category="KS Switched Configuration 5" address="2d676" type="1D" level="4" scaling="uint16"/>
+
+	<table name="CEL On KnockSum" category="KS Switched Configuration 6" address="2d678" type="1D" level="4" scaling="uint16"/>
+
+	<table name="CEL On KnockSum" category="KS Switched Configuration 7" address="2d67a" type="1D" level="4" scaling="uint16"/>
+
+	<table name="CEL On KnockSum" category="KS Switched Configuration 8" address="2d67c" type="1D" level="4" scaling="uint16"/>
+
+	<table name="Max Ignition Retard" category="KS Switched Configuration 1" address="2d6e6" type="1D" level="4" scaling="TimingLimit_16bit"/>
+
+	<table name="Max Ignition Retard" category="KS Switched Configuration 2" address="2d6e8" type="1D" level="4" scaling="TimingLimit_16bit"/>
+
+	<table name="Max Ignition Retard" category="KS Switched Configuration 3" address="2d6ea" type="1D" level="4" scaling="TimingLimit_16bit"/>
+
+	<table name="Max Ignition Retard" category="KS Switched Configuration 4" address="2d6ec" type="1D" level="4" scaling="TimingLimit_16bit"/>
+
+	<table name="Max Ignition Retard" category="KS Switched Configuration 5" address="2d6ee" type="1D" level="4" scaling="TimingLimit_16bit"/>
+
+	<table name="Max Ignition Retard" category="KS Switched Configuration 6" address="2d6f0" type="1D" level="4" scaling="TimingLimit_16bit"/>
+
+	<table name="Max Ignition Retard" category="KS Switched Configuration 7" address="2d6f2" type="1D" level="4" scaling="TimingLimit_16bit"/>
+
+	<table name="Max Ignition Retard" category="KS Switched Configuration 8" address="2d6f4" type="1D" level="4" scaling="TimingLimit_16bit"/>
+
+	<table name="Map 1 (10F50)" category="Target Load Maps" address="10f54" type="2D" level="1" scaling="Load8_8bit">
+		<table name="Engine Speed" address="2d232" type="Y Axis" elements="17" scaling="RPM4_16bit"/>
+	</table>
+
+	<table name="Map 2 (10F68)" category="Target Load Maps" address="10f6c" type="2D" level="1" scaling="Load8_8bit">
+		<table name="Engine Speed" address="2d232" type="Y Axis" elements="17" scaling="RPM4_16bit"/>
+	</table>
+
+	<table name="Map 3 (10F80)" category="Target Load Maps" address="10f84" type="2D" level="1" scaling="Load8_8bit">
+		<table name="Engine Speed" address="2d232" type="Y Axis" elements="17" scaling="RPM4_16bit"/>
+	</table>
+
+	<table name="Map 4 (10F98)" category="Target Load Maps" address="10f9c" type="2D" level="1" scaling="Load8_8bit">
+		<table name="Engine Speed" address="2d232" type="Y Axis" elements="17" scaling="RPM4_16bit"/>
+	</table>
+
+	<table name="Map 5 (10FB0)" category="Target Load Maps" address="10fb4" type="2D" level="1" scaling="Load8_8bit">
+		<table name="Engine Speed" address="2d232" type="Y Axis" elements="17" scaling="RPM4_16bit"/>
+	</table>
+
+	<table name="Map 6 (10FC8)" category="Target Load Maps" address="10fcc" type="2D" level="1" scaling="Load8_8bit">
+		<table name="Engine Speed" address="2d232" type="Y Axis" elements="17" scaling="RPM4_16bit"/>
+	</table>
+
+	<table name="Map 7 (10FE0)" category="Target Load Maps" address="10fe4" type="2D" level="1" scaling="Load8_8bit">
+		<table name="Engine Speed" address="2d232" type="Y Axis" elements="17" scaling="RPM4_16bit"/>
+	</table>
+
+	<table name="Map 8 (121D0)" category="Target Load Maps" address="121d4" type="2D" level="1" scaling="Load8_8bit">
+		<table name="Engine Speed" address="2d232" type="Y Axis" elements="17" scaling="RPM4_16bit"/>
+	</table>
+
+	<table name="Map 1 (121E8)" category="Wastegate Duty Cycle Maps" address="121ec" type="2D" level="1" scaling="WGDuty_8bit">
+		<table name="Engine Speed" address="2d232" type="Y Axis" elements="17" scaling="RPM4_16bit"/>
+	</table>
+
+	<table name="Map 2 (12200)" category="Wastegate Duty Cycle Maps" address="12204" type="2D" level="1" scaling="WGDuty_8bit">
+		<table name="Engine Speed" address="2d232" type="Y Axis" elements="17" scaling="RPM4_16bit"/>
+	</table>
+
+	<table name="Map 3 (12218)" category="Wastegate Duty Cycle Maps" address="1221c" type="2D" level="1" scaling="WGDuty_8bit">
+		<table name="Engine Speed" address="2d232" type="Y Axis" elements="17" scaling="RPM4_16bit"/>
+	</table>
+
+	<table name="Map 4 (12230)" category="Wastegate Duty Cycle Maps" address="12234" type="2D" level="1" scaling="WGDuty_8bit">
+		<table name="Engine Speed" address="2d232" type="Y Axis" elements="17" scaling="RPM4_16bit"/>
+	</table>
+
+	<table name="Map 5 (12248)" category="Wastegate Duty Cycle Maps" address="1224c" type="2D" level="1" scaling="WGDuty_8bit">
+		<table name="Engine Speed" address="2d232" type="Y Axis" elements="17" scaling="RPM4_16bit"/>
+	</table>
+
+	<table name="Map 6 (12260)" category="Wastegate Duty Cycle Maps" address="12264" type="2D" level="1" scaling="WGDuty_8bit">
+		<table name="Engine Speed" address="2d232" type="Y Axis" elements="17" scaling="RPM4_16bit"/>
+	</table>
+
+	<table name="Map 7 (12278)" category="Wastegate Duty Cycle Maps" address="1227c" type="2D" level="1" scaling="WGDuty_8bit">
+		<table name="Engine Speed" address="2d232" type="Y Axis" elements="17" scaling="RPM4_16bit"/>
+	</table>
+
+	<table name="Map 8 (12F20)" category="Wastegate Duty Cycle Maps" address="12f24" type="2D" level="1" scaling="WGDuty_8bit">
+		<table name="Engine Speed" address="2d232" type="Y Axis" elements="17" scaling="RPM4_16bit"/>
+	</table>
+
+	<table name="Map 1 (12F40)" category="Load Limit Maps" address="12f44" type="2D" level="1" flipx="true" scaling="LoadBoostCut">
+		<table name="RPM" address="2cd06" type="Y Axis" elements="12" scaling="RPM"/>
+	</table>
+
+	<table name="Map 2 (12F58)" category="Load Limit Maps" address="12f5c" type="2D" level="1" flipx="true" scaling="LoadBoostCut">
+		<table name="RPM" address="2cd06" type="Y Axis" elements="12" scaling="RPM"/>
+	</table>
+
+	<table name="Map 3 (12F70)" category="Load Limit Maps" address="12f74" type="2D" level="1" flipx="true" scaling="LoadBoostCut">
+		<table name="RPM" address="2cd06" type="Y Axis" elements="12" scaling="RPM"/>
+	</table>
+
+	<table name="Map 4 (12F88)" category="Load Limit Maps" address="12f8c" type="2D" level="1" flipx="true" scaling="LoadBoostCut">
+		<table name="RPM" address="2cd06" type="Y Axis" elements="12" scaling="RPM"/>
+	</table>
+
+	<table name="Map 5 (12FA0)" category="Load Limit Maps" address="12fa4" type="2D" level="1" flipx="true" scaling="LoadBoostCut">
+		<table name="RPM" address="2cd06" type="Y Axis" elements="12" scaling="RPM"/>
+	</table>
+
+	<table name="Map 6 (12FB8)" category="Load Limit Maps" address="12fbc" type="2D" level="1" flipx="true" scaling="LoadBoostCut">
+		<table name="RPM" address="2cd06" type="Y Axis" elements="12" scaling="RPM"/>
+	</table>
+
+	<table name="Map 7 (12FD0)" category="Load Limit Maps" address="12fd4" type="2D" level="1" flipx="true" scaling="LoadBoostCut">
+		<table name="RPM" address="2cd06" type="Y Axis" elements="12" scaling="RPM"/>
+	</table>
+
+	<table name="Map 8 (12FE8)" category="Load Limit Maps" address="12fec" type="2D" level="1" flipx="true" scaling="LoadBoostCut">
+		<table name="RPM" address="2cd06" type="Y Axis" elements="12" scaling="RPM"/>
+	</table>
+
+	<table name="Map 1 (10b20)" category="Fuel Maps" address="10b27" type="3D" level="1" swapxy="true" scaling="AFR">
+		<table name="Load" address="198e6" type="X Axis" elements="22" scaling="Load"/>
+		<table name="RPM" address="19926" type="Y Axis" elements="19" scaling="RPM"/>
+	</table>
+
+	<table name="Map 2 (110A0)" category="Fuel Maps" address="110a7" type="3D" level="1" swapxy="true" scaling="AFR">
+		<table name="Load" address="198e6" type="X Axis" elements="22" scaling="Load"/>
+		<table name="RPM" address="19926" type="Y Axis" elements="19" scaling="RPM"/>
+	</table>
+
+	<table name="Map 3 (11770)" category="Fuel Maps" address="11777" type="3D" level="1" swapxy="true" scaling="AFR">
+		<table name="Load" address="198e6" type="X Axis" elements="22" scaling="Load"/>
+		<table name="RPM" address="19926" type="Y Axis" elements="19" scaling="RPM"/>
+	</table>
+
+	<table name="Map 4 (11B10)" category="Fuel Maps" address="11b17" type="3D" level="1" swapxy="true" scaling="AFR">
+		<table name="Load" address="198e6" type="X Axis" elements="22" scaling="Load"/>
+		<table name="RPM" address="19926" type="Y Axis" elements="19" scaling="RPM"/>
+	</table>
+
+	<table name="Map 5 (13100)" category="Fuel Maps" address="13107" type="3D" level="1" swapxy="true" scaling="AFR">
+		<table name="Load" address="198e6" type="X Axis" elements="22" scaling="Load"/>
+		<table name="RPM" address="19926" type="Y Axis" elements="19" scaling="RPM"/>
+	</table>
+
+	<table name="Map 6 (134A0)" category="Fuel Maps" address="134a7" type="3D" level="1" swapxy="true" scaling="AFR">
+		<table name="Load" address="198e6" type="X Axis" elements="22" scaling="Load"/>
+		<table name="RPM" address="19926" type="Y Axis" elements="19" scaling="RPM"/>
+	</table>
+
+	<table name="Map 7 (13840)" category="Fuel Maps" address="13847" type="3D" level="1" swapxy="true" scaling="AFR">
+		<table name="Load" address="198e6" type="X Axis" elements="22" scaling="Load"/>
+		<table name="RPM" address="19926" type="Y Axis" elements="19" scaling="RPM"/>
+	</table>
+
+	<table name="Map 8 (13BE0)" category="Fuel Maps" address="13be7" type="3D" level="1" swapxy="true" scaling="AFR">
+		<table name="Load" address="198e6" type="X Axis" elements="22" scaling="Load"/>
+		<table name="RPM" address="19926" type="Y Axis" elements="19" scaling="RPM"/>
+	</table>
+
+	<table name="Map 1 (10CD0)" category="Ignition Timing Maps" address="10cd7" type="3D" level="1" swapxy="true" scaling="Timing">
+		<table name="Load" address="1a366" type="X Axis" elements="23" scaling="Load"/>
+		<table name="RPM" address="1a326" type="Y Axis" elements="21" scaling="RPM"/>
+	</table>
+
+	<table name="Map 2 (11250)" category="Ignition Timing Maps" address="11257" type="3D" level="1" swapxy="true" scaling="Timing">
+		<table name="Load" address="1a366" type="X Axis" elements="23" scaling="Load"/>
+		<table name="RPM" address="1a326" type="Y Axis" elements="21" scaling="RPM"/>
+	</table>
+
+	<table name="Map 3 (11920)" category="Ignition Timing Maps" address="11927" type="3D" level="1" swapxy="true" scaling="Timing">
+		<table name="Load" address="1a366" type="X Axis" elements="23" scaling="Load"/>
+		<table name="RPM" address="1a326" type="Y Axis" elements="21" scaling="RPM"/>
+	</table>
+
+	<table name="Map 4 (11CC0)" category="Ignition Timing Maps" address="11cc7" type="3D" level="1" swapxy="true" scaling="Timing">
+		<table name="Load" address="1a366" type="X Axis" elements="23" scaling="Load"/>
+		<table name="RPM" address="1a326" type="Y Axis" elements="21" scaling="RPM"/>
+	</table>
+
+	<table name="Map 5 (132B0)" category="Ignition Timing Maps" address="132b7" type="3D" level="1" swapxy="true" scaling="Timing">
+		<table name="Load" address="1a366" type="X Axis" elements="23" scaling="Load"/>
+		<table name="RPM" address="1a326" type="Y Axis" elements="21" scaling="RPM"/>
+	</table>
+
+	<table name="Map 6 (13650)" category="Ignition Timing Maps" address="13657" type="3D" level="1" swapxy="true" scaling="Timing">
+		<table name="Load" address="1a366" type="X Axis" elements="23" scaling="Load"/>
+		<table name="RPM" address="1a326" type="Y Axis" elements="21" scaling="RPM"/>
+	</table>
+
+	<table name="Map 7 (139F0)" category="Ignition Timing Maps" address="139f7" type="3D" level="1" swapxy="true" scaling="Timing">
+		<table name="Load" address="1a366" type="X Axis" elements="23" scaling="Load"/>
+		<table name="RPM" address="1a326" type="Y Axis" elements="21" scaling="RPM"/>
+	</table>
+
+	<table name="Map 8 (13D90)" category="Ignition Timing Maps" address="13d97" type="3D" level="1" swapxy="true" scaling="Timing">
+		<table name="Load" address="1a366" type="X Axis" elements="23" scaling="Load"/>
+		<table name="RPM" address="1a326" type="Y Axis" elements="21" scaling="RPM"/>
+	</table>
+
+	<table name="High Octane Fuel" category="KS Switched Configuration 1" address="2d46e" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Fuel" category="KS Switched Configuration 2" address="2d472" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Fuel" category="KS Switched Configuration 3" address="2d476" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Fuel" category="KS Switched Configuration 4" address="2d47a" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Fuel" category="KS Switched Configuration 5" address="2d47e" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Fuel" category="KS Switched Configuration 6" address="2d482" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Fuel" category="KS Switched Configuration 7" address="2d486" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Fuel" category="KS Switched Configuration 8" address="2d48a" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Fuel" category="KS Switched Configuration 1" address="2d48e" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Fuel" category="KS Switched Configuration 2" address="2d492" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Fuel" category="KS Switched Configuration 3" address="2d496" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Fuel" category="KS Switched Configuration 4" address="2d49a" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Fuel" category="KS Switched Configuration 5" address="2d49e" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Fuel" category="KS Switched Configuration 6" address="2d4a2" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Fuel" category="KS Switched Configuration 7" address="2d4a6" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Fuel" category="KS Switched Configuration 8" address="2d4aa" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Ignition Timing" category="KS Switched Configuration 1" address="2d4ae" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Ignition Timing" category="KS Switched Configuration 2" address="2d4b2" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Ignition Timing" category="KS Switched Configuration 3" address="2d4b6" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Ignition Timing" category="KS Switched Configuration 4" address="2d4ba" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Ignition Timing" category="KS Switched Configuration 5" address="2d4be" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Ignition Timing" category="KS Switched Configuration 6" address="2d4c2" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Ignition Timing" category="KS Switched Configuration 7" address="2d4c6" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Ignition Timing" category="KS Switched Configuration 8" address="2d4ca" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Ignition Timing" category="KS Switched Configuration 1" address="2d4ce" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Ignition Timing" category="KS Switched Configuration 2" address="2d4d2" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Ignition Timing" category="KS Switched Configuration 3" address="2d4d6" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Ignition Timing" category="KS Switched Configuration 4" address="2d4da" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Ignition Timing" category="KS Switched Configuration 5" address="2d4de" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Ignition Timing" category="KS Switched Configuration 6" address="2d4e2" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Ignition Timing" category="KS Switched Configuration 7" address="2d4e6" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Ignition Timing" category="KS Switched Configuration 8" address="2d4ea" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Target Load" category="KS Switched Configuration 1" address="2d60e" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Target Load" category="KS Switched Configuration 2" address="2d612" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Target Load" category="KS Switched Configuration 3" address="2d616" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Target Load" category="KS Switched Configuration 4" address="2d61a" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Target Load" category="KS Switched Configuration 5" address="2d61e" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Target Load" category="KS Switched Configuration 6" address="2d622" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Target Load" category="KS Switched Configuration 7" address="2d626" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Target Load" category="KS Switched Configuration 8" address="2d62a" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Target Load" category="KS Switched Configuration 1" address="2d5ee" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Target Load" category="KS Switched Configuration 2" address="2d5f2" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Target Load" category="KS Switched Configuration 3" address="2d5f6" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Target Load" category="KS Switched Configuration 4" address="2d5fa" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Target Load" category="KS Switched Configuration 5" address="2d5fe" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Target Load" category="KS Switched Configuration 6" address="2d602" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Target Load" category="KS Switched Configuration 7" address="2d606" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Target Load" category="KS Switched Configuration 8" address="2d60a" type="1D" level="4" scaling="Hex32"/>
+	
+	<table name="High Octane Wastegate Duty" category="KS Switched Configuration 1" address="2d64e" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Wastegate Duty" category="KS Switched Configuration 2" address="2d652" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Wastegate Duty" category="KS Switched Configuration 3" address="2d656" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Wastegate Duty" category="KS Switched Configuration 4" address="2d65a" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Wastegate Duty" category="KS Switched Configuration 5" address="2d65e" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Wastegate Duty" category="KS Switched Configuration 6" address="2d662" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Wastegate Duty" category="KS Switched Configuration 7" address="2d666" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="High Octane Wastegate Duty" category="KS Switched Configuration 8" address="2d66a" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Wastegate Duty" category="KS Switched Configuration 1" address="2d62e" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Wastegate Duty" category="KS Switched Configuration 2" address="2d632" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Wastegate Duty" category="KS Switched Configuration 3" address="2d636" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Wastegate Duty" category="KS Switched Configuration 4" address="2d63a" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Wastegate Duty" category="KS Switched Configuration 5" address="2d63e" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Wastegate Duty" category="KS Switched Configuration 6" address="2d642" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Wastegate Duty" category="KS Switched Configuration 7" address="2d646" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Low Octane Wastegate Duty" category="KS Switched Configuration 8" address="2d64a" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Load Limit" category="KS Switched Configuration 1" address="2d52e" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Load Limit" category="KS Switched Configuration 2" address="2d532" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Load Limit" category="KS Switched Configuration 3" address="2d536" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Load Limit" category="KS Switched Configuration 4" address="2d53a" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Load Limit" category="KS Switched Configuration 5" address="2d53e" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Load Limit" category="KS Switched Configuration 6" address="2d542" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Load Limit" category="KS Switched Configuration 7" address="2d546" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="Load Limit" category="KS Switched Configuration 8" address="2d54a" type="1D" level="4" scaling="Hex32"/>
+
+	<table name="KS Mods Setup Bits" category="KS Switched Configuration 1" address="2d6d6" type="2D" scaling="EnableDisableBit">
+		<table name="Setup Bit Number" type="Static Y Axis" flipy="true" elements="16">
+			<data>bit.15, All Mods Off                 0=Off, 1=Enable   .</data>
+			<data>bit.14, CEL on KnockSUM                                .</data>
+			<data>bit.13, One Byte Load (F604) (not working)             .</data>
+			<data>bit.12,                                                .</data>
+			<data>bit.11                                                 .</data>
+			<data>bit.10,                                                .</data>
+			<data>bit.09,                                                .</data>
+			<data>bit.08,                                                .</data>
+			<data>bit.07,                                                .</data>
+			<data>bit.06,                                                .</data>
+			<data>bit.05,                                                .</data>
+			<data>bit.04,                                                .</data>
+			<data>bit.03,                                                .</data>
+			<data>bit.02,                                                .</data>
+			<data>bit.01, Gear Calc (F640)                               .</data>
+			<data>bit.00, Standard Closed Loop (0 = Force Open loop)     .</data>
+		</table>
+	</table>
+
+	<table name="KS Mods Setup Bits" category="KS Switched Configuration 2" address="2d6d8" type="2D" scaling="EnableDisableBit">
+		<table name="Setup Bit Number" type="Static Y Axis" flipy="true" elements="16">
+			<data>bit.15, All Mods Off                 0=Off, 1=Enable   .</data>
+			<data>bit.14, CEL on KnockSUM                                .</data>
+			<data>bit.13, One Byte Load (F604) (not working)             .</data>
+			<data>bit.12,                                                .</data>
+			<data>bit.11                                                 .</data>
+			<data>bit.10,                                                .</data>
+			<data>bit.09                                                 .</data>
+			<data>bit.08                                                 .</data>
+			<data>bit.07                                                 .</data>
+			<data>bit.06                                                 .</data>
+			<data>bit.05,                                                .</data>
+			<data>bit.04,                                                .</data>
+			<data>bit.03,                                                .</data>
+			<data>bit.02,                                                .</data>
+			<data>bit.01, Gear Calc (F640)                               .</data>
+			<data>bit.00, Standard Closed Loop (0 = Force Open loop)     .</data>
+		</table>
+	</table>
+
+	<table name="KS Mods Setup Bits" category="KS Switched Configuration 3" address="2d6da" type="2D" scaling="EnableDisableBit">
+		<table name="Setup Bit Number" type="Static Y Axis" flipy="true" elements="16">
+			<data>bit.15, All Mods Off                 0=Off, 1=Enable   .</data>
+			<data>bit.14, CEL on KnockSUM                                .</data>
+			<data>bit.13, One Byte Load (F604) (not working)             .</data>
+			<data>bit.12,                                                .</data>
+			<data>bit.11                                                 .</data>
+			<data>bit.10,                                                .</data>
+			<data>bit.09                                                 .</data>
+			<data>bit.08                                                 .</data>
+			<data>bit.07                                                 .</data>
+			<data>bit.06                                                 .</data>
+			<data>bit.05,                                                .</data>
+			<data>bit.04,                                                .</data>
+			<data>bit.03,                                                .</data>
+			<data>bit.02,                                                .</data>
+			<data>bit.01, Gear Calc (F640)                               .</data>
+			<data>bit.00, Standard Closed Loop (0 = Force Open loop)     .</data>
+		</table>
+	</table>
+
+	<table name="KS Mods Setup Bits" category="KS Switched Configuration 4" address="2d6dc" type="2D" scaling="EnableDisableBit">
+		<table name="Setup Bit Number" type="Static Y Axis" flipy="true" elements="16">
+			<data>bit.15, All Mods Off                 0=Off, 1=Enable   .</data>
+			<data>bit.14, CEL on KnockSUM                                .</data>
+			<data>bit.13, One Byte Load (F604) (not working)             .</data>
+			<data>bit.12,                                                .</data>
+			<data>bit.11                                                 .</data>
+			<data>bit.10,                                                .</data>
+			<data>bit.09                                                 .</data>
+			<data>bit.08                                                 .</data>
+			<data>bit.07                                                 .</data>
+			<data>bit.06                                                 .</data>
+			<data>bit.05,                                                .</data>
+			<data>bit.04,                                                .</data>
+			<data>bit.03,                                                .</data>
+			<data>bit.02,                                                .</data>
+			<data>bit.01, Gear Calc (F640)                               .</data>
+			<data>bit.00, Standard Closed Loop (0 = Force Open loop)     .</data>
+		</table>
+	</table>
+
+	<table name="KS Mods Setup Bits" category="KS Switched Configuration 5" address="2d6de" type="2D" scaling="EnableDisableBit">
+		<table name="Setup Bit Number" type="Static Y Axis" flipy="true" elements="16">
+			<data>bit.15, All Mods Off                 0=Off, 1=Enable   .</data>
+			<data>bit.14, CEL on KnockSUM                                .</data>
+			<data>bit.13, One Byte Load (F604) (not working)             .</data>
+			<data>bit.12,                                                .</data>
+			<data>bit.11                                                 .</data>
+			<data>bit.10,                                                .</data>
+			<data>bit.09                                                 .</data>
+			<data>bit.08                                                 .</data>
+			<data>bit.07                                                 .</data>
+			<data>bit.06                                                 .</data>
+			<data>bit.05,                                                .</data>
+			<data>bit.04,                                                .</data>
+			<data>bit.03,                                                .</data>
+			<data>bit.02,                                                .</data>
+			<data>bit.01, Gear Calc (F640)                               .</data>
+			<data>bit.00, Standard Closed Loop (0 = Force Open loop)     .</data>
+		</table>
+	</table>
+
+	<table name="KS Mods Setup Bits" category="KS Switched Configuration 6" address="2d6e0" type="2D" scaling="EnableDisableBit">
+		<table name="Setup Bit Number" type="Static Y Axis" flipy="true" elements="16">
+			<data>bit.15, All Mods Off                 0=Off, 1=Enable   .</data>
+			<data>bit.14, CEL on KnockSUM                                .</data>
+			<data>bit.13, One Byte Load (F604) (not working)             .</data>
+			<data>bit.12,                                                .</data>
+			<data>bit.11                                                 .</data>
+			<data>bit.10,                                                .</data>
+			<data>bit.09                                                 .</data>
+			<data>bit.08                                                 .</data>
+			<data>bit.07                                                 .</data>
+			<data>bit.06                                                 .</data>
+			<data>bit.05,                                                .</data>
+			<data>bit.04,                                                .</data>
+			<data>bit.03,                                                .</data>
+			<data>bit.02,                                                .</data>
+			<data>bit.01, Gear Calc (F640)                               .</data>
+			<data>bit.00, Standard Closed Loop (0 = Force Open loop)     .</data>
+		</table>
+	</table>
+
+	<table name="KS Mods Setup Bits" category="KS Switched Configuration 7" address="2d6e2" type="2D" scaling="EnableDisableBit">
+		<table name="Setup Bit Number" type="Static Y Axis" flipy="true" elements="16">
+			<data>bit.15, All Mods Off                 0=Off, 1=Enable   .</data>
+			<data>bit.14, CEL on KnockSUM                                .</data>
+			<data>bit.13, One Byte Load (F604) (not working)             .</data>
+			<data>bit.12,                                                .</data>
+			<data>bit.11                                                 .</data>
+			<data>bit.10,                                                .</data>
+			<data>bit.09                                                 .</data>
+			<data>bit.08                                                 .</data>
+			<data>bit.07                                                 .</data>
+			<data>bit.06                                                 .</data>
+			<data>bit.05,                                                .</data>
+			<data>bit.04,                                                .</data>
+			<data>bit.03,                                                .</data>
+			<data>bit.02,                                                .</data>
+			<data>bit.01, Gear Calc (F640)                               .</data>
+			<data>bit.00, Standard Closed Loop (0 = Force Open loop)     .</data>
+		</table>
+	</table>
+
+	<table name="KS Mods Setup Bits" category="KS Switched Configuration 8" address="2d6e4" type="2D" scaling="EnableDisableBit">
+		<table name="Setup Bit Number" type="Static Y Axis" flipy="true" elements="16">
+			<data>bit.15, All Mods Off                 0=Off, 1=Enable   .</data>
+			<data>bit.14, CEL on KnockSUM                                .</data>
+			<data>bit.13, One Byte Load (F604) (not working)             .</data>
+			<data>bit.12,                                                .</data>
+			<data>bit.11                                                 .</data>
+			<data>bit.10,                                                .</data>
+			<data>bit.09                                                 .</data>
+			<data>bit.08                                                 .</data>
+			<data>bit.07                                                 .</data>
+			<data>bit.06                                                 .</data>
+			<data>bit.05,                                                .</data>
+			<data>bit.04,                                                .</data>
+			<data>bit.03,                                                .</data>
+			<data>bit.02,                                                .</data>
+			<data>bit.01, Gear Calc (F640)                               .</data>
+			<data>bit.00, Standard Closed Loop (0 = Force Open loop)     .</data>
+		</table>
+	</table>
+
+	<table name="RPM Limit" category="KS Switched Configuration 8" address="2d6b4" type="1D" level="4" scaling="RPMLimit_16bit"/>
+
+</rom>

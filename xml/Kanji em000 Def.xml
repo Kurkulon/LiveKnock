@@ -1,0 +1,805 @@
+<rom>
+	<romid>
+		<xmlid>EM000</xmlid>
+		<internalidaddress>2fefa</internalidaddress>
+		<internalidstring>EM000</internalidstring>
+		<caseid>md340288</caseid>
+		<make>mitsubishi</make>
+		<market>JDM</market>
+		<model>legnum</model>
+		<submodel>vr4</submodel>
+		<transmission>auto</transmission>
+		<year>1996</year>
+		<flashmethod>mitsukernel</flashmethod>
+		<memmodel>H8539F</memmodel>
+	</romid>
+
+
+	<scaling name="AFR" units="AFR" toexpr="14.7*128/x" frexpr="14.7*128/x" format="%.1f" min="8" max="20" inc="0.1" storagetype="uint8" endian="big"/>
+	<scaling name="AirFlow16" units="g/s" toexpr="x*300/65536" frexpr="x*65536/300" format="%.1f" min="0" max="300" inc="1" storagetype="uint16" endian="big"/>
+	<scaling name="AirFlow8" units="g/s" toexpr="x*321/256" frexpr="x*256/321" format="%.1f" min="0" max="321" inc="1" storagetype="uint8" endian="big"/>
+	<scaling name="Ascii" storagetype="bloblist" storagebits="8">
+		<data name="0" value="30"/>
+		<data name="1" value="31"/>
+		<data name="2" value="32"/>
+		<data name="3" value="33"/>
+		<data name="4" value="34"/>
+		<data name="5" value="35"/>
+		<data name="6" value="36"/>
+		<data name="7" value="37"/>
+		<data name="8" value="38"/>
+		<data name="9" value="39"/>
+		<data name="A" value="41"/>
+		<data name="B" value="42"/>
+		<data name="C" value="43"/>
+		<data name="D" value="44"/>
+		<data name="E" value="45"/>
+		<data name="F" value="46"/>
+		<data name="G" value="47"/>
+		<data name="H" value="48"/>
+		<data name="I" value="49"/>
+		<data name="J" value="4A"/>
+		<data name="K" value="4B"/>
+		<data name="L" value="4C"/>
+		<data name="M" value="4D"/>
+		<data name="N" value="4E"/>
+		<data name="O" value="4F"/>
+		<data name="P" value="50"/>
+		<data name="Q" value="51"/>
+		<data name="R" value="52"/>
+		<data name="S" value="53"/>
+		<data name="T" value="54"/>
+		<data name="U" value="55"/>
+		<data name="V" value="56"/>
+		<data name="W" value="57"/>
+		<data name="X" value="58"/>
+		<data name="Y" value="59"/>
+		<data name="Z" value="5A"/>
+	</scaling>
+	<scaling name="BatteryVoltage" units="V" toexpr="x*75/1024" frexpr="x*1024/75" format="%.2f" min="0" max="18.75" inc="0.5" storagetype="uint16" endian="big"/>
+	<scaling name="BoostBar" units="bar" toexpr="x/93.7" frexpr="x*93.7" format="%.2f" min="0" max="2.7" inc="0.05" storagetype="uint8" endian="big"/>
+	<scaling name="BoostBar16" units="bar" toexpr="x/1372.2" frexpr="x*1372.2" format="%.2f" min="0" max="2.7" inc="0.05" storagetype="uint16" endian="big"/>
+	<scaling name="BoostError" units="%" toexpr="x*5/32-20" frexpr="(x+20)*32/5" format="%.1f" min="-20" max="20" inc="0.5" storagetype="uint16" endian="big"/>
+	<scaling name="DynamicBoost" units="%" toexpr="(x-128)/2" frexpr="x*2+128" format="%.1f" min="-64" max="63.5" inc="0.5" storagetype="uint8" endian="big"/>
+	<scaling name="Enrich" units="deg" toexpr="x-128" frexpr="x+128" format="%.0f" min="-128" max="128" inc="1" storagetype="uint8" endian="big"/>
+	<scaling name="EnrichmentAdj" units="%" toexpr="x/128" frexpr="x*128" format="%.2f" min="0" max="2" inc="0.05" storagetype="uint8" endian="big"/>
+	<scaling name="Hex16" units="hex" toexpr="x" frexpr="x" format="%04X" min="0" max="65535" inc="1" storagetype="uint16" endian="big"/>
+	<scaling name="Hex8" units="hex" toexpr="x" frexpr="x" format="%02X" min="0" max="255" inc="1" storagetype="uint8" endian="big"/>
+	<scaling name="ISCVSteps" units="Steps" toexpr="x" frexpr="x" format="%.0f" min="0" max="255" inc="1" storagetype="uint8" endian="big"/>
+	<scaling name="ISCVSteps16" units="Steps" toexpr="x" frexpr="x" format="%.0f" min="0" max="255" inc="1" storagetype="uint16" endian="big"/>
+	<scaling name="InjectorLatency1" units="ms" toexpr="x*0.024" frexpr="x/0.024" format="%.3f" min="0" max="4" inc="1" storagetype="uint8" endian="big"/>
+	<scaling name="InjectorLatency2" units="mS" toexpr="x*0.015" frexpr="x/0.015" format="%.3f" min="0" max="4" inc="1" storagetype="uint8" endian="big"/>
+	<scaling name="InjectorScaling" units="cc/min" toexpr="29241/x" frexpr="29241/x" format="%.0f" min="1" max="1600" inc="10" storagetype="uint16" endian="big"/>
+	<scaling name="Load" units="%" toexpr="x*10/32" frexpr="x*32/10" format="%.0f" min="0" max="300" inc="1" storagetype="uint16" endian="big"/>
+	<scaling name="Load16" units="units" toexpr="x*5/8" frexpr="x*8/5" format="%.1f" min="0" max="100" inc="1" storagetype="uint16" endian="big"/>
+	<scaling name="Load8" units="%" toexpr="x*5/8" frexpr="x*8/5" format="%.1f" min="0" max="160" inc="1" storagetype="uint8" endian="big"/>
+	<scaling name="LoadBoost" units="%" toexpr="x*5/4" frexpr="x*4/5" format="%.0f" min="0" max="319" inc="1" storagetype="uint8" endian="big"/>
+	<scaling name="Boost" units="Bar" toexpr="x/200" frexpr="x*200" format="%.2f" min="0" max="1" inc=".01" storagetype="uint8" endian="big"/>
+	<scaling name="MAFsize" units="units" toexpr="39044/x" frexpr="39044/x" format="%.0f" min="1000" max="5000" inc="1" storagetype="int16" endian="big"/>
+	<scaling name="Percent (128)" units="%" toexpr="x/1.28" frexpr="x*1.28" format="%.0f" min="0" max="100" inc="1" storagetype="uint8" endian="big"/>
+	<scaling name="Percent255" units="%" toexpr="100*x/255" frexpr="255*x/100" format="%.0f" min="0" max="100" inc="1" storagetype="uint8" endian="big"/>
+	<scaling name="RPM" units="RPM" toexpr="x*1000/256" frexpr="x*256/1000" format="%.0f" min="0" max="11000" inc="50" storagetype="uint16" endian="big"/>
+	<scaling name="RPM8" units="RPM" toexpr="x*125/16" frexpr="x*16/125" format="%.0f" min="0" max="2000" inc="50" storagetype="uint8" endian="big"/>
+	<scaling name="RPMLimit" units="RPM" toexpr="7500000/x" frexpr="7500000/x" format="%.0f" min="0" max="9000" inc="60" storagetype="uint16" endian="big"/>
+	<scaling name="RPMStatLimit" units="units" toexpr="x*31.25" frexpr="x/31.25" format="%.0f" min="0" max="9000" inc="31.25" storagetype="uint16" endian="big"/>
+	<scaling name="RPMTarget" units="RPM" toexpr="x*125/16" frexpr="x*16/125" format="%.0f" min="0" max="2000" inc="50" storagetype="uint16" endian="big"/>
+	<scaling name="Temp" units="Celsius" toexpr="x-40" frexpr="x+40" format="%.0f" min="-40" max="215" inc="1" storagetype="uint16" endian="big"/>
+	<scaling name="ThrottleVoltage" units="V" toexpr="x*5/256" frexpr="x*256/5" format="%.2f" min="0" max="5" inc="0.05" storagetype="uint8" endian="big"/>
+	<scaling name="Time" units="ms" toexpr="x*25" frexpr="x/25" format="%.0f" min="0" max="1.63838e+06" inc="25" storagetype="uint16" endian="big"/>
+	<scaling name="TimeSec" units="s" toexpr="x/10" frexpr="x*10" format="%.1f" min="0" max="25.5" inc="0.1" storagetype="uint16" endian="big"/>
+	<scaling name="Timing" units="degrees" toexpr="x" frexpr="x" format="%.0f" min="-61" max="61" inc="1" storagetype="int8" endian="big"/>
+	<scaling name="TimingTrim8" units="units" toexpr="x-128" frexpr="x+128" format="%.0f" min="-128" max="128" inc="1" storagetype="uint8" endian="big"/>
+	<scaling name="ValveTiming" units="degrees" toexpr="72-x*0.6" frexpr="(72-x)/0.6" format="%.1f" min="0" max="30" inc="0.6" storagetype="uint8" endian="big"/>
+	<scaling name="VehicleSpeed" units="km/h" toexpr="x*2" frexpr="x/2" format="%.0f" min="0" max="510" inc="1" storagetype="uint16" endian="big"/>
+	<scaling name="VehicleSpeed8" units="units" toexpr="x*2" frexpr="x/2" format="%.0f" min="0" max="510" inc="1" storagetype="uint8" endian="big"/>
+	<scaling name="Volts16" units="Volts" toexpr="x*5/256" frexpr="x*256/5" format="%.2f" min="0" max="5" inc="0.05" storagetype="uint16" endian="big"/>
+	<scaling name="WGDuty" units="%" toexpr="x/2" frexpr="x*2" format="%.1f" min="0" max="100" inc="0.5" storagetype="uint8" endian="big"/>
+	<scaling name="blobbits" storagetype="bloblist" storagebits="1">
+		<data name="0" value="00"/>
+		<data name="1" value="01"/>
+	</scaling>
+	<scaling name="uint16" units="units" toexpr="x" frexpr="x" format="%.0f" min="0" max="65535" inc="1" storagetype="uint16" endian="big"/>
+	<scaling name="uint8" units="units" toexpr="x" frexpr="x" format="%.0f" min="0" max="255" inc="1" storagetype="uint8" endian="big"/>
+
+
+
+	<table name="Fuel Map 1 - HI OCTANE #1" category="Fuel" address="1109e" type="3D" level="2" scaling="AFR">
+		<table name="Load" type="Static X Axis" elements="15">
+			<data>10</data>
+			<data>20</data>
+			<data>30</data>
+			<data>40</data>
+			<data>50</data>
+			<data>60</data>
+			<data>70</data>
+			<data>80</data>
+			<data>90</data>
+			<data>100</data>
+			<data>120</data>
+			<data>140</data>
+			<data>160</data>
+			<data>180</data>
+			<data>200</data>
+		</table>		
+		<table name="RPM" type="Static Y Axis" elements="15">
+			<data>750</data>
+			<data>1000</data>
+			<data>1250</data>
+			<data>1500</data>
+			<data>2000</data>
+			<data>2500</data>
+			<data>3000</data>
+			<data>4000</data>
+			<data>4500</data>
+			<data>5000</data>
+			<data>5500</data>
+			<data>6000</data>
+			<data>6500</data>
+			<data>7000</data>
+			<data>8000</data>
+		</table>		
+	</table>
+
+	<table name="Fuel Map 2 - HI OCTANE #2" category="Fuel" address="11186" type="3D" scaling="AFR">
+		<table name="Load" type="Static X Axis" elements="15">
+			<data>10</data>
+			<data>20</data>
+			<data>30</data>
+			<data>40</data>
+			<data>50</data>
+			<data>60</data>
+			<data>70</data>
+			<data>80</data>
+			<data>90</data>
+			<data>100</data>
+			<data>120</data>
+			<data>140</data>
+			<data>160</data>
+			<data>180</data>
+			<data>200</data>
+		</table>		
+		<table name="RPM" type="Static Y Axis" elements="15">
+			<data>750</data>
+			<data>1000</data>
+			<data>1250</data>
+			<data>1500</data>
+			<data>2000</data>
+			<data>2500</data>
+			<data>3000</data>
+			<data>4000</data>
+			<data>4500</data>
+			<data>5000</data>
+			<data>5500</data>
+			<data>6000</data>
+			<data>6500</data>
+			<data>7000</data>
+			<data>8000</data>
+		</table>		
+	</table>
+
+	<table name="Fuel Map 3 - LO OCTANE #1" category="Fuel" address="1126e" type="3D" scaling="AFR">
+		<table name="Load" type="Static X Axis" elements="15">
+			<data>10</data>
+			<data>20</data>
+			<data>30</data>
+			<data>40</data>
+			<data>50</data>
+			<data>60</data>
+			<data>70</data>
+			<data>80</data>
+			<data>90</data>
+			<data>100</data>
+			<data>120</data>
+			<data>140</data>
+			<data>160</data>
+			<data>180</data>
+			<data>200</data>
+		</table>		
+		<table name="RPM" type="Static Y Axis" elements="15">
+			<data>750</data>
+			<data>1000</data>
+			<data>1250</data>
+			<data>1500</data>
+			<data>2000</data>
+			<data>2500</data>
+			<data>3000</data>
+			<data>4000</data>
+			<data>4500</data>
+			<data>5000</data>
+			<data>5500</data>
+			<data>6000</data>
+			<data>6500</data>
+			<data>7000</data>
+			<data>8000</data>
+		</table>		
+	</table>
+
+	<table name="Fuel Map 4 - LO OCTANE #2" category="Fuel" address="11356" type="3D" scaling="AFR">
+		<table name="Load" type="Static X Axis" elements="15">
+			<data>10</data>
+			<data>20</data>
+			<data>30</data>
+			<data>40</data>
+			<data>50</data>
+			<data>60</data>
+			<data>70</data>
+			<data>80</data>
+			<data>90</data>
+			<data>100</data>
+			<data>120</data>
+			<data>140</data>
+			<data>160</data>
+			<data>180</data>
+			<data>200</data>
+		</table>		
+		<table name="RPM" type="Static Y Axis" elements="15">
+			<data>750</data>
+			<data>1000</data>
+			<data>1250</data>
+			<data>1500</data>
+			<data>2000</data>
+			<data>2500</data>
+			<data>3000</data>
+			<data>4000</data>
+			<data>4500</data>
+			<data>5000</data>
+			<data>5500</data>
+			<data>6000</data>
+			<data>6500</data>
+			<data>7000</data>
+			<data>8000</data>
+		</table>		
+	</table>
+
+	<table name="*Injector Size Scaling" category="Fuel" address="14663" type="1D" scaling="InjectorScaling"/>
+
+
+	<table name="Injector Latency v Battery Voltage" category="Fuel" address="116a0" type="2D" scaling="InjectorLatency1">
+		<table name="Battery Voltage" address="147cc" type="Y Axis" elements="7" scaling="BatteryVoltage"/>
+	</table>
+
+	<table name="*AFM Speed" category="Fuel" address="11004" type="2D" swapxy="true" scaling="Timing">
+		<table name="Frequency" address="2ce68" type="X Axis" elements="21" scaling="AirFlow16"/>
+	</table>
+
+	<table name="*AFM Correct" category="Fuel" address="1101d" type="2D" scaling="Timing">
+		<table name="Frequency" address="2ce68" type="X Axis" elements="21" scaling="AirFlow16"/>
+	</table>
+
+	<table name="*Boost Cut Delay" category="Turbo" type="1D" scaling="Time"/>
+
+	<table name="*Boost Control Load Offset" category="Turbo" type="1D" scaling="Load16"/>
+
+	<table name="*Boost Desired Engine Load - Low Octane A" category="Turbo" address="121fd" type="2D" scaling="Load8">
+		<table name="RPM" type="Static Y Axis" elements="17">
+			<data>500</data>
+			<data>750</data>
+			<data>1000</data>
+			<data>1500</data>
+			<data>2000</data>
+			<data>2500</data>
+			<data>3000</data>
+			<data>3500</data>
+			<data>4000</data>
+			<data>4500</data>
+			<data>5000</data>
+			<data>5500</data>
+			<data>6000</data>
+			<data>6500</data>
+			<data>7000</data>
+			<data>7500</data>
+			<data>8000</data>
+		</table>		
+	</table>
+
+	<table name="*Boost Desired Engine Load - Low Octane B" category="Turbo" address="12227" type="2D" scaling="Load8">
+		<table name="RPM" type="Static Y Axis" elements="17">
+			<data>500</data>
+			<data>750</data>
+			<data>1000</data>
+			<data>1500</data>
+			<data>2000</data>
+			<data>2500</data>
+			<data>3000</data>
+			<data>3500</data>
+			<data>4000</data>
+			<data>4500</data>
+			<data>5000</data>
+			<data>5500</data>
+			<data>6000</data>
+			<data>6500</data>
+			<data>7000</data>
+			<data>7500</data>
+			<data>8000</data>
+		</table>		
+	</table>
+
+	<table name="*Boost Desired Engine Load - Hi Octane? - Auto?" category="Turbo" address="1223c" type="2D" scaling="Load8">
+		<table name="RPM" type="Static Y Axis" elements="17">
+			<data>500</data>
+			<data>750</data>
+			<data>1000</data>
+			<data>1500</data>
+			<data>2000</data>
+			<data>2500</data>
+			<data>3000</data>
+			<data>3500</data>
+			<data>4000</data>
+			<data>4500</data>
+			<data>5000</data>
+			<data>5500</data>
+			<data>6000</data>
+			<data>6500</data>
+			<data>7000</data>
+			<data>7500</data>
+			<data>8000</data>
+		</table>		
+	</table>
+
+	<table name="*Boost Desired Engine Load - Hi Octane? - Manual?" category="Turbo" address="12251" type="2D" scaling="Load8">
+		<table name="RPM" type="Static Y Axis" elements="17">
+			<data>500</data>
+			<data>750</data>
+			<data>1000</data>
+			<data>1500</data>
+			<data>2000</data>
+			<data>2500</data>
+			<data>3000</data>
+			<data>3500</data>
+			<data>4000</data>
+			<data>4500</data>
+			<data>5000</data>
+			<data>5500</data>
+			<data>6000</data>
+			<data>6500</data>
+			<data>7000</data>
+			<data>7500</data>
+			<data>8000</data>
+		</table>		
+	</table>
+
+	<table name="*WGDC - A" category="Turbo" address="121a1" type="2D" scaling="WGDuty">
+		<table name="RPM" type="Static Y Axis" elements="17">
+			<data>500</data>
+			<data>750</data>
+			<data>1000</data>
+			<data>1500</data>
+			<data>2000</data>
+			<data>2500</data>
+			<data>3000</data>
+			<data>3500</data>
+			<data>4000</data>
+			<data>4500</data>
+			<data>5000</data>
+			<data>5500</data>
+			<data>6000</data>
+			<data>6500</data>
+			<data>7000</data>
+			<data>7500</data>
+			<data>8000</data>
+		</table>		
+	</table>
+
+	<table name="*WGDC - B" category="Turbo" address="121b6" type="2D" scaling="WGDuty">
+		<table name="RPM" type="Static Y Axis" elements="17">
+			<data>500</data>
+			<data>750</data>
+			<data>1000</data>
+			<data>1500</data>
+			<data>2000</data>
+			<data>2500</data>
+			<data>3000</data>
+			<data>3500</data>
+			<data>4000</data>
+			<data>4500</data>
+			<data>5000</data>
+			<data>5500</data>
+			<data>6000</data>
+			<data>6500</data>
+			<data>7000</data>
+			<data>7500</data>
+			<data>8000</data>
+		</table>		
+	</table>
+	
+	<table name="Fuel cut Load - Auto? (only change 1000RPM-6500RPM)" category="Turbo" address="1149f" type="2D" scaling="Load8">
+		<table name="RPM" type="Static Y Axis" elements="15">
+			<data>750</data>
+			<data>1000</data>
+			<data>1250</data>
+			<data>1500</data>
+			<data>2000</data>
+			<data>2500</data>
+			<data>3000</data>
+			<data>4000</data>
+			<data>4500</data>
+			<data>5000</data>
+			<data>5500</data>
+			<data>6000</data>
+			<data>6500</data>
+			<data>7000</data>
+			<data>8000</data>
+		</table>		
+	</table>
+	
+	<table name="Fuel cut Load - Manual? (only change 1000RPM-6500RPM)" category="Turbo" address="114af" type="2D" scaling="Load8">
+		<table name="RPM" type="Static Y Axis" elements="15">
+			<data>750</data>
+			<data>1000</data>
+			<data>1250</data>
+			<data>1500</data>
+			<data>2000</data>
+			<data>2500</data>
+			<data>3000</data>
+			<data>4000</data>
+			<data>4500</data>
+			<data>5000</data>
+			<data>5500</data>
+			<data>6000</data>
+			<data>6500</data>
+			<data>7000</data>
+			<data>8000</data>
+		</table>		
+	</table>
+	
+	<table name="Rev Limit" category="Limits" address="1016a" type="1D" scaling="RPMLimit"/>
+
+	<table name="Speed Limit" category="Limits" address="1016d" type="2D" scaling="VehicleSpeed">
+		<table name="Condition" type="Static Y Axis" elements="2">
+			<data>Limit  ON</data>
+			<data>Limit OFF</data>
+		</table>
+	</table>
+
+	<table name="ECU Internal ID#2" category="Misc" address="2fefa" type="2D" scaling="Ascii">
+		<table name="Byte Position" type="Static Y Axis" elements="6">
+			<data>b1</data>
+			<data>b2</data>
+			<data>b3</data>
+			<data>b4</data>
+			<data>b5</data>
+			<data>b6</data>
+		</table>
+	</table>
+
+	<table name="Ignition Map 1 - HI OCTANE #1" category="Timing" address="1175d" type="3D" swapxy="true" scaling="Timing">
+		<table name="Load" type="Static X Axis" elements="17">
+			<data>0</data>
+			<data>10</data>
+			<data>20</data>
+			<data>30</data>
+			<data>40</data>
+			<data>50</data>
+			<data>60</data>
+			<data>70</data>
+			<data>80</data>
+			<data>90</data>
+			<data>100</data>
+			<data>120</data>
+			<data>140</data>
+			<data>160</data>
+			<data>180</data>
+			<data>200</data>
+			<data>400</data>
+		</table>		
+		<table name="RPM" type="Static Y Axis" elements="19">
+			<data>0</data>
+			<data>500</data>
+			<data>750</data>
+			<data>1000</data>
+			<data>1500</data>
+			<data>2000</data>
+			<data>2500</data>
+			<data>3000</data>
+			<data>3500</data>
+			<data>4000</data>
+			<data>4500</data>
+			<data>5000</data>
+			<data>5500</data>
+			<data>6000</data>
+			<data>6500</data>
+			<data>7000</data>
+			<data>7500</data>
+			<data>8000</data>
+			<data>20000</data>
+		</table>		
+	</table>
+
+	<table name="Ignition Map 2 - HI OCTANE #2" category="Timing" address="118a7" type="3D" swapxy="true" scaling="Timing">
+		<table name="Load" type="Static X Axis" elements="17">
+			<data>0</data>
+			<data>10</data>
+			<data>20</data>
+			<data>30</data>
+			<data>40</data>
+			<data>50</data>
+			<data>60</data>
+			<data>70</data>
+			<data>80</data>
+			<data>90</data>
+			<data>100</data>
+			<data>120</data>
+			<data>140</data>
+			<data>160</data>
+			<data>180</data>
+			<data>200</data>
+			<data>400</data>
+		</table>		
+		<table name="RPM" type="Static Y Axis" elements="19">
+			<data>0</data>
+			<data>500</data>
+			<data>750</data>
+			<data>1000</data>
+			<data>1500</data>
+			<data>2000</data>
+			<data>2500</data>
+			<data>3000</data>
+			<data>3500</data>
+			<data>4000</data>
+			<data>4500</data>
+			<data>5000</data>
+			<data>5500</data>
+			<data>6000</data>
+			<data>6500</data>
+			<data>7000</data>
+			<data>7500</data>
+			<data>8000</data>
+			<data>20000</data>
+		</table>		
+	</table>
+
+	<table name="Ignition Map 3 - LO OCTANE #1" category="Timing" address="119f1" type="3D" swapxy="true" scaling="Timing">
+		<table name="Load" type="Static X Axis" elements="17">
+			<data>0</data>
+			<data>10</data>
+			<data>20</data>
+			<data>30</data>
+			<data>40</data>
+			<data>50</data>
+			<data>60</data>
+			<data>70</data>
+			<data>80</data>
+			<data>90</data>
+			<data>100</data>
+			<data>120</data>
+			<data>140</data>
+			<data>160</data>
+			<data>180</data>
+			<data>200</data>
+			<data>400</data>
+		</table>		
+		<table name="RPM" type="Static Y Axis" elements="19">
+			<data>0</data>
+			<data>500</data>
+			<data>750</data>
+			<data>1000</data>
+			<data>1500</data>
+			<data>2000</data>
+			<data>2500</data>
+			<data>3000</data>
+			<data>3500</data>
+			<data>4000</data>
+			<data>4500</data>
+			<data>5000</data>
+			<data>5500</data>
+			<data>6000</data>
+			<data>6500</data>
+			<data>7000</data>
+			<data>7500</data>
+			<data>8000</data>
+			<data>20000</data>
+		</table>		
+	</table>
+
+	<table name="Ignition Map 4 - LO OCTANE #2" category="Timing" address="11b3b" type="3D" swapxy="true" scaling="Timing">
+		<table name="Load" type="Static X Axis" elements="17">
+			<data>0</data>
+			<data>10</data>
+			<data>20</data>
+			<data>30</data>
+			<data>40</data>
+			<data>50</data>
+			<data>60</data>
+			<data>70</data>
+			<data>80</data>
+			<data>90</data>
+			<data>100</data>
+			<data>120</data>
+			<data>140</data>
+			<data>160</data>
+			<data>180</data>
+			<data>200</data>
+			<data>400</data>
+		</table>		
+		<table name="RPM" type="Static Y Axis" elements="19">
+			<data>0</data>
+			<data>500</data>
+			<data>750</data>
+			<data>1000</data>
+			<data>1500</data>
+			<data>2000</data>
+			<data>2500</data>
+			<data>3000</data>
+			<data>3500</data>
+			<data>4000</data>
+			<data>4500</data>
+			<data>5000</data>
+			<data>5500</data>
+			<data>6000</data>
+			<data>6500</data>
+			<data>7000</data>
+			<data>7500</data>
+			<data>8000</data>
+			<data>20000</data>
+		</table>		
+	</table>
+
+	<table name="Cat-Warmup Ignition Retard Map #1" category="Timing" address="11c85" type="3D" swapxy="true" scaling="TimingTrim8">
+		<table name="Load" type="Static X Axis" elements="17">
+			<data>0</data>
+			<data>10</data>
+			<data>20</data>
+			<data>30</data>
+			<data>40</data>
+			<data>50</data>
+			<data>60</data>
+			<data>70</data>
+			<data>80</data>
+			<data>90</data>
+			<data>100</data>
+			<data>120</data>
+			<data>140</data>
+			<data>160</data>
+			<data>180</data>
+			<data>200</data>
+			<data>400</data>
+		</table>		
+		<table name="RPM" type="Static Y Axis" elements="19">
+			<data>0</data>
+			<data>500</data>
+			<data>750</data>
+			<data>1000</data>
+			<data>1500</data>
+			<data>2000</data>
+			<data>2500</data>
+			<data>3000</data>
+			<data>3500</data>
+			<data>4000</data>
+			<data>4500</data>
+			<data>5000</data>
+			<data>5500</data>
+			<data>6000</data>
+			<data>6500</data>
+			<data>7000</data>
+			<data>7500</data>
+			<data>8000</data>
+			<data>20000</data>
+		</table>		
+	</table>
+
+	<table name="Cat-Warmup Ignition Retard Map #2" category="Timing" address="11dcf" type="3D" swapxy="true" scaling="TimingTrim8">
+		<table name="Load" type="Static X Axis" elements="17">
+			<data>0</data>
+			<data>10</data>
+			<data>20</data>
+			<data>30</data>
+			<data>40</data>
+			<data>50</data>
+			<data>60</data>
+			<data>70</data>
+			<data>80</data>
+			<data>90</data>
+			<data>100</data>
+			<data>120</data>
+			<data>140</data>
+			<data>160</data>
+			<data>180</data>
+			<data>200</data>
+			<data>400</data>
+		</table>		
+		<table name="RPM" type="Static Y Axis" elements="19">
+			<data>0</data>
+			<data>500</data>
+			<data>750</data>
+			<data>1000</data>
+			<data>1500</data>
+			<data>2000</data>
+			<data>2500</data>
+			<data>3000</data>
+			<data>3500</data>
+			<data>4000</data>
+			<data>4500</data>
+			<data>5000</data>
+			<data>5500</data>
+			<data>6000</data>
+			<data>6500</data>
+			<data>7000</data>
+			<data>7500</data>
+			<data>8000</data>
+			<data>20000</data>
+		</table>		
+	</table>
+
+	<table name="Warmup Retard Control" category="Timing" address="11fae" type="2D" level="3" scaling="Percent255">
+		<table name="Engine Temp" address="2d0f4" type="X Axis" elements="8" scaling="Temp"/>
+	</table>
+
+	<table name="Timing Trim vs Engine Temp" category="Timing" address="11f7c" type="2D" level="2" scaling="Enrich">
+		<table name="Engine Temp" address="2d090" type="X Axis" elements="8" scaling="Temp"/>
+	</table>
+
+	<table name="Timing Trim vs Air Temp" category="Timing" address="11f88" type="2D" level="4" scaling="Enrich">
+		<table name="Air Temp" address="2d10a" type="X Axis" elements="7" scaling="Temp"/>
+	</table>
+
+	<table name="Target Idle RPM - Neutral" category="Idle" address="12004" type="2D" level="4" scaling="RPM8">
+		<table name="Engine Temp" address="2d090" type="X Axis" elements="8" scaling="Temp"/>
+	</table>
+
+	<table name="Target Idle RPM - Drive" category="Idle" address="12010" type="2D" level="4" scaling="RPM8">
+		<table name="Engine Temp" address="2d090" type="X Axis" elements="8" scaling="Temp"/>
+	</table>
+
+	<table name="ISCV Initial Steps #1" category="Idle" address="1201c" type="2D" level="4" scaling="ISCVSteps">
+		<table name="Engine Temp" address="2d090" type="X Axis" elements="8" scaling="Temp"/>
+	</table>
+
+	<table name="Decel Fuel Cut Resume RPM Offset" category="Fuel" address="1147a" type="2D" level="2" scaling="RPM8">
+		<table name="Engine Temp" address="2d090" type="X Axis" elements="8" scaling="Temp"/>
+	</table>
+
+	<table name="Fuel Primer Enrich" category="Fuel" address="1155c" type="2D" level="2" scaling="uint8">
+		<table name="Engine Temp" address="2d0a6" type="X Axis" elements="9" scaling="Temp"/>
+	</table>
+
+	<table name="0 = AT, 1 = MT, 2 = AT+TCL??? NOT YET TESTED!!!" category="Misc" address="10008" type="1D" scaling="Hex8"/>
+	<table name="KANJI Serial Number" category="Misc" address="2feff" type="1D" scaling="Hex8"/>
+
+
+	<table name="Target Boost - Op Temp" category="Turbo" address="121e0" type="2D" scaling="Load8">
+		<table name="RPM" type="Static Y Axis" elements="17">
+			<data>500</data>
+			<data>750</data>
+			<data>1000</data>
+			<data>1500</data>
+			<data>2000</data>
+			<data>2500</data>
+			<data>3000</data>
+			<data>3500</data>
+			<data>4000</data>
+			<data>4500</data>
+			<data>5000</data>
+			<data>5500</data>
+			<data>6000</data>
+			<data>6500</data>
+			<data>7000</data>
+			<data>7500</data>
+			<data>8000</data>
+		</table>		
+	</table>
+
+	<table name="Target Boost low Temp" category="Turbo" address="121cb" type="2D" scaling="Load8">
+		<table name="RPM" type="Static Y Axis" elements="17">
+			<data>500</data>
+			<data>750</data>
+			<data>1000</data>
+			<data>1500</data>
+			<data>2000</data>
+			<data>2500</data>
+			<data>3000</data>
+			<data>3500</data>
+			<data>4000</data>
+			<data>4500</data>
+			<data>5000</data>
+			<data>5500</data>
+			<data>6000</data>
+			<data>6500</data>
+			<data>7000</data>
+			<data>7500</data>
+			<data>8000</data>
+		</table>		
+	</table>
+
+
+</rom>
+
