@@ -1,7 +1,7 @@
 
 	.INCLUDE "cpp\def.inc"
 
-;DEF_ENRICH_COOL_AIR_MAPS:	.DEFINE		"1"
+DEF_ENRICH_COOL_AIR_MAPS:	.DEFINE		"1"
 TEST_INTERPOLATE:			.DEFINE		"1"
 ;DEF_NO_KNOCK_RETARD:		.DEFINE		"1"
 
@@ -693,78 +693,30 @@ rpmTimeRAM .EQU rpmTimeData + RAM - ROM
 
 	.AIFDEF DEF_ENRICH_COOL_AIR_MAPS
 
-
-			.align 4
-
-			.DATA.W		H'FFFF
-			
-enrichCoolantMap:           
-
-			.DATA.B 2                                                    
-			.DATA.B 0                   
-                                                                            
-            .DATA.L axisIndex_10_CoolTempSc
-            
-enrichCoolantMapData:
-            
-            .DATA.B  189, 178, 169, 166, 158, 141, 137, 133, 128, 128
-
-enrichCoolantMapRAM		.EQU enrichCoolantMap + RAM - ROM
-enrichCoolantMapDataRAM .EQU enrichCoolantMapData + RAM - ROM
-
-;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 	.EXPORT	_kAirMap
 	
 			.align 4
+			
+			.DATA.W		H'FFFF
 
 _kAirMap:
-			.DATA.W 	3
-			.DATA.W 	0                                                  
+			.DATA.B 	3
+			.DATA.B 	0                                                  
 			.DATA.L 	_axis_fu_RPM
 			.DATA.L 	axisIndex_7_InAirTemp
-			.DATA.W 	14
+			.DATA.B 	14
 kAirMapData:
-			.DATA.W 	H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
-			.DATA.W 	H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
-			.DATA.W 	H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
-			.DATA.W 	H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
-			.DATA.W 	H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
-			.DATA.W 	H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
-			.DATA.W 	H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
+			.DATA.B 	H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80
+			.DATA.B 	H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80
+			.DATA.B 	H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80
+			.DATA.B 	H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80
+			.DATA.B 	H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80
+			.DATA.B 	H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80
+			.DATA.B 	H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80, H'80
 						
 kAirMapRAM		.EQU _kAirMap + RAM - ROM
 kAirMapDataRAM	.EQU kAirMapData + RAM - ROM
 
-	
-;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-	.EXPORT	_trimVeMap
-	
-			.align 4
-			
-_trimVeMap:                    
-
-			.DATA.W 	3
-			.DATA.W 	0                                                  
-			.DATA.L 	_axis_ve_RPM
-			.DATA.L 	_axis_ve_LOAD
-			.DATA.W 	19
-trimVeMapData:                    
-            .DATA.W  H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
-            .DATA.W  H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
-            .DATA.W  H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
-            .DATA.W  H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
-            .DATA.W  H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
-            .DATA.W  H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
-            .DATA.W  H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
-            .DATA.W  H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
-            .DATA.W  H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
-            .DATA.W  H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
-            .DATA.W  H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000, H'8000
-            
-trimVeMapRAM		.EQU _trimVeMap + RAM - ROM
-trimVeMapDataRAM	.EQU trimVeMapData + RAM - ROM
 
 	.AENDI
 
@@ -793,25 +745,13 @@ _rpmTimeRAM:		.RES.B      1
 
 	.AIFDEF DEF_ENRICH_COOL_AIR_MAPS
 	
-	.EXPORT		_enrichCoolantMapRAM, _kAirMapRAM, _enrichCoolantMapDataRAM, _kAirMapDataRAM, _trimVeMapRAM, _trimVeMapDataRAM
-
-	.SECTION    ALTMAPS_enrichCoolantMapRAM, DATA, LOCATE=enrichCoolantMapRAM
-
-_enrichCoolantMapRAM:		.RES.w      5
-							.RES.B      1
-_enrichCoolantMapDataRAM:	.RES.B      1
+	.EXPORT		_kAirMapRAM, _kAirMapDataRAM
 
 	.SECTION    ALTMAPS_kAirMapRAM,		DATA, LOCATE=kAirMapRAM
 
 _kAirMapRAM:		.RES.w      5
 					.RES.B      1
 _kAirMapDataRAM:	.RES.B      1
-
-	.SECTION    ALTMAPS_trimVeMapRAM,		DATA, LOCATE=trimVeMapRAM
-
-_trimVeMapRAM:		.RES.w      5
-					.RES.B      1
-_trimVeMapDataRAM:	.RES.B      1
 
 	.AENDI
 	

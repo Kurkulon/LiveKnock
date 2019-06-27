@@ -92,7 +92,7 @@ struct Map3D_W
 #define FUEL_CUT						0x08
 #define STALL							0x10
 #define MUT1E_5_ALWAYS_1				0x20
-#define MUT1E_6_bit						0x40
+//#define MUT1E_6_bit						0x40
 #define CLOSED_LOOP_GENERIC				0x80
 #define MUT1E_8_bit						0x100
 #define MUT1E_9_bit						0x200
@@ -116,8 +116,8 @@ struct Map3D_W
 #define DRIVE_ALWAYS_1			0x20	// 1 - DRIVE; 0 - NEUTRAL
 #define STARTER					0x40
 #define RT_7_bit				0x80
-#define RT_8_bit				0x100
-#define RT_FR				0x200
+//#define RT_8_bit				0x100
+#define RT_FR					0x200
 #define RT_10_bit				0x400
 #define SPEED_ADJUST			0x800
 #define FIX_TIMING				0x1000
@@ -366,22 +366,22 @@ struct Map3D_W
 
 // FUEL_CUT_FLAG_FFFF8A5E
 
-#define FCF_01					0x01
-#define FCF_02					0x02
-#define FCF_04					0x04
-#define FCF_08					0x08
-#define FCF_10					0x10
-#define FCF_20					0x20
-#define FCF_40					0x40
-#define FCF_80					0x80
-#define FCF_100					0x100
-#define FCF_200					0x200
-#define FCF_400					0x400
-#define FCF_800					0x800
-#define FCF_1000				0x1000
-#define FCF_2000				0x2000
-#define FCF_4000				0x4000
-#define FCF_8000				0x8000
+#define FCF_01						0x01	// cranking init fuel pulse
+#define FCF_02						0x02	// cranking && rpm < word_152A(468)
+#define FCF_04						0x04
+#define FCF_CRANKING_OVERTEMP		0x08
+#define FCF_10						0x10	// load > 1(0.5kPa)
+#define FCF_20						0x20
+#define FCF_40						0x40
+#define FCF_80						0x80	// wMUT10_Coolant_Temperature_Scaled > word_1782/*255(215)*/
+#define FCF_100						0x100	// wMUT12_Coolant_Temperature_Min_81 >= word_16CE/*255*/ && MUT21_RPM_x125div4 >= word_16CC/*255*/;
+#define FCF_200						0x200
+#define FCF_400						0x400
+#define FCF_800						0x800
+#define FCF_1000					0x1000	// wMUT10_Coolant_Temperature_Scaled < word_1556/*22(-18)*/
+#define FCF_2000					0x2000	// STALL && wMUT10_Coolant_Temperature_Scaled <= word_1530/*50(10)*/
+#define FCF_KNOCK_ENRICH			0x4000
+#define FCF_8000					0x8000
 
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -389,8 +389,8 @@ struct Map3D_W
 // state_Ignition
 
 #define IGNST_NEXT_COIL				0
-#define IGNST_SPARK				1
-#define IGNST_CUR_COIL					2
+#define IGNST_SPARK					1
+#define IGNST_CUR_COIL				2
 
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

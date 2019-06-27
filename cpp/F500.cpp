@@ -836,13 +836,13 @@ void F500_Update_IAT_Sensor()
 	F500_Update_Air_Temp_Scaled();
 	
 	Table_Lookup_Axis(CEL7_692E);
-														//		 8,  33,  49,  63,  78,  96, 125				
-	k_InAirTemp = Table_Lookup_byte_2D_3D(CORFUELAIR_33A6);	// 143, 136, 132, 128, 125, 122, 118
-															//			, 1.252, 1.192, 
+														//	 8,  33,  49,  63,  78,  96, 125				
+	u32 r0 = Table_Lookup_byte_2D_3D(CORFUELAIR_33A6);	// 143, 136, 132, 128, 125, 122, 118
+														//			, 1.252, 1.192, 
 
-//	Table_Lookup_Axis(RPM14_6746);
+	Table_Lookup_Axis(RPM14_6746);
 
-//	__k_AirMult = Mul_Fix7_R(k_InAirTemp, Table_Lookup_word_2D_3D((__DEADloc != 0xDEAD) ? &kAirMap : &kAirMapRAM));	
+	k_InAirTemp = Mul_Fix7_R(r0, Table_Lookup_word_2D_3D((__DEADloc != 0xDEAD) ? &kAirMap : &kAirMapRAM));	
 
 	//EVO
 	//   8,  33,  49,  63,  78,  96, 125, 155
