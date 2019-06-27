@@ -555,7 +555,7 @@ static void AA05_Calc_Target_Idle_RPM()
 		r1 = min_Idle_RPM;
 	};
 
-	wMUT24_Target_Idle_RPM = sub_21ECC(Lim_FF(r1));
+	wMUT24_Target_Idle_RPM = (forcedIdleRPM != 0) ? forcedIdleRPM : Lim_FF(r1);
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
