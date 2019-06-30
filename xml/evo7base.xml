@@ -1,14 +1,11 @@
 <rom>
 	<romid>
 		<xmlid>evo7base</xmlid>
+		<internalidaddress>f52</internalidaddress>
+		<internalidstring>----</internalidstring>
 		<flashmethod>mitsukernel</flashmethod>
 		<memmodel>SH7052</memmodel>
 	</romid>
-	
-	<notes>
-		2012/11/16 [Tactrix] updated to include missing elements.
-                2012/11/20 [Tactrix] switching to standard MUT Table display.
-	</notes>
 	
 	<!--    ***  SCALINGS  ***    -->
 
@@ -703,7 +700,7 @@
 
   	<table name="Boost Control High/Low Gear Range RPM/MPH Crossover" category="Turbo Boost Dual Solenoid" type="1D" level="3" 	scaling="RPMPerMPH"/>
 
-        <table name="Reactive and Passive Solenoid WGDC Limit During Fault" category="Turbo Boost Dual Solenoid" type="1D" level="3" 	scaling="WGDuty16"/>
+  	<table name="Reactive And Passive Solenoid WGDC Limit During Fault" category="Turbo Boost Dual Solenoid" type="1D" level="3" 	scaling="WGDuty16"/>
 
   	<table name="Boost Cut Load" category="Turbo Boost Dual Solenoid" type="2D" scaling="LoadBoost">
     		<table name="RPM" type="Y Axis" scaling="RPM" elements="9"/>
@@ -963,25 +960,41 @@
 		
 	<!--  *** MUT ***  -->
 
-	<table name="MUT Table" category="MUT" type="3D" level="2" scaling="Hex16">
-               <table name="X" type="Static X Axis" elements="16">
-                        <data>0</data>
-                        <data>1</data>
-                        <data>2</data>
-                        <data>3</data>
-                        <data>4</data>
-                        <data>5</data>
-                        <data>6</data>
-                        <data>7</data>
-                        <data>8</data>
-                        <data>9</data>
-                        <data>A</data>
-                        <data>B</data>
-                        <data>C</data>
-                        <data>D</data>
-                        <data>E</data>
-                        <data>F</data>
-                </table>
+	<table name="MUT" category="MUT" type="3D" level="2" scaling="Hex16">
+		<table name="X" type="Static X Axis" elements="32" scaling="Hex16">
+			<data>-</data>
+			<data>0</data>
+			<data>-</data>
+			<data>1</data>
+			<data>-</data>
+			<data>2</data>
+			<data>-</data>
+			<data>3</data>
+			<data>-</data>
+			<data>4</data>
+			<data>-</data>
+			<data>5</data>
+			<data>-</data>
+			<data>6</data>
+			<data>-</data>
+			<data>7</data>
+			<data>-</data>
+			<data>8</data>
+			<data>-</data>
+			<data>9</data>
+			<data>-</data>
+			<data>A</data>
+			<data>-</data>
+			<data>B</data>
+			<data>-</data>
+			<data>C</data>
+			<data>-</data>
+			<data>D</data>
+			<data>-</data>
+			<data>E</data>
+			<data>-</data>
+			<data>F</data>
+		</table>
 		<table name="Y" type="Static Y Axis" elements="30">
 			<data>MUT0X</data>
 			<data>MUT1X</data>
@@ -1015,4 +1028,6 @@
 			<data>MUT1DX</data>
 		</table>
 	</table>
+
+
 </rom>
