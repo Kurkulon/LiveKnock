@@ -842,7 +842,7 @@ void F500_Update_IAT_Sensor()
 
 	Table_Lookup_Axis(RPM14_6746);
 
-	k_InAirTemp = Mul_Fix7_R(r0, Table_Lookup_word_2D_3D((__DEADloc != 0xDEAD) ? &kAirMap : &kAirMapRAM));	
+	k_InAirTemp = Mul_Fix7_R(r0, Table_Lookup_byte_2D_3D((__DEADloc != 0xDEAD) ? &kAirMap : &kAirMapRAM));	
 
 	//EVO
 	//   8,  33,  49,  63,  78,  96, 125, 155

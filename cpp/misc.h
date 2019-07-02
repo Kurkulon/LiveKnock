@@ -644,8 +644,8 @@ extern byte hiFuelMapRAM[];
 extern u16	rpmTimeRAM[];
 
 extern Map3D_B enrichCoolantMapRAM;
-extern Map3D_W kAirMap;
-extern Map3D_W kAirMapRAM;
+extern Map3D_B kAirMap;
+extern Map3D_B kAirMapRAM;
 extern Map3D_W trimVeMap;
 extern Map3D_W trimVeMapRAM;
 
