@@ -38,7 +38,7 @@
 	<table name="OBD-II Codes" address="96b0">
 	</table>
 
-	<table name="VE1Map_NO_EGR_IA" address="303d" scaling="myVE">
+	<table name="VE1Map_NO_EGR_IA" address="303d">
 		<table name="Load" address="6d28"/>
 		<table name="RPM" address="6cf8"/>
 	</table>
