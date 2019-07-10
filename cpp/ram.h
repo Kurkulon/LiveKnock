@@ -136,7 +136,7 @@
 #define      stored_DTC_9                   							(*(u16*)0xFFFF8152)
 #define      stored_DTC_10                  							(*(u16*)0xFFFF8154)                                                        
 #define      stored_DTC_11                  							(*(u16*)0xFFFF8156)                                                        
-#define      xxx_DTC                        							(*(u16*)0xFFFF8158)                                                        
+#define      xxx_DTC                        							((u16*) 0xFFFF8158)                                                        
 #define      last_Drive_DTC                 							((u16*) 0xFFFF8170)                                                      
 #define      current_DTC                    							((u16*) 0xFFFF8188)                                                      
 #define      some_DTC                       							((u16*) 0xFFFF81A0)                                                      
