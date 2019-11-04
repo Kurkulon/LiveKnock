@@ -8,6 +8,17 @@
 #include "constword.h"
 #include "ram.h"
 #include "hardware.h"
+#include "BC06.h"
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#define _sub_21E84										((bool(*)(void))0x21E84)
+#pragma regsave(sub_21E84)
+inline bool sub_21E84() { return false; }
+
+#define _sub_21E4C										((u16(*)(u16))0x21E4C)
+#pragma regsave(sub_21E4C)
+inline u16 sub_21E4C(u16 v) { return (v); }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

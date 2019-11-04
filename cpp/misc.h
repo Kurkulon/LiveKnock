@@ -473,8 +473,8 @@ struct Map3D_W
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#define Tephra ((void(*)(void))0x3ec00)
-#define sub_A98A ((void(*)(void))0xA98A)
+//#define Tephra ((void(*)(void))0x3ec00)
+//#define sub_A98A ((void(*)(void))0xA98A)
 
 #define Table_Lookup_byte_2D_3D ((u32(*)(Map3D_B*))0xC28)
 #define Table_Lookup_word_2D_3D ((u32(*)(Map3D_W*))0xE02)
@@ -533,7 +533,7 @@ struct Map3D_W
 #define Div_256_R										((byte(*)(u16))0x87C)
 
 
-#define FU03_sub_142DC									((u16(*)(void))0x142DC)
+//#define FU03_sub_142DC									((u16(*)(void))0x142DC)
 
 #define __disable_irq									((void(*)(void))0x400)
 #define __enable_irq									((void(*)(void))0x41e)
@@ -542,8 +542,8 @@ struct Map3D_W
 #define Timer_Counter_Related_sub_C928					((void(*)(void))0xC928)
 //#define Knock_Output_Calc_sub_AC96						((void(*)(void))0xAC96)
 
-#define sub_21E84										((bool(*)(void))0x21E84)
-#define BC06_sub_1E2D0									((void(*)(void))0x1E2D0)
+//#define sub_21E84										((bool(*)(void))0x21E84)
+//#define BC06_sub_1E2D0									((void(*)(void))0x1E2D0)
 //#define PEDR_LO_Check_sub_A790							((bool(*)(void))0xA790)
 
 	
@@ -594,9 +594,9 @@ extern Map3D_B* HIGHOKTF_7A88[8];		//#define HIGHOKTF_7A88	((void*)0x7A88)
 #define VE2Map_310E										((Map3D_B*)0x310E)
 #define VE3Map_31EA										((Map3D_B*)0x31EA)
 
-#define sub_21BC4										((u16(*)(u16))0x21BC4)
-#define sub_21E4C										((u16(*)(u16))0x21E4C)
-#define sub_21CA8										((u16(*)(u16))0x21CA8)
+//#define sub_21BC4										((u16(*)(u16))0x21BC4)
+//#define sub_21E4C										((u16(*)(u16))0x21E4C)
+//#define sub_21CA8										((u16(*)(u16))0x21CA8)
 
 #define Periphery_FAA									(*(const u16*)0xFAA)
 
@@ -714,7 +714,7 @@ struct TM32
 
 
 #define INCLIM(v) { if (v < 0xFFFF) {v += 1;}; }
-#define DECLIM(v) { if (v != 0) {v -= 1;}; }
+#define DECLIM(v) { u16 t = v; if (t != 0) { v = t - 1; }; }
 #define INCLIM80(v) { if (v < 0x80) {v += 1;}; }
 #define INC32(v) { if ((v+=1) == 0) {v -= 1;}; }
 

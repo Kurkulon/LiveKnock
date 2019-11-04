@@ -1,9 +1,10 @@
 ##################################################################################################
 
-variant = IDLE
+variant = BC06
 
-STACK_REPLACE = 0
+STACK_REPLACE = 1
 GNU_HARDWARE = 0
+CODE_ASM = 0
 
 ##################################################################################################
 
@@ -82,6 +83,11 @@ var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o
 var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1",DEF_BC06="1"
 var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o bc06.o
 
+!else ifeq variant HUGE
+
+var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1",DEF_BC06="1",DEF_HUGE="1"
+var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o bc06.o huge.o
+
 !else ifeq variant HARDWARE
 
 var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1",DEF_BC06="1",DEF_HARDWARE="1"
@@ -91,7 +97,7 @@ var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o bc06.o hardware.o
 
 !ifeq STACK_REPLACE 1
 
-var_opt = $(var_opt),DEF_STACK_REPLACE="1"
+#var_opt = $(var_opt),DEF_STACK_REPLACE="1"
 var_obj = $(var_obj) Reset_init.o
 
 !endif
@@ -104,7 +110,7 @@ libname = $(objdir)\sh2_$(libsuffix).lib
 
 .ERASE
 .EXTENSIONS:
-.EXTENSIONS: .o .cpp .h .asm
+.EXTENSIONS: .o .s .cpp .h .asm 
 
 ##################################################################################################
 
@@ -112,6 +118,7 @@ libname = $(objdir)\sh2_$(libsuffix).lib
 .asm:	$(cppdir)
 .o:	$(objdir)
 .h:	$(hdir)
+.s:	$(objdir)
 
 ##################################################################################################
 
@@ -151,34 +158,26 @@ $(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs $(objdir)\stock.abs
 
 $(objdir)\LiveKnock.abs : LiveMap.o AltMaps.o LiveKnock.o main.o $(var_obj)
 	@echo Linking $^@ ...
-	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P_main/EB04,P_Hooks/2CC0,P_HARDWARE/9D18,P/39000,B/FFFF8480 -LIBrary=$(libname) -OUtput="$^@" $<
+	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P_main/EB04,P_Hooks/2CC0,P_HARDWARE/9D18,P_HUGE/266DC,P/39000,B/FFFF8480 -LIBrary=$(libname) -OUtput="$^@" $<
 	@echo $(delimiter)	
 
 ##################################################################################################
 
-!ifeq GNU_HARDWARE 1
+!ifeq CODE_ASM 1
 
-hardware.o : hardware.cpp
+.cpp.s:
 	@echo Compiling asm $[. ...
-	@sh-elf-gcc $(gnu_compiler_options) -D DEF_HARDWARE -o "$(objdir)\$^." $[@
-	@sh-elf-gcc -fno-show-column -m2 -S -fno-diagnostics-show-option -Os -D DEF_HARDWARE -o "$(objdir)\hardware.s" $[@
-	@echo $(delimiter)	
-
-!else
-
-$(objdir)\hardware.s : hardware.cpp
-	@echo Compiling asm $[. ...
-	@shcpp $(compiler_options) -code=asmcode -List="$(objdir)\$^&.lst" -OBjectfile="$(objdir)\$^." $[@
+	@shcpp $(compiler_options) -code=asmcode -SHow=SOurce -List="$(objdir)\$^&.lst" -OBjectfile="$(objdir)\$^." $[@
 	@echo $(delimiter)	
 
 ##################################################################################################
 
-hardware.o : $(objdir)\hardware.s
+.s.o: 
 	@echo Compiling $[. ...
 	@asmsh $(asm_options)  -OBject="$(objdir)\$^." $[@
 	@echo $(delimiter)	
 
-!endif
+!else
 
 ##################################################################################################
 
@@ -186,6 +185,8 @@ hardware.o : $(objdir)\hardware.s
 	@echo Compiling $[. ...
 	@shcpp $(compiler_options) -Listfile="$(objdir)\$^&.lst" -SHow=SOurce -OBjectfile="$(objdir)\$^." $[@
 	@echo $(delimiter)	
+
+!endif
 
 ##################################################################################################
 

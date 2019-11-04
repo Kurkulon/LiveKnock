@@ -40,7 +40,6 @@
 //extern "C" void Update_Gen_G_output();
 
 #define Update_Gen_G_output					((void(*)(void))0xAD06)
-//#define MUT98_sub_329C6						((void(*)(void))0x329C6)
 #define IMMO_sub_2212E						((void(*)(void))0x2212E)
 #define COM_MUT_sub_207F0					((void(*)(void))0x207F0)
 #define sub_34664							((void(*)(void))0x34664)
@@ -100,6 +99,17 @@
 #define StartInjectAsync								((void(*)(u16,u16))0x261CA)
 #define StartInjectSync									((void(*)(u16,u16))0x26218)
 
+
+//#pragma noregsave(HUGE_Method_801_6_Hz)
+//#pragma noregsave(Huge_400_Hz)
+//#pragma noregsave(Huge_200_Hz)
+//#pragma noregsave(Huge_100_Hz)
+//#pragma noregsave(sub_27C6C)
+//#pragma noregsave(Huge_100_Hz_27C7A)
+//#pragma noregsave(Huge_50_Hz)
+//#pragma noregsave(Huge_800_Hz_27F62)
+
+
 static void HUGE_Method_801_6_Hz();
 
 static void Huge_400_Hz();
@@ -112,7 +122,8 @@ static void Huge_800_Hz_27F62();
 
 static void Update_MAP_Avrg();
 static u16 sub_E44C();
-static void MUT98_sub_329C6();
+//static void MUT98_sub_329C6();
+#define MUT98_sub_329C6						((void(*)(void))0x329C6)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -164,6 +175,8 @@ extern "C" void cmti0();
 #pragma address v_cmti0=0x2F0
 const void * v_cmti0 = cmti0;
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 #pragma section _HUGE
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -175,15 +188,15 @@ extern "C" void cmti0()
 {
 	__disable_irq();
 
-	word_FFFF9AD6 = reg_TCNT2A;
+	/*i32 b = */word_FFFF9AD6 = reg_TCNT2A;
 
 	CLR(reg_CMCSR0, 0x80);
 
 	DECLIM(downTimer_801);
 
-	word_FFFF9AD2 += 312;
+	/*i32 a = */word_FFFF9AD2 += 312;
 
-	if ((word_FFFF9AD2 - reg_TCNT2A) & 0x8000)
+	if ((word_FFFF9AD2 - reg_TCNT2A) & 0x8000) // if ((i16)(a - b) < 0)
 	{
 		word_FFFF9AD2 += 312;
 
@@ -264,7 +277,7 @@ extern "C" void SysInit_sub_266FC()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void PDIOR_Stuff_sub_AD3C()
+static void PDIOR_Stuff_sub_AD3C()
 {
 	__disable_irq();
 
@@ -450,7 +463,7 @@ static void sub_D4E4()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void PADR_Stuff_sub_A5F8()
+static void PADR_Stuff_sub_A5F8()
 {
 	__disable_irq();
 
@@ -494,7 +507,7 @@ extern "C" void PADR_Stuff_sub_A5F8()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void Read_Ports_And_Registers_sub_B114()
+static void Read_Ports_And_Registers_sub_B114()
 {
 	__disable_irq();
 
@@ -587,7 +600,7 @@ static void sub_E478()
 
 #pragma regsave(Get_ADC_Bat_TPS_oxigen)
 
-extern "C" void Get_ADC_Bat_TPS_oxigen()
+static void Get_ADC_Bat_TPS_oxigen()
 {
 	u16 res;//, res1, res2;
 
@@ -610,7 +623,7 @@ extern "C" void Get_ADC_Bat_TPS_oxigen()
 
 #pragma regsave(Get_Manifold_AbsPressure)
 
-extern "C" void Get_Manifold_AbsPressure()
+static void Get_Manifold_AbsPressure()
 {
 	u16 res;
 
@@ -621,7 +634,7 @@ extern "C" void Get_Manifold_AbsPressure()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#pragma noregsave(HUGE_Method_801_6_Hz)
+#pragma regsave(HUGE_Method_801_6_Hz)
 
 static void HUGE_Method_801_6_Hz()
 {
@@ -1078,7 +1091,7 @@ inline void Huge_200_loc_26E90()
 		}
 		else
 		{
-			if (NVRAM_FFFF802C & 8)
+			if (ZRO(NVRAM_FFFF802C,8))
 			{
 				SET(NVRAM_FFFF802C, 1);
 				SET(wMUT9B_Output_Pins, 0x400);
@@ -1259,9 +1272,10 @@ inline void Huge_200_Idle_Stepper()
 
 		if (word_FFFF8C9A >= r13)
 		{
-			u32 r1 = wMUT16_cur_Idle_Steps;
+			u32 m16 = wMUT16_cur_Idle_Steps;
+			u32 r1 = (byte)m16;
 			
-			if (SwapBytes16(r1) == r1 && r1 != wMUT25_Target_Idle_Steps)
+			if (SwapBytes16(r1) == m16 && r1 != wMUT25_Target_Idle_Steps)
 			{
 				if (r1 < wMUT25_Target_Idle_Steps)
 				{
@@ -1587,25 +1601,10 @@ static void Update_MAP_Avrg()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//static u16 sub_E44C()
+//static void MUT98_sub_329C6()
 //{
-//	__disable_irq();
 //
-//	u32 r1 = word_FFFF9ACC;
-//
-//	word_FFFF9ACC = 0;
-//
-//	__enable_irq();
-//
-//	return r1;
 //}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-static void MUT98_sub_329C6()
-{
-
-}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

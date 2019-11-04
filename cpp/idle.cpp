@@ -109,11 +109,25 @@
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#define sub_21ECC							((u16(*)(u16))0x21ECC)
-#define sub_21EF8							((u16(*)(void))0x21EF8)
-#define sub_21EE4							((bool(*)(void))0x21EE4)
-#define sub_21E9C							((u16(*)(u16))0x21E9C)
-#define sub_21EB4							((u16(*)(u16))0x21EB4)
+#define _sub_21ECC							((u16(*)(u16))0x21ECC)
+#pragma regsave(sub_21ECC)
+inline u16 sub_21ECC(u16 v) { return (v); }
+
+#define _sub_21E9C							((u16(*)(u16))0x21E9C)
+#pragma regsave(sub_21E9C)
+inline u16 sub_21E9C(u16 v) { return (v); }
+
+#define _sub_21EB4							((u16(*)(u16))0x21EB4)
+#pragma regsave(sub_21EB4)
+inline u16 sub_21EB4(u16 v) { return (v); }
+
+#define _sub_21EF8							((bool(*)(void))0x21EF8)
+#pragma regsave(sub_21EF8)
+inline bool sub_21EF8() { return false; }
+
+#define _sub_21EE4							((bool(*)(void))0x21EE4)
+#pragma regsave(sub_21EE4)
+inline bool sub_21EE4() { return false; }
 
 
 

@@ -161,10 +161,10 @@ static void Simulation()
 {
 	// atu02_ici0A
 
-	reg_TCNT2A += 3750000/6000;
+	reg_TCNT2A += 3750000/750;
 	reg_OSBR2 = reg_TCNT2A;
 
-	reg_ICR0A += 3750000*16/6000;
+	reg_ICR0A += 3750000*16/750;
 
 	reg_PADRL ^= 1;
 
@@ -190,8 +190,8 @@ static void Simulation()
 	adc_Hooked_value[1] = 13.8/0.0733*4;			// wMUT14_Battery_Level_ADC8bit
 	adc_Hooked_value[2] = (139.74 - 80)/1.468*4;	// wMUT07_CoolTemp_ADC8bit
 	adc_Hooked_value[3] = (139.74 - 20)/1.468*4;	// wMUT3A_AirTemp_ADC8bit
-	adc_Hooked_value[4] = 200*4;					// wMUT1A_Manifold_AbsPressure_ADC8bit
-	adc_Hooked_value[5] = 244*4;					// wMUT17_TPS_ADC8bit
+	adc_Hooked_value[4] = 70*4;					// wMUT1A_Manifold_AbsPressure_ADC8bit
+	adc_Hooked_value[5] = 25*4;					// wMUT17_TPS_ADC8bit
 	adc_Hooked_value[6] = 0;					// wMUT30_Knock_Voltage
 	adc_Hooked_value[7] = 0;					// null_ADC_7_8bit
 	adc_Hooked_value[8] = 0;					// ADC_08_8bit
@@ -478,6 +478,17 @@ static void SysInit_sub_F148()
 	SysInit_sub_9D2C();
 
 	word_FFFF8550 = word_8B00;
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void sub_AD72()
+{
+	__disable_irq();
+
+	CLR(reg_PBDRH, 0x80);
+
+	__enable_irq();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

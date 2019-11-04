@@ -11,16 +11,28 @@
 #include "ram.h"
 #include "EnVars.h"
 #include "hwreg.h"
+#include "F500.h"
 #include "hardware.h"
 
 #undef F500_Init_Load_ECU_Info_And_BitMap_Flags
 
 //#define F500_Get_All_ADC		((void(*)(void))0xA7F0)
-#define F500_sub_21C80			((bool(*)(void))0x21C80)
-#define F500_InitManifoldVars	((void(*)(void))0x23244)
+
+#define _F500_sub_21C80			((bool(*)(void))0x21C80)
+#pragma regsave(F500_sub_21C80)
+inline bool F500_sub_21C80() { return false; }
+
+#define _F500_InitManifoldVars	((void(*)(void))0x23244)
+#pragma regsave(F500_InitManifoldVars)
+static void F500_InitManifoldVars() { _F500_InitManifoldVars(); }
 
 
 //#define ENGINE_MAIN_VARIABLES_DIM_off_9198		((EnVars*)0x9198)
+
+#define _sub_21CA8			((u16(*)(u16))0x21CA8)
+#pragma regsave(sub_21CA8)
+inline u16 sub_21CA8(u16 v) { return v; }
+
 
 #pragma regsave(F500_root_sub)
 //#pragma regsave(F500_Init_BitMap_Flags_New)
@@ -194,12 +206,6 @@ static void F500_Battery_Calcs_sub_1101A();
 #define COOLTEMSCAL_98FA					((Map3D_B *)0x98FA)
 #define battery_voltage_compensation_5272	((Map3D_W *)0x5272)
 
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-#undef PEDR_LO_Check_sub_A790
-
-inline bool PEDR_LO_Check_sub_A790() { return ZRO(reg_PEDRL, 2); }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -1531,14 +1537,13 @@ void F500_Battery_Calcs_sub_1101A()
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#ifdef F500_TEST
 
-static void sub_A374()
+extern void sub_A374()
 {
-	const u32 r9 = ~0x10;
-	const u32 r8 = ~2;
+//	const u32 r9 = ~0x10;
+//	const u32 r8 = ~2;
 //	const u32 r2 = 0x200;
-	const u32 r1 = ~0x200;
+//	const u32 r1 = ~0x200;
 
 	__disable_irq();
 
@@ -1620,6 +1625,4 @@ static void sub_A374()
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-#endif // F500_TEST
 

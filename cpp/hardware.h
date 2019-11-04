@@ -1,7 +1,7 @@
 #ifndef HARDWARE_H__23_11_2018__23_02
 #define HARDWARE_H__23_11_2018__23_02
 
-#include "types.h"
+#include "hwreg.h"
 
 #ifdef DEF_HARDWARE
 
@@ -35,35 +35,34 @@ extern "C" void SysInit_ATU_0_DMA_2();
 
 #define SysInit_sub_9D2C					((void(*)(void))0x9D2C)
 #define sub_A078							((void(*)(void))0xA078)
-#define sub_A324							((void(*)(void))0xA324)
-#define sub_A374							((void(*)(void))0xA374)
 #define PADR_Stuff_sub_A5F8					((void(*)(void))0xA5F8)
 
-#define PEDR_LO_Check_sub_A790				((bool(*)(void))0xA790)
+//#define PEDR_LO_Check_sub_A790				((bool(*)(void))0xA790)
 
-#define Check_Starter_signal				((bool(*)(void))0xA7A8)
-#define CRANK_CheckCamshaft_sub_A7C0		((bool(*)(void))0xA7C0)
-#define Check_PEDRL_1						((bool(*)(void))0xA7D8)
+//#define Check_Starter_signal				((bool(*)(void))0xA7A8)
+//#define CRANK_CheckCamshaft_sub_A7C0		((bool(*)(void))0xA7C0)
+//#define Check_PEDRL_1						((bool(*)(void))0xA7D8)
 
 #define F500_Get_All_ADC					((void(*)(void))0xA7F0)
 #define Get_ADC_Bat_TPS_oxigen				((void(*)(void))0xA8DC)
 #define Get_ADC_Knock						((void(*)(void))0xA92C)
-#define Zero_MUT3B							((void(*)(void))0xA94A)
+//#define Zero_MUT3B							((void(*)(void))0xA94A)
 #define Get_Manifold_AbsPressure			((void(*)(void))0xA95A)
 #define UpdateOutputAsync					((void(*)(void))0xA98A)
-#define UpdateOutputSync					((void(*)(void))0xAB3C)
+//#define UpdateOutputSync					((void(*)(void))0xAB3C)
 #define Knock_Output_Calc_sub_AC96			((void(*)(void))0xAC96)
-#define Update_Gen_G_output					((void(*)(void))0xAD06)
+//#define Update_Gen_G_output					((void(*)(void))0xAD06)
 #define PDIOR_Stuff_sub_AD3C				((void(*)(void))0xAD3C)
-#define sub_AD72							((void(*)(void))0xAD72)
-#define sub_AD94							((void(*)(void))0xAD94)
+//#define sub_AD94							((void(*)(void))0xAD94)
 #define UpdateFanOutputDuty					((void(*)(void))0xB096)
-#define sub_B0BC							((void(*)(u16))0xB0BC)
-#define Read_Ports_And_Registers_sub_B114	((void(*)(void))0xB114)
+//#define sub_B0BC							((void(*)(u16))0xB0BC)
+//#define Read_Ports_And_Registers_sub_B114	((void(*)(void))0xB114)
 #define SysInit_ATU_0_DMA_2					((void(*)(void))0xB458)
 
 #endif
 
+//#define sub_A324							((void(*)(void))0xA324)
+//#define sub_AD72							((void(*)(void))0xAD72)
 
 
 #define WaitDownTimer801					((void(*)(void))0xBB36)
@@ -77,5 +76,11 @@ extern "C" void SysInit_ATU_0_DMA_2();
 
 #define      adc_Hooked_value ((u16*)0xFFFF8000)                                                        
 
+inline bool PEDR_LO_Check_sub_A790()		{ return ZRO(reg_PEDRL, 2); }
+inline bool Check_Starter_signal()			{ return (reg_PEDRL & 4) == 0; }
+inline bool CRANK_CheckCamshaft_sub_A7C0()	{ return (reg_PADRL & 4) == 0; }
+inline bool Check_PEDRL_1()					{ return (reg_PEDRL & 1) != 0; }
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #endif // HARDWARE_H__23_11_2018__23_02

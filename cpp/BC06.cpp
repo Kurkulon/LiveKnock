@@ -10,7 +10,7 @@
 #include "EnVars.h"
 #include "hwreg.h"
 
-#undef BC06_sub_1E2D0
+//#undef BC06_sub_1E2D0
 
 //#undef F500_Init_Load_ECU_Info_And_BitMap_Flags
 
@@ -20,16 +20,105 @@
 
 #define ENGINE_MAIN_VARIABLES_DIM_off_9198		((EnVars*)0x9198)
 
-#define sub_21F4E			((u16(*)(u16))0x21F4E)
+//#define _sub_21F4E			((u16(*)(u16))0x21F4E)
+//#pragma regsave(sub_21F4E)
+inline u16 sub_21F4E(u16 v) { return (v); }
 
-#define OBD_P0031_P0032_P0037_P0038_sub_2EF5A	((u16(*)(void))0x2EF5A)
+#define _OBD_P0031_P0032_P0037_P0038_sub_2EF5A	((u16(*)(void))0x2EF5A)
+#pragma regsave(OBD_P0031_P0032_P0037_P0038_sub_2EF5A)
+static u16 OBD_P0031_P0032_P0037_P0038_sub_2EF5A() { return _OBD_P0031_P0032_P0037_P0038_sub_2EF5A(); }
 
-#define sub_E294			((u16(*)())0xE294)
-#define sub_A324			((u16(*)())0xA324)
-#define sub_B0BC			((void(*)(u16))0xB0BC)
-#define sub_E356			((void(*)())0xE356)
-#define sub_E300			((void(*)())0xE300)
-#define sub_21F0C			((u16(*)(u16))0x21F0C)
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static bool sub_E294()
+{
+	__disable_irq();
+
+	bool r1 = word_FFFF9ADA & 1;
+
+	CLR(word_FFFF9ADA, 1);
+
+	__enable_irq();
+
+	return r1;
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void sub_A324()
+{
+	__disable_irq();
+
+	if (ZRO(wMUT9B_Output_Pins, 0x8000))
+	{
+		SET(word_FFFF9ADA, 4);
+		SET(reg_PJCRL, 0x10);
+	}
+	else
+	{
+		CLR(word_FFFF9ADA, 4);
+		CLR(reg_PJCRL, 0x10);
+	};
+
+	__enable_irq();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void sub_B0BC(u16 r1)
+{
+	const u16 r2 = 25000;
+
+	if (r1 < 5)	{ r1 = 5; };
+
+	word_FFFF8D28 = r1;
+
+	r1 = Mul_Fix8_Lim_FFFF(r1, r2);
+
+	if (r1 > r2) { r1 = r2; };
+
+	__disable_irq();
+
+	ufix8_FFFF9ADE = r2;
+
+	ufix8_FFFF9AE0 = r1;
+
+	__enable_irq();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void sub_E356()
+{
+	__disable_irq();
+
+	reg_GR2C = reg_TCNT2A + 250;
+
+	reg_TIOR2B = (reg_TIOR2B & ~7) | ((word_FFFF9ADA & 2) ? 2 : 1);
+
+	__enable_irq();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+extern "C" void sub_E300()
+{
+	__disable_irq();
+
+	reg_GR2C = reg_TCNT2A + 250;
+
+	CLR(word_FFFF9ADA, 8);
+
+	reg_TIOR2B = (reg_TIOR2B & ~7) | ((word_FFFF9ADA & 2) ? 2 : 1);
+
+	__enable_irq();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//#define _sub_21F0C		((u16(*)(u16))0x21F0C)
+//#pragma regsave(sub_21F0C)
+inline u16 sub_21F0C(u16 v) { return (v); }
 
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -88,6 +177,8 @@
 
 extern "C" void SysInit_sub_1BEFE();
 extern "C" void BC06_root_sub_1BF7A();
+extern "C" void BC06_sub_1E2D0();
+
 static void BC06_sub_1C0BC();
 static bool BC06_sub_1C0EA();
 static void BC06_sub_1C11C();
@@ -126,7 +217,6 @@ static void BC06_Nop8();
 static void BC06_sub_1E260();
 static void BC06_sub_1E2A8();
 static void BC06_Nop9();
-static void BC06_sub_1E2D0();
 static void BC06_sub_1E3FC();
 static void BC06_sub_1E42C();
 static void BC06_sub_1E5B0();
@@ -1452,7 +1542,7 @@ static void BC06_Nop9()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void BC06_sub_1E2D0()
+extern "C" void BC06_sub_1E2D0()
 {
 	u32 r13 = 0;
 

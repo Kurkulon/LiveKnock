@@ -144,6 +144,15 @@
 
 #define InjOpenStart									((void(*)(u16,u16))0xC698)
 
+#define _sub_21BC4										((u16(*)(u16))0x21BC4)
+#pragma regsave(sub_21BC4)
+inline u16 sub_21BC4(u16 v) { return v; }
+
+#define _sub_21CA8										((u16(*)(u16))0x21CA8)
+#pragma regsave(sub_21CA8)
+inline u16 sub_21CA8(u16 v) { return v; }
+
+
 //extern u16 INJECTOR_RESCALED_sub_26174(u16 v);
 //extern void StartInjectAsync(u16 v, u16 mask);
 //extern void StartInjectSync(u16 v, u16 mask);
