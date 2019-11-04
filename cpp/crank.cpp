@@ -10,6 +10,7 @@
 #include "constword.h"
 #include "ram.h"
 #include "EnVars.h"
+#include "hardware.h"
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -132,7 +133,7 @@ extern "C" void Ign_handler(u16 v);
 extern "C" u16 Get_Coil_charge_status();
 
 extern "C" void Start_Coil_Charge(u16 mask);
-extern "C" void Disable_Coil_Charge(u16 mask);
+//extern "C" void Disable_Coil_Charge(u16 mask);
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

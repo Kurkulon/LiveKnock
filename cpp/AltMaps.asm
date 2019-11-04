@@ -835,12 +835,12 @@ _Interpolate_my:
 								extu.w  r5, r5
 								extu.b	r0, r0
 								cmp/hs  r0, r6                                                 
-								bf      loc_D9C
+								bf      ?0001
 
 								rts
 								mov     r5, r0                                                 
 
-loc_D9C:                                                                                        
+?0001:                                                                                        
 								extu.w  r4, r4  
 
 								add		#2, r0		; r0 = 257      
@@ -892,12 +892,12 @@ _interpolate_r4_r5_r6_my:
 								extu.w  r5, r5
 								extu.b	r0, r0
 								cmp/hs  r0, r6                                                 
-								bf      loc_B26
+								bf      ?0001
 
 								rts
 								mov     r4, r0                                                 
 
-loc_B26:                                                                                        
+?0001:                                                                      
 								extu.w  r4, r4  
 
 								add		#2, r0		; r0 = 257      

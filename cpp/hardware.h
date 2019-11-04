@@ -3,6 +3,8 @@
 
 #include "hwreg.h"
 
+//#define DEF_HARDWARE
+
 #ifdef DEF_HARDWARE
 
 extern "C" void SysInit_sub_9D2C();
@@ -30,12 +32,25 @@ extern "C" void UpdateFanOutputDuty();
 extern "C" void sub_B0BC(u16 r1);
 extern "C" void Read_Ports_And_Registers_sub_B114();
 extern "C" void SysInit_ATU_0_DMA_2();
+extern "C" void PHDR_Stuff_sub_C388();
+extern "C" void WaitDownTimer801();
+extern "C" void Init_ATU_sub_C5D2();
+extern "C" void Init_ATU_0_2B();
+extern "C" void Disable_Coil_Charge(u16 mask);
+extern "C" void Timer_Counter_Related_sub_C928();
 
 #else
 
 #define SysInit_sub_9D2C					((void(*)(void))0x9D2C)
 #define sub_A078							((void(*)(void))0xA078)
+#define sub_A374							((void(*)(void))0xA374)
 #define PADR_Stuff_sub_A5F8					((void(*)(void))0xA5F8)
+#define PHDR_Stuff_sub_C388					((void(*)(void))0xC388)
+#define WaitDownTimer801					((void(*)(void))0xBB36)
+#define Init_ATU_sub_C5D2					((void(*)(void))0xC5D2)
+#define Init_ATU_0_2B						((void(*)(void))0xD918)
+#define Disable_Coil_Charge					((void(*)(u16))0xBED8)
+#define Timer_Counter_Related_sub_C928					((void(*)(void))0xC928)
 
 //#define PEDR_LO_Check_sub_A790				((bool(*)(void))0xA790)
 
@@ -65,12 +80,8 @@ extern "C" void SysInit_ATU_0_DMA_2();
 //#define sub_AD72							((void(*)(void))0xAD72)
 
 
-#define WaitDownTimer801					((void(*)(void))0xBB36)
-#define Init_ATU_sub_C5D2					((void(*)(void))0xC5D2)
-#define Init_ATU_0_2B						((void(*)(void))0xD918)
 //#define Get_ADC_Knock						((void(*)(void))0xA92C)
 //#define Get_Manifold_AbsPressure			((void(*)(void))0xA95A)
-#define Disable_Coil_Charge					((void(*)(u16))0xBED8)
 //#define F500_Get_All_ADC					((void(*)(void))0xA7F0)
 //#define Get_ADC_Bat_TPS_oxigen			((void(*)(void))0xA8DC)
 

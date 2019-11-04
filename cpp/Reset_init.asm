@@ -56,6 +56,8 @@ StatusRegisterStack:
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ;+++++++++++++++++++++++++++++++++++++++++++++++
 
+	.EXPORT __disable_irq, ___disable_irq, __enable_irq, ___enable_irq, Set_Intterupt_Mask, _Set_Intterupt_Mask
+	
 	.SECTION    P_IRQ_FUNC, CODE, LOCATE=H'400
 
 	.ORG H'400
@@ -70,8 +72,6 @@ ___disable_irq:
 	mov	r0, r4						
 	or	#h'F0, r0                   
 	ldc	r0, sr						
-
-loc_40E:	
 							
 	mov.l	#StatusRegisterStack, r0
 	mov.l	@r0, r3					

@@ -535,11 +535,13 @@ struct Map3D_W
 
 //#define FU03_sub_142DC									((u16(*)(void))0x142DC)
 
-#define __disable_irq									((void(*)(void))0x400)
-#define __enable_irq									((void(*)(void))0x41e)
+//#define __disable_irq									((void(*)(void))0x400)
+//#define __enable_irq									((void(*)(void))0x41e)
+extern "C" void __disable_irq();
+extern "C" void __enable_irq();			
 //#define F500_Init_Load_ECU_Info_And_BitMap_Flags		((void(*)(void))0xF58C)
 
-#define Timer_Counter_Related_sub_C928					((void(*)(void))0xC928)
+//#define Timer_Counter_Related_sub_C928					((void(*)(void))0xC928)
 //#define Knock_Output_Calc_sub_AC96						((void(*)(void))0xAC96)
 
 //#define sub_21E84										((bool(*)(void))0x21E84)

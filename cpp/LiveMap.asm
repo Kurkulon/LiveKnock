@@ -541,7 +541,7 @@ _LiveMap: ;COPY ROM TO RAM IF TEPHRA'S DEAD VARIABLE IS NOT 0XDEAD
 	mov.w 	#DEADloc,r1
 	mov.w	@r1,r1
 	cmp/eq	r1,r0
-	bt		TIMEOUT
+	bt		?0002 ;TIMEOUT
 	nop
 
 	mov.l 	#ROM,r10
@@ -549,16 +549,16 @@ _LiveMap: ;COPY ROM TO RAM IF TEPHRA'S DEAD VARIABLE IS NOT 0XDEAD
 	mov.w 	#LENGTH,r1
 	mov		#0,r0
 	
-loop:
+?0001:
 
 	mov.l 	@(r0,r10),r2
 	mov.l 	r2,@(r0,r11)
 	add		#4,r0
 	cmp/hs	r1,r0
-	bf		loop
+	bf		?0001
 	nop
 
-TIMEOUT: ;KILLS DMA IF COMMS HAVE BEEN KILLED
+?0002: ;KILLS DMA IF COMMS HAVE BEEN KILLED
 
 	mov.w	#int_disable,r10
 	jsr		@r10
@@ -567,7 +567,7 @@ TIMEOUT: ;KILLS DMA IF COMMS HAVE BEEN KILLED
 	mov.w	#bit7allowslogging,r10
 	mov.w	@r10,r0
 	tst		#H'80,r0
-	bf		__exit
+	bf		?0003
 	nop
 
 	mov		#H'fffffffc,r0
@@ -581,7 +581,7 @@ TIMEOUT: ;KILLS DMA IF COMMS HAVE BEEN KILLED
 	mov.w 	#___DMAOPFLAG,r10
 	mov.l 	r0,@r10
 
-__exit:
+?0003:
 
 	mov.w	#int_enable,r10
 	jsr		@r10

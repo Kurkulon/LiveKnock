@@ -17,6 +17,8 @@
 
 //#define F500_Update_Air_Temp_Scaled	((void(*)(void))0x1014A)
 
+#define FU03_sub_142DC									((u16(*)(void))0x142DC)
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 inline u16 Lookup_HiIgnMap()

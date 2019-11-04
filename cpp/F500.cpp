@@ -11,7 +11,7 @@
 #include "ram.h"
 #include "EnVars.h"
 #include "hwreg.h"
-#include "F500.h"
+//#include "F500.h"
 #include "hardware.h"
 
 #undef F500_Init_Load_ECU_Info_And_BitMap_Flags
@@ -1538,7 +1538,7 @@ void F500_Battery_Calcs_sub_1101A()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern void sub_A374()
+/*extern void sub_A374()
 {
 //	const u32 r9 = ~0x10;
 //	const u32 r8 = ~2;
@@ -1622,7 +1622,7 @@ extern void sub_A374()
 	word_FFFF8896 = r13;
 
 	__enable_irq();
-}
+}*/
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

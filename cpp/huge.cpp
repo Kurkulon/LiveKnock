@@ -6,6 +6,7 @@
 #include "ram.h"
 #include "EnVars.h"
 #include "hwreg.h"
+#include "hardware.h"
 
 
 #define	off_8AE4				((u16**)0x8AE4)  
@@ -277,65 +278,65 @@ extern "C" void SysInit_sub_266FC()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void PDIOR_Stuff_sub_AD3C()
-{
-	__disable_irq();
-
-	//u32 r11 = reg_PDDRH & 1 ^ 1;
-
-	//u32 r12 = reg_PDDRH & ~1;
-
-	//reg_PDDRH = r11 & 1 | r12;
-	
-	reg_PDDRH ^= 1;
-
-	__enable_irq();
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-extern "C" void PHDR_Stuff_sub_C388()
-{
-	__disable_irq();
-
-	CLR(reg_PHDRL, 2);
-
-	u32 t = 1;
-
-	while (--t);
-
-	bMUTB7 = ((u32)(RPDR16(reg_PHDRH)) << 1) >> 8;
-
-	SET(reg_PHDRL, 2);
-	CLR(reg_PHDRL, 1);
-
-	t = 1;
-
-	while (--t);
-
-	bMUTB8 = ((u32)(RPDR16(reg_PHDRH)) << 1) >> 8;
-
-	CLR(reg_PHDRL, 2);
-	SET(reg_PHDRL, 1);
-
-	t = 1;
-
-	while (--t);
-
-	bMUTB9 = ((u32)(RPDR16(reg_PHDRH)) << 1) >> 8;
-
-	SET(reg_PHDRL, 3);
-
-	t = 1;
-
-	while (--t);
-
-	bMUTBA = ((u32)(RPDR16(reg_PHDRH)) << 1) >> 8;
-
-	__enable_irq();
-}
+//static void PDIOR_Stuff_sub_AD3C()
+//{
+//	__disable_irq();
+//
+//	//u32 r11 = reg_PDDRH & 1 ^ 1;
+//
+//	//u32 r12 = reg_PDDRH & ~1;
+//
+//	//reg_PDDRH = r11 & 1 | r12;
+//	
+//	reg_PDDRH ^= 1;
+//
+//	__enable_irq();
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//
+//extern "C" void PHDR_Stuff_sub_C388()
+//{
+//	__disable_irq();
+//
+//	CLR(reg_PHDRL, 2);
+//
+//	u32 t = 1;
+//
+//	while (--t);
+//
+//	bMUTB7 = ((u32)(RPDR16(reg_PHDRH)) << 1) >> 8;
+//
+//	SET(reg_PHDRL, 2);
+//	CLR(reg_PHDRL, 1);
+//
+//	t = 1;
+//
+//	while (--t);
+//
+//	bMUTB8 = ((u32)(RPDR16(reg_PHDRH)) << 1) >> 8;
+//
+//	CLR(reg_PHDRL, 2);
+//	SET(reg_PHDRL, 1);
+//
+//	t = 1;
+//
+//	while (--t);
+//
+//	bMUTB9 = ((u32)(RPDR16(reg_PHDRH)) << 1) >> 8;
+//
+//	SET(reg_PHDRL, 3);
+//
+//	t = 1;
+//
+//	while (--t);
+//
+//	bMUTBA = ((u32)(RPDR16(reg_PHDRH)) << 1) >> 8;
+//
+//	__enable_irq();
+//}
+//
+////+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 static void sub_AD94()
 {
@@ -463,47 +464,47 @@ static void sub_D4E4()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void PADR_Stuff_sub_A5F8()
-{
-	__disable_irq();
-
-	u32 r1 = portA_state;
-
-	WBIT(r1, 1, ZRO(reg_PADRL, 1));
-
-	WBIT(r1, 2, ZRO(reg_PADRL, 0x80));
-
-	WBIT(r1, 8, ZRO(bMUTB7, 2));
-
-	WBIT(r1, 4, ZRO(bMUTB8, 2));
-
-	WBIT(r1, 0x20, ONE(reg_PADRH, 0x80));
-
-	WBIT(r1, 0x40, ZRO(reg_PEDRL, 4));
-
-	WBIT(r1, 0x80, ONE(bMUTBA, 4));
-
-	WBIT(r1, 0x100, ONE(bMUTB9, 2));
-
-	WBIT(r1, 0x400, sub_C2CC());
-
-	WBIT(r1, 0x800, sub_C304());
-
-	WBIT(r1, 0x1000, ONE(bMUTB7, 4));
-
-	WBIT(r1, 0x2000, true);
-
-	portA_state = r1;
-
-	__enable_irq();
-
-	__disable_irq();
-
-	WBIT(word_FFFF93CC, 0x800, sub_C33C());
-
-	__enable_irq();
-
-}
+//static void PADR_Stuff_sub_A5F8()
+//{
+//	__disable_irq();
+//
+//	u32 r1 = portA_state;
+//
+//	WBIT(r1, 1, ZRO(reg_PADRL, 1));
+//
+//	WBIT(r1, 2, ZRO(reg_PADRL, 0x80));
+//
+//	WBIT(r1, 8, ZRO(bMUTB7, 2));
+//
+//	WBIT(r1, 4, ZRO(bMUTB8, 2));
+//
+//	WBIT(r1, 0x20, ONE(reg_PADRH, 0x80));
+//
+//	WBIT(r1, 0x40, ZRO(reg_PEDRL, 4));
+//
+//	WBIT(r1, 0x80, ONE(bMUTBA, 4));
+//
+//	WBIT(r1, 0x100, ONE(bMUTB9, 2));
+//
+//	WBIT(r1, 0x400, sub_C2CC());
+//
+//	WBIT(r1, 0x800, sub_C304());
+//
+//	WBIT(r1, 0x1000, ONE(bMUTB7, 4));
+//
+//	WBIT(r1, 0x2000, true);
+//
+//	portA_state = r1;
+//
+//	__enable_irq();
+//
+//	__disable_irq();
+//
+//	WBIT(word_FFFF93CC, 0x800, sub_C33C());
+//
+//	__enable_irq();
+//
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -598,39 +599,39 @@ static void sub_E478()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#pragma regsave(Get_ADC_Bat_TPS_oxigen)
-
-static void Get_ADC_Bat_TPS_oxigen()
-{
-	u16 res;//, res1, res2;
-
-	GetADC(1, &wMUT14_Battery_Level_ADC8bit, &res);
-
-//	GetADC(5, &res1, &res);
-
-//	wMUT17_TPS_ADC8bit = res1;
-
-//	TPS_ADC10bit = res;
-
-	GetADC(5, &wMUT17_TPS_ADC8bit, &TPS_ADC10bit);
-
-	GetADC(9, &oxigen_ADC8bit, &res);
-
-	GetADC(7, &null_ADC_7_8bit, &res);
-}
+//#pragma regsave(Get_ADC_Bat_TPS_oxigen)
+//
+//static void Get_ADC_Bat_TPS_oxigen()
+//{
+//	u16 res;//, res1, res2;
+//
+//	GetADC(1, &wMUT14_Battery_Level_ADC8bit, &res);
+//
+////	GetADC(5, &res1, &res);
+//
+////	wMUT17_TPS_ADC8bit = res1;
+//
+////	TPS_ADC10bit = res;
+//
+//	GetADC(5, &wMUT17_TPS_ADC8bit, &TPS_ADC10bit);
+//
+//	GetADC(9, &oxigen_ADC8bit, &res);
+//
+//	GetADC(7, &null_ADC_7_8bit, &res);
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#pragma regsave(Get_Manifold_AbsPressure)
-
-static void Get_Manifold_AbsPressure()
-{
-	u16 res;
-
-	GetADC(4, &wMUT1A_Manifold_AbsPressure_ADC8bit, &res);
-
-	wMUT8C_Manifold_AbsPressure_ADC8bit = wMUT1A_Manifold_AbsPressure_ADC8bit;
-}
+//#pragma regsave(Get_Manifold_AbsPressure)
+//
+//static void Get_Manifold_AbsPressure()
+//{
+//	u16 res;
+//
+//	GetADC(4, &wMUT1A_Manifold_AbsPressure_ADC8bit, &res);
+//
+//	wMUT8C_Manifold_AbsPressure_ADC8bit = wMUT1A_Manifold_AbsPressure_ADC8bit;
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
