@@ -573,7 +573,7 @@ static bool ML02_Return_0()
 static bool ML02_sub_119DC()
 {
 	if (ZRO(RT_FLAG1_FFFF8888, DRIVE_ALWAYS_1) || wMUT73_TPS_Open_Delta >= word_1A58 || rpm_x125div32_B >= (rpm_1A5C/*192*/<<2) 
-		|| wMUT2E_Vehicle_Speed_Frequency >= word_1A54/*10*/ || (SPEED_FLAGS & SPD_6_40) || wMUT1C_ECU_Load < word_1A5A/*255*/)
+		|| wMUT2E_Vehicle_Speed_Frequency >= word_1A52/*255*/ || wMUT2E_Vehicle_Speed_Frequency <= word_1A54/*10*/ || (SPEED_FLAGS & SPD_6_40) || wMUT1C_ECU_Load >= word_1A5A/*255*/)
 	{
 		timer_FFFF858E = word_1A56/*80*/;
 	};

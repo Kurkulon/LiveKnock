@@ -804,9 +804,11 @@ static u16 BC06_sub_1CED4()
 
 	WFLAG(word_FFFF8D1E, 0x100, (ZRO(wMUT71_Sensor_Error, 8) && (word_FFFF8D1E & 0x400)) || ((word_FFFF80E6 & 0x300) && (Bitmap_Store_H_FFFF92BE & 0x30)));
 
+	// loc_1CF42
+
 	Table_Lookup_Axis(UN5_6CDA);
 
-	u32 r1 = word_FFFF8D5E = Table_Lookup_byte_2D_3D((coolantTempDuringCranking >= word_1DB8) ? unk0451_41E2 : unk0452_41EE);
+	u32 r1 = word_FFFF8D5E = Table_Lookup_byte_2D_3D((coolantTempDuringCranking >= word_1DB8/*50*/) ? unk0451_41E2 : unk0452_41EE);
 
 	Map3D_B *p;
 
@@ -825,24 +827,24 @@ static u16 BC06_sub_1CED4()
 
 	u32 r2 = Table_Lookup_byte_2D_3D(p);
 
-	u32 r0 = Sub_Lim_0(r2, word_1DAE);
+	u32 r0 = Sub_Lim_0(r2, word_1DAE/*9*/);
 
 	r0 = Mul_Fix8_Lim_FFFF(r0, r1 << 3);
 
-	r0 = Add_Lim_FFFF(r0, word_1DAE);
+	r0 = Add_Lim_FFFF(r0, word_1DAE/*9*/);
 
 	r1 = interpolate_r4_r5_r6(r0, r2, bMUTA6_Port_C_Data_Register_Low);
 
 	if (r1 >= r0)
 	{
-		r1 = r2;
+		r1 = r0;
 	};
 
 	word_FFFF8D5A = MIN(r1, 0xFF);
 
 	// loc_1D0A8
 
-	if ((wMUT1E_MAF_RESET_FLAG & FUEL_CUT) || ZRO(wMUT19_Startup_Check_Bits, 0x80) || (open_Loop_disable != 0 && byte_1063 != 0 && ((FUEL_CUT_FLAG_FFFF8A5E & 0x40) || timer_FFFF8596 != 0)))
+	if ((wMUT1E_MAF_RESET_FLAG & FUEL_CUT) || ZRO(wMUT19_Startup_Check_Bits, 0x80) || (open_Loop_disable/*1*/ != 0 && byte_1063/*0*/ != 0 && ((FUEL_CUT_FLAG_FFFF8A5E & 0x40) || timer_FFFF8596 != 0)))
 	{
 		r1 = 0;
 	}
@@ -853,7 +855,7 @@ static u16 BC06_sub_1CED4()
 
 	if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x2000) && (word_FFFF80E6 & 0x300) && (Bitmap_Store_H_FFFF92BE & 0x30))
 	{
-		r1 = Mul_Div_R((word_FFFF80E6 & 0x100) ? word_21BA : word_21C4, wMUTA5_Port_B_Data_Register_Low, 255);
+		r1 = Mul_Div_R((word_FFFF80E6 & 0x100) ? word_21BA/*120*/ : word_21C4/*120*/, wMUTA5_Port_B_Data_Register_Low, 255);
 	};
 
 	return r1;
@@ -1148,7 +1150,7 @@ static bool BC06_sub_1D77A()
 
 		u32 r8, r9;
 
-		if (flags_FFFF8D00 & 0x40)
+		if (flags_FFFF8D00 & 0x4000)
 		{
 			r8 = word_1B88;
 			r9 = word_1B8E;
@@ -1208,7 +1210,7 @@ static bool BC06_sub_1D77A()
 
 	if (!r13)
 	{
-		SET(flags_FFFF8D00, 0x1000);
+		SET(flags_FFFF8D00, 0x800);
 	};
 
 	return r13;

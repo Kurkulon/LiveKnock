@@ -2737,7 +2737,7 @@ static void SysInit_SCI_CF6C()
 
 	CLR(reg_SCI2->SDCR, 8);
 
-	reg_SCI2->SMR_BRR = 0x13F;
+	reg_SCI2->SMR_BRR = 0x1F;
 
 	reg_SCI2->SCR = 0xB0;
 

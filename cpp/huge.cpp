@@ -645,7 +645,6 @@ static void HUGE_Method_801_6_Hz()
 
 	DECLIM(RPM8_FFFF8B00);
 
-
 	PHDR_Stuff_sub_C388();
 
 	portA_state_pr2 = portA_state_pr1;
@@ -1199,7 +1198,12 @@ inline void Huge_200_loc_272A6()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+#ifndef DEF_HARDWARE
+#pragma regsave(Huge_200_loc_272BA)
+static void Huge_200_loc_272BA()
+#else
 inline void Huge_200_loc_272BA()
+#endif
 {	
 	// loc_272BA
 

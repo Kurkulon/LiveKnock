@@ -971,7 +971,7 @@ extern "C" void Knock_Output_Calc_sub_AC96()
 	
 //		WFLAG(reg_PHDRL, 4, KNOCK_FLAG2_FFFF887A & 2);
 
-		reg_PHDRL = (reg_PHDRL & 4) | ((KNOCK_FLAG2_FFFF887A << 1) & 4);
+		reg_PHDRL = (reg_PHDRL & ~4) | ((KNOCK_FLAG2_FFFF887A << 1) & 4);
 
 		__enable_irq();
 	};
@@ -2390,10 +2390,12 @@ static void Init_ATU_2A_2B_3_4_5_8_10()
 
 extern "C" void WaitDownTimer801()
 {
+#ifndef DEF_SIMULATION
 	for(;;)
 	{
 		if (downTimer_801 == 0 || downTimer_801 > 8) break;
 	};
+#endif
 
 	__disable_irq();
 
@@ -2540,7 +2542,9 @@ static void Start_Coil_Charge(u16 mask)
 
 		reg_TIOR2C = reg_TIOR2C & 0xF8 | 1; // 0 output on GR compare-match
 
+#ifndef DEF_SIMULATION
 		while(ZRO(reg_TSR2A, 0x10)) ;
+#endif
 	};
 
 	if (mask & 2)
@@ -2551,7 +2555,9 @@ static void Start_Coil_Charge(u16 mask)
 
 		reg_TIOR2C = reg_TIOR2C & 0x8F | 0x10; // 0 output on GR compare-match
 
+#ifndef DEF_SIMULATION
 		while(ZRO(reg_TSR2A, 0x20)) ;
+#endif
 	};
 
 	if (mask & 4)
@@ -2562,7 +2568,9 @@ static void Start_Coil_Charge(u16 mask)
 
 		reg_TIOR2D = reg_TIOR2D & 0xF8 | 1; // 0 output on GR compare-match
 
+#ifndef DEF_SIMULATION
 		while(ZRO(reg_TSR2A, 0x40)) ;
+#endif
 	};
 
 	__enable_irq();
@@ -2582,7 +2590,9 @@ extern "C" void Disable_Coil_Charge(u16 mask)
 
 		reg_TIOR2C = reg_TIOR2C & 0xF8 | 2;
 
+#ifndef DEF_SIMULATION
 		while(ZRO(reg_TSR2A, 0x10)) ;
+#endif
 	};
 
 	if (mask & 2)
@@ -2593,7 +2603,9 @@ extern "C" void Disable_Coil_Charge(u16 mask)
 
 		reg_TIOR2C = reg_TIOR2C & 0x8F | 0x20;
 
+#ifndef DEF_SIMULATION
 		while(ZRO(reg_TSR2A, 0x20)) ;
+#endif
 	};
 
 	if (mask & 4)
@@ -2604,7 +2616,9 @@ extern "C" void Disable_Coil_Charge(u16 mask)
 
 		reg_TIOR2D = reg_TIOR2D & 0xF8 | 2;
 
+#ifndef DEF_SIMULATION
 		while(ZRO(reg_TSR2A, 0x40)) ;
+#endif
 	};
 
 	__enable_irq();
@@ -3405,7 +3419,7 @@ static void SysInit_SCI_CF6C()
 
 	CLR(reg_SCI2->SDCR, 8);
 
-	reg_SCI2->SMR_BRR = 0x13F;
+	reg_SCI2->SMR_BRR = 0x1F;
 
 	reg_SCI2->SCR = 0xB0;
 
