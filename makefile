@@ -1,6 +1,6 @@
 ##################################################################################################
 
-variant = HUGE
+variant = IDLE
 
 STACK_REPLACE = 1
 GNU_HARDWARE = 0
@@ -92,6 +92,11 @@ var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o bc06.o huge.o
 
 var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1",DEF_BC06="1",DEF_HUGE="1",DEF_HARDWARE="1"
 var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o bc06.o huge.o hardware.o
+
+!else ifeq variant EF07
+
+var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1",DEF_BC06="1",DEF_HUGE="1",DEF_HARDWARE="1",DEF_EF07="1"
+var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o bc06.o huge.o hardware.o EF07.o
 
 !endif
 

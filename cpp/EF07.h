@@ -5,15 +5,23 @@
 
 #ifdef DEF_EF07
 
-extern "C" void SysInit_NVRAM_1F3E0();
-extern "C" void SysInit_sub_1F408();
-extern "C" void EF07_root_sub_1F428();
+extern void SysInit_NVRAM_1F3E0();
+extern void SysInit_sub_1F408();
+extern void EF07_root_sub_1F428();
 
 #else
 
-#define SysInit_NVRAM_1F3E0			((void(*)(void))0x1F3E0)
-#define SysInit_sub_1F408			((void(*)(void))0x1F408)
-#define EF07_root_sub_1F428			((void(*)(void))0x1F428)
+#define _SysInit_NVRAM_1F3E0		((void(*)(void))0x1F3E0)
+#define _SysInit_sub_1F408			((void(*)(void))0x1F408)
+#define _EF07_root_sub_1F428		((void(*)(void))0x1F428)
+
+#pragma regsave(SysInit_NVRAM_1F3E0		)			
+#pragma regsave(SysInit_sub_1F408		)
+#pragma regsave(EF07_root_sub_1F428		)	
+
+static void SysInit_NVRAM_1F3E0()	{	_SysInit_NVRAM_1F3E0();	}						
+static void SysInit_sub_1F408()		{	_SysInit_sub_1F408();	}		
+static void EF07_root_sub_1F428()	{	_EF07_root_sub_1F428();	}		
 
 #endif
 

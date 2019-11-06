@@ -5,23 +5,27 @@
 
 #ifdef DEF_HUGE
 
-extern "C" void SysInit_NVRAM_266DC();
-extern "C" void SysInit_sub_266FC();
-extern "C" void PHDR_Stuff_sub_C388();
-extern "C" void PADR_Stuff_sub_A5F8();
-extern "C" void PDIOR_Stuff_sub_AD3C();
-extern "C" void Read_Ports_And_Registers_sub_B114();
-extern "C" void Get_ADC_Bat_TPS_oxigen();
+extern void SysInit_NVRAM_266DC();
+extern void SysInit_sub_266FC();
+extern void Read_Ports_And_Registers_sub_B114();
+extern void Start_Coil_Charge(u16 mask);
 
 #else
 
-#define SysInit_NVRAM_266DC			((void(*)(void))0x266DC)
-#define SysInit_sub_266FC			((void(*)(void))0x266FC)
-#define PHDR_Stuff_sub_C388			((void(*)(void))0xC388)
-//#define PADR_Stuff_sub_A5F8								((void(*)(void))0xA5F8)
-//#define PDIOR_Stuff_sub_AD3C				((void(*)(void))0xAD3C)
-//#define Read_Ports_And_Registers_sub_B114	((void(*)(void))0xB114)
-//#define Get_ADC_Bat_TPS_oxigen							((void(*)(void))0xA8DC)
+#define _SysInit_NVRAM_266DC				((void(*)(void))0x266DC)
+#define _SysInit_sub_266FC					((void(*)(void))0x266FC)
+#define _Read_Ports_And_Registers_sub_B114	((void(*)(void))0xB114)
+#define _Start_Coil_Charge					((void(*)(u16))0xBE1C)
+
+#pragma regsave(SysInit_NVRAM_266DC					)			
+#pragma regsave(SysInit_sub_266FC					)
+#pragma regsave(Read_Ports_And_Registers_sub_B114	)	
+#pragma regsave(Start_Coil_Charge					)
+
+static void SysInit_NVRAM_266DC()				{	_SysInit_NVRAM_266DC();					}						
+static void SysInit_sub_266FC()					{	_SysInit_sub_266FC();					}		
+static void Read_Ports_And_Registers_sub_B114()	{	_Read_Ports_And_Registers_sub_B114();	}		
+static void Start_Coil_Charge(u16 mask)			{	_Start_Coil_Charge(mask);				}		
 
 
 #endif

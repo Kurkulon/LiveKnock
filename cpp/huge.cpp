@@ -6,11 +6,35 @@
 #include "ram.h"
 #include "EnVars.h"
 #include "hwreg.h"
+#include "FU03.h"
+#include "BC06.h"
 #include "hardware.h"
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#define	off_8AE4				((u16**)0x8AE4)  
-#define	word_8AD4				((const u16*)0x8AD4)                                                     
+void cmti0();
+#pragma address v_cmti0=0x2F0
+const void * v_cmti0 = cmti0;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma section _HUGE
+
+
+#define _IMMO_sub_2212E						((void(*)(void))0x2212E)
+#define _COM_MUT_sub_207F0					((void(*)(void))0x207F0)
+#define _sub_34664							((void(*)(void))0x34664)
+#define _MUT2B_800Hz_root					((void(*)(void))0x2192E)
+
+#pragma regsave(IMMO_sub_2212E		)			
+#pragma regsave(COM_MUT_sub_207F0	)
+#pragma regsave(sub_34664			)	
+#pragma regsave(MUT2B_800Hz_root	)
+
+static void IMMO_sub_2212E()		{	_IMMO_sub_2212E();		}						
+static void COM_MUT_sub_207F0()		{	_COM_MUT_sub_207F0();	}						
+static void sub_34664()				{	_sub_34664();			}						
+static void MUT2B_800Hz_root()		{	_MUT2B_800Hz_root();	}						
 
 //#undef BC06_sub_1E2D0
 
@@ -19,7 +43,7 @@
 //#define sub_A374			((void(*)(void))0xA374)
 //#define F500_sub_21C80		((bool(*)(void))0x21C80)
 
-#define ENGINE_MAIN_VARIABLES_DIM_off_9198		((EnVars*)0x9198)
+//#define ENGINE_MAIN_VARIABLES_DIM_off_9198		((EnVars*)0x9198)
 
 //#define Get_ADC_Bat_TPS_oxigen				((void(*)(void))0xA8DC)
 //#define Read_Ports_And_Registers_sub_B114	((void(*)(void))0xB114)
@@ -35,33 +59,30 @@
 //#define sub_E478							((void(*)(void))0xE478)
 //#define sub_DCB4							((bool(*)(void))0xDCB4)
 //#define sub_D4E4							((bool(*)(void))0xD4E4)
-#define Start_Coil_Charge					((void(*)(u16))0xBE1C)
+//#define Start_Coil_Charge					((void(*)(u16))0xBE1C)
 //#define sub_AD94							((void(*)(void))0xAD94)
 
 //extern "C" void Update_Gen_G_output();
 
-#define Update_Gen_G_output					((void(*)(void))0xAD06)
-#define IMMO_sub_2212E						((void(*)(void))0x2212E)
-#define COM_MUT_sub_207F0					((void(*)(void))0x207F0)
-#define sub_34664							((void(*)(void))0x34664)
+//#define Update_Gen_G_output					((void(*)(void))0xAD06)
 //#define Get_Manifold_AbsPressure			((void(*)(void))0xA95A)
 
-#define sub_21A72							((u16(*)(u16))0x21A72)
-#define sub_21A52							((u16(*)(u16))0x21A52)
-#define atu22_Get_DSTR_0x3C00				((u16(*)(void))0x3C00)
+//#define sub_21A72							((u16(*)(u16))0x21A72)
+//#define sub_21A52							((u16(*)(u16))0x21A52)
+//#define atu22_Get_DSTR_0x3C00				((u16(*)(void))0x3C00)
 
-#define BC06_sub_1D2BC						((void(*)(void))0x1D2BC)
-#define UpdateOutputSync					((void(*)(void))0xAB3C)
-#define PWM_EGR_EVAP_O2H					((void(*)(void))0xAE08)
-#define MUT2B_800Hz_root					((void(*)(void))0x2192E)
+//#define BC06_sub_1D2BC						((void(*)(void))0x1D2BC)
+//#define UpdateOutputSync					((void(*)(void))0xAB3C)
+//#define PWM_EGR_EVAP_O2H					((void(*)(void))0xAE08)
 
-
+#define	off_8AE4							((u16**)0x8AE4)  
+#define	word_8AD4							((const u16*)0x8AD4)                                                     
 
 #define ASSACCELTPSDELTA_353F				((const byte*)0x353F)
 #define word_98DE							((const u16*)0x98DE)
 #define asyncAccelMulTPS_Delta				((const byte*)0x3559)
 
-#define GetADC								((u16(*)(byte, u16*, u16*))0xB2B6)
+//#define GetADC								((u16(*)(byte, u16*, u16*))0xB2B6)
 
 
 //#define CEL8_685C							((Axis*)0x685C)
@@ -96,9 +117,9 @@
 //extern void StartInjectAsync(u16 v, u16 mask);
 //extern void StartInjectSync(u16 v, u16 mask);
 
-#define INJECTOR_RESCALED_sub_26174						((u16(*)(u16))0x26174)
-#define StartInjectAsync								((void(*)(u16,u16))0x261CA)
-#define StartInjectSync									((void(*)(u16,u16))0x26218)
+//#define INJECTOR_RESCALED_sub_26174						((u16(*)(u16))0x26174)
+//#define StartInjectAsync								((void(*)(u16,u16))0x261CA)
+//#define StartInjectSync									((void(*)(u16,u16))0x26218)
 
 
 //#pragma noregsave(HUGE_Method_801_6_Hz)
@@ -110,6 +131,8 @@
 //#pragma noregsave(Huge_50_Hz)
 //#pragma noregsave(Huge_800_Hz_27F62)
 
+inline u16 sub_21A72(u16 v) { return v; }
+inline u16 sub_21A52(u16 v) { return v; }
 
 static void HUGE_Method_801_6_Hz();
 
@@ -122,7 +145,7 @@ static void Huge_50_Hz();
 static void Huge_800_Hz_27F62();
 
 static void Update_MAP_Avrg();
-static u16 sub_E44C();
+//static u16 sub_E44C();
 //static void MUT98_sub_329C6();
 #define MUT98_sub_329C6						((void(*)(void))0x329C6)
 
@@ -170,22 +193,13 @@ static u16 sub_E44C();
 //	__enable_irq();
 //}
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-extern "C" void cmti0();
-#pragma address v_cmti0=0x2F0
-const void * v_cmti0 = cmti0;
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-#pragma section _HUGE
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #pragma interrupt(cmti0)
 #pragma regsave(cmti0)
 
-extern "C" void cmti0()
+void cmti0()
 {
 	__disable_irq();
 
@@ -219,7 +233,55 @@ extern "C" void cmti0()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SysInit_NVRAM_266DC()
+void Start_Coil_Charge(u16 mask)
+{
+	__disable_irq();
+
+	if (mask & 1)
+	{
+		reg_GR2E = reg_TCNT2A + 2;
+
+		CLR(reg_TSR2A, 0x10);
+
+		reg_TIOR2C = reg_TIOR2C & 0xF8 | 1; // 0 output on GR compare-match
+
+#ifndef DEF_SIMULATION
+		while(ZRO(reg_TSR2A, 0x10)) ;
+#endif
+	};
+
+	if (mask & 2)
+	{
+		reg_GR2F = reg_TCNT2A + 2;
+
+		CLR(reg_TSR2A, 0x20);
+
+		reg_TIOR2C = reg_TIOR2C & 0x8F | 0x10; // 0 output on GR compare-match
+
+#ifndef DEF_SIMULATION
+		while(ZRO(reg_TSR2A, 0x20)) ;
+#endif
+	};
+
+	if (mask & 4)
+	{
+		reg_GR2G = reg_TCNT2A + 2;
+
+		CLR(reg_TSR2A, 0x40);
+
+		reg_TIOR2D = reg_TIOR2D & 0xF8 | 1; // 0 output on GR compare-match
+
+#ifndef DEF_SIMULATION
+		while(ZRO(reg_TSR2A, 0x40)) ;
+#endif
+	};
+
+	__enable_irq();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+void SysInit_NVRAM_266DC()
 {
 	Barometric_FFFF8024 = barometric_sens_err_val;
 	TPS_NVRAM_FFFF802A = const_TPS_206C;
@@ -228,7 +290,7 @@ extern "C" void SysInit_NVRAM_266DC()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SysInit_sub_266FC()
+void SysInit_sub_266FC()
 {
 	SPEED_PULSES_FFFF89C4 = ~0;
 

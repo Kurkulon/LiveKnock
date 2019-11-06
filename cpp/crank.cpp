@@ -10,13 +10,14 @@
 #include "constword.h"
 #include "ram.h"
 #include "EnVars.h"
+#include "FU03.h"
 #include "hardware.h"
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-#define Get_ADC_Knock				((void(*)(void))0xA92C)
-#define atu22_Get_DSTR_0x3C00		((u16(*)(void))0xC850)
+//#define Get_ADC_Knock				((void(*)(void))0xA92C)
+//#define atu22_Get_DSTR_0x3C00		((u16(*)(void))0xC850)
 //#define Reset_IRQ0F					((u16(*)(void))0xC258)
 
 extern "C" bool Reset_IRQ0F();
@@ -68,12 +69,12 @@ void F500_InitManifoldVars();
 extern "C" void SetIgnCoilChargeStartTime(u16 mask, u16 v);
 extern "C" void SetIgnSparkStartTime(u16 mask, u16 v);
 
-void StartInjectSync(u16 v, u16 mask);
-void StartInjectAsync(u16 v, u16 mask);
+//void StartInjectSync(u16 v, u16 mask);
+//void StartInjectAsync(u16 v, u16 mask);
 
-extern "C" void InjOpenStart(u16 v, u16 mask);
+//extern "C" void InjOpenStart(u16 v, u16 mask);
 
-u16 INJECTOR_RESCALED_sub_26174(u16 v);
+//u16 INJECTOR_RESCALED_sub_26174(u16 v);
 
 extern "C" u16 atu22_Get_ECNT9A();
 
@@ -120,7 +121,7 @@ extern "C" void CRANK5_sub_C990(u16 v);
 
 static u16 sub_2640E(u16 ipw);
 
-extern "C" void Update_Gen_G_output();
+//extern "C" void Update_Gen_G_output();
 extern "C" bool CRANK_CheckCamshaft_sub_A7C0();
 
 //static void atu22_IMF2G_event();
@@ -586,21 +587,21 @@ void sub_23180()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-void F500_InitManifoldVars()
-{
-	u16 r1 = wMUT1A_Manifold_AbsPressure_ADC8bit;
-
-	__disable_irq();
-
-	Manifold_ADC8bit_1 = r1;
-	Manifold_ADC8bit_2 = r1;
-	Manifold_ADC8bit_3 = r1;
-	Manifold_ADC8bit_4 = r1;
-	Manifold_AbsPressure_ADC8bit_avrg = r1;
-	Manifold_AbsPressure_ADC8bit_x256_avrg = r1 << 8;
-
-	__enable_irq();
-}
+//void F500_InitManifoldVars()
+//{
+//	u16 r1 = wMUT1A_Manifold_AbsPressure_ADC8bit;
+//
+//	__disable_irq();
+//
+//	Manifold_ADC8bit_1 = r1;
+//	Manifold_ADC8bit_2 = r1;
+//	Manifold_ADC8bit_3 = r1;
+//	Manifold_ADC8bit_4 = r1;
+//	Manifold_AbsPressure_ADC8bit_avrg = r1;
+//	Manifold_AbsPressure_ADC8bit_x256_avrg = r1 << 8;
+//
+//	__enable_irq();
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -2745,61 +2746,61 @@ static void CRANK75_sub_260B8()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-u16 INJECTOR_RESCALED_sub_26174(u16 v)
-{
-	if (v <= 260)
-	{
-		v = Add_Lim_FFFF(v, Div_R4_R5__R0(byte_342F[(u32)v>>2], 2));
-	};
-
-	// loc_261AC
-
-	return Add_Lim_FFFF(v, injectorLatencyRescaled);
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-void StartInjectAsync(u16 v, u16 mask)
-{
-	u32 r13 = mask & 0xF;
-
-	r13 &= enInjMask;
-
-	r13 &= injectors_mask_FFFF8C72;
-
-	if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x30) // Random Misfire Detected
-	{
-		r13 &= injectors_misfire_mask;
-	};
-
-	if (v != 0 && r13 != 0)
-	{
-		InjOpenStart(v, r13);
-	};
-
-	CLR(word_FFFF8B4E, INJ_5_SYNC_INJECT);
-}
+//u16 INJECTOR_RESCALED_sub_26174(u16 v)
+//{
+//	if (v <= 260)
+//	{
+//		v = Add_Lim_FFFF(v, Div_R4_R5__R0(byte_342F[(u32)v>>2], 2));
+//	};
+//
+//	// loc_261AC
+//
+//	return Add_Lim_FFFF(v, injectorLatencyRescaled);
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-void StartInjectSync(u16 v, u16 mask)
-{
-	u32 r13 = mask & 0xF;
+//void StartInjectAsync(u16 v, u16 mask)
+//{
+//	u32 r13 = mask & 0xF;
+//
+//	r13 &= enInjMask;
+//
+//	r13 &= injectors_mask_FFFF8C72;
+//
+//	if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x30) // Random Misfire Detected
+//	{
+//		r13 &= injectors_misfire_mask;
+//	};
+//
+//	if (v != 0 && r13 != 0)
+//	{
+//		InjOpenStart(v, r13);
+//	};
+//
+//	CLR(word_FFFF8B4E, INJ_5_SYNC_INJECT);
+//}
 
-	r13 &= enInjMask;
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	r13 &= injectors_mask_FFFF8C72;
-
-	if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x30) // Random Misfire Detected
-	{
-		r13 &= injectors_misfire_mask;
-	};
-
-	SET(word_FFFF8B4E, INJ_5_SYNC_INJECT);
-
-	injPW_final = v;
-	injPW_chnl = r13;
-}
+//void StartInjectSync(u16 v, u16 mask)
+//{
+//	u32 r13 = mask & 0xF;
+//
+//	r13 &= enInjMask;
+//
+//	r13 &= injectors_mask_FFFF8C72;
+//
+//	if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x30) // Random Misfire Detected
+//	{
+//		r13 &= injectors_misfire_mask;
+//	};
+//
+//	SET(word_FFFF8B4E, INJ_5_SYNC_INJECT);
+//
+//	injPW_final = v;
+//	injPW_chnl = r13;
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

@@ -12,19 +12,21 @@
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#define _sub_21E84										((bool(*)(void))0x21E84)
-#pragma regsave(sub_21E84)
+//#define _sub_21E84										((bool(*)(void))0x21E84)
+//#pragma regsave(sub_21E84)
 inline bool sub_21E84() { return false; }
 
-#define _sub_21E4C										((u16(*)(u16))0x21E4C)
-#pragma regsave(sub_21E4C)
+//#define _sub_21E4C										((u16(*)(u16))0x21E4C)
+//#pragma regsave(sub_21E4C)
 inline u16 sub_21E4C(u16 v) { return (v); }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SysInit_NVRAM_OctaneNum();
-extern "C" void SysInit_sub_16D74();
-extern "C" void IG04_root_Update_Ignition();
+#pragma regsave(IG04_root_Update_Ignition)
+
+void SysInit_NVRAM_OctaneNum();
+void SysInit_sub_16D74();
+void IG04_root_Update_Ignition();
 
 static void	IG04_Init_knock_sub_16DB2();
 static void IG04_Set_Load_ECU_Ignintion();
@@ -139,7 +141,7 @@ static u16 	IG04_sub_21DCE(u16 v);
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SysInit_NVRAM_OctaneNum()
+void SysInit_NVRAM_OctaneNum()
 {
 	wMUT27_Octane_Number = octaneNum = GET_FROM_MASSIVE_byte(array_OctanNum);
 
@@ -148,7 +150,7 @@ extern "C" void SysInit_NVRAM_OctaneNum()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SysInit_sub_16D74()
+void SysInit_sub_16D74()
 {
 	timingAdv_75 = 160;
 
@@ -194,7 +196,7 @@ static void IG04_Init_knock_sub_16DB2()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void IG04_root_Update_Ignition()
+void IG04_root_Update_Ignition()
 {
 	IG04_Set_Load_ECU_Ignintion();
 

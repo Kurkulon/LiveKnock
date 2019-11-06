@@ -1,4 +1,6 @@
+#ifdef DEF_F500
 #pragma section _main
+#endif
 
 #include <umachine.h>
 
@@ -26,34 +28,52 @@
 
 
 
-#define sub_206A4					((void(*)(void))0x206A4)
-#define COM_root_sub_21564			((void(*)(void))0x21564)
+#define _sub_206A4					((void(*)(void))0x206A4)
+#define _COM_root_sub_21564			((void(*)(void))0x21564)
+#define _OBD_root_sub_2B8AC			((void(*)(void))0x2B8AC)
+#define _IMMO_root_sub_226E4		((void(*)(void))0x226E4)
+#define _Init_NVRAM_2B364			((void(*)(void))0x2B364)
+#define _SysInit_NVRAM_220D8		((void(*)(void))0x220D8)
+#define _sub_23180					((void(*)(void))0x23180)
+#define _Init_sub_2B474				((void(*)(void))0x2B474)
+#define _SysInit_sub_230FA			((void(*)(void))0x230FA)
+#define _SysInit_sub_22100			((void(*)(void))0x22100)
+#define _SysInit_sub_8000			((void(*)(void))0x8000)
+
+
+#pragma regsave(sub_206A4)			
+#pragma regsave(COM_root_sub_21564)
+#pragma regsave(OBD_root_sub_2B8AC)	
+#pragma regsave(IMMO_root_sub_226E4)
+#pragma regsave(Init_NVRAM_2B364)	
+#pragma regsave(SysInit_NVRAM_220D8)
+#pragma regsave(sub_23180)			
+#pragma regsave(Init_sub_2B474)
+#pragma regsave(SysInit_sub_230FA)
+#pragma regsave(SysInit_sub_22100)	
+#pragma regsave(SysInit_sub_8000)	
+
+static void sub_206A4()				{	_sub_206A4();			}						
+static void COM_root_sub_21564()	{	_COM_root_sub_21564(); 	}		
+static void OBD_root_sub_2B8AC()	{	_OBD_root_sub_2B8AC(); 	}		
+static void IMMO_root_sub_226E4()	{	_IMMO_root_sub_226E4();	}	
+static void Init_NVRAM_2B364()		{	_Init_NVRAM_2B364();	}				
+static void SysInit_NVRAM_220D8()	{	_SysInit_NVRAM_220D8(); }	
+static void sub_23180()				{	_sub_23180();			}						
+static void Init_sub_2B474()		{	_Init_sub_2B474();		}				
+static void SysInit_sub_230FA()		{	_SysInit_sub_230FA(); 	}		
+static void SysInit_sub_22100()		{	_SysInit_sub_22100(); 	}		
+static void SysInit_sub_8000()		{	_SysInit_sub_8000();	}			
 
 //#define AA05_root_sub_19096			((void(*)(void))0x19096)
 //#define EF07_root_sub_1F428			((void(*)(void))0x1F428)
-#define OBD_root_sub_2B8AC			((void(*)(void))0x2B8AC)
-#define IMMO_root_sub_226E4			((void(*)(void))0x226E4)
-
-
 //#define SysInit_NVRAM_266DC			((void(*)(void))0x266DC)
-
 //#define SysInit_NVRAM_18F80			((void(*)(void))0x18F80)
 //#define SysInit_NVRAM_1F3E0			((void(*)(void))0x1F3E0)
-#define Init_NVRAM_2B364			((void(*)(void))0x2B364)
-#define SysInit_NVRAM_220D8			((void(*)(void))0x220D8)
-
-
-#define sub_23180					((void(*)(void))0x23180)
-
-
 //#define SysInit_sub_266FC								((void(*)(void))0x266FC)
 //#define SysInit_sub_16D74								((void(*)(void))0x16D74)
 //#define SysInit_sub_19014								((void(*)(void))0x19014)
 //#define SysInit_sub_1F408								((void(*)(void))0x1F408)
-#define Init_sub_2B474									((void(*)(void))0x2B474)
-#define SysInit_sub_230FA								((void(*)(void))0x230FA)
-#define SysInit_sub_22100								((void(*)(void))0x22100)
-#define SysInit_sub_8000								((void(*)(void))0x8000)
 
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -94,7 +114,7 @@ extern "C" void Main_Engine_Control_Loop()
 	{
 #ifdef DEF_SIMULATION
 
-		if (frameCount == 0x100)
+		if (frameCount == 0x400)
 		{
 			while(1);
 		};
@@ -102,13 +122,13 @@ extern "C" void Main_Engine_Control_Loop()
 #endif
 		sub_206A4();
 
-		//deltaTimer_FFFF886A = reg_TCNT2A - prevTimer_FFFF886C;
+		deltaTimer_FFFF886A = reg_TCNT2A - prevTimer_FFFF886C;
 
-		//WaitDownTimer801();
+		WaitDownTimer801();
 
-		//prevTimer_FFFF886C = reg_TCNT2A;
+		prevTimer_FFFF886C = reg_TCNT2A;
 
-		WaitTimer();
+		//WaitTimer();
 
 		sub_F164();
 
@@ -281,7 +301,7 @@ static void System_Setup()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#pragma noregalloc(SysInit_Saved_Params)
+//#pragma noregalloc(SysInit_Saved_Params)
 
 static void SysInit_Saved_Params()       
 {

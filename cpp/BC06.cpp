@@ -20,8 +20,6 @@
 
 #define ENGINE_MAIN_VARIABLES_DIM_off_9198		((EnVars*)0x9198)
 
-//#define _sub_21F4E			((u16(*)(u16))0x21F4E)
-//#pragma regsave(sub_21F4E)
 inline u16 sub_21F4E(u16 v) { return (v); }
 
 #define _OBD_P0031_P0032_P0037_P0038_sub_2EF5A	((u16(*)(void))0x2EF5A)
@@ -69,7 +67,7 @@ static void sub_B0BC(u16 r1)
 {
 	const u16 r2 = 25000;
 
-	if (r1 < 5)	{ r1 = 5; };
+	if (r1 != 0 && r1 < 5)	{ r1 = 5; };
 
 	word_FFFF8D28 = r1;
 
@@ -101,7 +99,7 @@ static void sub_E356()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void sub_E300()
+static void sub_E300()
 {
 	__disable_irq();
 
@@ -175,9 +173,10 @@ inline u16 sub_21F0C(u16 v) { return (v); }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SysInit_sub_1BEFE();
-extern "C" void BC06_root_sub_1BF7A();
-extern "C" void BC06_sub_1E2D0();
+void SysInit_sub_1BEFE();
+void BC06_root_sub_1BF7A();
+void BC06_sub_1E2D0();
+void BC06_sub_1D2BC();
 
 static void BC06_sub_1C0BC();
 static bool BC06_sub_1C0EA();
@@ -195,7 +194,6 @@ static u16 BC06_sub_1CED4();
 static u16 BC06_sub_1D178(u16 v);
 static void BC06_sub_1D1BE();
 static u16 BC06_sub_1D268();
-static void BC06_sub_1D2BC();
 static void BC06_sub_1D42C();
 static bool BC06_sub_1D474();
 static void BC06_sub_1D49E();
@@ -236,7 +234,7 @@ static bool BC06_sub_1F334();
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SysInit_sub_1BEFE()
+void SysInit_sub_1BEFE()
 {
 	SET(word_FFFF8D68, 0xC080);
 
@@ -270,7 +268,7 @@ extern "C" void SysInit_sub_1BEFE()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void BC06_root_sub_1BF7A()
+void BC06_root_sub_1BF7A()
 {
 	BC06_sub_1C0BC();
 	BC06_sub_1C11C();
@@ -916,7 +914,7 @@ static u16 BC06_sub_1D268()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void BC06_sub_1D2BC()
+void BC06_sub_1D2BC()
 {
 	//u32 r9 = 0x8000;
 	//u32 r8 = 0x100;
@@ -924,8 +922,6 @@ static void BC06_sub_1D2BC()
 	u32 r2 = sub_E294();
 
 	u32 r1 = wMUT9B_Output_Pins;
-
-
 
 	if ((flags_FFFF92C0 & 1) || (MUT_CMD_0 & 4) || (MUT_CMD_1 & 8) || wMUT4A_Purge_Control_Duty == 0 || ((word_FFFF8D20 & 0x100) && wMUT4A_Purge_Control_Duty == 0xFF))
 	{
@@ -936,7 +932,10 @@ static void BC06_sub_1D2BC()
 
 		word_FFFF8D30 = 0xFF;
 
-		sub_E356();
+		if (ZRO(r1, 0x8000))
+		{
+			sub_E356();
+		};
 	}
 	else
 	{
@@ -951,12 +950,41 @@ static void BC06_sub_1D2BC()
 
 		if (r2 != 0 || (r1 & 0x8000))
 		{
+			// loc_1D364
+			
+			u32 r3 = 2;
 
+			if (word_FFFF8D1E & 0x100)
+			{
+				r3 = 1;
+			};
+
+			// loc_1D372
+			
+			u32 r13 = word_FFFF8D30;
+
+			INCLIM(r13);
+
+			if (r13 > r3)
+			{
+				r13 = 0;
+			};
+
+			word_FFFF8D30 = r13;
 		};
 
 		// loc_1D38E
 
+		if (word_FFFF8D30 == 0)
+		{
+			word_FFFF8D26 = wMUT4A_Purge_Control_Duty;
+		};
 
+		// loc_1D39E
+
+		u32 r1 = Sub_Lim_0(Mul_Div(word_FFFF8D26, 0x100, 255), word_FFFF8D30 << 8);
+
+		sub_B0BC( MIN(r1, 0x100) );
 	};
 }
 
@@ -1544,7 +1572,7 @@ static void BC06_Nop9()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void BC06_sub_1E2D0()
+void BC06_sub_1E2D0()
 {
 	u32 r13 = 0;
 

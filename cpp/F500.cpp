@@ -14,29 +14,11 @@
 //#include "F500.h"
 #include "hardware.h"
 
-#undef F500_Init_Load_ECU_Info_And_BitMap_Flags
-
-//#define F500_Get_All_ADC		((void(*)(void))0xA7F0)
-
-#define _F500_sub_21C80			((bool(*)(void))0x21C80)
-#pragma regsave(F500_sub_21C80)
 inline bool F500_sub_21C80() { return false; }
-
-#define _F500_InitManifoldVars	((void(*)(void))0x23244)
-#pragma regsave(F500_InitManifoldVars)
-static void F500_InitManifoldVars() { _F500_InitManifoldVars(); }
-
-
-//#define ENGINE_MAIN_VARIABLES_DIM_off_9198		((EnVars*)0x9198)
-
-#define _sub_21CA8			((u16(*)(u16))0x21CA8)
-#pragma regsave(sub_21CA8)
 inline u16 sub_21CA8(u16 v) { return v; }
 
 
 #pragma regsave(F500_root_sub)
-//#pragma regsave(F500_Init_BitMap_Flags_New)
-//#pragma noregsave(F500_Init_Load_ECU_Info_And_BitMap_Flags)
 
 
 void F500_root_sub();
@@ -206,6 +188,24 @@ static void F500_Battery_Calcs_sub_1101A();
 #define COOLTEMSCAL_98FA					((Map3D_B *)0x98FA)
 #define battery_voltage_compensation_5272	((Map3D_W *)0x5272)
 
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+void F500_InitManifoldVars()
+{
+	u16 r1 = wMUT1A_Manifold_AbsPressure_ADC8bit;
+
+	__disable_irq();
+
+	Manifold_ADC8bit_1 = r1;
+	Manifold_ADC8bit_2 = r1;
+	Manifold_ADC8bit_3 = r1;
+	Manifold_ADC8bit_4 = r1;
+	Manifold_AbsPressure_ADC8bit_avrg = r1;
+	Manifold_AbsPressure_ADC8bit_x256_avrg = r1 << 8;
+
+	__enable_irq();
+}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

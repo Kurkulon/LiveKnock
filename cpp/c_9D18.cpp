@@ -269,13 +269,13 @@ const void *off_26620 = Disable_Ign_Handler;
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void Start_Coil_Charge(u16 mask);
-#pragma address off_24744=0x24744
-const void *off_24744 = Start_Coil_Charge;
-#pragma address off_24D88=0x24D88
-const void *off_24D88 = Start_Coil_Charge;
-#pragma address off_26A50=0x26A50
-const void *off_26A50 = Start_Coil_Charge;
+//extern "C" void Start_Coil_Charge(u16 mask);
+//#pragma address off_24744=0x24744
+//const void *off_24744 = Start_Coil_Charge;
+//#pragma address off_24D88=0x24D88
+//const void *off_24D88 = Start_Coil_Charge;
+//#pragma address off_26A50=0x26A50
+//const void *off_26A50 = Start_Coil_Charge;
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -321,11 +321,11 @@ const void *off_23F88 = atu22_Get_ECNT9A;
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void InjOpenStart(u16 v, u16 mask);
-#pragma address off_23F6C=0x23F6C
-const void *off_23F6C = InjOpenStart;
-#pragma address off_262B0=0x262B0
-const void *off_262B0 = InjOpenStart;
+//extern "C" void InjOpenStart(u16 v, u16 mask);
+//#pragma address off_23F6C=0x23F6C
+//const void *off_23F6C = InjOpenStart;
+//#pragma address off_262B0=0x262B0
+//const void *off_262B0 = InjOpenStart;
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -1807,45 +1807,45 @@ extern "C" void Disable_Ign_Handler(u16 v)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void Start_Coil_Charge(u16 mask)
-{
-	__disable_irq();
-
-	if (mask & 1)
-	{
-		reg_GR2E = reg_TCNT2A + 2;
-
-		CLR(reg_TSR2A, 0x10);
-
-		reg_TIOR2C = reg_TIOR2C & 0xF8 | 1; // 0 output on GR compare-match
-
-		while(ZRO(reg_TSR2A, 0x10)) ;
-	};
-
-	if (mask & 2)
-	{
-		reg_GR2F = reg_TCNT2A + 2;
-
-		CLR(reg_TSR2A, 0x20);
-
-		reg_TIOR2C = reg_TIOR2C & 0x8F | 0x10; // 0 output on GR compare-match
-
-		while(ZRO(reg_TSR2A, 0x20)) ;
-	};
-
-	if (mask & 4)
-	{
-		reg_GR2G = reg_TCNT2A + 2;
-
-		CLR(reg_TSR2A, 0x40);
-
-		reg_TIOR2D = reg_TIOR2D & 0xF8 | 1; // 0 output on GR compare-match
-
-		while(ZRO(reg_TSR2A, 0x40)) ;
-	};
-
-	__enable_irq();
-}
+//extern "C" void Start_Coil_Charge(u16 mask)
+//{
+//	__disable_irq();
+//
+//	if (mask & 1)
+//	{
+//		reg_GR2E = reg_TCNT2A + 2;
+//
+//		CLR(reg_TSR2A, 0x10);
+//
+//		reg_TIOR2C = reg_TIOR2C & 0xF8 | 1; // 0 output on GR compare-match
+//
+//		while(ZRO(reg_TSR2A, 0x10)) ;
+//	};
+//
+//	if (mask & 2)
+//	{
+//		reg_GR2F = reg_TCNT2A + 2;
+//
+//		CLR(reg_TSR2A, 0x20);
+//
+//		reg_TIOR2C = reg_TIOR2C & 0x8F | 0x10; // 0 output on GR compare-match
+//
+//		while(ZRO(reg_TSR2A, 0x20)) ;
+//	};
+//
+//	if (mask & 4)
+//	{
+//		reg_GR2G = reg_TCNT2A + 2;
+//
+//		CLR(reg_TSR2A, 0x40);
+//
+//		reg_TIOR2D = reg_TIOR2D & 0xF8 | 1; // 0 output on GR compare-match
+//
+//		while(ZRO(reg_TSR2A, 0x40)) ;
+//	};
+//
+//	__enable_irq();
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -2311,26 +2311,26 @@ static void sub_C646()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void InjOpenStart(u16 v, u16 mask)
-{
-	__disable_irq();
-
-	if (v != 0)
-	{
-		u32 r13 = 0xFFFFFFFF + v;
-
-		if (mask & 1) 	{	reg_DCNT8K = r13; 	};
-		if (mask & 2) 	{	reg_DCNT8L = r13; 	};
-		if (mask & 4) 	{	reg_DCNT8M = r13; 	};
-		if (mask & 8) 	{	reg_DCNT8N = r13; 	};
-		if (mask & 16) 	{	reg_DCNT8O = r13; 	};
-		if (mask & 32) 	{	reg_DCNT8P = r13; 	};
-
-		SET(reg_DSTR, (mask & 63) << 10);
-	};
-	
-	__enable_irq();
-}
+//extern "C" void InjOpenStart(u16 v, u16 mask)
+//{
+//	__disable_irq();
+//
+//	if (v != 0)
+//	{
+//		u32 r13 = 0xFFFFFFFF + v;
+//
+//		if (mask & 1) 	{	reg_DCNT8K = r13; 	};
+//		if (mask & 2) 	{	reg_DCNT8L = r13; 	};
+//		if (mask & 4) 	{	reg_DCNT8M = r13; 	};
+//		if (mask & 8) 	{	reg_DCNT8N = r13; 	};
+//		if (mask & 16) 	{	reg_DCNT8O = r13; 	};
+//		if (mask & 32) 	{	reg_DCNT8P = r13; 	};
+//
+//		SET(reg_DSTR, (mask & 63) << 10);
+//	};
+//	
+//	__enable_irq();
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

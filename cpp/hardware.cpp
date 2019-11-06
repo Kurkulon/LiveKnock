@@ -349,7 +349,7 @@ static void __pop_r8_r14()
 
 //#pragma regsave(SysInit_sub_9D2C)
 
-extern "C" void SysInit_sub_9D2C()
+void SysInit_sub_9D2C()
 {
 	SysInit_HW_C0CC();
 
@@ -480,7 +480,7 @@ static void sub_xxx()
 
 //#pragma regsave(sub_A078)
 
-extern "C" void sub_A078()
+void sub_A078()
 {
 	Init_HW_C164();                                      
 	Init_ATU_0_DMA_2();                                  
@@ -603,7 +603,7 @@ static void sub_A324()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void sub_A374()
+void sub_A374()
 {
 //	const u32 r9 = ~0x10;
 //	const u32 r8 = ~2;
@@ -691,7 +691,7 @@ extern "C" void sub_A374()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void PADR_Stuff_sub_A5F8()
+void PADR_Stuff_sub_A5F8()
 {
 	__disable_irq();
 
@@ -763,7 +763,7 @@ extern "C" void PADR_Stuff_sub_A5F8()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void F500_Get_All_ADC()
+void F500_Get_All_ADC()
 {
 	u16 res;
 
@@ -794,7 +794,7 @@ extern "C" void F500_Get_All_ADC()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void Get_ADC_Bat_TPS_oxigen()
+void Get_ADC_Bat_TPS_oxigen()
 {
 	u16 res;//, res1, res2;
 
@@ -815,7 +815,7 @@ extern "C" void Get_ADC_Bat_TPS_oxigen()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void Get_ADC_Knock()
+void Get_ADC_Knock()
 {
 	u16 res;
 
@@ -831,7 +831,7 @@ static void Zero_MUT3B()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void Get_Manifold_AbsPressure()
+void Get_Manifold_AbsPressure()
 {
 	u16 res;
 
@@ -842,7 +842,7 @@ extern "C" void Get_Manifold_AbsPressure()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void UpdateOutputAsync()
+void UpdateOutputAsync()
 {
 	__disable_irq();
 
@@ -904,7 +904,7 @@ extern "C" void UpdateOutputAsync()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void UpdateOutputSync()
+void UpdateOutputSync()
 {
 	__disable_irq();
 
@@ -963,7 +963,7 @@ static void UpdateOutputSync()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void Knock_Output_Calc_sub_AC96()
+void Knock_Output_Calc_sub_AC96()
 {
 	if (wMUTD1_BitMap_FAA & FAA_7_HIGH_IGN)
 	{
@@ -992,7 +992,7 @@ extern "C" void Knock_Output_Calc_sub_AC96()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void Update_Gen_G_output()
+void Update_Gen_G_output()
 {
 	__disable_irq();
 
@@ -1003,7 +1003,7 @@ static void Update_Gen_G_output()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void PDIOR_Stuff_sub_AD3C()
+void PDIOR_Stuff_sub_AD3C()
 {
 	__disable_irq();
 
@@ -1042,7 +1042,7 @@ static void sub_AD94()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void PWM_EGR_EVAP_O2H()
+void PWM_EGR_EVAP_O2H()
 {
 	u32 r13 = pwm_Counter + 1;
 
@@ -1145,7 +1145,7 @@ static void SetDuty_6D(u16 v)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void UpdateFanOutputDuty()
+void UpdateFanOutputDuty()
 {
 	SetDuty_6D(wMUT84_Thermo_Fan_Duty << 1);
 }
@@ -1247,7 +1247,7 @@ static void SysInit_ADC()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void GetADC(byte ch, u16 *res8, u16 *res10)
+void GetADC(byte ch, u16 *res8, u16 *res10)
 {
 #ifdef DEF_SIMULATION
 
@@ -1329,7 +1329,7 @@ static u16 GetADC1(byte r1)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SysInit_ATU_0_DMA_2()
+void SysInit_ATU_0_DMA_2()
 {
 	__disable_irq();
 
@@ -2388,7 +2388,7 @@ static void Init_ATU_2A_2B_3_4_5_8_10()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void WaitDownTimer801()
+void WaitDownTimer801()
 {
 #ifndef DEF_SIMULATION
 	for(;;)
@@ -2530,55 +2530,55 @@ static void Disable_Ign_Handler(u16 v)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void Start_Coil_Charge(u16 mask)
-{
-	__disable_irq();
-
-	if (mask & 1)
-	{
-		reg_GR2E = reg_TCNT2A + 2;
-
-		CLR(reg_TSR2A, 0x10);
-
-		reg_TIOR2C = reg_TIOR2C & 0xF8 | 1; // 0 output on GR compare-match
-
-#ifndef DEF_SIMULATION
-		while(ZRO(reg_TSR2A, 0x10)) ;
-#endif
-	};
-
-	if (mask & 2)
-	{
-		reg_GR2F = reg_TCNT2A + 2;
-
-		CLR(reg_TSR2A, 0x20);
-
-		reg_TIOR2C = reg_TIOR2C & 0x8F | 0x10; // 0 output on GR compare-match
-
-#ifndef DEF_SIMULATION
-		while(ZRO(reg_TSR2A, 0x20)) ;
-#endif
-	};
-
-	if (mask & 4)
-	{
-		reg_GR2G = reg_TCNT2A + 2;
-
-		CLR(reg_TSR2A, 0x40);
-
-		reg_TIOR2D = reg_TIOR2D & 0xF8 | 1; // 0 output on GR compare-match
-
-#ifndef DEF_SIMULATION
-		while(ZRO(reg_TSR2A, 0x40)) ;
-#endif
-	};
-
-	__enable_irq();
-}
+//static void Start_Coil_Charge(u16 mask)
+//{
+//	__disable_irq();
+//
+//	if (mask & 1)
+//	{
+//		reg_GR2E = reg_TCNT2A + 2;
+//
+//		CLR(reg_TSR2A, 0x10);
+//
+//		reg_TIOR2C = reg_TIOR2C & 0xF8 | 1; // 0 output on GR compare-match
+//
+//#ifndef DEF_SIMULATION
+//		while(ZRO(reg_TSR2A, 0x10)) ;
+//#endif
+//	};
+//
+//	if (mask & 2)
+//	{
+//		reg_GR2F = reg_TCNT2A + 2;
+//
+//		CLR(reg_TSR2A, 0x20);
+//
+//		reg_TIOR2C = reg_TIOR2C & 0x8F | 0x10; // 0 output on GR compare-match
+//
+//#ifndef DEF_SIMULATION
+//		while(ZRO(reg_TSR2A, 0x20)) ;
+//#endif
+//	};
+//
+//	if (mask & 4)
+//	{
+//		reg_GR2G = reg_TCNT2A + 2;
+//
+//		CLR(reg_TSR2A, 0x40);
+//
+//		reg_TIOR2D = reg_TIOR2D & 0xF8 | 1; // 0 output on GR compare-match
+//
+//#ifndef DEF_SIMULATION
+//		while(ZRO(reg_TSR2A, 0x40)) ;
+//#endif
+//	};
+//
+//	__enable_irq();
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void Disable_Coil_Charge(u16 mask)
+void Disable_Coil_Charge(u16 mask)
 {
 	__disable_irq();
 
@@ -2879,7 +2879,7 @@ static void Nop5()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void PHDR_Stuff_sub_C388()
+void PHDR_Stuff_sub_C388()
 {
 	__disable_irq();
 
@@ -2998,7 +2998,7 @@ static u16 atu22_Get_ECNT9A()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void Init_ATU_sub_C5D2()
+void Init_ATU_sub_C5D2()
 {
 	__disable_irq();
 
@@ -3046,26 +3046,26 @@ static void sub_C646()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void InjOpenStart(u16 v, u16 mask)
-{
-	__disable_irq();
-
-	if (v != 0)
-	{
-		u32 r13 = 0xFFFFFFFF + v;
-
-		if (mask & 1) 	{	reg_DCNT8K = r13; 	};
-		if (mask & 2) 	{	reg_DCNT8L = r13; 	};
-		if (mask & 4) 	{	reg_DCNT8M = r13; 	};
-		if (mask & 8) 	{	reg_DCNT8N = r13; 	};
-		if (mask & 16) 	{	reg_DCNT8O = r13; 	};
-		if (mask & 32) 	{	reg_DCNT8P = r13; 	};
-
-		SET(reg_DSTR, (mask & 63) << 10);
-	};
-	
-	__enable_irq();
-}
+//static void InjOpenStart(u16 v, u16 mask)
+//{
+//	__disable_irq();
+//
+//	if (v != 0)
+//	{
+//		u32 r13 = 0xFFFFFFFF + v;
+//
+//		if (mask & 1) 	{	reg_DCNT8K = r13; 	};
+//		if (mask & 2) 	{	reg_DCNT8L = r13; 	};
+//		if (mask & 4) 	{	reg_DCNT8M = r13; 	};
+//		if (mask & 8) 	{	reg_DCNT8N = r13; 	};
+//		if (mask & 16) 	{	reg_DCNT8O = r13; 	};
+//		if (mask & 32) 	{	reg_DCNT8P = r13; 	};
+//
+//		SET(reg_DSTR, (mask & 63) << 10);
+//	};
+//	
+//	__enable_irq();
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -3082,7 +3082,7 @@ static void InjOpenStart(u16 v, u16 mask)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static u16 atu22_Get_DSTR_0x3C00()
+u16 atu22_Get_DSTR_0x3C00()
 {
 	__disable_irq();
 
@@ -3136,7 +3136,7 @@ static void sub_C8E0()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void Timer_Counter_Related_sub_C928()
+void Timer_Counter_Related_sub_C928()
 {
 	__disable_irq();
 
@@ -3952,7 +3952,7 @@ static void SysInit_Reset_Crank_Flags()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void Init_ATU_0_2B()
+void Init_ATU_0_2B()
 {
 	__disable_irq();
 
@@ -4149,7 +4149,7 @@ static void sub_DE24()
 
 	CLR(word_FFFF9ADA, 0x40);
 
-	CLR(reg_TIOR2B, 0xBB);
+	CLR(reg_TIOR2B, 0x44);
 
 	SET(reg_TIER2A, 4);
 

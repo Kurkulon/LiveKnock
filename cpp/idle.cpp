@@ -109,24 +109,10 @@
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#define _sub_21ECC							((u16(*)(u16))0x21ECC)
-#pragma regsave(sub_21ECC)
 inline u16 sub_21ECC(u16 v) { return (v); }
-
-#define _sub_21E9C							((u16(*)(u16))0x21E9C)
-#pragma regsave(sub_21E9C)
 inline u16 sub_21E9C(u16 v) { return (v); }
-
-#define _sub_21EB4							((u16(*)(u16))0x21EB4)
-#pragma regsave(sub_21EB4)
 inline u16 sub_21EB4(u16 v) { return (v); }
-
-#define _sub_21EF8							((bool(*)(void))0x21EF8)
-#pragma regsave(sub_21EF8)
 inline bool sub_21EF8() { return false; }
-
-#define _sub_21EE4							((bool(*)(void))0x21EE4)
-#pragma regsave(sub_21EE4)
 inline bool sub_21EE4() { return false; }
 
 
@@ -134,9 +120,9 @@ inline bool sub_21EE4() { return false; }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SysInit_NVRAM_18F80();
-extern "C" void SysInit_sub_19014();
-extern "C" void AA05_root_sub_19096();
+void SysInit_NVRAM_18F80();
+void SysInit_sub_19014();
+void AA05_root_sub_19096();
 
 static void AA05_sub_19188();
 static void AA05_sub_19260();
@@ -224,7 +210,7 @@ static u16 sub_220B4();
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SysInit_NVRAM_18F80()
+void SysInit_NVRAM_18F80()
 {
 	trim_Idle_Control_AC_2 = word_1936/*0x8D00*/;
 
@@ -245,7 +231,7 @@ extern "C" void SysInit_NVRAM_18F80()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SysInit_sub_19014()
+void SysInit_sub_19014()
 {
 	if (wMUT22_ISCV & (M22_FORCED_OPEN|M22_INIT_ISCV) /*0xA0*/)
 	{
@@ -402,7 +388,7 @@ static void AA05_Idle_root()
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void AA05_root_sub_19096()
+void AA05_root_sub_19096()
 {
 	AA05_sub_19188();
 	AA05_ISCV_Update();

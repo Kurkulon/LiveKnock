@@ -715,10 +715,10 @@ struct TM32
 #define WBIT(v, m, c) { v &= ~(m); if (c) v |= m; }
 
 
-#define INCLIM(v) { if (v < 0xFFFF) {v += 1;}; }
+#define INCLIM(v) { if ((v) < 0xFFFF) {v += 1;}; }
 #define DECLIM(v) { u16 t = v; if (t != 0) { v = t - 1; }; }
-#define INCLIM80(v) { if (v < 0x80) {v += 1;}; }
-#define INC32(v) { if ((v+=1) == 0) {v -= 1;}; }
+#define INCLIM80(v) { if ((v) < 0x80) {v += 1;}; }
+#define INC32(v) { if (((v)+=1) == 0) {v -= 1;}; }
 
 #define WPDR16(p,v) { *((u16*)&p) = v; }
 #define RPDR16(p)	(*((u16*)&p))

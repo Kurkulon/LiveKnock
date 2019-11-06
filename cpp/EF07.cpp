@@ -1,4 +1,3 @@
-//#pragma section _EF07
 #pragma section _main
 
 #include <umachine.h>
@@ -84,7 +83,7 @@ static bool EF07_sub_204AC();
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SysInit_NVRAM_1F3E0()
+void SysInit_NVRAM_1F3E0()
 {
 	Init_Clear_active_faults();
 
@@ -93,7 +92,7 @@ extern "C" void SysInit_NVRAM_1F3E0()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-extern "C" void SysInit_sub_1F408()
+void SysInit_sub_1F408()
 {
 	word_FFFF8718 = t1_unk_253E/*20*/;
 
@@ -104,8 +103,7 @@ extern "C" void SysInit_sub_1F408()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-
-extern "C" void EF07_root_sub_1F428()
+void EF07_root_sub_1F428()
 {
 	EF07_sub_1F468();
 	EF07_sub_1F4FC();
