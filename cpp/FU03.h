@@ -3,6 +3,10 @@
 
 #include "types.h"
 
+#ifdef __MVS
+#define DEF_FU03
+#endif
+
 #ifdef DEF_FU03
 
 extern void SysInit_NVRAM_Trims();

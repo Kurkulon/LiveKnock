@@ -27,7 +27,7 @@
 				ReBuildCommandLine="make -h -a version=Debug"
 				CleanCommandLine="@del /Q .\Debug\*.*"
 				Output="$(ProjectDir)\LiveKnock.axf"
-				PreprocessorDefinitions="_DEBUG,DEF_SIMULATION,DEF_IGNITION_HOOKS,DEF_FU03_HOOKS"
+				PreprocessorDefinitions="__MVS,_DEBUG,DEF_SIMULATION"
 				IncludeSearchPath=""
 				ForcedIncludes=""
 				AssemblySearchPath=""
@@ -47,7 +47,7 @@
 				ReBuildCommandLine="make -h -a version=Release"
 				CleanCommandLine="@del /Q .\Release\*.*"
 				Output="$(ProjectDir)\LiveKnock.axf"
-				PreprocessorDefinitions="DEF_IGNITION_HOOKS,DEF_FU03_HOOKS"
+				PreprocessorDefinitions="__MVS"
 				IncludeSearchPath=""
 				ForcedIncludes=""
 				AssemblySearchPath=""
@@ -73,15 +73,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\cpp\atu02_ici0A.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\cpp\BC06.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\cpp\c_9D18.cpp"
 				>
 			</File>
 			<File
@@ -94,10 +86,6 @@
 			</File>
 			<File
 				RelativePath=".\cpp\EF07.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\cpp\ext_ram_vars.cpp"
 				>
 			</File>
 			<File
@@ -150,10 +138,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ida\ram_vars.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\cpp\Reset_init.asm"
 				>
 			</File>
@@ -185,10 +169,6 @@
 			</File>
 			<File
 				RelativePath=".\cpp\EnVars.h"
-				>
-			</File>
-			<File
-				RelativePath=".\cpp\ext_ram_vars.h"
 				>
 			</File>
 			<File
@@ -241,10 +221,6 @@
 			</File>
 			<File
 				RelativePath=".\cpp\ram_asm.inc"
-				>
-			</File>
-			<File
-				RelativePath=".\ida\ram_vars.h"
 				>
 			</File>
 			<File

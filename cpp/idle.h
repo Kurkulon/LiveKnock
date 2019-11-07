@@ -3,6 +3,10 @@
 
 #include "types.h"
 
+#ifdef __MVS
+#define DEF_IDLE
+#endif
+
 #ifdef DEF_IDLE
 
 extern void SysInit_NVRAM_18F80();

@@ -1,3 +1,5 @@
+#ifdef DEF_C_9D18
+
 #include <smachine.h>
 
 //#include "ext_ram_vars.h"
@@ -1532,9 +1534,9 @@ static void SysInit_ATU_2A_2B_3_4_5_8_10()
 {
 	__disable_irq();
 
-	reg_PSCR1 = 3; // 4 MHz
+	reg_PSCR1 = 3; // 4 MHz (Channel: 0, 1, 2, 3, 4, 5, 8, 11)
 
-	reg_PSCR4 = 3; // 4 MHz
+	reg_PSCR4 = 3; // 4 MHz (Channel: 10)
 
 	reg_TCR2A = 0x34; // 250kHz
 	reg_TCR2B = 0x34;
@@ -3321,3 +3323,5 @@ static void sub_D99A()
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#endif // DEF_C_9D18

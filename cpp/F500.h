@@ -3,6 +3,10 @@
 
 #include "types.h"
 
+#ifdef __MVS
+#define DEF_F500
+#endif
+
 #ifdef DEF_F500
 
 extern void SysInit_NVRAM_F234();

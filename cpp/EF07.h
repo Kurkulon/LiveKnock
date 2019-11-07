@@ -3,6 +3,10 @@
 
 #include "types.h"
 
+#ifdef __MVS
+#define DEF_EF07
+#endif
+
 #ifdef DEF_EF07
 
 extern void SysInit_NVRAM_1F3E0();

@@ -2068,7 +2068,7 @@ static void BC06_sub_1EB2E()
 		timer_FFFF87B0 = word_1BC0/*10*/ << 2;
 	};
 
-	if (timer_down_TXFLAG3_FFFF8574 == 0)
+	if (timer_down_TXFLAG3_FFFF8574 != 0)
 	{
 		if (timer_FFFF87B0 == 0)
 		{

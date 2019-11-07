@@ -3,6 +3,10 @@
 
 #include "types.h"
 
+#ifdef __MVS
+#define DEF_ML02
+#endif
+
 #ifdef DEF_ML02
 
 extern void SysInit_NVRAM_111C8();

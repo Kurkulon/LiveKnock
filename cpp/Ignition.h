@@ -3,6 +3,10 @@
 
 #include "types.h"
 
+#ifdef __MVS
+#define DEF_IGNITION
+#endif
+
 #ifdef DEF_IGNITION
 
 extern void SysInit_NVRAM_OctaneNum();

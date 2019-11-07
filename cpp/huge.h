@@ -3,6 +3,10 @@
 
 #include "types.h"
 
+#ifdef __MVS
+#define DEF_HUGE
+#endif
+
 #ifdef DEF_HUGE
 
 extern void SysInit_NVRAM_266DC();

@@ -3,7 +3,9 @@
 
 #include "hwreg.h"
 
-//#define DEF_HARDWARE
+#ifdef __MVS
+#define DEF_HARDWARE
+#endif
 
 #ifdef DEF_HARDWARE
 
