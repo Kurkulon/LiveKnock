@@ -124,9 +124,9 @@ static void SysInit_sub_9D2C() __attribute__ ((section ("P_HARDWARE")));
 #define	word_8AD4				((const u16*)0x8AD4)                                                     
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+/*
 //#define sub_A324							((void(*)(void))0xA324)
-/*extern  void sub_A324();
+extern  void sub_A324();
 #pragma address off_1D414=0x1D414
 const void *off_1D414 = (const void *)sub_A324;
 
@@ -175,15 +175,20 @@ const void *off_23504 = (const void *)Check_PEDRL_1;
 static void Get_ADC_Bat_TPS_oxigen();
 #pragma address off_270BC=0x270BC
 const void *off_270BC = (const void *)Get_ADC_Bat_TPS_oxigen;
-
+*/
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void Get_ADC_Knock();
+#ifdef DEF_SIMULATION
+
+void Get_ADC_Knock();
+#pragma regsave(Get_ADC_Knock)			
 #pragma address off_2409C=0x2409C
 const void *off_2409C = (const void *)Get_ADC_Knock;
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#endif 
 
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+/*
 static void Get_Manifold_AbsPressure();
 #pragma address off_2803C=0x2803C
 const void *off_2803C = (const void *)Get_Manifold_AbsPressure;
@@ -259,11 +264,11 @@ const void *v_cmti0 = cmti0;
 static void atu41_imi4B();
 #pragma address v_atu41_imi4B=0x204
 const void *v_atu41_imi4B = atu41_imi4B;
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 */
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 //#pragma section _HARDWARE
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

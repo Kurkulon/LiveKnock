@@ -179,32 +179,38 @@ extern "C" void Main_Engine_Control_Loop()
 
 static void Simulation()
 {
-	// atu02_ici0A
+	SET(reg_PEDRL, 4); // PE2/A2 (71: Starter Signal	INVERTED)
 
-	reg_TCNT2A += 3750000/750;
-	reg_OSBR2 = reg_TCNT2A;
-
-	reg_ICR0A += 3750000*16/750;
-
-	reg_PADRL ^= 1;
-
-	trapa(84);
-
-	// atu22_CMF2G_event
-
-	SET(reg_TSR2B, 0x40);
-	trapa(114);
+	u32 ht = 3750000/750; // crank rpm
 
 	//HUGE_Method_801_6_Hz
 
-	reg_PADRL ^= 0x80; reg_TSR3 |= 8;	trapa(188); 
-		trapa(188); 
-	reg_PADRL ^= 0x80; reg_TSR3 |= 8;	trapa(188); 
-		trapa(188); 
-	reg_PADRL ^= 0x80; reg_TSR3 |= 8;	trapa(188); 
-		trapa(188); 
-	reg_PADRL ^= 0x80; reg_TSR3 |= 8;	trapa(188); 
-		trapa(188); 
+	for (byte i = 0; i < 8; i++)
+	{
+		if ((i & 1) == 0) { reg_PADRL ^= 0x80; reg_TSR3 |= 8; } //  PA7/TIO3D 	(86:Vehicle Speed Sensor Signal)
+		trapa(188);
+
+		if ((u16)(reg_TCNT2A - reg_OSBR2) < 312)
+		{
+			u16 t = reg_TCNT2A;
+			reg_TCNT2A = reg_OSBR2;
+			reg_PADRL ^= 1;
+			trapa(84);
+
+			// atu22_CMF2G_event
+			SET(reg_TSR2B, 0x40);
+			trapa(114);
+
+			reg_OSBR2 += ht; 
+			reg_ICR0A += ht * 16;
+
+			reg_TCNT2A = t;
+		};
+
+		reg_TCNT2A += 312;
+	};
+
+	if (reg_ECNT9A == 0xFF) { SET(reg_TSR9,1); }; reg_ECNT9A += 1; //  PJ10/TI9A (41:Alternator FR terminal)
 
 	adc_Hooked_value[0] = 0;
 	adc_Hooked_value[1] = 13.8/0.0733*4;			// wMUT14_Battery_Level_ADC8bit
@@ -212,7 +218,7 @@ static void Simulation()
 	adc_Hooked_value[3] = (139.74 - 20)/1.468*4;	// wMUT3A_AirTemp_ADC8bit
 	adc_Hooked_value[4] = 70*4;					// wMUT1A_Manifold_AbsPressure_ADC8bit
 	adc_Hooked_value[5] = 25*4;					// wMUT17_TPS_ADC8bit
-	adc_Hooked_value[6] = 0;					// wMUT30_Knock_Voltage
+	adc_Hooked_value[6] += 100;					// wMUT30_Knock_Voltage
 	adc_Hooked_value[7] = 0;					// null_ADC_7_8bit
 	adc_Hooked_value[8] = 0;					// ADC_08_8bit
 	adc_Hooked_value[9] = 0;					// oxigen_ADC8bit

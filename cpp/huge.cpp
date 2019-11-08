@@ -233,6 +233,11 @@ void cmti0()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+//#define _Start_Coil_Charge					((void(*)(u16))0xBE1C)
+//#pragma regsave(Start_Coil_Charge					)
+//void Start_Coil_Charge(u16 mask)			{	_Start_Coil_Charge(mask);				}		
+
+
 void Start_Coil_Charge(u16 mask)
 {
 	__disable_irq();
@@ -719,7 +724,7 @@ static void HUGE_Method_801_6_Hz()
 
 	sub_E478();
 
-	if ((portA_state & 0x40) && (portA_state & 1) && (word_FFFF8BBA & 0x80) && wMUT14_Battery_Level_ADC8bit >= 0xFF)
+	if ((portA_state & 0x40) && (portA_state & 1) && (word_FFFF8BBA & 0x80) && wMUT14_Battery_Level_ADC8bit < 0xFF)
 	{
 		word_FFFF8C5C = 0;
 

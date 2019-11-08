@@ -382,7 +382,7 @@ u16 INJECTOR_RESCALED_sub_26174(u32 v)
 
 	// loc_261AC
 
-	return Add_Lim_FFFF(v, injectorLatencyRescaled);
+	return Lim_FFFF(v + injectorLatencyRescaled);
 
 //	return _INJECTOR_RESCALED_sub_26174(v);
 }
