@@ -241,7 +241,7 @@ void SysInit_sub_19014()
 	}
 	else
 	{
-		if (wMUT16_cur_Idle_Steps == some_iscstep_const_1982/*80*/)
+		if ((byte)wMUT16_cur_Idle_Steps == some_iscstep_const_1982/*80*/)
 		{
 			stepperPinOutIndex = 3;
 		};
@@ -1244,7 +1244,7 @@ static void AA05_sub_1A304()
 	if ((byte_103B == 0 || (RT_FLAG1_FFFF8888 & RACING)) 
 		&& ((RT_FLAG1_COPY_FFFF888A ^ RT_FLAG1_FFFF8888) & RT_FLAG1_FFFF8888 & RT_7_bit))
 	{
-		u32 r13 = Sub_Lim_0(wMUT16_cur_Idle_Steps + word_FFFF8CB8, wMUT25_Target_Idle_Steps);
+		u32 r13 = Sub_Lim_0((byte)wMUT16_cur_Idle_Steps + word_FFFF8CB8, wMUT25_Target_Idle_Steps);
 
 		if (word_FFFF8CB8 > r13)
 		{
@@ -1474,7 +1474,7 @@ static bool AA05_sub_1A8CA()
 {
 	u32 r1 = wMUT16_cur_Idle_Steps;
 
-	return SwapBytes16(r1) != r1
+	return SwapBytes16((byte)r1) != r1
 			|| trim_Idle_Control_main > ufix8_COOLANT_TEMP_CONST_1932 
 			|| trim_Idle_Control_AC_1 > ufix8_COOLANT_TEMP_CONST_1932 
 			|| trim_Idle_Control_AC_2 > ufix8_COOLANT_TEMP_CONST_1932
@@ -1514,7 +1514,7 @@ static void AA05_Init_ISCV_position()
 
 	if (wMUT22_ISCV & M22_FORCED_CLOSE)
 	{
-		if (wMUT16_cur_Idle_Steps & 0xFF)
+		if ((byte)wMUT16_cur_Idle_Steps != 0)
 		{
 			mut25_IdleSteps = 0;
 
@@ -1712,7 +1712,7 @@ static bool AA05_sub_1AE26()
 	{
 		SET(idle_FLAGS, IDLF_01);
 	}
-	else if (wMUT16_cur_Idle_Steps == wMUT25_Target_Idle_Steps)
+	else if ((byte)wMUT16_cur_Idle_Steps == wMUT25_Target_Idle_Steps)
 	{
 		CLR(idle_FLAGS, IDLF_01);
 	};

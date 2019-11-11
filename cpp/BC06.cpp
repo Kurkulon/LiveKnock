@@ -766,7 +766,7 @@ static void BC06_sub_1CDE6()
 	}
 	else
 	{
-		word_FFFF87BA = word_1DC4;
+		word_FFFF87BA = word_1DC4/*200*/;
 	};
 
 	// loc_1CE44
@@ -781,12 +781,15 @@ static void BC06_sub_1CDE6()
 
 		if (timeEvents & EVT_2_100ms)
 		{
-			Sub_Lim_0(r13, word_1DC0/*3*/);
+			r13 = Sub_Lim_0(r13, word_1DC0/*3*/);
 		};
 	}
-	else if (ZRO(word_FFFF8D1E, 0xE0) || (timeEvents & EVT_2_100ms))
+	else if (ZRO(word_FFFF8D1E, 0xE0))
 	{
-		r13 = Add_Lim_FFFF(r13, word_1DC0/*3*/);
+		if (timeEvents & EVT_2_100ms)
+		{
+			r13 = Add_Lim_FFFF(r13, word_1DC0/*3*/);
+		};
 	};
 
 	// loc_1CEAC

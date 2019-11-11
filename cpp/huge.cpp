@@ -1895,7 +1895,7 @@ static void Huge_100_Hz_27C7A()
 
 				if (r1 != 0)
 				{
-					r1 = INJECTOR_RESCALED_sub_26174(r1<<7);
+					r1 = INJECTOR_RESCALED_sub_26174(r1<<5);
 
 					__disable_irq();
 

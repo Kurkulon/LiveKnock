@@ -179,9 +179,9 @@ extern "C" void Main_Engine_Control_Loop()
 
 static void Simulation()
 {
-	SET(reg_PEDRL, 4); // PE2/A2 (71: Starter Signal	INVERTED)
+	CLR(reg_PEDRL, 4); // PE2/A2 (71: Starter Signal	INVERTED)
 
-	u32 ht = 3750000/750; // crank rpm
+	u32 ht = 3750000/400; // crank rpm
 
 	//HUGE_Method_801_6_Hz
 
@@ -213,21 +213,31 @@ static void Simulation()
 	if (reg_ECNT9A == 0xFF) { SET(reg_TSR9,1); }; reg_ECNT9A += 1; //  PJ10/TI9A (41:Alternator FR terminal)
 
 	adc_Hooked_value[0] = 0;
-	adc_Hooked_value[1] = 13.8/0.0733*4;			// wMUT14_Battery_Level_ADC8bit
-	adc_Hooked_value[2] = (139.74 - 80)/1.468*4;	// wMUT07_CoolTemp_ADC8bit
-	adc_Hooked_value[3] = (139.74 - 20)/1.468*4;	// wMUT3A_AirTemp_ADC8bit
-	adc_Hooked_value[4] = 70*4;					// wMUT1A_Manifold_AbsPressure_ADC8bit
-	adc_Hooked_value[5] = 25*4;					// wMUT17_TPS_ADC8bit
-	adc_Hooked_value[6] += 100;					// wMUT30_Knock_Voltage
-	adc_Hooked_value[7] = 0;					// null_ADC_7_8bit
-	adc_Hooked_value[8] = 0;					// ADC_08_8bit
-	adc_Hooked_value[9] = 0;					// oxigen_ADC8bit
-	adc_Hooked_value[10] = 0;					// wMUT3C_Rear_O2_ADC8bit
-	adc_Hooked_value[11] = 0;					// wMUT38_Manifold_DiffPressure_ADC8bit
-	adc_Hooked_value[12] = 0;					// wMUT39_Fuel_Tank_Pressure_ADC8bit
-	adc_Hooked_value[13] = 0;					// wMUT88_Fuel_Level_ADC8bit
-	adc_Hooked_value[14] = 0;					// wMUT87_Fuel_Temp_ADC8bit
-	adc_Hooked_value[15] = 0;					// wMUT83_ADC_15_8bit
+	adc_Hooked_value[1] = 13.8/0.0733*4;					// wMUT14_Battery_Level_ADC8bit
+	adc_Hooked_value[2] = (139.74 - 120)/1.468*4;			// wMUT07_CoolTemp_ADC8bit
+	adc_Hooked_value[3] = (139.74 - 100)/1.468*4;			// wMUT3A_AirTemp_ADC8bit
+	adc_Hooked_value[7] = 0;								// null_ADC_7_8bit
+	adc_Hooked_value[8] = 0;								// ADC_08_8bit
+	adc_Hooked_value[9] = 0;								// oxigen_ADC8bit
+	adc_Hooked_value[10] = 0;								// wMUT3C_Rear_O2_ADC8bit
+	adc_Hooked_value[11] = 0;								// wMUT38_Manifold_DiffPressure_ADC8bit
+	adc_Hooked_value[12] = 0;								// wMUT39_Fuel_Tank_Pressure_ADC8bit
+	adc_Hooked_value[13] = 0;								// wMUT88_Fuel_Level_ADC8bit
+	adc_Hooked_value[14] = 0;								// wMUT87_Fuel_Temp_ADC8bit
+	adc_Hooked_value[15] = 0;								// wMUT83_ADC_15_8bit
+
+	if (frameCount > 0x200)
+	{
+		adc_Hooked_value[4] = 75*4;						// wMUT1A_Manifold_AbsPressure_ADC8bit
+		adc_Hooked_value[5] = 25*4;						// wMUT17_TPS_ADC8bit
+		adc_Hooked_value[6] = (frameCount * 101) & 1023;	// wMUT30_Knock_Voltage
+	}
+	else
+	{
+		adc_Hooked_value[4] = 200*4;						// wMUT1A_Manifold_AbsPressure_ADC8bit
+		adc_Hooked_value[5] = 25*4;							// wMUT17_TPS_ADC8bit
+		adc_Hooked_value[6] = (frameCount * 101) & 31;		// wMUT30_Knock_Voltage
+	};
 
 }
 
