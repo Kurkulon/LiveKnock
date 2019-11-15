@@ -150,6 +150,7 @@ static void GetADC(byte ch, u16 *res8, u16 *res10) 	{ _GetADC(ch, res8, res10);	
 //#define Get_ADC_Bat_TPS_oxigen			((void(*)(void))0xA8DC)
 
 #define      adc_Hooked_value ((u16*)0xFFFF8000)                                                        
+#define      cam_sim (*((u32*)0xFFFF8030))
 
 inline bool PEDR_LO_Check_sub_A790()		{ return ZRO(reg_PEDRL, 2); }
 inline bool Check_Starter_signal()			{ return (reg_PEDRL & 4) == 0; }

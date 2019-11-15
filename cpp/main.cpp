@@ -179,9 +179,11 @@ extern "C" void Main_Engine_Control_Loop()
 
 static void Simulation()
 {
-	CLR(reg_PEDRL, 4); // PE2/A2 (71: Starter Signal	INVERTED)
+	SET(reg_PEDRL, 4); // PE2/A2 (71: Starter Signal	INVERTED)
 
-	u32 ht = 3750000/400; // crank rpm
+	u32 ht = 3750000/850; // crank rpm
+
+	if (frameCount <= 1) { cam_sim = 0xE4E4E4E4; };
 
 	//HUGE_Method_801_6_Hz
 
@@ -194,7 +196,8 @@ static void Simulation()
 		{
 			u16 t = reg_TCNT2A;
 			reg_TCNT2A = reg_OSBR2;
-			reg_PADRL ^= 1;
+			reg_PADRL ^= 1; //crank 
+			cam_sim = rotr(cam_sim); reg_PADRL = (reg_PADRL & ~4) | ((cam_sim << 2) & 4); // camshaft
 			trapa(84);
 
 			// atu22_CMF2G_event
@@ -214,8 +217,8 @@ static void Simulation()
 
 	adc_Hooked_value[0] = 0;
 	adc_Hooked_value[1] = 13.8/0.0733*4;					// wMUT14_Battery_Level_ADC8bit
-	adc_Hooked_value[2] = (139.74 - 120)/1.468*4;			// wMUT07_CoolTemp_ADC8bit
-	adc_Hooked_value[3] = (139.74 - 100)/1.468*4;			// wMUT3A_AirTemp_ADC8bit
+	adc_Hooked_value[2] = (139.74 - 85)/1.468*4;			// wMUT07_CoolTemp_ADC8bit
+	adc_Hooked_value[3] = (139.74 - 25)/1.468*4;			// wMUT3A_AirTemp_ADC8bit
 	adc_Hooked_value[7] = 0;								// null_ADC_7_8bit
 	adc_Hooked_value[8] = 0;								// ADC_08_8bit
 	adc_Hooked_value[9] = 0;								// oxigen_ADC8bit
@@ -234,7 +237,7 @@ static void Simulation()
 	}
 	else
 	{
-		adc_Hooked_value[4] = 200*4;						// wMUT1A_Manifold_AbsPressure_ADC8bit
+		adc_Hooked_value[4] = 75*4;						// wMUT1A_Manifold_AbsPressure_ADC8bit
 		adc_Hooked_value[5] = 25*4;							// wMUT17_TPS_ADC8bit
 		adc_Hooked_value[6] = (frameCount * 101) & 31;		// wMUT30_Knock_Voltage
 	};
