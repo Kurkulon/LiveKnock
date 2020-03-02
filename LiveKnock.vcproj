@@ -134,6 +134,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cpp\MISFIRE.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\cpp\ML02.cpp"
 				>
 			</File>
@@ -209,6 +213,10 @@
 			</File>
 			<File
 				RelativePath=".\cpp\misc.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cpp\MISFIRE.h"
 				>
 			</File>
 			<File

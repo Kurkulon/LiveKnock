@@ -83,20 +83,25 @@ var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o
 var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1",DEF_BC06="1"
 var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o bc06.o
 
+!else ifeq variant CRANK
+
+var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1",DEF_BC06="1",DEF_CRANK="1"
+var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o bc06.o crank.o
+
 !else ifeq variant HUGE
 
-var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1",DEF_BC06="1",DEF_HUGE="1"
-var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o bc06.o huge.o
+var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1",DEF_BC06="1",DEF_CRANK="1",DEF_HUGE="1"
+var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o bc06.o crank.o huge.o
 
 !else ifeq variant HARDWARE
 
-var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1",DEF_BC06="1",DEF_HUGE="1",DEF_HARDWARE="1"
-var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o bc06.o huge.o hardware.o
+var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1",DEF_BC06="1",DEF_CRANK="1",DEF_HUGE="1",DEF_HARDWARE="1"
+var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o bc06.o crank.o huge.o hardware.o
 
 !else ifeq variant EF07
 
-var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1",DEF_BC06="1",DEF_HUGE="1",DEF_HARDWARE="1",DEF_EF07="1"
-var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o bc06.o huge.o hardware.o EF07.o
+var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1",DEF_BC06="1",DEF_CRANK="1",DEF_HUGE="1",DEF_HARDWARE="1",DEF_EF07="1"
+var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o bc06.o crank.o huge.o hardware.o EF07.o
 
 !endif
 
@@ -163,7 +168,7 @@ $(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs $(objdir)\stock.abs
 
 $(objdir)\LiveKnock.abs : LiveMap.o AltMaps.o LiveKnock.o main.o $(var_obj)
 	@echo Linking $^@ ...
-	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P_main/EB04,P_Hooks/2CC0,P_HARDWARE/9D18,P_HUGE/266DC,P/39000,B/FFFF8480 -LIBrary=$(libname) -OUtput="$^@" $<
+	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P_main/EB04,P_Hooks/2CC0,P_HARDWARE/9D18,P_CRANK/230F0,P_HUGE/266DC,P/39000,B/FFFF8480 -LIBrary=$(libname) -OUtput="$^@" $<
 	@echo $(delimiter)	
 
 ##################################################################################################

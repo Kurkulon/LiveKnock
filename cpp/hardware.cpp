@@ -178,7 +178,7 @@ const void *off_270BC = (const void *)Get_ADC_Bat_TPS_oxigen;
 */
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#ifdef DEF_SIMULATION
+#if (defined(DEF_SIMULATION) && !defined(DEF_CRANK))
 
 void Get_ADC_Knock();
 #pragma regsave(Get_ADC_Knock)			

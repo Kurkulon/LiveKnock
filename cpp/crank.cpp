@@ -1,5 +1,3 @@
-#pragma section _crank
-
 #include <machine.h>
 #include <umachine.h>
 
@@ -12,6 +10,7 @@
 #include "EnVars.h"
 #include "FU03.h"
 #include "hardware.h"
+#include "MISFIRE.h"
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -20,7 +19,7 @@
 //#define atu22_Get_DSTR_0x3C00		((u16(*)(void))0xC850)
 //#define Reset_IRQ0F					((u16(*)(void))0xC258)
 
-extern "C" bool Reset_IRQ0F();
+//extern "C" bool Reset_IRQ0F();
 
 #define sub_21AAA					((u16(*)(u16))0x21AAA)
 #define sub_21ACC					((u16(*)(u16))0x21ACC)
@@ -61,13 +60,13 @@ extern "C" bool Reset_IRQ0F();
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-//static void CRANK5_root_sub_DC18(u16 osbr, u32 icr);
-//static void CRANK75_root_sub_DB40(u16 osbr, u32 icr);
+static void CRANK5_root_sub_DC18(u16 osbr, u32 icr);
+static void CRANK75_root_sub_DB40(u16 osbr, u32 icr);
 
 void F500_InitManifoldVars();
 
-extern "C" void SetIgnCoilChargeStartTime(u16 mask, u16 v);
-extern "C" void SetIgnSparkStartTime(u16 mask, u16 v);
+static void SetIgnCoilChargeStartTime(u16 mask, u16 v);
+static void SetIgnSparkStartTime(u16 mask, u16 v);
 
 //void StartInjectSync(u16 v, u16 mask);
 //void StartInjectAsync(u16 v, u16 mask);
@@ -90,8 +89,8 @@ void CRANK75_Main_sub_232A0();
 static bool CRANK75_sub_24636();
 static void CRANK75_sub_2467E(u16 v);
 static void CRANK75_sub_260B8();
-static void Misfire_CRANK75_root();
-static void Misfire_CRANK75_sub_2B168();
+//static void Misfire_CRANK75_root();
+//static void Misfire_CRANK75_sub_2B168();
 
 
 static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2);
@@ -105,17 +104,18 @@ void CRANK5_Main_sub_24AF0();
 static void CRANK5_sub_2504A();
 static void CRANK5_SetIgnSpark5();
 static void CRANK5_sub_21A04();
-static void Misfire_CRANK5_root();
-static void Misfire_CRANK5_sub_29558(u16 v1, u16 v2);
-static void Misfire_CRANK5_sub_29750();
-static void Misfire_CRANK5_sub_2A684();
-static void Misfire_CRANK5_sub_2AAA2();
-static void Misfire_CRANK5_sub_2AC5C();
-static void Misfire_CRANK5_sub_2AEE4();
+//static void Misfire_CRANK5_root();
+//static void Misfire_CRANK5_sub_29558(u16 v1, u16 v2);
+//static void Misfire_CRANK5_sub_29750();
+//static void Misfire_CRANK5_sub_2A684();
+//static void Misfire_CRANK5_sub_2AAA2();
+//static void Misfire_CRANK5_sub_2AC5C();
+//static void Misfire_CRANK5_sub_2AEE4();
 
-extern "C" void CRANK5_sub_C990(u16 v);
+//extern "C" void CRANK5_sub_C990(u16 v);
 
 
+static u16 atu22_Get_ECNT9A();
 
 
 
@@ -124,8 +124,8 @@ static u16 sub_2640E(u16 ipw);
 //extern "C" void Update_Gen_G_output();
 extern "C" bool CRANK_CheckCamshaft_sub_A7C0();
 
-//static void atu22_IMF2G_event();
-//static void atu22_CMF2G_event();
+static void atu22_IMF2G_event();
+static void atu22_CMF2G_event();
 extern "C" void Disable_Ign_Handler(u16 v);
 extern "C" bool Check_Starter_signal();
 extern "C" bool Check_PEDRL_1();
@@ -138,83 +138,99 @@ extern "C" void Start_Coil_Charge(u16 mask);
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//#pragma interrupt(atu02_ici0A)
-//
-//extern "C" void atu02_ici0A()
-//{
-////	u16 r1 = 0;
-//
-//	__disable_irq();
-//
-//	ici0A_TCNT2A = reg_TCNT2A;
-//
-//	CLR(reg_TSR0, 1);
-//
-//	crank_OSBR2_4us = reg_OSBR2;
-//
-//	crank_ICR0AH_250ns = reg_ICR0A;
-//
-//	//if (crank_Flags & 1)
-//	//{
-//	//	if ((reg_PADRL & 1) == 0)
-//	//	{
-//	//		r1 = 1;
-//	//	};
-//	//}
-//	//else
-//	//{
-//	//	if ((reg_PADRL & 1) != 0)
-//	//	{
-//	//		r1 = 1;
-//	//	};
-//	//};
-//
-//	if ((crank_Flags ^ reg_PADRL) & 1)
-//	{
-//		reg_OCR2G = reg_TCNT2B + 13;
-//
-//		SET(crank_Flags, 2);
-//	}
-//	else
-//	{
-//		reg_OCR2G = reg_TCNT2B - 1;
-//
-//		CLR(crank_Flags, 2);
-//	};
-//
-//	CLR(reg_TSR2B, 0x40);
-//
-//	__enable_irq();
-//}
+static void atu02_ici0A();
+#pragma address v_atu02_ici0A=0x150
+const void *v_atu02_ici0A = atu02_ici0A;
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//#pragma interrupt(atu22_imi2G)
-//
-//extern "C" void atu22_imi2G()
-//{
-//	if (reg_TSR2A & 0x40)
-//	{
-//		__disable_irq();
-//
-//		CLR(reg_TSR2A, 0x40);
-//
-//		__enable_irq();
-//
-//		atu22_IMF2G_event();
-//	};
-//
-//	if (reg_TSR2B & 0x40)
-//	{
-//		__disable_irq();
-//
-//		CLR(reg_TSR2B, 0x40);
-//
-//		__enable_irq();
-//
-//		atu22_CMF2G_event();
-//	};
-//}
+static void atu22_imi2G();
+#pragma address v_atu22_imi2G=0x1C8
+const void *v_atu22_imi2G = atu22_imi2G;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma section _CRANK
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma interrupt(atu02_ici0A)
+
+static void atu02_ici0A()
+{
+//	u16 r1 = 0;
+
+	__disable_irq();
+
+	ici0A_TCNT2A = reg_TCNT2A;
+
+	CLR(reg_TSR0, 1);
+
+	crank_OSBR2_4us = reg_OSBR2;
+
+	crank_ICR0AH_250ns = reg_ICR0A;
+
+	//if (crank_Flags & 1)
+	//{
+	//	if ((reg_PADRL & 1) == 0)
+	//	{
+	//		r1 = 1;
+	//	};
+	//}
+	//else
+	//{
+	//	if ((reg_PADRL & 1) != 0)
+	//	{
+	//		r1 = 1;
+	//	};
+	//};
+
+	if ((crank_Flags ^ reg_PADRL) & 1)
+	{
+		reg_OCR2G = reg_TCNT2B + 13;
+
+		SET(crank_Flags, 2);
+	}
+	else
+	{
+		reg_OCR2G = reg_TCNT2B - 1;
+
+		CLR(crank_Flags, 2);
+	};
+
+	CLR(reg_TSR2B, 0x40);
+
+	__enable_irq();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma interrupt(atu22_imi2G)
+
+extern "C" void atu22_imi2G()
+{
+	if (reg_TSR2A & 0x40)
+	{
+		__disable_irq();
+
+		CLR(reg_TSR2A, 0x40);
+
+		__enable_irq();
+
+		atu22_IMF2G_event();
+	};
+
+	if (reg_TSR2B & 0x40)
+	{
+		__disable_irq();
+
+		CLR(reg_TSR2B, 0x40);
+
+		__enable_irq();
+
+		atu22_CMF2G_event();
+	};
+}
 
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -263,97 +279,121 @@ extern "C" void Start_Coil_Charge(u16 mask);
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//void atu22_IMF2G_event()
-//{
-//	__disable_irq();
-//
-//	Disable_Ign_Handler(4);
-//
-//	__enable_irq();
-//}
+void atu22_IMF2G_event()
+{
+	__disable_irq();
+
+	Disable_Ign_Handler(4);
+
+	__enable_irq();
+}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//static void atu22_CMF2G_event()
-//{
-//	__disable_irq();
-//
-//	u32 r3 = crank_ICR0AH_250ns;
-//	u32 r6 = crank_OSBR2_4us;
-//
-//	if (crank_Flags & 2)
-//	{
-//		CLR(crank_Flags, 2);
-//
-//		if (crank_Flags & 1)
-//		{
-//			CRANK75_root_sub_DB40(r6, r3);
-//		}
-//		else
-//		{
-//			CRANK5_root_sub_DC18(r6, r3);
-//		};
-//	}
-//	else
-//	{
-//		__enable_irq();
-//	};
-//}
+static void atu22_CMF2G_event()
+{
+	__disable_irq();
+
+	u32 r3 = crank_ICR0AH_250ns;
+	u32 r6 = crank_OSBR2_4us;
+
+	if (crank_Flags & 2)
+	{
+		CLR(crank_Flags, 2);
+
+		if (crank_Flags & 1)
+		{
+			CRANK75_root_sub_DB40(r6, r3);
+		}
+		else
+		{
+			CRANK5_root_sub_DC18(r6, r3);
+		};
+	}
+	else
+	{
+		__enable_irq();
+	};
+}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//static u16 Get_Coil_charge_status()
-//{
-//	__disable_irq();
-//
-//	u32 r1 = reg_PHDRH;
-//
-//	__enable_irq();
-//
-//	return (~(r1 >> 4)) & 7;
-//}
+static void CRANK5_sub_C990(u16 v)
+{
+	__disable_irq();
+
+	u32 r13 = v;
+
+	v -= reg_TCNT2A + 2;
+
+	if (v & 0x8000)
+	{
+		r13 = reg_TCNT2A + 2;
+	};
+
+	reg_GR2H = r13;
+
+	CLR(reg_TSR2A, 0x80);
+
+	reg_TIOR2D = reg_TIOR2D & 0x8F | 0x10;
+
+	__enable_irq();
+}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//static void Start_Coil_Charge(u16 mask)
-//{
-//	__disable_irq();
-//
-//	if (mask & 1)
-//	{
-//		reg_GR2E = reg_TCNT2A + 2;
-//
-//		CLR(reg_TSR2A, 0x10);
-//
-//		reg_TIOR2C = reg_TIOR2C & 0xF8 | 1; // 0 output on GR compare-match
-//
-//		while(ZRO(reg_TSR2A, 0x10)) ;
-//	};
-//
-//	if (mask & 2)
-//	{
-//		reg_GR2F = reg_TCNT2A + 2;
-//
-//		CLR(reg_TSR2A, 0x20);
-//
-//		reg_TIOR2C = reg_TIOR2C & 0x8F | 0x10; // 0 output on GR compare-match
-//
-//		while(ZRO(reg_TSR2A, 0x20)) ;
-//	};
-//
-//	if (mask & 4)
-//	{
-//		reg_GR2G = reg_TCNT2A + 2;
-//
-//		CLR(reg_TSR2A, 0x40);
-//
-//		reg_TIOR2D = reg_TIOR2D & 0xF8 | 1; // 0 output on GR compare-match
-//
-//		while(ZRO(reg_TSR2A, 0x40)) ;
-//	};
-//
-//	__enable_irq();
-//}
+static u16 Get_Coil_charge_status()
+{
+	__disable_irq();
+
+	u32 r1 = reg_PHDRH;
+
+	__enable_irq();
+
+	return (~(r1 >> 4)) & 7;
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void Start_Coil_Charge(u16 mask)
+{
+	__disable_irq();
+
+	if (mask & 1)
+	{
+		reg_GR2E = reg_TCNT2A + 2;
+
+		CLR(reg_TSR2A, 0x10);
+
+		reg_TIOR2C = reg_TIOR2C & 0xF8 | 1; // 0 output on GR compare-match
+
+		while(ZRO(reg_TSR2A, 0x10)) ;
+	};
+
+	if (mask & 2)
+	{
+		reg_GR2F = reg_TCNT2A + 2;
+
+		CLR(reg_TSR2A, 0x20);
+
+		reg_TIOR2C = reg_TIOR2C & 0x8F | 0x10; // 0 output on GR compare-match
+
+		while(ZRO(reg_TSR2A, 0x20)) ;
+	};
+
+	if (mask & 4)
+	{
+		reg_GR2G = reg_TCNT2A + 2;
+
+		CLR(reg_TSR2A, 0x40);
+
+		reg_TIOR2D = reg_TIOR2D & 0xF8 | 1; // 0 output on GR compare-match
+
+		while(ZRO(reg_TSR2A, 0x40)) ;
+	};
+
+	__enable_irq();
+}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -399,117 +439,137 @@ extern "C" void Start_Coil_Charge(u16 mask);
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//static void CRANK5_root_sub_DC18(u16 osbr, u32 icr)
-//{
-//	if ((osbr - crank_OSBR2_75) >= 162 || timer_up_FFFF8522 >= 40)
-//	{
-//		if (timer_up_FFFF8524 >= 39)
-//		{
-//			crank_dt_ICR0AH_5 = 0xFFFFFFFF;
-//
-//			crankHT_5 = 0xFFFF;
-//		}
-//		else
-//		{
-//			crankHT_5 = osbr - crank_OSBR2_5;
-//
-//			crank_dt_ICR0AH_5 = icr - crankPrev_ICR0AH_5;
-//		};
-//
-//		crank_OSBR2_5 = osbr;
-//
-//		crankPrev_ICR0AH_5 = icr;
-//
-//		timer_up_FFFF8524 = 0;
-//
-//		__enable_irq();
-//
-//		CRANK5_Main_sub_24AF0();
-//
-//		word_FFFF8870 = reg_TCNT2A - ici0A_TCNT2A;
-//
-//		SET(crank_Flags, 1);
-//	};
-//
-//	__enable_irq();
-//}
+static bool Reset_IRQ0F()
+{
+	bool r1 = false;
+
+	__disable_irq();
+
+	if (reg_ISR & 0x80)
+	{
+		CLR(reg_ISR, 0x80);
+
+		r1 = true;
+	};
+
+	__enable_irq();
+
+	return r1;
+}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//static void CRANK75_root_sub_DB40(u16 osbr, u32 icr)
-//{
-//    if ((osbr - crank_OSBR2_5) >= 254 || timer_up_FFFF8524 >= 40)
-//	{
-//		if (timer_up_FFFF8522 >= 39)
-//		{
-//			crank_OSBR2_75 = osbr;
-//
-//			crankPrev_ICR0AH_75 = icr;
-//
-//			null_crank_dt_ICR0AH_5 = (u32)-1;
-//
-//			crankHT_75 = (u16)-1;
-//		}
-//		else
-//		{
-//			crankHT_75 = osbr - crank_OSBR2_75;
-//
-//			crank_OSBR2_75 = osbr;
-//
-//			null_crank_dt_ICR0AH_5 = icr - crankPrev_ICR0AH_75;
-//
-//			crankPrev_ICR0AH_75 = icr;
-//		};
-//
-//		timer_up_FFFF8522 = 0;
-//
-//		__enable_irq();
-//
-//		CRANK75_Main_sub_232A0();
-//
-//		word_FFFF886E = reg_TCNT2A - ici0A_TCNT2A;
-//
-//		__disable_irq();
-//
-//		CLR(crank_Flags, 1);
-//	};
-//
-//	__enable_irq();
-//}
+static void CRANK5_root_sub_DC18(u16 osbr, u32 icr)
+{
+	if ((osbr - crank_OSBR2_75) >= 162 || timer_up_FFFF8522 >= 40)
+	{
+		if (timer_up_FFFF8524 >= 39)
+		{
+			crank_dt_ICR0AH_5 = 0xFFFFFFFF;
+
+			crankHT_5 = 0xFFFF;
+		}
+		else
+		{
+			crankHT_5 = osbr - crank_OSBR2_5;
+
+			crank_dt_ICR0AH_5 = icr - crankPrev_ICR0AH_5;
+		};
+
+		crank_OSBR2_5 = osbr;
+
+		crankPrev_ICR0AH_5 = icr;
+
+		timer_up_FFFF8524 = 0;
+
+		__enable_irq();
+
+		CRANK5_Main_sub_24AF0();
+
+		word_FFFF8870 = reg_TCNT2A - ici0A_TCNT2A;
+
+		SET(crank_Flags, 1);
+	};
+
+	__enable_irq();
+}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//static void Disable_Ign_Handler(u16 v)
-//{
-//	__disable_irq();
-//
-//	u32 r13 = reg_TCNT2A;
-//
-//	r13 -= 1;
-//
-//	if (v & 1)
-//	{
-//		reg_GR2E = r13;
-//
-//		CLR(reg_TSR2A, 0x10);
-//	};
-//
-//	if (v & 2)
-//	{
-//		reg_GR2F = r13;
-//
-//		CLR(reg_TSR2A, 0x20);
-//	};
-//
-//	if (v & 4)
-//	{
-//		reg_GR2G = r13;
-//
-//		CLR(reg_TSR2A, 0x40);
-//	};
-//
-//	__enable_irq();
-//}
+static void CRANK75_root_sub_DB40(u16 osbr, u32 icr)
+{
+    if ((osbr - crank_OSBR2_5) >= 254 || timer_up_FFFF8524 >= 40)
+	{
+		if (timer_up_FFFF8522 >= 39)
+		{
+			crank_OSBR2_75 = osbr;
+
+			crankPrev_ICR0AH_75 = icr;
+
+			null_crank_dt_ICR0AH_5 = (u32)-1;
+
+			crankHT_75 = (u16)-1;
+		}
+		else
+		{
+			crankHT_75 = osbr - crank_OSBR2_75;
+
+			crank_OSBR2_75 = osbr;
+
+			null_crank_dt_ICR0AH_5 = icr - crankPrev_ICR0AH_75;
+
+			crankPrev_ICR0AH_75 = icr;
+		};
+
+		timer_up_FFFF8522 = 0;
+
+		__enable_irq();
+
+		CRANK75_Main_sub_232A0();
+
+		word_FFFF886E = reg_TCNT2A - ici0A_TCNT2A;
+
+		__disable_irq();
+
+		CLR(crank_Flags, 1);
+	};
+
+	__enable_irq();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void Disable_Ign_Handler(u16 v)
+{
+	__disable_irq();
+
+	u32 r13 = reg_TCNT2A;
+
+	r13 -= 1;
+
+	if (v & 1)
+	{
+		reg_GR2E = r13;
+
+		CLR(reg_TSR2A, 0x10);
+	};
+
+	if (v & 2)
+	{
+		reg_GR2F = r13;
+
+		CLR(reg_TSR2A, 0x20);
+	};
+
+	if (v & 4)
+	{
+		reg_GR2G = r13;
+
+		CLR(reg_TSR2A, 0x40);
+	};
+
+	__enable_irq();
+}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -587,21 +647,21 @@ void sub_23180()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//void F500_InitManifoldVars()
-//{
-//	u16 r1 = wMUT1A_Manifold_AbsPressure_ADC8bit;
-//
-//	__disable_irq();
-//
-//	Manifold_ADC8bit_1 = r1;
-//	Manifold_ADC8bit_2 = r1;
-//	Manifold_ADC8bit_3 = r1;
-//	Manifold_ADC8bit_4 = r1;
-//	Manifold_AbsPressure_ADC8bit_avrg = r1;
-//	Manifold_AbsPressure_ADC8bit_x256_avrg = r1 << 8;
-//
-//	__enable_irq();
-//}
+static void F500_InitManifoldVars()
+{
+	u16 r1 = wMUT1A_Manifold_AbsPressure_ADC8bit;
+
+	__disable_irq();
+
+	Manifold_ADC8bit_1 = r1;
+	Manifold_ADC8bit_2 = r1;
+	Manifold_ADC8bit_3 = r1;
+	Manifold_ADC8bit_4 = r1;
+	Manifold_AbsPressure_ADC8bit_avrg = r1;
+	Manifold_AbsPressure_ADC8bit_x256_avrg = r1 << 8;
+
+	__enable_irq();
+}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -1263,7 +1323,9 @@ void CRANK75_Knock_sub_23F8C()
 
 		if (KNOCK_BASE_MINUS_ADC_FFFF8C40 != 0)
 		{
-			r1 = (KNOCK_FLAG_FFFF8C34 & KNOCK_F1_80) ? t1_knock_control__17CC/*32*/ : t1_knock_control__17CE/*16*/;
+			//r1 = (KNOCK_FLAG_FFFF8C34 & KNOCK_F1_80) ? t1_knock_control__17CC/*32*/ : t1_knock_control__17CE/*16*/;
+
+			r1 = (KNOCK_FLAG_FFFF8C34 & KNOCK_F1_80) ? knock_mul_high : knock_mul_low;
 
 			r1 = 1 + Mul_Div_R(KNOCK_BASE_MINUS_ADC_FFFF8C40, r1, knock_base_final << 3);
 
@@ -2952,125 +3014,52 @@ static u16 sub_2640E(u16 ipw)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void Misfire_CRANK75_root()
+
+static void SetIgnCoilChargeStartTime(u16 mask, u16 v)
 {
-	Misfire_CRANK75_sub_2B168();
+	__disable_irq();
+
+	u32 r13 = v;
+
+	v -= reg_TCNT2A + 2;
+
+	if (v & 0x8000)
+	{
+		r13 = reg_TCNT2A + 2;
+	};
+
+	// 0 output on GR compare-match
+
+	if (mask & 1) { reg_GR2E = r13; CLR(reg_TSR2A, 0x10); reg_TIOR2C = reg_TIOR2C & 0xF8 | 1; };	
+	if (mask & 2) { reg_GR2F = r13; CLR(reg_TSR2A, 0x20); reg_TIOR2C = reg_TIOR2C & 0x8F | 0x10; };
+	if (mask & 4) { reg_GR2G = r13; CLR(reg_TSR2A, 0x40); reg_TIOR2D = reg_TIOR2D & 0xF8 | 1; };
+
+	__enable_irq();
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void Misfire_CRANK75_sub_2B168()
+static void SetIgnSparkStartTime(u16 mask, u16 v)
 {
-	CLR(word_FFFF8F7A, 0xC);
+	__disable_irq();
 
-	word_FFFF9990 = 0xFFFF;
+	u32 r13 = v;
 
-	u32 r13 = word_FFFF8C62;
+	v -= reg_TCNT2A + 2;
 
-	if (MUT21_RPM_x125div4 >= word_182E/*0*/ || wMUT14_Battery_Level_ADC8bit < word_1834/*109*/ || wMUT14_Battery_Level_ADC8bit >= word_1832/*245*/)
+	if (v & 0x8000)
 	{
-		return;
+		r13 = reg_TCNT2A + 2;
 	};
 
-	if (r13 == 0xFF || r13 == 0 || (flags_FFFF8FFC & 8) || ZRO(misfire_word_FFFF8F7C, 0x10) || ZRO(bMUTD3_BitMap4_FCA_Store_FFFF89D8, 0x20))
-	{
-		return;
-	};
+	// 1 output on GR compare-match
 
-	r13 = word_FFFF8C62 & 3;
+	if (mask & 1) { reg_GR2E = r13; CLR(reg_TSR2A, 0x10); reg_TIOR2C = reg_TIOR2C & 0xF8 | 2; };
+	if (mask & 2) { reg_GR2F = r13; CLR(reg_TSR2A, 0x20); reg_TIOR2C = reg_TIOR2C & 0x8F | 0x20; };
+	if (mask & 4) { reg_GR2G = r13; CLR(reg_TSR2A, 0x40); reg_TIOR2D = reg_TIOR2D & 0xF8 | 2; };
 
-	if (r13 != 3 && r13 != 0)
-	{
-		return;
-	};
-
-	SET(word_FFFF8F7A, 8);
-
-	r13 = word_FFFF8C62 & 7;
-
-	if (r13 == 7 || r13 == 0)
-	{
-		SET(word_FFFF8F7A, 4);
-	};
-
-	word_FFFF9990 = stroke_75 << 4;
-
-	if (ZRO(word_FFFF8F7A, 0x8000))
-	{
-		SET(word_FFFF8F7A, 0x4000);
-	};
-
-	if (ZRO(word_FFFF8F7A, 0x2000))
-	{
-		SET(word_FFFF8F7A, 0x1000);
-	};
-
-	SET(word_FFFF8F7A, 0xA000);
-
-	u16 **p = &ENGINE_MAIN_VARIABLES_DIM_off_9198->_1064_word_FFFF901E;
-
-	u16 *r2 = p[stroke_75];
-
-	p = &ENGINE_MAIN_VARIABLES_DIM_off_9198->_1144_word_FFFF9036;
-
-	u16 *r1 = p[stroke_75];
-
-	*r2 += 1;
-
-	if (*r2 == 0) { *r2 -= 1; };
-
-	*r1 += 1;
-
-	if (*r1 == 0) { *r1 -= 1; };
-}	
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-//static void SetIgnCoilChargeStartTime(u16 mask, u16 v)
-//{
-//	__disable_irq();
-//
-//	u32 r13 = v;
-//
-//	v -= reg_TCNT2A + 2;
-//
-//	if (v & 0x8000)
-//	{
-//		r13 = reg_TCNT2A + 2;
-//	};
-//
-//	// 0 output on GR compare-match
-//
-//	if (mask & 1) { reg_GR2E = r13; CLR(reg_TSR2A, 0x10); reg_TIOR2C = reg_TIOR2C & 0xF8 | 1; };	
-//	if (mask & 2) { reg_GR2F = r13; CLR(reg_TSR2A, 0x20); reg_TIOR2C = reg_TIOR2C & 0x8F | 0x10; };
-//	if (mask & 4) { reg_GR2G = r13; CLR(reg_TSR2A, 0x40); reg_TIOR2D = reg_TIOR2D & 0xF8 | 1; };
-//
-//	__enable_irq();
-//}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-//static void SetIgnSparkStartTime(u16 mask, u16 v)
-//{
-//	__disable_irq();
-//
-//	u32 r13 = v;
-//
-//	v -= reg_TCNT2A + 2;
-//
-//	if (v & 0x8000)
-//	{
-//		r13 = reg_TCNT2A + 2;
-//	};
-//
-//	// 1 output on GR compare-match
-//
-//	if (mask & 1) { reg_GR2E = r13; CLR(reg_TSR2A, 0x10); reg_TIOR2C = reg_TIOR2C & 0xF8 | 2; };
-//	if (mask & 2) { reg_GR2F = r13; CLR(reg_TSR2A, 0x20); reg_TIOR2C = reg_TIOR2C & 0x8F | 0x20; };
-//	if (mask & 4) { reg_GR2G = r13; CLR(reg_TSR2A, 0x40); reg_TIOR2D = reg_TIOR2D & 0xF8 | 2; };
-//
-//	__enable_irq();
-//}
+	__enable_irq();
+}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -3097,25 +3086,25 @@ static void Misfire_CRANK75_sub_2B168()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//u16 atu22_Get_ECNT9A()
-//{
-//	__disable_irq();
-//
-//	u32 r1 = reg_ECNT9A;
-//
-//	reg_ECNT9A = 0;
-//
-//	if (reg_TSR9 & 1)
-//	{
-//		r1 = 0xFF;
-//
-//		CLR(reg_TSR9, 1);
-//	};
-//
-//	__enable_irq();
-//
-//	return r1;
-//}
+static u16 atu22_Get_ECNT9A()
+{
+	__disable_irq();
+
+	u32 r1 = reg_ECNT9A;
+
+	reg_ECNT9A = 0;
+
+	if (reg_TSR9 & 1)
+	{
+		r1 = 0xFF;
+
+		CLR(reg_TSR9, 1);
+	};
+
+	__enable_irq();
+
+	return r1;
+}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -3136,183 +3125,6 @@ static void CRANK5_sub_21A04()
 	};
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-static void Misfire_CRANK5_root()
-{
-	Misfire_CRANK5_sub_29558(Div_DW(crank_dt_ICR0AH_5, 4), 0);
-
-	Misfire_CRANK5_sub_29750();
-
-	Misfire_CRANK5_sub_2AC5C();
-
-	if (byte_1056/*0*/ != 0)
-	{
-		Misfire_CRANK5_sub_2AEE4();
-	};
-
-	DECLIM(bMUTDE);
-
-	DECLIM(bMUTE0);
-
-	DECLIM(misfire_word_FFFF9072);
-	DECLIM(misfire_word_FFFF8FE4);
-	DECLIM(misfire_word_FFFF8FE6);
-	DECLIM(word_FFFF8FE8);
-	DECLIM(misfire_word_FFFF8FEA);
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-static void Misfire_CRANK5_sub_29558(u16 v1, u16 v2)
-{
-	null_crank_dt_ICR0AH_B_div_4_6 = null_crank_dt_ICR0AH_B_div_4_5;
-	null_crank_dt_ICR0AH_B_div_4_5 = null_crank_dt_ICR0AH_B_div_4_4;
-	null_crank_dt_ICR0AH_B_div_4_4 = null_crank_dt_ICR0AH_B_div_4_3;
-	null_crank_dt_ICR0AH_B_div_4_3 = null_crank_dt_ICR0AH_B_div_4_2;
-
-	null_crank_dt_ICR0AH_B_div_4_2 = crank_dt_ICR0AH_B_div_4;
-
-	crank_dt_ICR0AH_B_div_4 = v1;
-
-	misfire_word_FFFF8FE2 = misfire_word_FFFF8FE0;
-	misfire_word_FFFF8FE0 = misfire_word_FFFF8FDE;
-	misfire_word_FFFF8FDE = misfire_word_FFFF8FDC;
-	misfire_word_FFFF8FDC = misfire_word_FFFF8FDA;
-	misfire_word_FFFF8FDA = misfire_word_FFFF8FD8;
-	misfire_word_FFFF8FD8 = misfire_word_FFFF8FD6;
-	misfire_word_FFFF8FD6 = misfire_word_FFFF8FD4;
-	misfire_word_FFFF8FD4 = word_FFFF8FD2;
-	word_FFFF8FD2 = v2;
-
-
-	u16 r13 = (byte_1056/*0*/ != 0 && (flags_FFFF8FFC & 0x80)) ? word_FFFF8FD2 : crank_dt_ICR0AH_B_div_4;
-
-	word_FFFF8F60 = Div_DW(0x8000000, r13);
-
-	u16 r2 = word_FFFF8F62;
-
-	u32 **p = (byte_1056/*0*/ != 0 && (flags_FFFF8FFC & 0x80)) ? &ENGINE_MAIN_VARIABLES_DIM_off_9198->_952_dword_FFFF8124 : &ENGINE_MAIN_VARIABLES_DIM_off_9198->_872_bMUTD9;
-
-	r13 = Div_65536_R(*p[stroke_75]);
-
-	word_FFFF8F62 = Mul_Div(word_FFFF8F60, r13, 0x8000);
-
-	misfire_word_FFFF8F6C = misfire_word_FFFF8F6A;
-	misfire_word_FFFF8F6A = misfire_word_FFFF8F68;
-	misfire_word_FFFF8F68 = misfire_word_FFFF8F66;
-	misfire_word_FFFF8F66 = bMUTD6;
-
-	r13 = word_FFFF8F62;
-
-	bool r1;
-
-	if (r1 = (r13 >= r2))
-	{
-		r13 -= r2;
-	}
-	else
-	{
-		r13 = r2 - r13;
-	};
-
-	if (r13 >= 0x7FFF)
-	{
-		r13 = 0x7FFF;
-	};
-
-	word_FFFF9992 = r13 = Div_DW(Mul32_Fix8(r13, word_FFFF8F60), misfire_word_FFFF8F78);
-
-	if (r1 || r13 == 0)
-	{
-		bMUTD6 = (r13 < word_1CCC) ? r13 : word_1CCC;
-	}
-	else
-	{
-		r13 = -r13;
-
-		bMUTD6 = (r13 >= word_1CCA) ? r13 : word_1CCA;
-	};
-
-	misfire_word_FFFF8F72 = misfire_word_FFFF8F70;
-	misfire_word_FFFF8F70 = bMUTD7;
-
-	r13 = bMUTD6 - misfire_word_FFFF8F68;
-
-	if (r13 & 0x8000)
-	{
-		bMUTD7 = (r13 >= word_1CCA) ? r13 : word_1CCA;
-	}
-	else
-	{
-		bMUTD7 = (r13 < word_1CCC) ? r13 : word_1CCC;
-	};
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-static void Misfire_CRANK5_sub_29750()
-{
-
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-static void Misfire_CRANK5_sub_2A684()
-{
-
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-static void Misfire_CRANK5_sub_2AAA2(u16 v)
-{
-	if (v & 1)
-	{
-		word_FFFF9000 = word_1C8A;
-
-		word_FFFF9000 = 0;
-		word_FFFF9014 = 0;
-		word_FFFF9012 = 0;
-		word_FFFF9010 = 0;
-		word_FFFF901A = 0;
-		word_FFFF9018 = 0;
-		word_FFFF9016 = 0;
-		word_FFFF9020 = 0;
-		word_FFFF901E = 0;
-		word_FFFF901C = 0;
-		word_FFFF9026 = 0;
-		word_FFFF9024 = 0;
-		word_FFFF9022 = 0;
-
-		if (byte_1026/*0*/ != 0)
-		{
-			word_FFFF9332 = 0;
-			word_FFFF9334 = 0;
-			word_FFFF9336 = 0;
-			word_FFFF9338 = 0;
-		};
-
-		CLR(word_FFFF8F7A, 0x80);
-		SET(word_FFFF900C, 0x40);
-	};
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-static void Misfire_CRANK5_sub_2AC5C()
-{
-
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-static void Misfire_CRANK5_sub_2AEE4()
-{
-
-}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //static void CRANK5_sub_C990(u16 v)
 //{

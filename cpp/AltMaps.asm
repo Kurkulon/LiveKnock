@@ -195,10 +195,16 @@ _frameCount:		.RES.L      1					;	.EQU H'FFFF8462
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	.SECTION ALTMAPS_C_24208, DATA, LOCATE=H'24208
+	.AIFDEF DEF_CRANK
 
-		.DATA.L		_knock_mul_high                                    
-		.DATA.L		_knock_mul_low                                    
+	.AELSE
+	
+		.SECTION ALTMAPS_C_24208, DATA, LOCATE=H'24208
+
+			.DATA.L		_knock_mul_high                                    
+			.DATA.L		_knock_mul_low                                    
+
+	.AENDI
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
