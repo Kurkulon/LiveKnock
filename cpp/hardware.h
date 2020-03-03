@@ -7,7 +7,7 @@
 #define DEF_HARDWARE
 #endif
 
-#ifdef DEF_HARDWARE
+//#ifdef DEF_HARDWARE
 
 extern void SysInit_sub_9D2C();
 extern void sub_A078();
@@ -43,9 +43,14 @@ extern void Timer_Counter_Related_sub_C928();
 extern u16 atu22_Get_DSTR_0x3C00();
 extern void PWM_EGR_EVAP_O2H();
 extern void GetADC(byte ch, u16 *res8, u16 *res10);
+extern void SetIgnCoilChargeStartTime(u16 mask, u16 v);
+extern void SetIgnSparkStartTime(u16 mask, u16 v);
+extern u16 atu22_Get_ECNT9A();
+extern void InjOpenStart(u16 v, u16 mask);
 
-#else
+//#else
 
+/*
 #define _SysInit_sub_9D2C					((void(*)(void))0x9D2C)
 #define _sub_A078							((void(*)(void))0xA078)
 #define _sub_A374							((void(*)(void))0xA374)
@@ -138,7 +143,7 @@ static void GetADC(byte ch, u16 *res8, u16 *res10) 	{ _GetADC(ch, res8, res10);	
 //#define CRANK_CheckCamshaft_sub_A7C0		((bool(*)(void))0xA7C0)
 //#define Check_PEDRL_1						((bool(*)(void))0xA7D8)
 
-#endif
+#endif */
 
 //#define sub_A324							((void(*)(void))0xA324)
 //#define sub_AD72							((void(*)(void))0xAD72)

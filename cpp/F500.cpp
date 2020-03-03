@@ -1,6 +1,3 @@
-//#pragma section _F500
-#pragma section _main
-
 //#include <umachine.h>
 
 //#include "ext_ram_vars.h"
@@ -11,11 +8,36 @@
 #include "ram.h"
 #include "EnVars.h"
 #include "hwreg.h"
-//#include "F500.h"
+#include "F500.h"
 #include "hardware.h"
+#include "crank.h"
 
-inline bool F500_sub_21C80() { return false; }
-inline u16 sub_21CA8(u16 v) { return v; }
+
+#ifndef DEF_F500	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#define _SysInit_NVRAM_F234								((void(*)(void))0xF234)
+#define _SysInit_Copy_ADC_To_Local_Vars_More_sub_F26C	((void(*)(void))0xF26C)
+#define _F500_root_sub									((void(*)(void))0xF500)
+#define _F500_Init_BitMap_Flags_New						((void(*)(void))0xF58C)
+
+
+#pragma regsave(SysInit_NVRAM_F234								)			
+#pragma regsave(SysInit_Copy_ADC_To_Local_Vars_More_sub_F26C	)
+#pragma regsave(F500_root_sub									)	
+#pragma regsave(F500_Init_BitMap_Flags_New						)
+
+void SysInit_NVRAM_F234()								{	_SysInit_NVRAM_F234();							}						
+void SysInit_Copy_ADC_To_Local_Vars_More_sub_F26C()		{	_SysInit_Copy_ADC_To_Local_Vars_More_sub_F26C();}		
+void F500_root_sub()									{	_F500_root_sub(); 								}		
+void F500_Init_BitMap_Flags_New()						{	_F500_Init_BitMap_Flags_New();					}	
+
+
+#else	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma section _main
+
+//inline bool F500_sub_21C80() { return false; }
+//inline u16 sub_21CA8(u16 v) { return v; }
 
 
 #pragma regsave(F500_root_sub)
@@ -191,21 +213,21 @@ static void F500_Battery_Calcs_sub_1101A();
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-void F500_InitManifoldVars()
-{
-	u16 r1 = wMUT1A_Manifold_AbsPressure_ADC8bit;
-
-	__disable_irq();
-
-	Manifold_ADC8bit_1 = r1;
-	Manifold_ADC8bit_2 = r1;
-	Manifold_ADC8bit_3 = r1;
-	Manifold_ADC8bit_4 = r1;
-	Manifold_AbsPressure_ADC8bit_avrg = r1;
-	Manifold_AbsPressure_ADC8bit_x256_avrg = r1 << 8;
-
-	__enable_irq();
-}
+//void F500_InitManifoldVars()
+//{
+//	u16 r1 = wMUT1A_Manifold_AbsPressure_ADC8bit;
+//
+//	__disable_irq();
+//
+//	Manifold_ADC8bit_1 = r1;
+//	Manifold_ADC8bit_2 = r1;
+//	Manifold_ADC8bit_3 = r1;
+//	Manifold_ADC8bit_4 = r1;
+//	Manifold_AbsPressure_ADC8bit_avrg = r1;
+//	Manifold_AbsPressure_ADC8bit_x256_avrg = r1 << 8;
+//
+//	__enable_irq();
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -1626,3 +1648,4 @@ void F500_Battery_Calcs_sub_1101A()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+#endif //DEF_F500	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

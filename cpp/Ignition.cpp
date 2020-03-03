@@ -9,6 +9,7 @@
 #include "ram.h"
 #include "hardware.h"
 #include "BC06.h"
+#include "com.h"
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

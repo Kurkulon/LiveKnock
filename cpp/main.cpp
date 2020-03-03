@@ -2,6 +2,8 @@
 #pragma section _main
 #endif
 
+#pragma section _main
+
 #include <umachine.h>
 
 //#include "ext_ram_vars.h" 
@@ -12,6 +14,8 @@
 #include "ram.h"
 #include "EnVars.h"
 #include "hwreg.h"
+#include "com.h"
+#include "com_hal.h"
 #include "F500.h"
 #include "ML02.h"
 #include "FU03.h"
@@ -21,6 +25,10 @@
 #include "hardware.h"
 #include "BC06.h"
 #include "EF07.h"
+#include "obd.h"
+#include "immo.h"
+#include "crank.h"
+#include "MISFIRE.h"
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -28,42 +36,42 @@
 
 
 
-#define _sub_206A4					((void(*)(void))0x206A4)
-#define _COM_root_sub_21564			((void(*)(void))0x21564)
-#define _OBD_root_sub_2B8AC			((void(*)(void))0x2B8AC)
-#define _IMMO_root_sub_226E4		((void(*)(void))0x226E4)
-#define _Init_NVRAM_2B364			((void(*)(void))0x2B364)
-#define _SysInit_NVRAM_220D8		((void(*)(void))0x220D8)
-#define _sub_23180					((void(*)(void))0x23180)
-#define _Init_sub_2B474				((void(*)(void))0x2B474)
-#define _SysInit_sub_230FA			((void(*)(void))0x230FA)
-#define _SysInit_sub_22100			((void(*)(void))0x22100)
-#define _SysInit_sub_8000			((void(*)(void))0x8000)
+//#define _sub_206A4					((void(*)(void))0x206A4)
+//#define _COM_root_sub_21564			((void(*)(void))0x21564)
+//#define _OBD_root_sub_2B8AC			((void(*)(void))0x2B8AC)
+//#define _IMMO_root_sub_226E4		((void(*)(void))0x226E4)
+//#define _Init_NVRAM_2B364			((void(*)(void))0x2B364)
+//#define _SysInit_NVRAM_220D8		((void(*)(void))0x220D8)
+//#define _sub_23180					((void(*)(void))0x23180)
+//#define _Init_sub_2B474				((void(*)(void))0x2B474)
+//#define _SysInit_sub_230FA			((void(*)(void))0x230FA)
+//#define _SysInit_sub_22100			((void(*)(void))0x22100)
+//#define _SysInit_sub_8000			((void(*)(void))0x8000)
 
 
-#pragma regsave(sub_206A4)			
-#pragma regsave(COM_root_sub_21564)
-#pragma regsave(OBD_root_sub_2B8AC)	
-#pragma regsave(IMMO_root_sub_226E4)
-#pragma regsave(Init_NVRAM_2B364)	
-#pragma regsave(SysInit_NVRAM_220D8)
-#pragma regsave(sub_23180)			
-#pragma regsave(Init_sub_2B474)
-#pragma regsave(SysInit_sub_230FA)
-#pragma regsave(SysInit_sub_22100)	
-#pragma regsave(SysInit_sub_8000)	
+//#pragma regsave(sub_206A4)			
+//#pragma regsave(COM_root_sub_21564)
+//#pragma regsave(OBD_root_sub_2B8AC)	
+//#pragma regsave(IMMO_root_sub_226E4)
+//#pragma regsave(Init_NVRAM_2B364)	
+//#pragma regsave(SysInit_NVRAM_220D8)
+//#pragma regsave(sub_23180)			
+//#pragma regsave(Init_sub_2B474)
+//#pragma regsave(SysInit_sub_230FA)
+//#pragma regsave(SysInit_sub_22100)	
+//#pragma regsave(SysInit_sub_8000)	
 
-static void sub_206A4()				{	_sub_206A4();			}						
-static void COM_root_sub_21564()	{	_COM_root_sub_21564(); 	}		
-static void OBD_root_sub_2B8AC()	{	_OBD_root_sub_2B8AC(); 	}		
-static void IMMO_root_sub_226E4()	{	_IMMO_root_sub_226E4();	}	
-static void Init_NVRAM_2B364()		{	_Init_NVRAM_2B364();	}				
-static void SysInit_NVRAM_220D8()	{	_SysInit_NVRAM_220D8(); }	
-static void sub_23180()				{	_sub_23180();			}						
-static void Init_sub_2B474()		{	_Init_sub_2B474();		}				
-static void SysInit_sub_230FA()		{	_SysInit_sub_230FA(); 	}		
-static void SysInit_sub_22100()		{	_SysInit_sub_22100(); 	}		
-static void SysInit_sub_8000()		{	_SysInit_sub_8000();	}			
+//static void sub_206A4()				{	_sub_206A4();			}						
+//static void COM_root_sub_21564()	{	_COM_root_sub_21564(); 	}		
+//static void OBD_root_sub_2B8AC()	{	_OBD_root_sub_2B8AC(); 	}		
+//static void IMMO_root_sub_226E4()	{	_IMMO_root_sub_226E4();	}	
+//static void Init_NVRAM_2B364()		{	_Init_NVRAM_2B364();	}				
+//static void SysInit_NVRAM_220D8()	{	_SysInit_NVRAM_220D8(); }	
+//static void sub_23180()				{	_sub_23180();			}						
+//static void Init_sub_2B474()		{	_Init_sub_2B474();		}				
+//static void SysInit_sub_230FA()		{	_SysInit_sub_230FA(); 	}		
+//static void SysInit_sub_22100()		{	_SysInit_sub_22100(); 	}		
+//static void SysInit_sub_8000()		{	_SysInit_sub_8000();	}			
 
 //#define AA05_root_sub_19096			((void(*)(void))0x19096)
 //#define EF07_root_sub_1F428			((void(*)(void))0x1F428)

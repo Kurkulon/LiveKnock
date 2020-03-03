@@ -1,6 +1,5 @@
 //#pragma section _ML02
 
-#pragma section _main
 
 
 #include <umachine.h>
@@ -13,32 +12,23 @@
 #include "hardware.h"
 
 
-//cranking_end_timer_up; //528
-//word_FFFF86B0;
-//RAM_VAR_1065_FFFF86B2;
-//word_FFFF86C2;
-//timer_FFFF8792;
-//word_FFFF8828;
-//word_FFFF882A;
-//word_FFFF89E8;
-//wMUT1E_MAF_RESET_FLAG;
-//prev_MUT1E_FLAGS;
-//word_FFFF8A34;
-//RPM_FLAGS;
-//FUEL_CUT_FLAG_FFFF8A5E;
-//prev_FUEL_CUT_FLAG_FFFF8A5E;
+#ifndef DEF_ML02	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//ipw_crank_DuringCranking;
-//word_FFFF8B32;
-//word_FFFF8B3A;
-//ipwDuringCranking;
-//ipw_crank_DuringCrankingSync;
-//idle_FLAGS;
-//wMUT24_Target_Idle_RPM;
-//min_Idle_RPM;
-//word_FFFF8D5A;
-//word_FFFF8D5E;
+#define _SysInit_Set_0x10_MUT1E_MAF_RESET_FLAG		((void(*)(void))0x11228)
+#define _ML02_root_sub_1123E						((void(*)(void))0x1123E)
+#define _SysInit_NVRAM_111C8						((void(*)(void))0x111C8)
 
+#pragma regsave(SysInit_Set_0x10_MUT1E_MAF_RESET_FLAG	)			
+#pragma regsave(ML02_root_sub_1123E						)
+#pragma regsave(SysInit_NVRAM_111C8						)	
+
+void SysInit_Set_0x10_MUT1E_MAF_RESET_FLAG()	{	_SysInit_Set_0x10_MUT1E_MAF_RESET_FLAG();	}						
+void ML02_root_sub_1123E()						{	_ML02_root_sub_1123E();						}		
+void SysInit_NVRAM_111C8()						{	_SysInit_NVRAM_111C8(); 					}		
+
+#else	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma section _main
 
 
 //#undef F500_Init_Load_ECU_Info_And_BitMap_Flags
@@ -378,8 +368,6 @@ static bool ML02_sub_113C6()
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-#ifdef ML02_TEST
 
 static void ML02_sub_114B4()
 {
@@ -2138,4 +2126,4 @@ static void ML02_sub_139C4()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-#endif
+#endif //DEF_ML02	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

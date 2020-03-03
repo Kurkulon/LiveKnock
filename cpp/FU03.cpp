@@ -8,7 +8,8 @@
 #include "constword.h"
 #include "ram.h"
 #include "hwreg.h"
-//#include "EnVars.h"
+#include "crank.h"
+#include "com.h"
 
 //#include "FU03.h"
 
@@ -147,11 +148,11 @@
 
 //#define _sub_21BC4										((u16(*)(u16))0x21BC4)
 //#pragma regsave(sub_21BC4)
-inline u16 sub_21BC4(u16 v) { return v; }
+//inline u16 sub_21BC4(u16 v) { return v; }
 
 //#define _sub_21CA8										((u16(*)(u16))0x21CA8)
 //#pragma regsave(sub_21CA8)
-inline u16 sub_21CA8(u16 v) { return v; }
+//inline u16 sub_21CA8(u16 v) { return v; }
 
 
 //extern u16 INJECTOR_RESCALED_sub_26174(u16 v);
@@ -163,12 +164,12 @@ void FU03_Init_Trims();
 void SysInit_sub_13B04();
 void FU03_root_sub();
 
-u16 INJECTOR_RESCALED_sub_26174(u32 v);
-void StartInjectAsync(u16 v, u16 mask);
-void StartInjectSync(u16 v, u16 mask);
+//u16 INJECTOR_RESCALED_sub_26174(u32 v);
+//void StartInjectAsync(u16 v, u16 mask);
+//void StartInjectSync(u16 v, u16 mask);
 
 static void FU03_sub_13CE4_hook();
-static void FU03_sub_13CE4();
+//static void FU03_sub_13CE4();
 static void FU03_sub_13D8C();
 static void FU03_sub_13DA2();
 static void FU03_sub_13DCA();
@@ -348,88 +349,88 @@ static void FU03_sub_16C60();
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-void InjOpenStart(u16 v, u16 mask)
-{
-	__disable_irq();
-
-	if (v != 0)
-	{
-		u32 r13 = 0xFFFFFFFF + v;
-
-		if (mask & 1) 	{	reg_DCNT8K = r13; 	};
-		if (mask & 2) 	{	reg_DCNT8L = r13; 	};
-		if (mask & 4) 	{	reg_DCNT8M = r13; 	};
-		if (mask & 8) 	{	reg_DCNT8N = r13; 	};
-		if (mask & 16) 	{	reg_DCNT8O = r13; 	};
-		if (mask & 32) 	{	reg_DCNT8P = r13; 	};
-
-		SET(reg_DSTR, (mask & 63) << 10);
-	};
-	
-	__enable_irq();
-}
+//void InjOpenStart(u16 v, u16 mask)
+//{
+//	__disable_irq();
+//
+//	if (v != 0)
+//	{
+//		u32 r13 = 0xFFFFFFFF + v;
+//
+//		if (mask & 1) 	{	reg_DCNT8K = r13; 	};
+//		if (mask & 2) 	{	reg_DCNT8L = r13; 	};
+//		if (mask & 4) 	{	reg_DCNT8M = r13; 	};
+//		if (mask & 8) 	{	reg_DCNT8N = r13; 	};
+//		if (mask & 16) 	{	reg_DCNT8O = r13; 	};
+//		if (mask & 32) 	{	reg_DCNT8P = r13; 	};
+//
+//		SET(reg_DSTR, (mask & 63) << 10);
+//	};
+//	
+//	__enable_irq();
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //#pragma regsave(INJECTOR_RESCALED_sub_26174)
 
-u16 INJECTOR_RESCALED_sub_26174(u32 v)
-{
-	if (v <= 260)
-	{
-		v += byte_342F[v>>2] / 2;
-	};
-
-	// loc_261AC
-
-	return Lim_FFFF(v + injectorLatencyRescaled);
-
-//	return _INJECTOR_RESCALED_sub_26174(v);
-}
+//u16 INJECTOR_RESCALED_sub_26174(u32 v)
+//{
+//	if (v <= 260)
+//	{
+//		v += byte_342F[v>>2] / 2;
+//	};
+//
+//	// loc_261AC
+//
+//	return Lim_FFFF(v + injectorLatencyRescaled);
+//
+////	return _INJECTOR_RESCALED_sub_26174(v);
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //#pragma regsave(StartInjectAsync)
 
-void StartInjectAsync(u16 v, u16 mask)
-{
-	mask &= enInjMask & injectors_mask_FFFF8C72 & 0xF;
-
-	if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x30) // Random Misfire Detected
-	{
-		mask &= injectors_misfire_mask;
-	};
-
-	if (v != 0 && mask != 0)
-	{
-		InjOpenStart(v, mask);
-	};
-
-	CLR(word_FFFF8B4E, INJ_5_SYNC_INJECT);
-
-//	_StartInjectAsync(v, mask);
-}
+//void StartInjectAsync(u16 v, u16 mask)
+//{
+//	mask &= enInjMask & injectors_mask_FFFF8C72 & 0xF;
+//
+//	if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x30) // Random Misfire Detected
+//	{
+//		mask &= injectors_misfire_mask;
+//	};
+//
+//	if (v != 0 && mask != 0)
+//	{
+//		InjOpenStart(v, mask);
+//	};
+//
+//	CLR(word_FFFF8B4E, INJ_5_SYNC_INJECT);
+//
+////	_StartInjectAsync(v, mask);
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //#pragma regsave(StartInjectSync)
 
-void StartInjectSync(u16 v, u16 mask)
-{
-	mask &= enInjMask & injectors_mask_FFFF8C72 & 0xF;
-
-	if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x30) // Random Misfire Detected
-	{
-		mask &= injectors_misfire_mask;
-	};
-
-	SET(word_FFFF8B4E, INJ_5_SYNC_INJECT);
-
-	injPW_final = v;
-	injPW_chnl = mask;
-
-//	_StartInjectSync(v, mask);
-}
+//void StartInjectSync(u16 v, u16 mask)
+//{
+//	mask &= enInjMask & injectors_mask_FFFF8C72 & 0xF;
+//
+//	if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x30) // Random Misfire Detected
+//	{
+//		mask &= injectors_misfire_mask;
+//	};
+//
+//	SET(word_FFFF8B4E, INJ_5_SYNC_INJECT);
+//
+//	injPW_final = v;
+//	injPW_chnl = mask;
+//
+////	_StartInjectSync(v, mask);
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

@@ -9,6 +9,31 @@
 #include "FU03.h"
 #include "BC06.h"
 #include "hardware.h"
+#include "crank.h"
+#include "immo.h"
+#include "com.h"
+#include "obd.h"
+
+
+#ifndef DEF_HUGE	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#define _SysInit_NVRAM_266DC				((void(*)(void))0x266DC)
+#define _SysInit_sub_266FC					((void(*)(void))0x266FC)
+//#define _Read_Ports_And_Registers_sub_B114	((void(*)(void))0xB114)
+//#define _Start_Coil_Charge					((void(*)(u16))0xBE1C)
+
+#pragma regsave(SysInit_NVRAM_266DC					)			
+#pragma regsave(SysInit_sub_266FC					)
+//#pragma regsave(Read_Ports_And_Registers_sub_B114	)	
+//#pragma regsave(Start_Coil_Charge					)
+
+void SysInit_NVRAM_266DC()				{	_SysInit_NVRAM_266DC();					}						
+void SysInit_sub_266FC()				{	_SysInit_sub_266FC();					}		
+//static void Read_Ports_And_Registers_sub_B114()	{	_Read_Ports_And_Registers_sub_B114();	}		
+//static void Start_Coil_Charge(u16 mask)			{	_Start_Coil_Charge(mask);				}		
+
+
+#else	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -18,23 +43,28 @@ const void * v_cmti0 = cmti0;
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+#pragma address v_huge_end_section = 0x28050
+const void *v_huge_end_section = 0;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 #pragma section _HUGE
 
 
-#define _IMMO_sub_2212E						((void(*)(void))0x2212E)
-#define _COM_MUT_sub_207F0					((void(*)(void))0x207F0)
-#define _sub_34664							((void(*)(void))0x34664)
-#define _MUT2B_800Hz_root					((void(*)(void))0x2192E)
-
-#pragma regsave(IMMO_sub_2212E		)			
-#pragma regsave(COM_MUT_sub_207F0	)
-#pragma regsave(sub_34664			)	
-#pragma regsave(MUT2B_800Hz_root	)
-
-static void IMMO_sub_2212E()		{	_IMMO_sub_2212E();		}						
-static void COM_MUT_sub_207F0()		{	_COM_MUT_sub_207F0();	}						
-static void sub_34664()				{	_sub_34664();			}						
-static void MUT2B_800Hz_root()		{	_MUT2B_800Hz_root();	}						
+//#define _IMMO_sub_2212E						((void(*)(void))0x2212E)
+//#define _COM_MUT_sub_207F0					((void(*)(void))0x207F0)
+//#define _sub_34664							((void(*)(void))0x34664)
+//#define _MUT2B_800Hz_root					((void(*)(void))0x2192E)
+//
+//#pragma regsave(IMMO_sub_2212E		)			
+//#pragma regsave(COM_MUT_sub_207F0	)
+//#pragma regsave(sub_34664			)	
+//#pragma regsave(MUT2B_800Hz_root	)
+//
+//static void IMMO_sub_2212E()		{	_IMMO_sub_2212E();		}						
+//static void COM_MUT_sub_207F0()		{	_COM_MUT_sub_207F0();	}						
+//static void sub_34664()				{	_sub_34664();			}						
+//static void MUT2B_800Hz_root()		{	_MUT2B_800Hz_root();	}						
 
 //#undef BC06_sub_1E2D0
 
@@ -131,8 +161,8 @@ static void MUT2B_800Hz_root()		{	_MUT2B_800Hz_root();	}
 //#pragma noregsave(Huge_50_Hz)
 //#pragma noregsave(Huge_800_Hz_27F62)
 
-inline u16 sub_21A72(u16 v) { return v; }
-inline u16 sub_21A52(u16 v) { return v; }
+//inline u16 sub_21A72(u16 v) { return v; }
+//inline u16 sub_21A52(u16 v) { return v; }
 
 static void HUGE_Method_801_6_Hz();
 
@@ -147,7 +177,7 @@ static void Huge_800_Hz_27F62();
 static void Update_MAP_Avrg();
 //static u16 sub_E44C();
 //static void MUT98_sub_329C6();
-#define MUT98_sub_329C6						((void(*)(void))0x329C6)
+//#define MUT98_sub_329C6						((void(*)(void))0x329C6)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -2003,3 +2033,6 @@ static void Huge_800_Hz_27F62()
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+#endif //DEF_HUGE	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

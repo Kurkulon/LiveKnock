@@ -488,7 +488,7 @@ struct Map3D_W
 
 #define Lim_FF											((u32(*)(u16))0x590)
 #define Lim_FFFF										((u32(*)(u32))0x598)
-#define sub_21E14										((u16(*)(u16))0x21E14)
+//#define sub_21E14										((u16(*)(u16))0x21E14)
 #define SHLR8											((byte(*)(u32))0x864)
 #define Mult_R4_65536									((u32(*)(u16))0x876)
 #define SwapBytes16										((u16(*)(byte))0x8B8)

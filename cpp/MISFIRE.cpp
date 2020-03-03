@@ -1,5 +1,4 @@
 //#pragma section _F500
-#pragma section _main
 
 //#include <umachine.h>
 
@@ -12,9 +11,35 @@
 #include "EnVars.h"
 #include "hwreg.h"
 #include "hardware.h"
+//#include "MISFIRE.h"
 
+
+#ifndef DEF_MISFIRE	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#define _Misfire_NVRAM_Init		((void(*)(void))0x28054)
+#define _Misfire_Init_280E4		((void(*)(void))0x280E4)
+#define _Misfire_root_28320		((void(*)(void))0x28320)
+#define _Misfire_CRANK5_root	((void(*)(void))0x29438)
+#define _Misfire_CRANK75_root	((void(*)(void))0x2941C)
+
+
+#pragma regsave(Misfire_NVRAM_Init			)			
+#pragma regsave(Misfire_Init_280E4			)
+#pragma regsave(Misfire_root_28320			)	
+#pragma regsave(Misfire_CRANK5_root			)
+#pragma regsave(Misfire_CRANK75_root		)
+
+void Misfire_NVRAM_Init()							{	_Misfire_NVRAM_Init();		}						
+void Misfire_Init_280E4()							{	_Misfire_Init_280E4();		}		
+void Misfire_root_28320()							{	_Misfire_root_28320(); 		}		
+void Misfire_CRANK5_root()							{	_Misfire_CRANK5_root(); 		}		
+void Misfire_CRANK75_root()							{	_Misfire_CRANK75_root(); 		}		
+
+
+#else	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 static void Misfire_CRANK75_root()
 {
 	Misfire_CRANK75_sub_2B168();
@@ -264,3 +289,5 @@ static void Misfire_CRANK5_sub_2AEE4()
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#endif // DEF_MISFIRE	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

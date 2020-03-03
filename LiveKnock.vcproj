@@ -81,6 +81,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cpp\com_hal.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\cpp\crank.cpp"
 				>
 			</File>
@@ -117,6 +121,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cpp\immo.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\cpp\LibsFunc.asm"
 				>
 			</File>
@@ -142,6 +150,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cpp\obd.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\cpp\Reset_init.asm"
 				>
 			</File>
@@ -156,11 +168,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cpp\com.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cpp\com_hal.h"
+				>
+			</File>
+			<File
 				RelativePath=".\cpp\constbyte.h"
 				>
 			</File>
 			<File
 				RelativePath=".\cpp\constword.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cpp\crank.h"
 				>
 			</File>
 			<File
@@ -208,6 +232,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\cpp\immo.h"
+				>
+			</File>
+			<File
 				RelativePath=".\cpp\libsfunc_exp.inc"
 				>
 			</File>
@@ -221,6 +249,10 @@
 			</File>
 			<File
 				RelativePath=".\cpp\ML02.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cpp\obd.h"
 				>
 			</File>
 			<File

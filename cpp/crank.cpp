@@ -11,6 +11,37 @@
 #include "FU03.h"
 #include "hardware.h"
 #include "MISFIRE.h"
+#include "crank.h"
+#include "com.h"
+#include "com_hal.h"
+
+
+#ifndef DEF_CRANK	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+#define _sub_23180						((void(*)(void))0x23180)
+#define _SysInit_sub_230FA				((void(*)(void))0x230FA)
+#define _INJECTOR_RESCALED_sub_26174	((u16(*)(u16))0x26174)
+#define _StartInjectAsync				((void(*)(u16,u16))0x261CA)
+#define _StartInjectSync				((void(*)(u16,u16))0x26218)
+#define _F500_InitManifoldVars							((void(*)(void))0x23244)
+
+#pragma regsave(sub_23180)			
+#pragma regsave(SysInit_sub_230FA)
+#pragma regsave(INJECTOR_RESCALED_sub_26174	)
+#pragma regsave(StartInjectAsync			)	
+#pragma regsave(StartInjectSync				)			
+#pragma regsave(F500_InitManifoldVars							)	
+
+void 	sub_23180					()					{	_sub_23180();							}						
+void 	SysInit_sub_230FA			()					{	_SysInit_sub_230FA(); 					}		
+u16		INJECTOR_RESCALED_sub_26174	(u32 v)				{	return _INJECTOR_RESCALED_sub_26174(v);	}						
+void	StartInjectAsync			(u16 v, u16 mask)	{	_StartInjectAsync(v, mask);				}						
+void	StartInjectSync				(u16 v, u16 mask)	{	_StartInjectSync(v, mask);				}						
+void	F500_InitManifoldVars()							{	_F500_InitManifoldVars();						}				
+
+#else	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -21,12 +52,12 @@
 
 //extern "C" bool Reset_IRQ0F();
 
-#define sub_21AAA					((u16(*)(u16))0x21AAA)
-#define sub_21ACC					((u16(*)(u16))0x21ACC)
-#define sub_21B50					((u16(*)(u16))0x21B50)
-
-#define COM_MUT2B_sub_895C			((void(*)(u16))0x895C)
-#define PEDR_LO_Check_sub_A790			((bool(*)(void))0xA790)
+//#define sub_21AAA					((u16(*)(u16))0x21AAA)
+//#define sub_21ACC					((u16(*)(u16))0x21ACC)
+//#define sub_21B50					((u16(*)(u16))0x21B50)
+//
+//#define COM_MUT2B_sub_895C			((void(*)(u16))0x895C)
+//#define PEDR_LO_Check_sub_A790			((bool(*)(void))0xA790)
 
 
 //#define CRANK75_Knock_sub_24AC0		((void(*)(void))0x24AC0)
@@ -63,10 +94,10 @@
 static void CRANK5_root_sub_DC18(u16 osbr, u32 icr);
 static void CRANK75_root_sub_DB40(u16 osbr, u32 icr);
 
-void F500_InitManifoldVars();
+//void F500_InitManifoldVars();
 
-static void SetIgnCoilChargeStartTime(u16 mask, u16 v);
-static void SetIgnSparkStartTime(u16 mask, u16 v);
+//static void SetIgnCoilChargeStartTime(u16 mask, u16 v);
+//static void SetIgnSparkStartTime(u16 mask, u16 v);
 
 //void StartInjectSync(u16 v, u16 mask);
 //void StartInjectAsync(u16 v, u16 mask);
@@ -75,7 +106,7 @@ static void SetIgnSparkStartTime(u16 mask, u16 v);
 
 //u16 INJECTOR_RESCALED_sub_26174(u16 v);
 
-extern "C" u16 atu22_Get_ECNT9A();
+//extern "C" u16 atu22_Get_ECNT9A();
 
 
 
@@ -103,7 +134,7 @@ void CRANK5_Main_sub_24AF0();
 
 static void CRANK5_sub_2504A();
 static void CRANK5_SetIgnSpark5();
-static void CRANK5_sub_21A04();
+//static void CRANK5_sub_21A04();
 //static void Misfire_CRANK5_root();
 //static void Misfire_CRANK5_sub_29558(u16 v1, u16 v2);
 //static void Misfire_CRANK5_sub_29750();
@@ -115,7 +146,7 @@ static void CRANK5_sub_21A04();
 //extern "C" void CRANK5_sub_C990(u16 v);
 
 
-static u16 atu22_Get_ECNT9A();
+//static u16 atu22_Get_ECNT9A();
 
 
 
@@ -126,14 +157,14 @@ extern "C" bool CRANK_CheckCamshaft_sub_A7C0();
 
 static void atu22_IMF2G_event();
 static void atu22_CMF2G_event();
-extern "C" void Disable_Ign_Handler(u16 v);
-extern "C" bool Check_Starter_signal();
-extern "C" bool Check_PEDRL_1();
+static void Disable_Ign_Handler(u16 v);
+//extern "C" bool Check_Starter_signal();
+//extern "C" bool Check_PEDRL_1();
 
-extern "C" void Ign_handler(u16 v);
-extern "C" u16 Get_Coil_charge_status();
+//extern "C" void Ign_handler(u16 v);
+//extern "C" u16 Get_Coil_charge_status();
 
-extern "C" void Start_Coil_Charge(u16 mask);
+//extern "C" void Start_Coil_Charge(u16 mask);
 //extern "C" void Disable_Coil_Charge(u16 mask);
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -147,6 +178,11 @@ const void *v_atu02_ici0A = atu02_ici0A;
 static void atu22_imi2G();
 #pragma address v_atu22_imi2G=0x1C8
 const void *v_atu22_imi2G = atu22_imi2G;
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma address v_crank_end_section = 0x26170
+const void *v_crank_end_section = 0;
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -647,7 +683,7 @@ void sub_23180()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void F500_InitManifoldVars()
+void F500_InitManifoldVars()
 {
 	u16 r1 = wMUT1A_Manifold_AbsPressure_ADC8bit;
 
@@ -2808,61 +2844,61 @@ static void CRANK75_sub_260B8()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//u16 INJECTOR_RESCALED_sub_26174(u16 v)
-//{
-//	if (v <= 260)
-//	{
-//		v = Add_Lim_FFFF(v, Div_R4_R5__R0(byte_342F[(u32)v>>2], 2));
-//	};
-//
-//	// loc_261AC
-//
-//	return Add_Lim_FFFF(v, injectorLatencyRescaled);
-//}
+u16 INJECTOR_RESCALED_sub_26174(u32 v)
+{
+	if (v <= 260)
+	{
+		v = Add_Lim_FFFF(v, Div_R4_R5__R0(byte_342F[(u32)v>>2], 2));
+	};
+
+	// loc_261AC
+
+	return Add_Lim_FFFF(v, injectorLatencyRescaled);
+}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//void StartInjectAsync(u16 v, u16 mask)
-//{
-//	u32 r13 = mask & 0xF;
-//
-//	r13 &= enInjMask;
-//
-//	r13 &= injectors_mask_FFFF8C72;
-//
-//	if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x30) // Random Misfire Detected
-//	{
-//		r13 &= injectors_misfire_mask;
-//	};
-//
-//	if (v != 0 && r13 != 0)
-//	{
-//		InjOpenStart(v, r13);
-//	};
-//
-//	CLR(word_FFFF8B4E, INJ_5_SYNC_INJECT);
-//}
+void StartInjectAsync(u16 v, u16 mask)
+{
+	u32 r13 = mask & 0xF;
+
+	r13 &= enInjMask;
+
+	r13 &= injectors_mask_FFFF8C72;
+
+	if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x30) // Random Misfire Detected
+	{
+		r13 &= injectors_misfire_mask;
+	};
+
+	if (v != 0 && r13 != 0)
+	{
+		InjOpenStart(v, r13);
+	};
+
+	CLR(word_FFFF8B4E, INJ_5_SYNC_INJECT);
+}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//void StartInjectSync(u16 v, u16 mask)
-//{
-//	u32 r13 = mask & 0xF;
-//
-//	r13 &= enInjMask;
-//
-//	r13 &= injectors_mask_FFFF8C72;
-//
-//	if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x30) // Random Misfire Detected
-//	{
-//		r13 &= injectors_misfire_mask;
-//	};
-//
-//	SET(word_FFFF8B4E, INJ_5_SYNC_INJECT);
-//
-//	injPW_final = v;
-//	injPW_chnl = r13;
-//}
+void StartInjectSync(u16 v, u16 mask)
+{
+	u32 r13 = mask & 0xF;
+
+	r13 &= enInjMask;
+
+	r13 &= injectors_mask_FFFF8C72;
+
+	if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x30) // Random Misfire Detected
+	{
+		r13 &= injectors_misfire_mask;
+	};
+
+	SET(word_FFFF8B4E, INJ_5_SYNC_INJECT);
+
+	injPW_final = v;
+	injPW_chnl = r13;
+}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -3014,52 +3050,51 @@ static u16 sub_2640E(u16 ipw)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-
-static void SetIgnCoilChargeStartTime(u16 mask, u16 v)
-{
-	__disable_irq();
-
-	u32 r13 = v;
-
-	v -= reg_TCNT2A + 2;
-
-	if (v & 0x8000)
-	{
-		r13 = reg_TCNT2A + 2;
-	};
-
-	// 0 output on GR compare-match
-
-	if (mask & 1) { reg_GR2E = r13; CLR(reg_TSR2A, 0x10); reg_TIOR2C = reg_TIOR2C & 0xF8 | 1; };	
-	if (mask & 2) { reg_GR2F = r13; CLR(reg_TSR2A, 0x20); reg_TIOR2C = reg_TIOR2C & 0x8F | 0x10; };
-	if (mask & 4) { reg_GR2G = r13; CLR(reg_TSR2A, 0x40); reg_TIOR2D = reg_TIOR2D & 0xF8 | 1; };
-
-	__enable_irq();
-}
+//static void SetIgnCoilChargeStartTime(u16 mask, u16 v)
+//{
+//	__disable_irq();
+//
+//	u32 r13 = v;
+//
+//	v -= reg_TCNT2A + 2;
+//
+//	if (v & 0x8000)
+//	{
+//		r13 = reg_TCNT2A + 2;
+//	};
+//
+//	// 0 output on GR compare-match
+//
+//	if (mask & 1) { reg_GR2E = r13; CLR(reg_TSR2A, 0x10); reg_TIOR2C = reg_TIOR2C & 0xF8 | 1; };	
+//	if (mask & 2) { reg_GR2F = r13; CLR(reg_TSR2A, 0x20); reg_TIOR2C = reg_TIOR2C & 0x8F | 0x10; };
+//	if (mask & 4) { reg_GR2G = r13; CLR(reg_TSR2A, 0x40); reg_TIOR2D = reg_TIOR2D & 0xF8 | 1; };
+//
+//	__enable_irq();
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void SetIgnSparkStartTime(u16 mask, u16 v)
-{
-	__disable_irq();
-
-	u32 r13 = v;
-
-	v -= reg_TCNT2A + 2;
-
-	if (v & 0x8000)
-	{
-		r13 = reg_TCNT2A + 2;
-	};
-
-	// 1 output on GR compare-match
-
-	if (mask & 1) { reg_GR2E = r13; CLR(reg_TSR2A, 0x10); reg_TIOR2C = reg_TIOR2C & 0xF8 | 2; };
-	if (mask & 2) { reg_GR2F = r13; CLR(reg_TSR2A, 0x20); reg_TIOR2C = reg_TIOR2C & 0x8F | 0x20; };
-	if (mask & 4) { reg_GR2G = r13; CLR(reg_TSR2A, 0x40); reg_TIOR2D = reg_TIOR2D & 0xF8 | 2; };
-
-	__enable_irq();
-}
+//static void SetIgnSparkStartTime(u16 mask, u16 v)
+//{
+//	__disable_irq();
+//
+//	u32 r13 = v;
+//
+//	v -= reg_TCNT2A + 2;
+//
+//	if (v & 0x8000)
+//	{
+//		r13 = reg_TCNT2A + 2;
+//	};
+//
+//	// 1 output on GR compare-match
+//
+//	if (mask & 1) { reg_GR2E = r13; CLR(reg_TSR2A, 0x10); reg_TIOR2C = reg_TIOR2C & 0xF8 | 2; };
+//	if (mask & 2) { reg_GR2F = r13; CLR(reg_TSR2A, 0x20); reg_TIOR2C = reg_TIOR2C & 0x8F | 0x20; };
+//	if (mask & 4) { reg_GR2G = r13; CLR(reg_TSR2A, 0x40); reg_TIOR2D = reg_TIOR2D & 0xF8 | 2; };
+//
+//	__enable_irq();
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -3086,44 +3121,44 @@ static void SetIgnSparkStartTime(u16 mask, u16 v)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static u16 atu22_Get_ECNT9A()
-{
-	__disable_irq();
-
-	u32 r1 = reg_ECNT9A;
-
-	reg_ECNT9A = 0;
-
-	if (reg_TSR9 & 1)
-	{
-		r1 = 0xFF;
-
-		CLR(reg_TSR9, 1);
-	};
-
-	__enable_irq();
-
-	return r1;
-}
+//static u16 atu22_Get_ECNT9A()
+//{
+//	__disable_irq();
+//
+//	u32 r1 = reg_ECNT9A;
+//
+//	reg_ECNT9A = 0;
+//
+//	if (reg_TSR9 & 1)
+//	{
+//		r1 = 0xFF;
+//
+//		CLR(reg_TSR9, 1);
+//	};
+//
+//	__enable_irq();
+//
+//	return r1;
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void CRANK5_sub_21A04()
-{
-	u32 r13 = recieve_buffer_1_2;
-
-	if ((HIGHBAUDFLAG_FFFF93D8 & 1) && (r13 & 1) && (r13 & 0x20))
-	{
-		COM_MUT2B_sub_895C(0);
-	};
-
-	r13 = word_FFFF9A5E;
-
-	if ((HIGHBAUDFLAG_FFFF93D8 & 2) && (r13 & 1) && (r13 & 0x20))
-	{
-		COM_MUT2B_sub_895C(1);
-	};
-}
+//static void CRANK5_sub_21A04()
+//{
+//	u32 r13 = recieve_buffer_1_2;
+//
+//	if ((HIGHBAUDFLAG_FFFF93D8 & 1) && (r13 & 1) && (r13 & 0x20))
+//	{
+//		COM_MUT2B_sub_895C(0);
+//	};
+//
+//	r13 = word_FFFF9A5E;
+//
+//	if ((HIGHBAUDFLAG_FFFF93D8 & 2) && (r13 & 1) && (r13 & 0x20))
+//	{
+//		COM_MUT2B_sub_895C(1);
+//	};
+//}
 
 
 //static void CRANK5_sub_C990(u16 v)
@@ -3150,3 +3185,4 @@ static void CRANK5_sub_21A04()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+#endif // DEF_CRANK	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
