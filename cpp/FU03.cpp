@@ -1,6 +1,3 @@
-//#pragma section _FU03
-#pragma section _main
-
 #include <umachine.h>
 
 #include "misc.h"
@@ -11,7 +8,26 @@
 #include "crank.h"
 #include "com.h"
 
-//#include "FU03.h"
+#include "FU03.h"
+
+#ifndef DEF_FU03	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#define _SysInit_NVRAM_Trims			((void(*)(void))0x13AB8)
+#define _SysInit_sub_13B04				((void(*)(void))0x13B04)
+#define _FU03_root_sub					((void(*)(void))0x13BF4)
+
+#pragma regsave(SysInit_NVRAM_Trims			)			
+#pragma regsave(SysInit_sub_13B04			)
+#pragma regsave(FU03_root_sub				)	
+
+void	SysInit_NVRAM_Trims()				{	_SysInit_NVRAM_Trims();			}						
+void	SysInit_sub_13B04()					{	_SysInit_sub_13B04();			}						
+void	FU03_root_sub()						{	_FU03_root_sub();				}						
+
+#else	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma section _main
+
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -2725,3 +2741,4 @@ static void MAF_air_flow_rate_EVO()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+#endif //DEF_FU03	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

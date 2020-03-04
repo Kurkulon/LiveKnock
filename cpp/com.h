@@ -27,7 +27,7 @@ extern u16 sub_21ACC                      		(u16 v);
 extern u16 sub_21B50                      		(u16 v);
 extern u16 sub_21BC4                      		(u16 v);
 extern u16 sub_21C0C                      		(u16 v);
-extern u16 F500_sub_21C80                 		(u16 v);
+extern u16 F500_sub_21C80                 		();
 extern u16 sub_21CA8                      		(u16 v);
 extern u16 sub_21D6C                      		(u16 v);
 extern u16 sub_21D9C                      		(u16 v);

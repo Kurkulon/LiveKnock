@@ -21,12 +21,12 @@
 //extern void COM_MUT2B_sub_895C		(u16 r1			);
 
 
-#define _SysInit_sub_8000		((void(*)(void))	0x28054)
-#define _COM_sub_8026			((void(*)(u16))		0x280E4)
-#define _MUT2B_800Hz_sub_85E0	((void(*)(u16))		0x28320)
-#define _COM_sub_86BC			((void(*)(u16, u16))0x29438)
-#define _MUT2B_800Hz_sub_87CC	((void(*)(u16))		0x2941C)
-#define _COM_MUT2B_sub_895C		((void(*)(u16))		0x2941C)
+#define _SysInit_sub_8000		((void(*)(void))		0x8000)
+#define _COM_sub_8026			((void(*)(u16))			0x8026)
+#define _MUT2B_800Hz_sub_85E0	((void(*)(u16))			0x85E0)
+#define _COM_sub_86BC			((void(*)(u16, u16))	0x86BC)
+#define _MUT2B_800Hz_sub_87CC	((void(*)(u16))			0x87CC)
+#define _COM_MUT2B_sub_895C		((void(*)(u16))			0x895C)
 
 #pragma regsave(SysInit_sub_8000				)			
 #pragma regsave(COM_sub_8026					)

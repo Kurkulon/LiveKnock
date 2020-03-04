@@ -1,5 +1,3 @@
-#pragma section _main
-
 #include <umachine.h>
 
 #include "misc.h"
@@ -9,7 +7,26 @@
 #include "EnVars.h"
 #include "hwreg.h"
 #include "hardware.h"
+#include "ef07.h"
+#include "obd.h"
 
+#ifndef DEF_EF07	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#define _SysInit_NVRAM_1F3E0		((void(*)(void))0x1F3E0)
+#define _SysInit_sub_1F408			((void(*)(void))0x1F408)
+#define _EF07_root_sub_1F428		((void(*)(void))0x1F428)
+
+#pragma regsave(SysInit_NVRAM_1F3E0		)			
+#pragma regsave(SysInit_sub_1F408		)
+#pragma regsave(EF07_root_sub_1F428		)	
+
+void SysInit_NVRAM_1F3E0()		{	_SysInit_NVRAM_1F3E0();	}						
+void SysInit_sub_1F408()		{	_SysInit_sub_1F408();	}		
+void EF07_root_sub_1F428()		{	_EF07_root_sub_1F428();	}		
+
+#else	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma section _main
 
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -26,8 +43,8 @@ struct FLT
 #define dword_8BC4 ((const FLT*)0x8BC4)
 #define byte_8C0C ((const byte*)0x8C0C)
 
-#define OBD_Set_DTC_sub_2C1FC ((void(*)(u16,u16,u16))0x2C1FC)
-#define OBD_Set_DTC_sub_2C22A ((void(*)(u16,u16,u16,u16))0x2C22A)
+//#define OBD_Set_DTC_sub_2C1FC ((void(*)(u16,u16,u16))0x2C1FC)
+//#define OBD_Set_DTC_sub_2C22A ((void(*)(u16,u16,u16,u16))0x2C22A)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1108,3 +1125,4 @@ static bool EF07_sub_204AC()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
            
+#endif //DEF_EF07	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

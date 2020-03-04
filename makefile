@@ -1,6 +1,6 @@
 ##################################################################################################
 
-variant = MAIN
+variant = CRANK
 
 STACK_REPLACE = 1
 GNU_HARDWARE = 0
@@ -46,7 +46,7 @@ define_options = DEF_RELEASE="1"
 ##################################################################################################
 
 var_opt = DEF_IGNMAP16="1",DEF_VEMAP16="1"
-var_obj = 
+var_obj = com_hal.o com.o obd.o immo.o misfire.o crank.o hardware.o huge.o f500.o ml02.o FU03.o ignition.o idle.o bc06.o ef07.o
 
 !ifeq variant MAIN
 
@@ -56,52 +56,52 @@ var_obj = $(var_obj) Hooks.o
 !else ifeq variant F500
 
 var_opt = $(var_opt),DEF_F500="1",DEF_IGNITION_HOOKS="1",DEF_FU03_HOOKS="1",DEF_IDLE_HOOKS="1"
-var_obj = $(var_obj) F500.o Hooks.o
+var_obj = $(var_obj) Hooks.o
 
 !else ifeq variant ML02
 
 var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_IGNITION_HOOKS="1",DEF_FU03_HOOKS="1",DEF_IDLE_HOOKS="1"
-var_obj = $(var_obj) F500.o Hooks.o ML02.o
+var_obj = $(var_obj) Hooks.o
 
 !else ifeq variant FU03
 
 var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION_HOOKS="1",DEF_IDLE_HOOKS="1"
-var_obj = $(var_obj) F500.o Hooks.o ML02.o FU03.o
+var_obj = $(var_obj) Hooks.o
 
 !else ifeq variant IGNITION
 
 var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE_HOOKS="1"
-var_obj = $(var_obj) F500.o Hooks.o ML02.o FU03.o ignition.o
+var_obj = $(var_obj) Hooks.o
 
 !else ifeq variant IDLE
 
 var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1"
-var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o
+var_obj = $(var_obj) 
 
 !else ifeq variant BC06
 
 var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1",DEF_BC06="1"
-var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o bc06.o
+var_obj = $(var_obj) 
 
 !else ifeq variant CRANK
 
 var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1",DEF_BC06="1",DEF_CRANK="1"
-var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o bc06.o
+var_obj = $(var_obj) 
 
 !else ifeq variant HUGE
 
 var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1",DEF_BC06="1",DEF_CRANK="1",DEF_HUGE="1"
-var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o bc06.o
+var_obj = $(var_obj) 
 
 !else ifeq variant HARDWARE
 
 var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1",DEF_BC06="1",DEF_CRANK="1",DEF_HUGE="1",DEF_HARDWARE="1"
-var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o bc06.o
+var_obj = $(var_obj) 
 
 !else ifeq variant EF07
 
 var_opt = $(var_opt),DEF_F500="1",DEF_ML02="1",DEF_FU03="1",DEF_IGNITION="1",DEF_IDLE="1",DEF_BC06="1",DEF_CRANK="1",DEF_HUGE="1",DEF_HARDWARE="1",DEF_EF07="1"
-var_obj = $(var_obj) F500.o ML02.o FU03.o ignition.o idle.o bc06.o EF07.o
+var_obj = $(var_obj) 
 
 !endif
 
@@ -166,7 +166,7 @@ $(objdir)\9327_mod.hex : $(objdir)\LiveKnock.abs $(objdir)\stock.abs
 
 ##################################################################################################
 
-$(objdir)\LiveKnock.abs : LiveMap.o AltMaps.o LiveKnock.o com_hal.o com.o obd.o immo.o misfire.o crank.o hardware.o huge.o f500.o ml02.o main.o $(var_obj)
+$(objdir)\LiveKnock.abs : LiveMap.o AltMaps.o LiveKnock.o main.o $(var_obj)
 	@echo Linking $^@ ...
 	@optlnk	-NOLOGO -LISt -SHow=SY -FOrm=Absolute -start=P_main/EB04,P_Hooks/2CC0,P_HARDWARE/9D18,P_CRANK/230F0,P_HUGE/266DC,P/39000,B/FFFF8480 -LIBrary=$(libname) -OUtput="$^@" $<
 	@echo $(delimiter)	

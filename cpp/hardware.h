@@ -47,6 +47,14 @@ extern void SetIgnCoilChargeStartTime(u16 mask, u16 v);
 extern void SetIgnSparkStartTime(u16 mask, u16 v);
 extern u16 atu22_Get_ECNT9A();
 extern void InjOpenStart(u16 v, u16 mask);
+extern u16 Get_Coil_charge_status();
+extern void Start_Coil_Charge(u16 mask);
+extern void CRANK5_sub_C990(u16 v);
+extern bool Reset_IRQ0F();
+//extern void CRANK5_root_sub_DC18(u16 osbr, u32 icr);
+//extern void CRANK75_root_sub_DB40(u16 osbr, u32 icr);
+extern void Disable_Ign_Handler(u16 v);
+
 
 //#else
 

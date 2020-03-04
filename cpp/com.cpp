@@ -32,7 +32,7 @@
 #define _sub_21B50                      			((u16(*)(u16))	0x21B50)
 #define _sub_21BC4                      			((u16(*)(u16))	0x21BC4)
 #define _sub_21C0C                      			((u16(*)(u16))	0x21C0C)
-#define _F500_sub_21C80                 			((u16(*)(u16))	0x21C80)
+#define _F500_sub_21C80                 			((u16(*)())		0x21C80)
 #define _sub_21CA8                      			((u16(*)(u16))	0x21CA8)
 #define _sub_21D6C                      			((u16(*)(u16))	0x21D6C)
 #define _sub_21D9C                      			((u16(*)(u16))	0x21D9C)
@@ -123,7 +123,7 @@ u16 sub_21ACC                      		(u16 v)		{	return _sub_21ACC               
 u16 sub_21B50                      		(u16 v)		{	return _sub_21B50                      	(v);		}						
 u16 sub_21BC4                      		(u16 v)		{	return _sub_21BC4                      	(v);		}						
 u16 sub_21C0C                      		(u16 v)		{	return _sub_21C0C                      	(v);		}						
-u16 F500_sub_21C80                 		(u16 v)		{	return _F500_sub_21C80                 	(v);		}						
+u16 F500_sub_21C80                 		()			{	return _F500_sub_21C80                 	();			}						
 u16 sub_21CA8                      		(u16 v)		{	return _sub_21CA8                      	(v);		}						
 u16 sub_21D6C                      		(u16 v)		{	return _sub_21D6C                      	(v);		}						
 u16 sub_21D9C                      		(u16 v)		{	return _sub_21D9C                      	(v);		}						

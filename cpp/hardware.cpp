@@ -20,7 +20,6 @@
 
 #ifndef DEF_HARDWARE	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-
 #define _SysInit_sub_9D2C					((void(*)(void))0x9D2C)
 #define _sub_A078							((void(*)(void))0xA078)
 #define _sub_A374							((void(*)(void))0xA374)
@@ -50,6 +49,13 @@
 #define _atu22_Get_ECNT9A					((u16(*)(void))0x0000C590)
 #define _InjOpenStart						((void(*)(u16,u16))0xC698)
 
+#define _Get_Coil_charge_status				((u16(*)(void))		0xC098)
+#define _Start_Coil_Charge					((void(*)(u16))		0xBE1C)
+#define _CRANK5_sub_C990					((void(*)(u16))		0xC990)
+#define _Reset_IRQ0F						((bool(*)(void))	0xC258)
+//#define _CRANK5_root_sub_DC18				((void(*)(u16,u32))	0xDC18)
+//#define _CRANK75_root_sub_DB40				((void(*)(u16,u32))	0xDB40)
+#define _Disable_Ign_Handler				((void(*)(u16))		0xBDB4)
 
 
 
@@ -78,40 +84,54 @@
 #pragma regsave(PWM_EGR_EVAP_O2H				)			
 #pragma regsave(SetIgnCoilChargeStartTime		)			
 #pragma regsave(SetIgnSparkStartTime			)			
-#pragma regsave(atu22_Get_ECNT9A			)			
-#pragma regsave(InjOpenStart				)			
+#pragma regsave(atu22_Get_ECNT9A				)			
+#pragma regsave(InjOpenStart					)			
+
+#pragma regsave(Get_Coil_charge_status			)			
+#pragma regsave(Start_Coil_Charge				)			
+#pragma regsave(CRANK5_sub_C990					)			
+#pragma regsave(Reset_IRQ0F						)			
+//#pragma regsave(CRANK5_root_sub_DC18			)			
+//#pragma regsave(CRANK75_root_sub_DB40			)			
+#pragma regsave(Disable_Ign_Handler				)			
 
 
-void SysInit_sub_9D2C				()									{ _SysInit_sub_9D2C					();					}
-void sub_A078						() 									{ _sub_A078							(); 				}
-void sub_A374						() 									{ _sub_A374							(); 				}
-void PADR_Stuff_sub_A5F8			() 									{ _PADR_Stuff_sub_A5F8				(); 				}
-void PHDR_Stuff_sub_C388			() 									{ _PHDR_Stuff_sub_C388				(); 				}
-void WaitDownTimer801				()									{ _WaitDownTimer801					();					}
-void Init_ATU_sub_C5D2				()									{ _Init_ATU_sub_C5D2				();					}
-void Init_ATU_0_2B					()									{ _Init_ATU_0_2B					();					}
-void Disable_Coil_Charge			(u16 mask)							{ _Disable_Coil_Charge				(mask);				}
-void Timer_Counter_Related_sub_C928	()									{ _Timer_Counter_Related_sub_C928	();					}				
-void F500_Get_All_ADC				()									{ _F500_Get_All_ADC					();					}
-void Get_ADC_Bat_TPS_oxigen			()									{ _Get_ADC_Bat_TPS_oxigen			();					}
-void Get_ADC_Knock					()									{ _Get_ADC_Knock					();					}
-void Get_Manifold_AbsPressure		()									{ _Get_Manifold_AbsPressure			();					}	
-void UpdateOutputAsync				()									{ _UpdateOutputAsync				();					}
-void UpdateOutputSync				()									{ _UpdateOutputSync					();					}
-void Knock_Output_Calc_sub_AC96		()									{ _Knock_Output_Calc_sub_AC96		();					}		
-void Update_Gen_G_output			()									{ _Update_Gen_G_output				();					}
-void PDIOR_Stuff_sub_AD3C			()									{ _PDIOR_Stuff_sub_AD3C				();					}
-void UpdateFanOutputDuty			() 									{ _UpdateFanOutputDuty				(); 				}
-void SysInit_ATU_0_DMA_2			() 									{ _SysInit_ATU_0_DMA_2				(); 				}
-u16	atu22_Get_DSTR_0x3C00			()									{ return _atu22_Get_DSTR_0x3C00		();					}	
-void PWM_EGR_EVAP_O2H				() 									{ _PWM_EGR_EVAP_O2H					(); 				}
-void GetADC							(byte ch, u16 *res8, u16 *res10) 	{ _GetADC							(ch, res8, res10);	}
+void 	SysInit_sub_9D2C				()									{ _SysInit_sub_9D2C					();					}
+void 	sub_A078						() 									{ _sub_A078							(); 				}
+void 	sub_A374						() 									{ _sub_A374							(); 				}
+void 	PADR_Stuff_sub_A5F8				() 									{ _PADR_Stuff_sub_A5F8				(); 				}
+void 	PHDR_Stuff_sub_C388				() 									{ _PHDR_Stuff_sub_C388				(); 				}
+void 	WaitDownTimer801				()									{ _WaitDownTimer801					();					}
+void 	Init_ATU_sub_C5D2				()									{ _Init_ATU_sub_C5D2				();					}
+void 	Init_ATU_0_2B					()									{ _Init_ATU_0_2B					();					}
+void 	Disable_Coil_Charge				(u16 mask)							{ _Disable_Coil_Charge				(mask);				}
+void 	Timer_Counter_Related_sub_C928	()									{ _Timer_Counter_Related_sub_C928	();					}				
+void 	F500_Get_All_ADC				()									{ _F500_Get_All_ADC					();					}
+void 	Get_ADC_Bat_TPS_oxigen			()									{ _Get_ADC_Bat_TPS_oxigen			();					}
+void 	Get_ADC_Knock					()									{ _Get_ADC_Knock					();					}
+void 	Get_Manifold_AbsPressure		()									{ _Get_Manifold_AbsPressure			();					}	
+void 	UpdateOutputAsync				()									{ _UpdateOutputAsync				();					}
+void 	UpdateOutputSync				()									{ _UpdateOutputSync					();					}
+void 	Knock_Output_Calc_sub_AC96		()									{ _Knock_Output_Calc_sub_AC96		();					}		
+void 	Update_Gen_G_output				()									{ _Update_Gen_G_output				();					}
+void 	PDIOR_Stuff_sub_AD3C			()									{ _PDIOR_Stuff_sub_AD3C				();					}
+void 	UpdateFanOutputDuty				() 									{ _UpdateFanOutputDuty				(); 				}
+void 	SysInit_ATU_0_DMA_2				() 									{ _SysInit_ATU_0_DMA_2				(); 				}
+u16		atu22_Get_DSTR_0x3C00			()									{ return _atu22_Get_DSTR_0x3C00		();					}	
+void 	PWM_EGR_EVAP_O2H				() 									{ _PWM_EGR_EVAP_O2H					(); 				}
+void 	GetADC							(byte ch, u16 *res8, u16 *res10) 	{ _GetADC							(ch, res8, res10);	}
+void 	SetIgnCoilChargeStartTime		(u16 mask, u16 v) 					{ _SetIgnCoilChargeStartTime		(mask, v); 			}
+void 	SetIgnSparkStartTime			(u16 mask, u16 v) 					{ _SetIgnSparkStartTime				(mask, v); 			}
+u16		atu22_Get_ECNT9A				()									{ return _atu22_Get_ECNT9A			();					}	
+void	InjOpenStart					(u16 v, u16 mask)					{ _InjOpenStart(v, mask);					}						
 
-void SetIgnCoilChargeStartTime		(u16 mask, u16 v) 					{ _SetIgnCoilChargeStartTime		(mask, v); 			}
-void SetIgnSparkStartTime			(u16 mask, u16 v) 					{ _SetIgnSparkStartTime				(mask, v); 			}
-u16	atu22_Get_ECNT9A				()									{ return _atu22_Get_ECNT9A			();					}	
-void	InjOpenStart				(u16 v, u16 mask)					{	_InjOpenStart(v, mask);					}						
-
+u16 	Get_Coil_charge_status			()									{ return _Get_Coil_charge_status			(); 				}
+void 	Start_Coil_Charge				(u16 mask)							{ _Start_Coil_Charge						(mask);				}
+void 	CRANK5_sub_C990					(u16 v)								{ _CRANK5_sub_C990							(v); 				}
+bool 	Reset_IRQ0F						()									{ return _Reset_IRQ0F						(); 				}
+//void 	CRANK5_root_sub_DC18			(u16 osbr, u32 icr)					{ _CRANK5_root_sub_DC18						(osbr, icr);		}
+//void 	CRANK75_root_sub_DB40			(u16 osbr, u32 icr)					{ _CRANK75_root_sub_DB40					(osbr, icr); 		}
+void 	Disable_Ign_Handler				(u16 v)								{ _Disable_Ign_Handler						(v); 				}
 
 
 #else	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1702,7 +1722,7 @@ void SetIgnSparkStartTime(u16 mask, u16 v)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void Disable_Ign_Handler(u16 v)
+void Disable_Ign_Handler(u16 v)
 {
 	__disable_irq();
 
@@ -1729,6 +1749,54 @@ static void Disable_Ign_Handler(u16 v)
 		reg_GR2G = r13;
 
 		CLR(reg_TSR2A, 0x40);
+	};
+
+	__enable_irq();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+void Start_Coil_Charge(u16 mask)
+{
+	__disable_irq();
+
+	if (mask & 1)
+	{
+		reg_GR2E = reg_TCNT2A + 2;
+
+		CLR(reg_TSR2A, 0x10);
+
+		reg_TIOR2C = reg_TIOR2C & 0xF8 | 1; // 0 output on GR compare-match
+
+#ifndef DEF_SIMULATION
+		while(ZRO(reg_TSR2A, 0x10)) ;
+#endif
+	};
+
+	if (mask & 2)
+	{
+		reg_GR2F = reg_TCNT2A + 2;
+
+		CLR(reg_TSR2A, 0x20);
+
+		reg_TIOR2C = reg_TIOR2C & 0x8F | 0x10; // 0 output on GR compare-match
+
+#ifndef DEF_SIMULATION
+		while(ZRO(reg_TSR2A, 0x20)) ;
+#endif
+	};
+
+	if (mask & 4)
+	{
+		reg_GR2G = reg_TCNT2A + 2;
+
+		CLR(reg_TSR2A, 0x40);
+
+		reg_TIOR2D = reg_TIOR2D & 0xF8 | 1; // 0 output on GR compare-match
+
+#ifndef DEF_SIMULATION
+		while(ZRO(reg_TSR2A, 0x40)) ;
+#endif
 	};
 
 	__enable_irq();
@@ -1795,7 +1863,7 @@ static void atu22_IMF2G_event()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static u16 Get_Coil_charge_status()
+u16 Get_Coil_charge_status()
 {
 	__disable_irq();
 
@@ -1913,7 +1981,7 @@ static void sub_C234()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static bool Reset_IRQ0F()
+bool Reset_IRQ0F()
 {
 	bool r1 = false;
 
@@ -2256,7 +2324,7 @@ void Timer_Counter_Related_sub_C928()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void CRANK5_sub_C990(u16 v)
+void CRANK5_sub_C990(u16 v)
 {
 	__disable_irq();
 
@@ -2944,6 +3012,86 @@ static void sub_D99A()
 
 	__enable_irq();
 }
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//void CRANK5_root_sub_DC18(u16 osbr, u32 icr)
+//{
+//	if ((osbr - crank_OSBR2_75) >= 162 || timer_up_FFFF8522 >= 40)
+//	{
+//		if (timer_up_FFFF8524 >= 39)
+//		{
+//			crank_dt_ICR0AH_5 = 0xFFFFFFFF;
+//
+//			crankHT_5 = 0xFFFF;
+//		}
+//		else
+//		{
+//			crankHT_5 = osbr - crank_OSBR2_5;
+//
+//			crank_dt_ICR0AH_5 = icr - crankPrev_ICR0AH_5;
+//		};
+//
+//		crank_OSBR2_5 = osbr;
+//
+//		crankPrev_ICR0AH_5 = icr;
+//
+//		timer_up_FFFF8524 = 0;
+//
+//		__enable_irq();
+//
+//		CRANK5_Main_sub_24AF0();
+//
+//		word_FFFF8870 = reg_TCNT2A - ici0A_TCNT2A;
+//
+//		SET(crank_Flags, 1);
+//	};
+//
+//	__enable_irq();
+//}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//void CRANK75_root_sub_DB40(u16 osbr, u32 icr)
+//{
+//    if ((osbr - crank_OSBR2_5) >= 254 || timer_up_FFFF8524 >= 40)
+//	{
+//		if (timer_up_FFFF8522 >= 39)
+//		{
+//			crank_OSBR2_75 = osbr;
+//
+//			crankPrev_ICR0AH_75 = icr;
+//
+//			null_crank_dt_ICR0AH_5 = (u32)-1;
+//
+//			crankHT_75 = (u16)-1;
+//		}
+//		else
+//		{
+//			crankHT_75 = osbr - crank_OSBR2_75;
+//
+//			crank_OSBR2_75 = osbr;
+//
+//			null_crank_dt_ICR0AH_5 = icr - crankPrev_ICR0AH_75;
+//
+//			crankPrev_ICR0AH_75 = icr;
+//		};
+//
+//		timer_up_FFFF8522 = 0;
+//
+//		__enable_irq();
+//
+//		CRANK75_Main_sub_232A0();
+//
+//		word_FFFF886E = reg_TCNT2A - ici0A_TCNT2A;
+//
+//		__disable_irq();
+//
+//		CLR(crank_Flags, 1);
+//	};
+//
+//	__enable_irq();
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

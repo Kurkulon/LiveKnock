@@ -1,14 +1,28 @@
-//#pragma section _idle
-#pragma section _main
-
 #include <umachine.h>
 
 #include "ram.h"
 #include "misc.h"
 #include "constbyte.h"
 #include "constword.h"
+#include "idle.h"
 
+#ifndef DEF_IDLE	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+#define _AA05_root_sub_19096		((void(*)(void))0x19096)
+#define _SysInit_NVRAM_18F80		((void(*)(void))0x18F80)
+#define _SysInit_sub_19014			((void(*)(void))0x19014)
+
+#pragma regsave(AA05_root_sub_19096	)			
+#pragma regsave(SysInit_NVRAM_18F80	)
+#pragma regsave(SysInit_sub_19014	)	
+
+void AA05_root_sub_19096()		{	_AA05_root_sub_19096();	}						
+void SysInit_NVRAM_18F80()		{	_SysInit_NVRAM_18F80();	}		
+void SysInit_sub_19014()		{	_SysInit_sub_19014();	}		
+
+#else	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma section _main
 
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -2445,3 +2459,4 @@ static u16 sub_220B4()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+#endif //DEF_IDLE	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

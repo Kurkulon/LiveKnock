@@ -122,7 +122,7 @@ extern "C" void Main_Engine_Control_Loop()
 	{
 #ifdef DEF_SIMULATION
 
-		if (frameCount == 0x400)
+		if (frameCount == 0x100)
 		{
 			while(1);
 		};
@@ -198,7 +198,7 @@ static void Simulation()
 	for (byte i = 0; i < 8; i++)
 	{
 		if ((i & 1) == 0) { reg_PADRL ^= 0x80; reg_TSR3 |= 8; } //  PA7/TIO3D 	(86:Vehicle Speed Sensor Signal)
-		trapa(188);
+		trapa(188); // cmti0
 
 		if ((u16)(reg_TCNT2A - reg_OSBR2) < 312)
 		{
@@ -206,11 +206,11 @@ static void Simulation()
 			reg_TCNT2A = reg_OSBR2;
 			reg_PADRL ^= 1; //crank 
 			cam_sim = rotr(cam_sim); reg_PADRL = (reg_PADRL & ~4) | ((cam_sim << 2) & 4); // camshaft
-			trapa(84);
+			trapa(84); // atu02_ici0A
 
 			// atu22_CMF2G_event
 			SET(reg_TSR2B, 0x40);
-			trapa(114);
+			trapa(114); // atu22_imi2G atu22_CMF2G_event
 
 			reg_OSBR2 += ht; 
 			reg_ICR0A += ht * 16;

@@ -1,6 +1,3 @@
-//#pragma section _BC06
-#pragma section _main
-
 #include <umachine.h>
 
 #include "misc.h"
@@ -9,6 +6,28 @@
 #include "ram.h"
 #include "EnVars.h"
 #include "hwreg.h"
+
+#ifndef DEF_BC06	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#define _SysInit_sub_1BEFE			((void(*)(void))0x1BEFE)
+#define _BC06_root_sub_1BF7A		((void(*)(void))0x1BF7A)
+#define _BC06_sub_1E2D0				((void(*)(void))0x1E2D0)
+#define _BC06_sub_1D2BC				((void(*)(void))0x1D2BC)
+
+#pragma regsave(SysInit_sub_1BEFE	)			
+#pragma regsave(BC06_root_sub_1BF7A	)
+#pragma regsave(BC06_sub_1E2D0		)	
+#pragma regsave(BC06_sub_1D2BC		)	
+
+void SysInit_sub_1BEFE()		{	_SysInit_sub_1BEFE();	}						
+void BC06_root_sub_1BF7A()		{	_BC06_root_sub_1BF7A();	}		
+void BC06_sub_1E2D0()			{	_BC06_sub_1E2D0();		}		
+void BC06_sub_1D2BC()			{	_BC06_sub_1D2BC();		}		
+
+#else	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#pragma section _main
+
 
 //#undef BC06_sub_1E2D0
 
@@ -2449,3 +2468,4 @@ static bool BC06_sub_1F334()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+#endif //DEF_BC06	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
