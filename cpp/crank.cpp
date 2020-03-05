@@ -83,7 +83,7 @@ void	F500_InitManifoldVars()							{	_F500_InitManifoldVars();						}
 #define	byte_342F				((const byte*)0x342F)                                                     
 #define	byte_35B7				((const byte*)0x35B7)                                                     
 
-#define	word_98C2				(*(const u16*)0x98BA)                                                     
+#define	word_98C2				(*(const u16*)0x98C2)                                                     
 #define	word_98EA				(*(const u16*)0x98EA)                                                     
 #define	word_98EC				(*(const u16*)0x98EC)                                                     
 #define	word_98EE				(*(const u16*)0x98EE)                                                     
@@ -741,10 +741,16 @@ void CRANK75_Main_sub_232A0()
 		crankCounter -= 1;
 	};
 
-	u32 r1 = word_98BA[stroke_75] ^ camshaft_Shift;//0xB1B1, 0xC6C6, 0x1B1B, 0x6C6C
+	u16 r1 = word_98BA[stroke_75] ^ camshaft_Shift;//0xB1B1, 0xC6C6, 0x1B1B, 0x6C6C
+
+	(*(u16*)0xFFFF8F36) = r1;
+
+	CLR(camShaftFlags, 0x700);
 
 	if (crankCounter < 4)
 	{
+		SET(camShaftFlags, 0x400);
+
 		CLR(camShaftFlags, CAM_SYNCHRO);
 		camSyncCrankCounter = 2;
 	}
@@ -752,6 +758,8 @@ void CRANK75_Main_sub_232A0()
 	{
 		if (word_98C2/*3*/ & r1)
 		{
+			SET(camShaftFlags, 0x200);
+
 			if (camSyncCrankCounter != 0)
 			{
 				camSyncCrankCounter -= 1;
@@ -763,6 +771,8 @@ void CRANK75_Main_sub_232A0()
 		}
 		else 
 		{
+			SET(camShaftFlags, 0x100);
+
 			if ((r1 & 0xF) == 0)
 			{
 				SET(camShaftFlags, CAM_SYNCHRO);
@@ -2319,7 +2329,11 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 			wMUTC0_bMUT54_Acceleration_Enrichment = 0;
 			wMUTC1_bMUT55_Deceleration_Enleanment = 0;
 		}
-		else if (!PEDR_LO_Check_sub_A790() || (RPM_FLAGS & (RPM_5_REVLIM|RPM_3_FUEL_CUT)) || (FUEL_CUT_FLAG_FFFF8A5E & FCF_40))
+		else if (!PEDR_LO_Check_sub_A790())
+		{
+			wMUTC1_bMUT55_Deceleration_Enleanment = 0;
+		}
+		else if ((RPM_FLAGS & (RPM_5_REVLIM|RPM_3_FUEL_CUT)) || (FUEL_CUT_FLAG_FFFF8A5E & FCF_40))
 		{
 			wMUTC0_bMUT54_Acceleration_Enrichment = 0;
 		}
@@ -2332,7 +2346,7 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 				word_FFFF8B2A = r2;
 			};
 
-			u32 r13 = (wMUT10_Coolant_Temperature_Scaled >= word_167E/*0*/ && wMUT10_Coolant_Temperature_Scaled < word_1680/*151(111)*/ && fall_TPS_timer != 0) ? word_166A/*14*/ : ((word_FFFF855A != 0) ? word_1666/*4*/ : word_1668/*14*/);
+			u32 r13 = (wMUT10_Coolant_Temperature_Scaled >= word_167E/*0*/ && wMUT10_Coolant_Temperature_Scaled < word_1680/*151(111)*/ && rise_TPS_timer != 0) ? word_1684/*51*/ : word_FFFF8B20;
 
 			// loc_25798
 
@@ -2357,6 +2371,8 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 		}
 		else // (crank_cur_map < crank_prev_4_cycle_map)
 		{
+			// loc_25660
+
 			u32 r2 = Sub_Lim_0(crank_cur_map, crank_prev_4_cycle_map);
 
 			if (r2 >= word_FFFF8B28)
@@ -2364,7 +2380,9 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 				r2 = word_FFFF8B28;
 			};
 
-			u32 r13 = (wMUT10_Coolant_Temperature_Scaled >= word_167E/*0*/ && wMUT10_Coolant_Temperature_Scaled < word_1680/*151(111)*/ && rise_TPS_timer != 0) ? word_1684/*51*/ : word_FFFF8B20;
+			// loc_25684
+
+			u32 r13 = (wMUT10_Coolant_Temperature_Scaled >= word_167E/*0*/ && wMUT10_Coolant_Temperature_Scaled < word_1680/*151(111)*/ && fall_TPS_timer != 0) ? word_166A/*14*/ : ((word_FFFF855A != 0) ? word_1666/*4*/ : word_1668/*14*/);
 
 			// loc_256C0
 

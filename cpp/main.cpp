@@ -122,7 +122,7 @@ extern "C" void Main_Engine_Control_Loop()
 	{
 #ifdef DEF_SIMULATION
 
-		if (frameCount == 0x100)
+		if (frameCount == 25)
 		{
 			while(1);
 		};
