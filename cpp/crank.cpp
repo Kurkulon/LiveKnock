@@ -271,50 +271,6 @@ extern "C" void atu22_imi2G()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-
-//#pragma interrupt(atu22_imi2H) 
-//
-//extern "C" void atu22_imi2H()
-//{
-//	__disable_irq();
-//
-//	CLR(reg_TSR2B, 0x80);
-//
-//	__enable_irq();
-//}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-//#pragma interrupt(atu22_imi2E)
-//
-//extern "C" void atu22_imi2E()
-//{
-//	__disable_irq();
-//
-//	CLR(reg_TSR2A, 0x10);
-//
-//	__enable_irq();
-//
-//	Ign_handler(1);
-//}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-//#pragma interrupt(atu22_imi2F)
-//
-//extern "C" void atu22_imi2F()
-//{
-//	__disable_irq();
-//
-//	CLR(reg_TSR2A, 0x20);
-//
-//	__enable_irq();
-//
-//	Ign_handler(2);
-//}
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 void atu22_IMF2G_event()
 {
 	__disable_irq();
@@ -743,14 +699,8 @@ void CRANK75_Main_sub_232A0()
 
 	u16 r1 = word_98BA[stroke_75] ^ camshaft_Shift;//0xB1B1, 0xC6C6, 0x1B1B, 0x6C6C
 
-	(*(u16*)0xFFFF8F36) = r1;
-
-	CLR(camShaftFlags, 0x700);
-
 	if (crankCounter < 4)
 	{
-		SET(camShaftFlags, 0x400);
-
 		CLR(camShaftFlags, CAM_SYNCHRO);
 		camSyncCrankCounter = 2;
 	}
@@ -758,8 +708,6 @@ void CRANK75_Main_sub_232A0()
 	{
 		if (word_98C2/*3*/ & r1)
 		{
-			SET(camShaftFlags, 0x200);
-
 			if (camSyncCrankCounter != 0)
 			{
 				camSyncCrankCounter -= 1;
@@ -771,8 +719,6 @@ void CRANK75_Main_sub_232A0()
 		}
 		else 
 		{
-			SET(camShaftFlags, 0x100);
-
 			if ((r1 & 0xF) == 0)
 			{
 				SET(camShaftFlags, CAM_SYNCHRO);

@@ -122,7 +122,7 @@ extern "C" void Main_Engine_Control_Loop()
 	{
 #ifdef DEF_SIMULATION
 
-		if (frameCount == 25)
+		if (frameCount == 0x400)
 		{
 			while(1);
 		};
@@ -187,9 +187,9 @@ extern "C" void Main_Engine_Control_Loop()
 
 static void Simulation()
 {
-	SET(reg_PEDRL, 4); // PE2/A2 (71: Starter Signal	INVERTED)
+	CLR(reg_PEDRL, 4); // PE2/A2 (71: Starter Signal	INVERTED)
 
-	u32 ht = 3750000/850; // crank rpm
+	u32 ht = 3750000/400; // crank rpm
 
 	if (frameCount <= 1) { cam_sim = 0xE4E4E4E4; };
 

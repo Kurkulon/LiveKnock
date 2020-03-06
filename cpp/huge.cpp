@@ -13,6 +13,7 @@
 #include "immo.h"
 #include "com.h"
 #include "obd.h"
+#include "huge.h"
 
 
 #ifndef DEF_HUGE	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -268,51 +269,51 @@ void cmti0()
 //void Start_Coil_Charge(u16 mask)			{	_Start_Coil_Charge(mask);				}		
 
 
-void Start_Coil_Charge(u16 mask)
-{
-	__disable_irq();
-
-	if (mask & 1)
-	{
-		reg_GR2E = reg_TCNT2A + 2;
-
-		CLR(reg_TSR2A, 0x10);
-
-		reg_TIOR2C = reg_TIOR2C & 0xF8 | 1; // 0 output on GR compare-match
-
-#ifndef DEF_SIMULATION
-		while(ZRO(reg_TSR2A, 0x10)) ;
-#endif
-	};
-
-	if (mask & 2)
-	{
-		reg_GR2F = reg_TCNT2A + 2;
-
-		CLR(reg_TSR2A, 0x20);
-
-		reg_TIOR2C = reg_TIOR2C & 0x8F | 0x10; // 0 output on GR compare-match
-
-#ifndef DEF_SIMULATION
-		while(ZRO(reg_TSR2A, 0x20)) ;
-#endif
-	};
-
-	if (mask & 4)
-	{
-		reg_GR2G = reg_TCNT2A + 2;
-
-		CLR(reg_TSR2A, 0x40);
-
-		reg_TIOR2D = reg_TIOR2D & 0xF8 | 1; // 0 output on GR compare-match
-
-#ifndef DEF_SIMULATION
-		while(ZRO(reg_TSR2A, 0x40)) ;
-#endif
-	};
-
-	__enable_irq();
-}
+//void Start_Coil_Charge(u16 mask)
+//{
+//	__disable_irq();
+//
+//	if (mask & 1)
+//	{
+//		reg_GR2E = reg_TCNT2A + 2;
+//
+//		CLR(reg_TSR2A, 0x10);
+//
+//		reg_TIOR2C = reg_TIOR2C & 0xF8 | 1; // 0 output on GR compare-match
+//
+//#ifndef DEF_SIMULATION
+//		while(ZRO(reg_TSR2A, 0x10)) ;
+//#endif
+//	};
+//
+//	if (mask & 2)
+//	{
+//		reg_GR2F = reg_TCNT2A + 2;
+//
+//		CLR(reg_TSR2A, 0x20);
+//
+//		reg_TIOR2C = reg_TIOR2C & 0x8F | 0x10; // 0 output on GR compare-match
+//
+//#ifndef DEF_SIMULATION
+//		while(ZRO(reg_TSR2A, 0x20)) ;
+//#endif
+//	};
+//
+//	if (mask & 4)
+//	{
+//		reg_GR2G = reg_TCNT2A + 2;
+//
+//		CLR(reg_TSR2A, 0x40);
+//
+//		reg_TIOR2D = reg_TIOR2D & 0xF8 | 1; // 0 output on GR compare-match
+//
+//#ifndef DEF_SIMULATION
+//		while(ZRO(reg_TSR2A, 0x40)) ;
+//#endif
+//	};
+//
+//	__enable_irq();
+//}
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
