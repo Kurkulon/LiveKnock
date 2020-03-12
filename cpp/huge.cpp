@@ -940,7 +940,7 @@ static void HUGE_Method_801_6_Hz()
 
 	__enable_irq();
 
-	if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x8000)
+	if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & FCA_15_8000)
 	{
 		MUT98_sub_329C6();
 	};
@@ -1066,7 +1066,7 @@ static void Huge_400_Hz()
 	
 	COM_MUT_sub_207F0();
 
-	if (bMUTD4_BitMap5_FDA_Store_FFFF89DA & 0x2000)
+	if (bMUTD4_BitMap5_FDA_Store_FFFF89DA & FDA_13_2000)
 	{
 		sub_34664();
 	};
@@ -1086,7 +1086,7 @@ inline void Huge_200_loc_26E90()
 
 	wMUT8A_TPS_Corrected = Lim_FF(Sub_Lim_0(wMUT1B_TPS_Idle_Adder + wMUT17_TPS_ADC8bit, 0x80));
 
-	if (bMUTD2_FBA_MAF_MAP_FLAG & 8)
+	if (bMUTD2_FBA_MAF_MAP_FLAG & FBA_3_08)
 	{
 		// loc_26ECE
 
@@ -1900,7 +1900,7 @@ static void Huge_100_Hz_27C7A()
 	{
 		if (word_FFFF8B46 >= asyncAccelMinTPS_Delta && r13 < ASYNC_INJECTION_FFFF8B44 && word_FFFF8B40 < word_FFFF8B3E && ZRO(RPM_FLAGS, RPM_0_CRANKING|RPM_4_STALL))
 		{
-			if (((bMUTD2_FBA_MAF_MAP_FLAG & 8) && ZRO(NVRAM_FFFF802C, 1)) || (ZRO(bMUTD2_FBA_MAF_MAP_FLAG, 8) && ZRO(portA_state, 0x80)))
+			if (((bMUTD2_FBA_MAF_MAP_FLAG & FBA_3_08) && ZRO(NVRAM_FFFF802C, 1)) || (ZRO(bMUTD2_FBA_MAF_MAP_FLAG, FBA_3_08) && ZRO(portA_state, 0x80)))
 			{	
 				word_FFFF855C = asyncAccelPausePeriod;
 

@@ -545,7 +545,7 @@ static void FU03_sub_13CE4_hook()
 		
 	WFLAG(FUEL_CUT_FLAG_FFFF8A5E, FCF_400, (wMUTD1_BitMap_FAA & FAA_4_CLOSED_LOOP) == 0 && FU03_Check_13E4A()); //FU03_Check_13E12();
 	
-	WFLAG(FUEL_CUT_FLAG_FFFF8A5E, FCF_800, (bMUTD2_FBA_MAF_MAP_FLAG & 1) && FU03_sub_13EE6()); //FU03_Check_13EAE();
+	WFLAG(FUEL_CUT_FLAG_FFFF8A5E, FCF_800, (bMUTD2_FBA_MAF_MAP_FLAG & FBA_0_01) && FU03_sub_13EE6()); //FU03_Check_13EAE();
 
 	FU03_Coolant_Air_Calcs_sub_14088(/*ENGINE_MAIN_VARIABLES_DIM_off_9198*/);
 
@@ -640,7 +640,7 @@ static bool FU03_Check_13E4A()
 
 static void FU03_Check_13EAE()
 {
-	WFLAG(FUEL_CUT_FLAG_FFFF8A5E, FCF_800, (bMUTD2_FBA_MAF_MAP_FLAG & 1) && FU03_sub_13EE6());
+	WFLAG(FUEL_CUT_FLAG_FFFF8A5E, FCF_800, (bMUTD2_FBA_MAF_MAP_FLAG & FBA_0_01) && FU03_sub_13EE6());
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -785,7 +785,7 @@ static void FU03_HI_LO_Octan()
 
 static u16 FU03_sub_142DC()
 {
-	return ((wMUTD0_BitMap1 & 0x11) == 0 && (wMUT18_Open_Loop_Bit_Array & MUT18_1_02)) ? ECU_Load_x2_FFFF8962 : ECU_Load_x2_FFFF895C;
+	return ((wMUTD0_BitMap1 & (F9A_4_10|F9A_0_01)) == 0 && (wMUT18_Open_Loop_Bit_Array & MUT18_1_02)) ? ECU_Load_x2_FFFF8962 : ECU_Load_x2_FFFF895C;
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -950,7 +950,7 @@ static void FU03_VE_map_sub_14620_stock()
 
 	Table_Lookup_Axis(LOAD11_6D1E);
 
-	if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x200) && EGRONOFF_103D == 0);
+	if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & FCA_9_200) && EGRONOFF_103D == 0);
 
 	Map3D_B *p;
 
@@ -1081,7 +1081,7 @@ static void FU03_Fuel_Knock_Reaction(/*EnVars* ev*/)
 
 		// loc_14894
 
-		if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 8/*P0132, P0136 O2 Sensor Circuit*/) && (word_FFFF9296 & 0x200) && afr < word_1F44/*147(12.8)*/)
+		if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & FCA_3_08/*P0132, P0136 O2 Sensor Circuit*/) && (word_FFFF9296 & 0x200) && afr < word_1F44/*147(12.8)*/)
 		{
 			afr = word_1F44/*147(12.8)*/;	
 		};
@@ -1502,15 +1502,15 @@ static void FU03_sub_Oxygen_Feedback_Trim_stock(/*EnVars* ev*/)
 
 			r13 = (r0 >= r2) ? r2 : r0;
 		}
-		else if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 4) && r3 == 3)
+		else if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & FCA_2_04) && r3 == 3)
 		{
 			r13 = word_FFFF92A2;
 		}
-		else if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 4) && r3 >= 3  && r3 <= 12)
+		else if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & FCA_2_04) && r3 >= 3  && r3 <= 12)
 		{
 			r13 = word_FFFF929E;
 		}
-		else if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 1)
+		else if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & FCA_0_01)
 		{
 			if (((wMUT1E_MAF_RESET_FLAG & DECELERATION_FUEL_CUT) || (wMUT19_Startup_Check_Bits & 0x80) == 0) && ((word_FFFF928E & 0x1000) || word_FFFF86FA != 0))
 			{
@@ -1523,7 +1523,7 @@ static void FU03_sub_Oxygen_Feedback_Trim_stock(/*EnVars* ev*/)
 		}
 		else
 		{
-			if ((wMUTD0_BitMap1 & 1) == 0 || (wMUT19_Startup_Check_Bits & 0x80))
+			if ((wMUTD0_BitMap1 & F9A_0_01) == 0 || (wMUT19_Startup_Check_Bits & 0x80))
 			{
 				r13 = 0x8080;
 			}
@@ -1632,15 +1632,15 @@ static void FU03_sub_Oxygen_Feedback_Trim(/*EnVars* ev*/)
 
 			r13 = (r0 >= r2) ? r2 : r0;
 		}
-		else if ((*FCA & 4) && r3 == 3)
+		else if ((*FCA & FCA_2_04) && r3 == 3)
 		{
 			r13 = word_FFFF92A2;
 		}
-		else if ((*FCA & 4) && r3 >= 3  && r3 <= 12)
+		else if ((*FCA & FCA_2_04) && r3 >= 3  && r3 <= 12)
 		{
 			r13 = word_FFFF929E;
 		}
-		else if (*FCA & 1)
+		else if (*FCA & FCA_0_01)
 		{
 			if (((*MUT1E & DECELERATION_FUEL_CUT) || (wMUT19_Startup_Check_Bits & 0x80) == 0) && ((word_FFFF928E & 0x1000) || word_FFFF86FA != 0))
 			{
@@ -1653,7 +1653,7 @@ static void FU03_sub_Oxygen_Feedback_Trim(/*EnVars* ev*/)
 		}
 		else
 		{
-			if ((wMUTD0_BitMap1 & 1) == 0 || (wMUT19_Startup_Check_Bits & 0x80))
+			if ((wMUTD0_BitMap1 & F9A_0_01) == 0 || (wMUT19_Startup_Check_Bits & 0x80))
 			{
 				r13 = 0x8080;
 			}
@@ -1685,7 +1685,7 @@ static u16 FU03_sub_1525A(/*EnVars* ev*/)
 	else if (wMUT10_Coolant_Temperature_Scaled <= Closed_Loop_Min_Engine_Temp 
 			|| (wMUT18_Open_Loop_Bit_Array & MUT18_12_1000) 
 			|| (wMUT18_Open_Loop_Bit_Array & MUT18_15_8000)
-			|| ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 1) && word_FFFF8828 != 0)
+			|| ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & FCA_0_01) && word_FFFF8828 != 0)
 			|| (word_FFFF9296 & 0xF2))
 	{
 		r13 = 4;
@@ -1717,7 +1717,7 @@ static void FU03_sub_15300(/*Vars *v*/)
 {
 //	const u32 r7 = 0x200;
 
-	u32 r6 = bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 4;
+	u32 r6 = bMUTD3_BitMap4_FCA_Store_FFFF89D8 & FCA_2_04;
 
 	u32 r3 = bMUTBC;
 

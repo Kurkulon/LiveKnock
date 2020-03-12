@@ -6,6 +6,7 @@
 #include "ram.h"
 #include "EnVars.h"
 #include "hwreg.h"
+#include "BC06.h"
 
 #ifndef DEF_BC06	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -313,7 +314,7 @@ void BC06_root_sub_1BF7A()
 	BC06_sub_1E5B0();
 	BC06_sub_1EB0C();
 
-	if(bMUTD2_FBA_MAF_MAP_FLAG & 0x40)
+	if(bMUTD2_FBA_MAF_MAP_FLAG & FBA_6_40)
 	{
 		BC06_sub_1D49E();
 	};
@@ -543,7 +544,7 @@ static void BC06_sub_1C68A()
 		word_FFFF8600 = word_1DA0;
 	};
 
-	if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x2000)
+	if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & FCA_13_2000)
 	{
 		WFLAG(Bitmap_Store_I_FFFF8CFE, 0x20, (Bitmap_Store_I_FFFF8CFE & 0x40));
 
@@ -673,7 +674,7 @@ static u16 BC06_sub_1CB66()
 static void BC06_sub_1CB88()
 {
 	u32 r1 = wMUTA5_Port_B_Data_Register_Low;
-	u32 r2 = 0x2000;
+	u32 r2 = FCA_13_2000;
 
 	u32 r13;
 
@@ -873,7 +874,7 @@ static u16 BC06_sub_1CED4()
 		r1 = Mul_Div_R(r1, wMUTA5_Port_B_Data_Register_Low, 255);
 	};
 
-	if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x2000) && (word_FFFF80E6 & 0x300) && (Bitmap_Store_H_FFFF92BE & 0x30))
+	if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & FCA_13_2000) && (word_FFFF80E6 & 0x300) && (Bitmap_Store_H_FFFF92BE & 0x30))
 	{
 		r1 = Mul_Div_R((word_FFFF80E6 & 0x100) ? word_21BA/*120*/ : word_21C4/*120*/, wMUTA5_Port_B_Data_Register_Low, 255);
 	};
@@ -885,8 +886,8 @@ static u16 BC06_sub_1CED4()
 
 static u16 BC06_sub_1D178(u16 v)
 {
-	if (((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 4) && (Bitmap_Store_H_FFFF92BE & 8))
-		|| ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x80) && (Bitmap_Store_H_FFFF92BE & 4)))
+	if (((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & FCA_2_04) && (Bitmap_Store_H_FFFF92BE & 8))
+		|| ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & FCA_7_80) && (Bitmap_Store_H_FFFF92BE & 4)))
 	{
 		v = 0;
 	};
@@ -1483,7 +1484,7 @@ static u16 BC06_TERMOFANDUTY_sub_1DF8A()
 
 	// loc_1E050
 
-	byte *p = (bMUTD2_FBA_MAF_MAP_FLAG & 0x20) ? TERMFAN_8B34[r13] : TERMFAN_8B04[r13];
+	byte *p = (bMUTD2_FBA_MAF_MAP_FLAG & FBA_5_20) ? TERMFAN_8B34[r13] : TERMFAN_8B04[r13];
 
 	return p[word_FFFF8D66];
 }
@@ -1721,15 +1722,15 @@ static void BC06_sub_1E42C()
 
 	r13 = word_1AFA | word_1AFC;
 
-	if (wMUTD0_BitMap1 & 0xC)
+	if (wMUTD0_BitMap1 & (F9A_2_04|F9A_3_08))
 	{
 		SET(r13, 2);
 	}
-	else if (wMUTD0_BitMap1 & 2)
+	else if (wMUTD0_BitMap1 & F9A_1_02)
 	{
 		SET(r13, 1);
 	}
-	else if (ZRO(wMUTD0_BitMap1, 1) || (wMUTD0_BitMap1 & 0x20))
+	else if (ZRO(wMUTD0_BitMap1, F9A_0_01) || (wMUTD0_BitMap1 & F9A_5_20))
 	{
 		SET(r13, 3);
 	};
@@ -1745,7 +1746,7 @@ static void BC06_sub_1E42C()
 		r13 = 0xC0;
 	};
 
-	if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 1) && (wMUT10_Coolant_Temperature_Scaled >= word_1F52 || (wMUT71_Sensor_Error & MUT71_0_COOLANT)))
+	if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & FCA_0_01) && (wMUT10_Coolant_Temperature_Scaled >= word_1F52 || (wMUT71_Sensor_Error & MUT71_0_COOLANT)))
 	{
 		SET(r13, 4);
 	};

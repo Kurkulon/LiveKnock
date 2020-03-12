@@ -2641,7 +2641,7 @@ static void CRANK_MAF_MAP_Calcs_sub_250F8(u16 v1, u16 v2)
 
 		wMUT2A_Injector_Pulse_Width_us = Mul_Lim_FFFF(ipw, 8);
 
-		if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 4) && (word_FFFF929A == 6 || word_FFFF929A == 9))
+		if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & FCA_2_04) && (word_FFFF929A == 6 || word_FFFF929A == 9))
 		{
 			// loc_25E82
 
@@ -2839,7 +2839,7 @@ void StartInjectAsync(u16 v, u16 mask)
 
 	r13 &= injectors_mask_FFFF8C72;
 
-	if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x30) // Random Misfire Detected
+	if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & (FCA_4_10|FCA_5_20)) // Random Misfire Detected
 	{
 		r13 &= injectors_misfire_mask;
 	};
@@ -2862,7 +2862,7 @@ void StartInjectSync(u16 v, u16 mask)
 
 	r13 &= injectors_mask_FFFF8C72;
 
-	if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x30) // Random Misfire Detected
+	if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & (FCA_4_10|FCA_5_20)) // Random Misfire Detected
 	{
 		r13 &= injectors_misfire_mask;
 	};

@@ -60,7 +60,7 @@ static void Misfire_CRANK75_sub_2B168()
 		return;
 	};
 
-	if (r13 == 0xFF || r13 == 0 || (flags_FFFF8FFC & 8) || ZRO(misfire_word_FFFF8F7C, 0x10) || ZRO(bMUTD3_BitMap4_FCA_Store_FFFF89D8, 0x20))
+	if (r13 == 0xFF || r13 == 0 || (flags_FFFF8FFC & 8) || ZRO(misfire_word_FFFF8F7C, 0x10) || ZRO(bMUTD3_BitMap4_FCA_Store_FFFF89D8, FCA_5_20))
 	{
 		return;
 	};

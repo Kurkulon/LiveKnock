@@ -229,6 +229,27 @@ struct Map3D_W
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+// F9A
+
+#define F9A_0_01 					0x01 
+#define F9A_1_02					0x02
+#define F9A_2_04					0x04
+#define F9A_3_08					0x08
+#define F9A_4_10					0x10
+#define F9A_5_20					0x20
+#define F9A_6_40					0x40
+#define F9A_7_80					0x80
+#define F9A_8_100					0x100
+#define F9A_9_200					0x200
+#define F9A_10_400					0x400
+#define F9A_11_800					0x800
+#define F9A_12_1000					0x1000
+#define F9A_13_2000					0x2000
+#define F9A_14_4000					0x4000
+#define F9A_15_8000					0x8000
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 // wMUTD1_BitMap_FAA
 
 #define FAA_0_01 					0x01 
@@ -247,6 +268,90 @@ struct Map3D_W
 #define FAA_13_2000					0x2000
 #define FAA_14_HEATER_O2			0x4000
 #define FAA_15_8000					0x8000
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// FBA
+
+#define FBA_0_01 					0x01	//	Lean Spool
+#define FBA_1_02					0x02	//	Unknown
+#define FBA_2_04					0x04	//	Unknown
+#define FBA_3_08					0x08	//	AYC/ACD
+#define FBA_4_10					0x10	//	Unknown
+#define FBA_5_20					0x20	//	2nd thermo fan table
+#define FBA_6_40					0x40	//	Intercooler Sprayer activation light
+#define FBA_7_80					0x80	//	Unknown
+#define FBA_8_100					0x100	//	Unknown
+#define FBA_9_200					0x200	//	Unknown
+#define FBA_10_400					0x400	//	Unknown
+#define FBA_11_800					0x800	//	Unknown
+#define FBA_12_1000					0x1000	//	Unknown
+#define FBA_13_2000					0x2000	//	Unknown
+#define FBA_14_4000					0x4000	//	Unknown
+#define FBA_15_8000					0x8000	//	Unknown
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// FCA
+
+#define FCA_0_01 					0x01	//	Unknown
+#define FCA_1_02					0x02	//	P0421 not in FSM. Warm Up Catalyst Efficiency Below Threshold (Bank 1)
+#define FCA_2_04					0x04	//	P0133, P0159 O2 Sensor Circuit Slow Response
+#define FCA_3_08					0x08	//	P0132, P0136 O2 Sensor Circuit
+#define FCA_4_10					0x10	//	P0300 Random Misfire Detected - Set bit.4 and bit.5 to 0 to disable
+#define FCA_5_20					0x20	//	P0300 Random Misfire Detected - Set bit.4 and bit.5 to 0 to disable
+#define FCA_6_40					0x40	//	P0134 Front O2 (P0134 02 Sensor Circuit No Activity Detected (Bank I Sensor 1))
+#define FCA_7_80					0x80	//	Unknown OBD_sub_2DB58
+#define FCA_8_100					0x100	//	P0506, P0507 Idle Test
+#define FCA_9_200					0x200	//	P0401 EGR Flow Insufficient Detected
+#define FCA_10_400					0x400	//	P1400 MAP Sensor
+#define FCA_11_800					0x800	//	P0031, P0032, P0037, P0038 0x800 - front/rear O2 heater check enabled
+#define FCA_12_1000					0x1000	//	Unknown
+#define FCA_13_2000					0x2000	//	P0441, P0442 Evap
+#define FCA_14_4000					0x4000	//	P0450, P0451, P0452, P0453 Evap
+#define FCA_15_8000					0x8000	//	P0443, P0446, P0403, P0243, P0090, P2263
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// FDA
+
+#define FDA_0_01 					0x01	//	P1715, P1750, etc	
+#define FDA_1_02					0x02	//	P0510 not in FSM. Closed Throttle Position Switch Malfunction
+#define FDA_2_04					0x04	//	P0234, P0243, P2263 Turbocharger
+#define FDA_3_08					0x08	//	Unknown
+#define FDA_4_10					0x10	//	EGR unknow test
+#define FDA_5_20					0x20	//	EVAP unknow test
+#define FDA_6_40					0x40	//	Unknown
+#define FDA_7_80					0x80	//	Unknown - OBD_sub_32E70
+#define FDA_8_100					0x100	//	Unknown
+#define FDA_9_200					0x200	//	0x200 - OBD enabled
+#define FDA_10_400					0x400	//	Unknown
+#define FDA_11_800					0x800	//	Unknown
+#define FDA_12_1000					0x1000	//	Unknown
+#define FDA_13_2000					0x2000	//	Unknown
+#define FDA_14_4000					0x4000	//	Unknown - OBD_sub_32F90
+#define FDA_15_8000					0x8000	//	Unknown
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// FEA
+
+#define FEA_0_01 					0x01	//	Unknown	
+#define FEA_1_02					0x02	//	Unknown
+#define FEA_2_04					0x04	//	Unknown
+#define FEA_3_08					0x08	//	Unknown
+#define FEA_4_10					0x10	//	Unknown
+#define FEA_5_20					0x20	//	Unknown
+#define FEA_6_40					0x40	//	Unknown
+#define FEA_7_80					0x80	//	P0090 Fuel Pressure Circuit
+#define FEA_8_100					0x100	//	P0830 Clutch Pedal Circuit
+#define FEA_9_200					0x200	//	Unknown
+#define FEA_10_400					0x400	//	Unknown
+#define FEA_11_800					0x800	//	P1530 A/C1 Switch
+#define FEA_12_1000					0x1000	//	P0554 PS Press Sens
+#define FEA_13_2000					0x2000	//	P0111 IAT Circuit
+#define FEA_14_4000					0x4000	//	P0069 MAP vs Baro. Map / Baro Test
+#define FEA_15_8000					0x8000	//	P0140 Rear O2 No Act
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -449,7 +554,7 @@ struct Map3D_W
 #define M23_80					0x80
 #define M23_100					0x100
 #define M23_200					0x200
-#define M23_400					0x400
+#define M23_SPEED_7kmh					0x400
 #define M23_800					0x800
 #define M23_1000				0x1000
 #define M23_2000				0x2000

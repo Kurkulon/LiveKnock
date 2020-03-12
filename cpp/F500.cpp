@@ -387,7 +387,7 @@ void F500_Init_BitMap_Flags_New()
 
 	WFLAG(wMUTD1_BitMap_FAA, FAA_7_HIGH_IGN, no_knock_retard == 0); 
 
-	CLR(bMUTD3_BitMap4_FCA_Store_FFFF89D8, 0x808); // Disable Front/Rear O2 heater check: clear bit 11 address 0xFCA 
+	CLR(bMUTD3_BitMap4_FCA_Store_FFFF89D8, (FCA_11_800|FCA_3_08)); // Disable Front/Rear O2 heater check: clear bit 11 address 0xFCA 
 }
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -425,47 +425,47 @@ static void F500_Init_Load_ECU_Info_And_BitMap_Flags()
 
 		if (Enable_O2_Frequency_Ratio_Check == 0)
 		{
-			CLR(r1, 2);
+			CLR(r1, FCA_1_02);
 		};
 
 		if (Enable_O2_Slow_Response_Check == 0)
 		{
-			CLR(r1, 4);
+			CLR(r1, FCA_2_04);
 		};
 
 		if (byte_101F == 0)
 		{
-			CLR(r1, 0x10);
+			CLR(r1, FCA_4_10);
 		};
 
 		if (byte_1020 == 0)
 		{
-			CLR(r1, 0x20);
+			CLR(r1, FCA_5_20);
 		};
 
 		if (Enable_O2_Voltage_Check == 0)
 		{
-			CLR(r1, 0x40);
+			CLR(r1, FCA_6_40);
 		};
 
 		if (Enable_AFR_Check == 0)
 		{
-			CLR(r1, 0x80);
+			CLR(r1, FCA_7_80);
 		};
 
 		if (Enable_Idle_Control_Check == 0)
 		{
-			CLR(r1, 0x100);
+			CLR(r1, FCA_8_100);
 		};
 
 		if (Enable_Intake_EGR_MAP_Check == 0)
 		{
-			CLR(r1, 0x600);
+			CLR(r1, FCA_9_200|FCA_10_400);
 		};
 
 		if (Enable_Evaporative_Checks == 0)
 		{
-			CLR(r1, 0x6000);
+			CLR(r1, FCA_13_2000|FCA_14_4000);
 		};
 
 		bMUTD3_BitMap4_FCA_Store_FFFF89D8 = r1;
@@ -623,7 +623,7 @@ static void F500_sub_F834()
 		};
 	};
 
-	if ((bMUTD2_FBA_MAF_MAP_FLAG & 0x10) == 0 && ((rtf & AC_SWITCH) == 0 || byte_102E/*2*/ == 0))
+	if ((bMUTD2_FBA_MAF_MAP_FLAG & FBA_4_10) == 0 && ((rtf & AC_SWITCH) == 0 || byte_102E/*2*/ == 0))
 	{
 		CLR(rtf, RT_0_bit);
 		CLR(r2, 0x100);
@@ -653,7 +653,7 @@ static void F500_sub_F834()
 		SET(rtf, RACING);
 	};
 
-	if (bMUTD2_FBA_MAF_MAP_FLAG & 8) // AYC/ACD
+	if (bMUTD2_FBA_MAF_MAP_FLAG & FBA_3_08) // AYC/ACD
 	{
 		if ((wMUT40_Stored_Faults_Lo & 8) || (wMUT44_Stored_Faults_Lo_2 & 0xEF)) {};
 
@@ -768,7 +768,7 @@ void F500_sub_FDF4()
 	F500_TPS_sub_103DA();
 	F500_sub_1044C();
 
-	if ((bMUTD2_FBA_MAF_MAP_FLAG & 0x40) || (bMUTD4_BitMap5_FDA_Store_FFFF89DA & 0x800))
+	if ((bMUTD2_FBA_MAF_MAP_FLAG & FBA_6_40) || (bMUTD4_BitMap5_FDA_Store_FFFF89DA & FDA_11_800))
 	{
 		F500_Battery_Calcs_sub_1101A();
 	};
@@ -922,7 +922,7 @@ void F500_sub_10220()
 
 void F500_O22_Manipulations_sub_1023C(/*EnVars* ev*/)
 {
-	if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 8) == 0 || (word_FFFF9296 & 4) == 0)
+	if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & FCA_3_08) == 0 || (word_FFFF9296 & 4) == 0)
 	{
 		O2_SECONDARY_SENSOR_VOLTAGE_SHLL8_CLIPPED_FFFF88D0 = Interpolate_256(O2_SECONDARY_SENSOR_VOLTAGE_SHLL8_CLIPPED_FFFF88D0, wMUT3C_Rear_O2_ADC8bit << 8, t1_unk_16FE/*250*/);
 
@@ -936,7 +936,7 @@ void F500_TPS_Load_RPM_Calcs()
 {
 	u32 TPS = wMUT17_TPS_ADC8bit;
 
-	if (bMUTD2_FBA_MAF_MAP_FLAG & 8)
+	if (bMUTD2_FBA_MAF_MAP_FLAG & FBA_3_08)
 	{
 		bool c =		(wMUT1E_MAF_RESET_FLAG & (CRANKING|STALL)) 
 					||	(wMUT71_Sensor_Error & MUT71_3_MAP) 
@@ -1025,7 +1025,7 @@ void F500_sub_1044C()
 		};
 	};
 
-	if (bMUTD2_FBA_MAF_MAP_FLAG & 8)
+	if (bMUTD2_FBA_MAF_MAP_FLAG & FBA_3_08)
 	{
 		r1 = Sub_Lim_0(161, (u32)TPS_NVRAM_FFFF802A >> 2);
 

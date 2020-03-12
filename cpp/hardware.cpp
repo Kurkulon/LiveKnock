@@ -964,7 +964,7 @@ void UpdateOutputAsync()
 		__enable_irq();
 	};
 
-	if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 8)
+	if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & FCA_3_08)
 	{
 		__disable_irq();
 
@@ -982,7 +982,7 @@ void UpdateOutputAsync()
 		__enable_irq();
 	};
 
-	if (bMUTD2_FBA_MAF_MAP_FLAG & 0x40)
+	if (bMUTD2_FBA_MAF_MAP_FLAG & FBA_6_40)
 	{
 		__disable_irq();
 
@@ -1041,7 +1041,7 @@ void UpdateOutputSync()
 		__enable_irq();
 	};
 
-	if (bMUTD2_FBA_MAF_MAP_FLAG & 8)
+	if (bMUTD2_FBA_MAF_MAP_FLAG & FBA_3_08)
 	{
 		__disable_irq();
 

@@ -10,6 +10,7 @@
 #include "ram.h"
 #include "EnVars.h"
 #include "hardware.h"
+#include "ML02.h"
 
 
 #ifndef DEF_ML02	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -720,7 +721,7 @@ static void ML02_sub_11E14()
 {
 	TRG(ZERO_8_IGNITION_FLAGS, 1, wMUT2F_Vehicle_Speed, word_1754/*70(140)*/, word_1752/*75(150)*/);
 
-	if ((bMUTD2_FBA_MAF_MAP_FLAG & 2) && (ZERO_8_IGNITION_FLAGS & 1) && MUT21_RPM_x125div4 > word_1756/*112(3500)*/)
+	if ((bMUTD2_FBA_MAF_MAP_FLAG & FBA_1_02) && (ZERO_8_IGNITION_FLAGS & 1) && MUT21_RPM_x125div4 > word_1756/*112(3500)*/)
 	{
 		SET(ZERO_8_IGNITION_FLAGS, 2);
 	}
@@ -880,7 +881,7 @@ static void ML02_sub_12180()
 		r1 |= FUEL_CUT|DECELERATION_FUEL_CUT;
 	};
 
-	if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 0x2000) && (word_FFFF80E6 & 0x300))
+	if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & FCA_13_2000) && (word_FFFF80E6 & 0x300))
 	{
 		CLR(r1, MUT1E_9_bit|MUT1E_8_bit|FUEL_CUT|DECELERATION_FUEL_CUT);
 	};
@@ -1078,13 +1079,13 @@ static void ML02_O2_Heater_Tests()
 
 	if (prev_MUT1E_FLAGS & CRANKING)
 	{
-		word_FFFF8828 = word_FFFF882A = ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 1) && wMUT10_Coolant_Temperature_Scaled > word_1EC2/*60*/) ? Mul_Lim_FFFF(2, Table_Lookup_byte_2D_3D(STFUELTRIM1_41D4)) : 0;
+		word_FFFF8828 = word_FFFF882A = ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & FCA_0_01) && wMUT10_Coolant_Temperature_Scaled > word_1EC2/*60*/) ? Mul_Lim_FFFF(2, Table_Lookup_byte_2D_3D(STFUELTRIM1_41D4)) : 0;
 
 		// loc_127D6
 
 		timer_FFFF8792 = Mul_Lim_FFFF(2, Table_Lookup_byte_2D_3D(STFUELTRIM_3356)); 
 	}
-	else if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 1) && cranking_end_timer_up >= t1_off_1592/*1*/*20)
+	else if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & FCA_0_01) && cranking_end_timer_up >= t1_off_1592/*1*/*20)
 	{
 		if (wMUT13_Front_O2_ADC8bit > t1_Primary_O2_Voltage_Check1_1EC0/*26*/)
 		{
@@ -1114,7 +1115,7 @@ static void ML02_Open_andor_Closed_Loop_Fuel_Calcs()
 {
 	u32 load = ECU_Load_1;//wMUT1C_ECU_Load;
 
-	if (ZRO(wMUTD0_BitMap1, 1) && wMUT15_Barometric_Pressure >= Closed_Loop_Minimal_Pressure_Const)
+	if (ZRO(wMUTD0_BitMap1, F9A_0_01) && wMUT15_Barometric_Pressure >= Closed_Loop_Minimal_Pressure_Const)
 	{
 		load = ECU_Load_1;
 	};
@@ -1489,7 +1490,7 @@ static void ML02_sub_12D9C(/*EnVars* ev*/)
 		word_FFFF8714 = word_2902/*20*/;
 	};
 
-	if (ZRO(prev_MUT1E_FLAGS, STALL) && (((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 8) && (word_FFFF9296 & 4)) || cranking_end_timer_up <= (t1_off_1592*20)))
+	if (ZRO(prev_MUT1E_FLAGS, STALL) && (((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & FCA_3_08) && (word_FFFF9296 & 4)) || cranking_end_timer_up <= (t1_off_1592*20)))
 	{
 		CLR(r2, MUT18_13_2000);
 
@@ -1673,12 +1674,12 @@ static bool ML02_sub_130BC(/*EnVars* ev*/)
 		return false;
 	};
 
-	if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 1) && word_FFFF8828 != 0)
+	if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & FCA_0_01) && word_FFFF8828 != 0)
 	{
 		return false;
 	};
 
-	if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 1) && (word_FFFF9296 & 0xF2))
+	if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & FCA_0_01) && (word_FFFF9296 & 0xF2))
 	{
 		return false;
 	};
@@ -1912,7 +1913,7 @@ static void ML02_sub_133BC()
 
 static bool ML02_sub_1359C(/*EnVars* ev*/)
 {
-	bool r13 = word_FFFF86AC == 0 && (word_FFFF928E & 2) && (ZRO(bMUTD3_BitMap4_FCA_Store_FFFF89D8, 0xC) || ZRO(word_FFFF9296, 0xC));
+	bool r13 = word_FFFF86AC == 0 && (word_FFFF928E & 2) && (ZRO(bMUTD3_BitMap4_FCA_Store_FFFF89D8, FCA_2_04|FCA_3_08) || ZRO(word_FFFF9296, 0xC));
 
 	WFLAG(wMUT5E_FUEL_CUT_FLAG, 0x20, r13);
 
@@ -1923,7 +1924,7 @@ static bool ML02_sub_1359C(/*EnVars* ev*/)
 
 static bool ML02_sub_13602()
 {
-	return (ZRO(bMUTD3_BitMap4_FCA_Store_FFFF89D8, 0xC) || ZRO(word_FFFF9296, 0xC)) 
+	return (ZRO(bMUTD3_BitMap4_FCA_Store_FFFF89D8, FCA_2_04|FCA_3_08) || ZRO(word_FFFF9296, 0xC)) 
 		&& word_FFFF86AC == 0 
 		&& timer_FFFF8796 == 0 
 		&& (word_FFFF928E & 2) 

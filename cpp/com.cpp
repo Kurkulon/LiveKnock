@@ -8,6 +8,7 @@
 #include "ram.h"
 #include "EnVars.h"
 #include "hwreg.h"
+#include "com.h"
 
 #ifndef DEF_COM	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -386,7 +387,7 @@ extern "C" void sub_206A4()
 	{
 		r13 = 0;
 	}
-	else if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & 1) && (r1 & 0x4000))
+	else if ((bMUTD3_BitMap4_FCA_Store_FFFF89D8 & FCA_0_01) && (r1 & 0x4000))
 	{
 		r13 = 0x40;
 	}
