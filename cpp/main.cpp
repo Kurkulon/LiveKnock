@@ -4,7 +4,7 @@
 
 #pragma section _main
 
-#include <umachine.h>
+#include <machine.h>
 
 //#include "ext_ram_vars.h" 
 
@@ -117,6 +117,7 @@ extern "C" void Main_Engine_Control_Loop()
 	System_Setup();
 
     Set_Intterupt_Mask(0);
+	//set_imask(0);
 
 	while(1)
 	{

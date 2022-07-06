@@ -1,6 +1,7 @@
 #ifndef MISC_H__26_04_2016__22_59
 #define MISC_H__26_04_2016__22_59
 
+#include <machine.h>
 #include "types.h"
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -644,6 +645,10 @@ struct Map3D_W
 //#define __enable_irq									((void(*)(void))0x41e)
 extern "C" void __disable_irq();
 extern "C" void __enable_irq();			
+
+inline i32	__push_irq() { i32 im = get_cr(); set_cr(im|0xF0); return im; }
+inline void	__pop_irq(i32 im) { set_cr(im); }
+
 //#define F500_Init_Load_ECU_Info_And_BitMap_Flags		((void(*)(void))0xF58C)
 
 //#define Timer_Counter_Related_sub_C928					((void(*)(void))0xC928)
@@ -816,9 +821,7 @@ struct TM32
 #define ZRO(v, m) (((v) & (m)) == 0)
 #define AND(v, m) (((v) & (m)) == (m))
 
-
 #define WBIT(v, m, c) { v &= ~(m); if (c) v |= m; }
-
 
 #define INCLIM(v) { if ((v) < 0xFFFF) {v += 1;}; }
 #define DECLIM(v) { u16 t = v; if (t != 0) { v = t - 1; }; }

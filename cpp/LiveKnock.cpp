@@ -1,4 +1,4 @@
-//#include <umachine.h>
+#include <machine.h>
 
 #include "ram.h"
 #include "misc.h"
@@ -61,17 +61,19 @@ extern "C" void LiveKnock()
 	{
 		__DEADloc = 0xDEAD;
 
-		hiIgnMapIndex = 15;	
+		hiIgnMapIndex = 0;	
 		hiFuelMapIndex = 0;	
-		veMapIndex = 7;	
+		veMapIndex = 0;	
 
 		fixAFR = false;
-		openLoop = true;
-		forcedIdleRPM = 0;
+		openLoop = false;
+		forcedIdleRPM = 112;
 		no_knock_retard = 0;
 
-		knock_mul_high = t1_knock_control__17CC;
-		knock_mul_low = t1_knock_control__17CE;
+		knock_mul_high = 8;//t1_knock_control__17CC;
+		knock_mul_low = 4;//t1_knock_control__17CE;
+
+		wMUT27_Octane_Number = 255;
 	};
 
 	//if (openLoop)
@@ -94,44 +96,34 @@ extern "C" void LiveKnock()
 
 	//CLR(bMUTD3_BitMap4_FCA_Store_FFFF89D8, 0x808); // Disable Front/Rear O2 heater check: clear bit 11 address 0xFCA 
 
-	//__enable_irq();
-
+	__enable_irq();
 	
 	frameCount += 1;
 
-
-
 	if ((wMUT1E_MAF_RESET_FLAG & (STALL|CRANKING)) == 0)
 	{
-		//u32 al = ((u32)(swapb(axis_ig_LOAD)+128)>>8);
-		//u32 ar = ((u32)(swapb(axis_ig_RPM)+128)>>8);
+		u32 al = ((u32)(swapb(axis_ig_LOAD)+128)>>8);
+		u32 ar = ((u32)(swapb(axis_ig_RPM)+128)>>8);
 
-		//if (hiIgnMapIndex == 15 && (KNOCK_FLAG_FFFF8C34 & KNOCK_RETARD_ENABLED) && ((wMUT72_Knock_Present & 1) == 0) && ar > 8 && al > 5 && wMUT17_TPS_ADC8bit >= TPS(11))
-		//{
-		//	u32 ind = ar + al*21;
+		if (hiIgnMapIndex == 15 && /*(KNOCK_FLAG_FFFF8C34 & KNOCK_RETARD_ENABLED) && ((wMUT72_Knock_Present & 1) == 0) &&*/ ar > 8 && al > 5 && wMUT17_TPS_ADC8bit >= TPS(11))
+		{
+			u32 ind = ar + al*21;
 
-		//	u16 &p = hiIgnMapRAM[ind];
+			u16 &p = hiIgnMapRAM[ind];
 
-		//	u32 timing = p;
+			u32 timing = p;
 
-		//	const u32 knock = wMUT26_Knock_Retard;
+			i32 dt = wMUT06_Timing_Advance + 2 - wMUT33_Corrected_Timing_Advance;
 
-		//	if (knock > 1)
-		//	{
-		//		const u32 loign = (loIgnMapData[ind]+20)*256;
+			const u32 loign = (loIgnMapData[ind]+20)*256;
 
-		//		timing = Sub_Lim_0(timing, knock);
+			timing += dt;
 
-		//		if (timing > loign)
-		//		{
-		//			p =  timing;
-		//		};
-		//	}
-		//	else if (knock == 0 && timing < 35*256)
-		//	{
-		//		p = timing + 1;
-		//	};
-		//};
+			if (timing > loign)
+			{
+				p = timing;
+			};
+		};
 
 		FeedBack_WBO2_O2F();
 
