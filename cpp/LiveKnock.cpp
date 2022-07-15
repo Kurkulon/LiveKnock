@@ -96,7 +96,7 @@ extern "C" void LiveKnock()
 
 	//CLR(bMUTD3_BitMap4_FCA_Store_FFFF89D8, 0x808); // Disable Front/Rear O2 heater check: clear bit 11 address 0xFCA 
 
-	__enable_irq();
+	//__enable_irq();
 	
 	frameCount += 1;
 
