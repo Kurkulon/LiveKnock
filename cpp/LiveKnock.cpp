@@ -105,7 +105,7 @@ extern "C" void LiveKnock()
 		u32 al = ((u32)(swapb(axis_ig_LOAD)+128)>>8);
 		u32 ar = ((u32)(swapb(axis_ig_RPM)+128)>>8);
 
-		if (hiIgnMapIndex == 15 && (KNOCK_FLAG_FFFF8C34 & KNOCK_RETARD_ENABLED) && ((wMUT72_Knock_Present & 1) == 0) && ar > 8 && al > 5 && wMUT17_TPS_ADC8bit >= TPS(11))
+		if ((frameCount&15) == 0 && hiIgnMapIndex == 15 && (KNOCK_FLAG_FFFF8C34 & KNOCK_RETARD_ENABLED) && ((wMUT72_Knock_Present & 1) == 0) && ar > 8 && al > 5 && wMUT17_TPS_ADC8bit >= TPS(11))
 		{
 			u32 ind = ar + al*21;
 
@@ -116,10 +116,11 @@ extern "C" void LiveKnock()
 			i32 dt = wMUT06_Timing_Advance + 2 - wMUT33_Corrected_Timing_Advance;
 
 			const u32 loign = (loIgnMapData[ind]+20)*256;
+			const u32 hiign = (hiIgnMapData[ind]+20)*256;
 
 			timing += dt;
 
-			if (timing > loign)
+			if (timing >= loign && timing <= hiign)
 			{
 				p = timing;
 			};

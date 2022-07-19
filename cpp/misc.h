@@ -789,6 +789,7 @@ struct TM32
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #define loIgnMapData						((const i8*)0x05413)
+#define hiIgnMapData						((const i8*)0x036B9)
 
 #define array_OctanNum						((const byte*)0x3AAA)
 
