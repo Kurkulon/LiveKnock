@@ -115,8 +115,8 @@ extern "C" void LiveKnock()
 
 			i32 dt = wMUT06_Timing_Advance + 2 - wMUT33_Corrected_Timing_Advance;
 
-			const u32 loign = (loIgnMapData[ind]+20)*256;
-			const u32 hiign = (hiIgnMapData[ind]+20)*256;
+			const u32 loign = hiIgnMapData[ind];
+			const u32 hiign = (hiIgnMapStockData[ind]+20)*256;
 
 			timing += dt;
 
