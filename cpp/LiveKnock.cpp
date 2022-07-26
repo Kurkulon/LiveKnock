@@ -120,10 +120,16 @@ extern "C" void LiveKnock()
 
 			timing += dt;
 
-			if (timing >= loign && timing <= hiign)
+			if (timing < loign)
 			{
-				p = timing;
+				timing = loign;
+			}
+			else if (timing > hiign)
+			{
+				timing = hiign;
 			};
+
+			p = timing;
 		};
 
 		FeedBack_WBO2_O2F();
