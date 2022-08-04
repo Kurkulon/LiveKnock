@@ -73,7 +73,7 @@ extern "C" void LiveKnock()
 		knock_mul_high = 8;//t1_knock_control__17CC;
 		knock_mul_low = 4;//t1_knock_control__17CE;
 
-		wMUT27_Octane_Number = 255;
+		wMUT27_Octane_Number = octaneNum = 255;
 	};
 
 	//if (openLoop)
