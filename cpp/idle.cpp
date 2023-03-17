@@ -746,7 +746,7 @@ static void AA05_sub_19804()
 
 	if (RT_FLAG1_FFFF8888 & AC_SWITCH)
 	{
-		if (RT_FLAG1_FFFF8888 & AC_SWITCH)
+		if (RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1)
 		{
 			r1 = word_2BD2;
 		}
@@ -757,7 +757,7 @@ static void AA05_sub_19804()
 	}
 	else
 	{
-		if (RT_FLAG1_FFFF8888 & AC_SWITCH)
+		if (RT_FLAG1_FFFF8888 & DRIVE_ALWAYS_1)
 		{
 			r1 = word_2BCE;
 		}
