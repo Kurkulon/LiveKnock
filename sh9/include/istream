@@ -1,0 +1,115 @@
+/***************************************************************************/
+/* Copyright (C) 1998 (1998 - 2010) Renesas Electronics Corporation and    */
+/* Renesas Solutions Corp. All Rights Reserved.                            */
+/***************************************************************************/
+//====================================================================
+//  File:	istream
+//  Purpose:	Definition of class istream
+//  Create:     1997.09.20 Rev. 1.0
+//====================================================================
+
+#ifndef _ISTREAM_
+#define _ISTREAM_
+
+#include <streambuf>
+
+class istream : public ios {
+public:
+	// Types (inherited from ios):
+	// typedef INT_T int_type;
+	// typedef POS_T pos_type;
+	// typedef OFF_T off_type;
+
+	istream(streambuf *sb)
+		:chcount(0),ios(sb){}		// Constructor
+	virtual	~istream(){}			// Destructor
+	class sentry;				// Prefix/Suffix
+
+	// Formatted input
+	istream& operator >>(istream& (*pf)(istream&)){
+		return	((*pf)(*this)); }
+	istream& operator >>(ios& (*pf)(ios&)){
+		(*pf)(* (ios *)this); return (*this); }
+	istream& operator>> (ios_base& (*pf)(ios_base&)){
+		(*pf)(* (ios*)this); return (*this); }
+	istream & operator >>(bool &n);
+	istream & operator >>(short &n);
+	istream & operator >>(unsigned short &n);
+	istream & operator >>(int &n);
+	istream & operator >>(unsigned  int &n);
+	istream & operator >>(long &n);
+	istream & operator >>(long long &n);
+	istream & operator >>(unsigned long &n);
+	istream & operator >>(unsigned long long &n);
+	istream & operator >>(float &f);
+	istream & operator >>(double &f);
+	istream & operator >>(long double &f);
+	istream & operator >>(void * &p);
+	istream & operator >>(streambuf *sb);
+
+	// Unformatted input
+	streamsize gcount() const{return chcount;}
+	int_type get();
+	istream & get( char& c );
+	istream & get( signed char& c );
+	istream & get( unsigned char& c );
+	istream & get( char* s, streamsize n);
+	istream & get( char* s, streamsize n, char delim );
+	istream & get( signed char* s, streamsize n);
+	istream & get( signed char* s, streamsize n, char delim );
+	istream & get( unsigned char* s, streamsize n);	
+	istream & get( unsigned char* s, streamsize n, char delim );
+	istream & get( streambuf& sb);
+	istream & get( streambuf& sb, char delim );
+	istream & getline( char* s, streamsize n);
+	istream & getline( char* s, streamsize n, char delim );
+	istream & getline( signed char* s, streamsize n );
+	istream & getline( signed char* s, streamsize n, char delim );
+	istream & getline( unsigned char* s, streamsize n );
+	istream & getline( unsigned char* s, streamsize n, char delim );
+	istream & ignore( streamsize n=1, int_type delim=streambuf::eof );
+	int_type peek();
+	istream & read( char* s, streamsize n );
+	istream & read( signed char* s, streamsize n );
+	istream & read( unsigned char* s, streamsize n );
+	streamsize readsome( char* s, streamsize n );
+	streamsize readsome( signed char* s, streamsize n );
+	streamsize readsome( unsigned char* s, streamsize n );
+	istream & putback( char c );
+	istream & unget();
+	int sync();
+	pos_type tellg();
+	istream & seekg( pos_type pos );
+	istream & seekg( off_type off, ios_base::seekdir dir );
+
+private:
+	streamsize chcount;
+	streamsize _ec2p_gets( char* s, streamsize n, char delim, int mode );
+	int _ec2p_getistr(char* str, unsigned int dig, int mode);
+	int _ec2p_getfstr(char* str, unsigned int dig);
+	unsigned long _ec2p_strtoul(char *nptr, char **endptr, int base);
+	unsigned long long _ec2p_strtoull(char *nptr, char **endptr, int base);
+	long _ec2p_extlong();
+	unsigned long _ec2p_extulong();
+};
+
+class istream::sentry {
+public:
+	sentry(istream& is, bool noskipws = false);
+	~sentry(){}
+	operator bool() { return ok_; }
+private:
+	bool ok_;
+};
+
+// character extraction templates:
+istream& operator>>(istream&, char&);
+istream& operator>>(istream&, unsigned char&);
+istream& operator>>(istream&, signed char&);
+istream& operator>>(istream&, char*);
+istream& operator>>(istream&, unsigned char*);
+istream& operator>>(istream&, signed char*);
+
+// Manipulator
+istream& ws(istream& is );
+#endif

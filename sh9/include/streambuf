@@ -1,0 +1,100 @@
+/***************************************************************************/
+/* Copyright (C) 1998 (1998 - 2010) Renesas Electronics Corporation and    */
+/* Renesas Solutions Corp. All Rights Reserved.                            */
+/***************************************************************************/
+//
+//  Embeded C++ Library <streambuf> 
+//
+
+//====================================================================
+//  File:	streambuf
+//  Purpose:	Definition of class streambuf
+//  Create:     1997.09.20 Rev. 1.0
+//====================================================================
+
+#ifndef _STREAMBUF_
+#define _STREAMBUF_
+
+#include <ios>
+#pragma pack 4
+class streambuf {
+public:
+	virtual ~streambuf(){}
+	streambuf *pubsetbuf(char *cptr, streamsize nnum){
+		return setbuf(cptr, nnum);
+	}
+	pos_type pubseekoff(off_type off,ios_base::seekdir way,
+				ios_base::openmode which
+					=(ios_base::openmode)
+					(ios_base::in|ios_base::out)){
+		return seekoff(off, way, which);
+	}
+	pos_type pubseekpos(pos_type sp,
+				ios_base::openmode which
+					=(ios_base::openmode)
+					(ios_base::in|ios_base::out)){
+		return seekpos(sp, which);
+	}
+	int pubsync(){
+		return sync();
+	}
+	streamsize in_avail(){
+		return ((gptr()!=0)&&(gptr()<egptr()) ? 
+                       egptr()-gptr(): showmanyc());
+	}
+	int_type snextc() {return ((sbumpc()==eof) ? eof:sgetc());}
+	int_type sbumpc();
+	int_type sgetc();
+	int sgetn(char* cptr, streamsize nnum) {return xsgetn( cptr, nnum);}
+	int_type sputbackc(char);
+	int sungetc();
+	int sputc(char);
+	int_type sputn(const char *cptr, streamsize nnum)
+		{return xsputn( cptr, nnum);}
+	enum {eof=-1};
+protected:
+	streambuf();
+	char *eback() const {return *B_beg_pptr;}
+	char *gptr() const {return *B_next_pptr;}
+	char *egptr() const {return (*B_next_pptr+(*_B_cnt_ptr));}
+	void gbump(int nptr);
+	void setg(char *gbeg, char *gnext, char *gend)
+		{*B_beg_pptr = gbeg;*B_next_pptr = gnext;B_end_ptr = gend;
+			*_B_cnt_ptr=gend-gnext;*_B_len_ptr=gend-gbeg;}
+	char *pbase() const {return *B_beg_pptr;}
+	char *pptr() const {return *B_next_pptr;}
+	char *epptr() const {return (*B_beg_pptr+(*_B_len_ptr));}
+	char *_ec2p_getflag() const { return ((char*)C_flg_ptr);}
+	void pbump(int nptr);
+	void setp(char *pbeg, char *pend)
+		{*B_beg_pptr = pbeg;*B_next_pptr = pbeg;B_end_ptr = pend;
+			*_B_cnt_ptr=pend-pbeg;*_B_len_ptr=pend-pbeg;}
+	virtual streambuf *setbuf(char *, streamsize){ return this; }
+	virtual pos_type seekoff(off_type, ios_base::seekdir,
+        		ios_base::openmode=(ios_base::openmode)
+			(ios_base::in|ios_base::out)){ return -1; }
+	virtual pos_type seekpos(pos_type, ios_base::openmode=
+			(ios_base::openmode)(ios_base::in|ios_base::out)){
+			return -1; }
+	virtual int sync(){ return 0; }
+	virtual int showmanyc(){ return 0; }
+	virtual streamsize xsgetn(char *, streamsize);
+	virtual int_type underflow(){ return eof; }
+	virtual int_type uflow();
+	virtual int_type pbackfail(int_type=eof){ return eof; }
+	virtual streamsize xsputn(const char *, streamsize);
+	virtual int_type overflow(int_type=eof){ return eof; }
+	char *& _ec2p_gnptr(){ return (char *&)*B_next_pptr;}
+	char *& _ec2p_pnptr(){ return (char *&)*B_next_pptr;}
+	void _ec2p_bcntplus(){(*_B_cnt_ptr)++;}
+	void _ec2p_bcntminus(){(*_B_cnt_ptr)--;}
+	void _ec2p_setbPtr(char**, char**, long*, long*,char*);
+private:
+	long *_B_cnt_ptr, *_B_len_ptr;
+	char *B_beg_ptr, *B_next_ptr, *B_end_ptr;
+	char **B_beg_pptr, **B_next_pptr;
+	char *C_flg_ptr;
+};
+#pragma unpack
+
+#endif

@@ -1,0 +1,60 @@
+/***************************************************************************/
+/* Copyright (C) 1998 (1998 - 2010) Renesas Electronics Corporation and    */
+/* Renesas Solutions Corp. All Rights Reserved.                            */
+/***************************************************************************/
+//
+// Embeded C++ Library Header <iomanip>
+//
+
+//====================================================================
+//  File:       iomanip
+//  Purpose:    Definition of class iomanip
+//  Create:     1997.09.20 Rev. 1.0
+//====================================================================
+
+#ifndef _IOMANIP_
+#define _IOMANIP_
+
+#include <istream>
+#include <ostream>
+
+//Class
+class smanip{
+private:
+    union{
+        int val_i;
+        char val_c;
+        ios_base::fmtflags val_f;
+    };
+    union{
+        ios_base& (*pfi)(ios_base&,int);
+        ios_base& (*pfc)(ios_base&,char);
+        ios_base& (*pff)(ios_base&,ios_base::fmtflags);
+    };
+    enum _ec2p_smanip_t{
+         _ec2p_smanip_i,_ec2p_smanip_c ,_ec2p_smanip_f
+    }_ec2p_smanip_data;
+
+public:
+    smanip(ios_base& (*pf)(ios_base&,int),int arg)
+      :pfi(pf),val_i(arg),_ec2p_smanip_data(_ec2p_smanip_i){}
+
+    smanip(ios_base& (*pf)(ios_base&,char),char arg)
+      :pfc(pf),val_c(arg),_ec2p_smanip_data(_ec2p_smanip_c){}
+
+    smanip(ios_base& (*pf)(ios_base&,ios_base::fmtflags),ios_base::fmtflags arg)
+      :pff(pf),val_f(arg),_ec2p_smanip_data(_ec2p_smanip_f){}
+
+    friend ostream& operator << (ostream&,smanip);
+    friend istream& operator >> (istream&,smanip);
+};
+
+//Manipulators
+smanip resetiosflags(ios_base::fmtflags);
+smanip setiosflags(ios_base::fmtflags);
+smanip setbase(int);
+smanip setfill(char);
+smanip setprecision(int);
+smanip setw(int);
+
+#endif

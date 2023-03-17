@@ -1,0 +1,56 @@
+/***************************************************************************/
+/* Copyright (C) 1998 (1998 - 2010) Renesas Electronics Corporation and    */
+/* Renesas Solutions Corp. All Rights Reserved.                            */
+/***************************************************************************/
+//
+//  Embeded C++ Library <mystrbuf>
+//
+
+//====================================================================
+//  File:	mystrbuf
+//  Purpose:	Definition of class mystrbuf
+//  Create:     1997.09.20 Rev. 1.0
+//====================================================================
+
+#ifndef _MYSTRBUF_
+#define _MYSTRBUF_
+
+#ifdef  _EC2P_GPP
+#define _bufbase	_base
+#define _bufptr		_ptr
+#define _bufcnt		_cnt
+// #define _buflen	_bufsiz
+#define _ioflag1	_flag
+#endif
+
+#include <streambuf>
+struct	_f_type;
+#pragma pack 4
+class mystrbuf : public streambuf {
+public:
+	mystrbuf(){_file_Ptr = 0;}
+	mystrbuf(void *_fp){_Init((_f_type*)_fp);}
+	virtual ~mystrbuf(){close();}
+	void 	*myfptr() const{return _file_Ptr;} 
+	mystrbuf	*open(const char *, int);
+	mystrbuf	*close();
+protected:
+	virtual streambuf *setbuf(char *, streamsize);
+	virtual pos_type seekoff(off_type, ios_base::seekdir,
+        ios_base::openmode=(ios_base::openmode)(ios_base::in|ios_base::out));
+	virtual pos_type seekpos(pos_type sp,
+	ios_base::openmode=(ios_base::openmode)(ios_base::in|ios_base::out));
+	virtual int sync();
+	virtual int showmanyc(){return 0;}
+	virtual int_type underflow();
+	virtual int_type pbackfail(int_type=streambuf::eof);
+	virtual int_type overflow(int_type=streambuf::eof);
+private:
+	void	_Init(_f_type *);
+	_f_type	*_file_Ptr;
+#ifdef	_EC2P_GPP
+	long	_buflen_wk;
+#endif
+};
+#pragma unpack
+#endif

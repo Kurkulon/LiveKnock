@@ -1,0 +1,213 @@
+/***************************************************************************/
+/* Copyright (C) 1998 (1998 - 2010) Renesas Electronics Corporation and    */
+/* Renesas Solutions Corp. All Rights Reserved.                            */
+/***************************************************************************/
+//
+// Strings library / String classes
+// Embedded C++ Library Header <string>
+//
+
+//====================================================================
+//  File:	string
+//  Purpose:	Definition of class string
+//  Create:     1997.09.20 Rev. 1.0
+//====================================================================
+
+#ifndef _STRING_
+#define _STRING_
+
+#include <stdlib.h>
+#include <string.h>
+
+
+#include <istream>
+#include <ostream>
+#include <new>
+
+class string;
+
+string operator + (const string &lhs,const string &rhs);
+string operator + (const char *lhs,const string &rhs);
+string operator + (char lhs,const string &rhs);
+string operator + (const string &lhs,const char *rhs);
+string operator + (const string &lhs,char rhs);
+
+bool operator == (const string &lhs,const string &rhs);
+bool operator == (const char *lhs,const string &rhs);
+bool operator == (const string &lhs,const char *rhs);
+bool operator != (const string &lhs,const string &rhs);
+bool operator != (const char *lhs,const string &rhs);
+bool operator != (const string &lhs,const char *rhs);
+
+bool operator < (const string &lhs,const string &rhs);
+bool operator < (const char *lhs,const string &rhs);
+bool operator < (const string &lhs,const char *rhs);
+bool operator > (const string &lhs,const string &rhs);
+bool operator > (const char *lhs,const string &rhs);
+bool operator > (const string &lhs,const char *rhs);
+
+bool operator <= (const string &lhs,const string &rhs);
+bool operator <= (const char *lhs,const string &rhs);
+bool operator <= (const string &lhs,const char *rhs);
+bool operator >= (const string &lhs,const string &rhs);
+bool operator >= (const char *lhs,const string &rhs);
+bool operator >= (const string &lhs,const char *rhs);
+
+void swap(string &lhs, string &rhs);
+
+istream & operator >> (istream &is,string &str);
+ostream & operator << (ostream &os,const string &str);
+istream & getline (istream &is,string &str,char delim);
+istream & getline (istream &is,string &str);
+
+class string {
+public:
+	typedef char* iterator;
+	typedef const char* const_iterator;
+
+	static const size_t npos;
+
+	string(void) {
+		_ec2p_getmem(NULL, 0, NULL, false);
+	}
+	string(const string& str, size_t pos = 0, size_t n = npos) {
+		size_t wkpos = pos > str.size() ? str.size() : pos;	
+		size_t rlen = (n > (str.size() - wkpos)) ? str.size() - wkpos : n;
+		_ec2p_getmem(&str.c_str()[wkpos], rlen, NULL, false);
+	}
+	string(const char* s, size_t n) {
+		_ec2p_getmem(s, n, NULL, false);
+	}
+	string(const char* s) {
+		_ec2p_getmem(s, strlen(s), NULL, false);
+	}
+	string(size_t n, char c) {
+		_ec2p_getmem(NULL, n, c, true);
+	}
+#ifdef _EC2P_GPP
+	string(char c) {
+		_ec2p_getmem(NULL, 1, c, true);
+	}
+#endif
+	~string() {
+		if (s_ptr != NULL) {
+			delete [] s_ptr;
+			s_ptr = NULL;
+		}
+	}
+	string& operator=(const string& str);
+	string& operator=(const char* s);
+	string& operator=(char c);
+
+	iterator begin() { return((iterator)s_ptr); }
+	const_iterator begin() const { return((const_iterator)s_ptr); }
+	iterator end() { return((iterator)&s_ptr[s_len]); }
+	const_iterator end() const { return((const_iterator)&s_ptr[s_len]);}
+
+	size_t size() const { return(s_len); }
+	size_t length() const { return(s_len); }
+	size_t max_size() const { return(s_res); }
+	void resize(size_t n, char c);
+	void resize(size_t n);
+	size_t capacity() const { return(s_res); }
+	void reserve(size_t res_arg = 0);
+	void clear();
+	bool empty() const { return( s_len == 0 ? true : false ); }
+
+	const char & operator[](size_t pos) const;
+	char & operator[](size_t pos);
+	const char & at(size_t n) const;
+	char & at(size_t n);
+
+	string& operator+=(const string& str);
+	string& operator+=(const char* s);
+	string& operator+=(char c);
+	string& append(const string& str);
+	string& append(const string& str, size_t pos, size_t n);
+	string& append(const char* s, size_t n);
+	string& append(const char* s);
+	string& append(size_t n, char c);
+
+	string& assign(const string&);
+	string& assign(const string& str, size_t pos, size_t n);
+	string& assign(const char* s, size_t n);
+	string& assign(const char* s);
+	string& assign(size_t n, char c);
+
+	string& insert(size_t pos1, const string& str);
+	string& insert(size_t pos1, const string& str,
+	size_t pos2, size_t n);
+	string& insert(size_t pos, const char* s, size_t n);
+	string& insert(size_t pos, const char* s);
+	string& insert(size_t pos, size_t n, char c);
+	iterator insert(iterator p, char c = char());
+	void insert(iterator p, size_t n, char c);
+
+	string& erase(size_t pos = 0, size_t n = npos);
+	iterator erase(iterator position);
+	iterator erase(iterator first, iterator last);
+
+	string& replace(size_t pos1, size_t n1, const string& str);
+	string& replace(size_t pos1, size_t n1, const string& str,
+	size_t pos2, size_t n2);
+	string& replace(size_t pos, size_t n1, const char* s, size_t n2);
+	string& replace(size_t pos, size_t n1, const char* s);
+	string& replace(size_t pos, size_t n1, size_t n2, char c);
+	string& replace(iterator i1, iterator i2, const string& str);
+	string& replace(iterator i1, iterator i2, const char* s, size_t n);
+	string& replace(iterator i1, iterator i2, const char* s);
+	string& replace(iterator i1, iterator i2, size_t n, char c);
+
+	size_t copy(char* s, size_t n, size_t pos = 0) const;
+	void swap(string&);
+	const char* c_str() const { return(s_ptr); }
+	const char* data() const {
+		if (s_len == 0) {
+			s_ptr[0] = '\0';
+		}
+		return(s_ptr);
+	}
+
+	size_t find (const string& str, size_t pos = 0) const;
+	size_t find (const char* s, size_t pos, size_t n) const;
+	size_t find (const char* s, size_t pos = 0) const;
+	size_t find (char c, size_t pos = 0) const;
+	size_t rfind(const string& str, size_t pos = npos) const;
+	size_t rfind(const char* s, size_t pos, size_t n) const;
+	size_t rfind(const char* s, size_t pos = npos) const;
+	size_t rfind(char c, size_t pos = npos) const;
+
+	size_t find_first_of(const string& str, size_t pos = 0) const;
+	size_t find_first_of(const char* s, size_t pos, size_t n) const;
+	size_t find_first_of(const char* s, size_t pos = 0) const;
+	size_t find_first_of(char c, size_t pos = 0) const;
+	size_t find_last_of (const string& str, size_t pos = npos) const;
+	size_t find_last_of (const char* s, size_t pos, size_t n) const;
+	size_t find_last_of (const char* s, size_t pos = npos) const;
+	size_t find_last_of (char c, size_t pos = npos) const;
+
+	size_t find_first_not_of(const string& str, size_t pos = 0) const;
+	size_t find_first_not_of(const char* s, size_t pos, size_t n) const;
+	size_t find_first_not_of(const char* s, size_t pos = 0) const;
+	size_t find_first_not_of(char c, size_t pos = 0) const;
+	size_t find_last_not_of (const string& str, size_t pos = npos) const;
+	size_t find_last_not_of (const char* s, size_t pos, size_t n) const;
+	size_t find_last_not_of (const char* s, size_t pos = npos) const;
+	size_t find_last_not_of (char c, size_t pos = npos) const;
+
+	string substr(size_t pos = 0, size_t n = npos) const;
+	int compare(const string& str) const;
+	int compare(size_t pos1, size_t n1, const string& str) const;
+	int compare(size_t pos1, size_t n1, const string& str,
+	size_t pos2, size_t n2) const;
+	int compare(const char* s) const;
+	int compare(size_t pos1, size_t n1,
+	const char* s, size_t n2 = npos) const;
+private:
+	char	*s_ptr;
+	size_t	s_len, s_res;
+	void	_ec2p_getmem(const char *s, size_t n, char c, bool flg=false);
+	char	*_ec2p_extmem(size_t n);
+	static const char _ec2p_at;
+     };
+#endif

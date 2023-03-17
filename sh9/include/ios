@@ -1,0 +1,193 @@
+/***************************************************************************/
+/* Copyright (C) 1998 (1998 - 2010) Renesas Electronics Corporation and    */
+/* Renesas Solutions Corp. All Rights Reserved.                            */
+/***************************************************************************/
+//
+//  Embeded C++ Class Library Header <ios> 
+//
+
+//====================================================================
+//  File:	ios	
+//  Purpose:	Definition of class ios
+//  Create:	1997.09.20 Rev. 1.0
+//====================================================================
+
+#ifndef _IOS_
+#define _IOS_
+
+class streambuf;
+class ostream;
+
+typedef	long	POS_T;
+typedef	long	INT_T;
+typedef	long	SZ_T;
+typedef	long	OFF_T;
+
+typedef	OFF_T	streamoff;
+typedef	SZ_T	streamsize;
+typedef	INT_T	int_type;
+typedef	POS_T	pos_type;
+typedef	OFF_T	off_type;
+
+class ios_base {
+public:
+	typedef long fmtflags;
+	static const fmtflags boolalpha;
+	static const fmtflags dec;
+	static const fmtflags fixed;
+	static const fmtflags hex;
+	static const fmtflags internal;
+	static const fmtflags left;
+	static const fmtflags oct;
+	static const fmtflags right;
+	static const fmtflags scientific;
+	static const fmtflags showbase;
+	static const fmtflags showpoint;
+	static const fmtflags showpos;
+	static const fmtflags skipws;
+	static const fmtflags unitbuf;
+	static const fmtflags uppercase;
+	static const fmtflags adjustfield;
+	static const fmtflags basefield;
+	static const fmtflags floatfield;
+	typedef int iostate;
+	static const iostate badbit;
+	static const iostate eofbit;
+	static const iostate failbit;
+	static const iostate goodbit;
+	typedef int openmode;
+	static const openmode app;
+	static const openmode ate;
+	static const openmode binary;
+	static const openmode in;
+	static const openmode out;
+	static const openmode trunc;
+	typedef int seekdir;
+	static const seekdir beg;
+	static const seekdir cur;
+	static const seekdir end;
+
+	class Init;
+
+	fmtflags flags() const {return (fmtflags)fmtfl;}
+	fmtflags flags(fmtflags);
+	fmtflags setf(fmtflags) ;
+	fmtflags setf(fmtflags, fmtflags);
+	void unsetf(fmtflags);
+	char fill() const {
+		return (char)fillch;
+	}
+	char fill(char);
+	int precision() const {
+		return prec;
+	}
+	streamsize precision(streamsize);
+	streamsize width() const {return wide;}
+	streamsize width(streamsize);
+
+//	static int xalloc() {return index++;}	// Not implemented
+//	long & ipword(int);			// Not implemented
+//	long * &pword(int);			// Not implemented
+
+	~ios_base(){}				// destructor
+
+	// callbacks -- exposition only
+	enum event {
+		erase_event,
+		imbue_event,
+		copyfmt_event
+	};
+	typedef void (*event_callback)(event, ios_base&, int index);
+	void register_callback(event_callback fn, int index);
+	static bool sync_with_stdio(bool sync = true){ return true; }
+
+	class Init{
+	public:
+		Init(){init_cnt++;}
+		~Init(){init_cnt--;}
+	private:
+		static int init_cnt;
+	};
+
+protected:
+	ios_base(){Init::Init();}
+	void	_ec2p_init_base();
+	void	_ec2p_copy_base(ios_base &);
+	static const fmtflags _fmtmask;
+	static const iostate _statemask;
+private:
+	fmtflags	fmtfl;		// format flag
+	streamsize	prec;		// number of after floating point
+	streamsize	wide;		// field width
+	char		fillch;		// fill charactor
+
+//	static int	index;		// exposition only
+//	long		*iarray;	// exposition only
+//	void		**parray;	// exposition only
+};
+
+class ios  :  public ios_base {
+public:
+// Types:
+// typedef INT_T int_type;
+// typedef POS_T pos_type;
+// typedef OFF_T off_type;
+
+	operator void*() const {
+		return (void*)!fail();
+	}
+	bool operator!() const{return (bool)fail();}
+	iostate rdstate () const{return (iostate)state;}
+	void clear(iostate = goodbit);
+	void setstate(iostate);
+	bool good() const {return (bool)(state==goodbit);}
+	bool eof() const {return (bool)(state&eofbit);}
+	bool fail() const {return (bool)(state&(badbit|failbit));}
+	bool bad() const {return (bool)(state&badbit);}
+
+	iostate exceptions() const;	// exposition only
+	void exceptions(iostate);	// exposition only
+
+	ios(streambuf *sbptr){		// Constructor
+		init(sbptr);
+	}
+	virtual ~ios(){};		// Destructor
+	ostream *tie() const {return tiestr;}
+	ostream *tie(ostream*);
+	streambuf *rdbuf() const{return sb;}
+	streambuf *rdbuf(streambuf*);
+	ios & copyfmt(const ios &);
+	ios(){init(0);}
+	void init(streambuf*);
+private:
+	streambuf	*sb;		// pointer to streambuf object
+	ostream		*tiestr;	// pointer to ostream object
+	int		state;		// status
+};
+
+//Manipulators
+ios_base & boolalpha(ios_base&);
+ios_base & noboolalpha(ios_base&);
+ios_base & showbase(ios_base&);
+ios_base & noshowbase(ios_base&);
+ios_base & showpoint(ios_base&);
+ios_base & noshowpoint(ios_base&);
+ios_base & showpos(ios_base&);
+ios_base & noshowpos(ios_base&);
+ios_base & skipws(ios_base&);
+ios_base & noskipws(ios_base&);
+ios_base & uppercase(ios_base&);
+ios_base & nouppercase(ios_base&);
+//Adjustfield
+ios_base & internal(ios_base&);
+ios_base & left(ios_base&);
+ios_base & right(ios_base&);
+//Basefield
+ios_base & dec(ios_base&);
+ios_base & hex(ios_base&);
+ios_base & oct(ios_base&);
+//floatfield
+ios_base & fixed(ios_base&);
+ios_base & scientific(ios_base&);
+
+#endif

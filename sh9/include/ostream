@@ -1,0 +1,89 @@
+/***************************************************************************/
+/* Copyright (C) 1998 (1998 - 2010) Renesas Electronics Corporation and    */
+/* Renesas Solutions Corp. All Rights Reserved.                            */
+/***************************************************************************/
+//====================================================================
+//  File:	ostream
+//  Purpose:	Definition of class ostream
+//  Create:     1997.09.20 Rev. 1.0
+//====================================================================
+
+#ifndef _OSTREAM_
+#define _OSTREAM_
+
+#include <streambuf>
+
+class ostream : public ios {
+public:
+	// Types (inherited from ios):
+	// typedef INT_T int_type;
+	// typedef POS_T pos_type;
+	// typedef OFF_T off_type;
+
+	ostream(streambuf *sbptr) : ios(sbptr){}
+	virtual ~ostream(){}
+	class sentry;		// Prefix/Suffix
+	ostream& operator <<(ostream& (*pf)(ostream&)){
+		return (*pf)(*this); }
+	ostream& operator <<(ios& (*pf)(ios&)){
+		(*pf)(*(ios*)this); return *this; }
+	ostream& operator<< (ios_base& (*pf)(ios_base&)){
+		(*pf)(*(ios*)this); return *this; }
+	ostream & operator <<(bool n){
+		*this<<(int)n; return *this; }
+	ostream & operator <<(short);
+	ostream & operator <<(unsigned short);
+	ostream & operator <<(int);
+	ostream & operator <<(unsigned  int);
+	ostream & operator <<(long);
+	ostream & operator <<(long long);
+	ostream & operator <<(unsigned long);
+	ostream & operator <<(unsigned long long);
+	ostream & operator <<(float);
+	ostream & operator <<(double);
+	ostream & operator <<(long double);
+	ostream & operator <<(void *);
+	ostream & operator <<(streambuf *);
+	ostream & put(char);
+	ostream & write(const char *, streamsize);
+	ostream & write(const signed char *, streamsize);
+	ostream & write(const unsigned char *, streamsize);
+	ostream & flush();
+	pos_type tellp();
+	ostream& seekp( pos_type );
+	ostream& seekp( off_type , ios_base::seekdir );
+
+	int  _ec2p_strput(const char*);
+private:
+	void _ec2p_IntPrint(const char*, short);
+	void _ec2p_FloatPrint(const char*, short);
+	void _ec2p_DataPut(const char*, int, int, int, int);
+	void _ec2p_int_fmtparam(const char*, char*);
+	void _ec2p_flt_fmtparam(const char*, char*);
+};
+
+// Class ostream::sentry
+class ostream::sentry {
+public:
+	sentry(ostream& os);
+	~sentry();
+	operator bool() { return ok_; }
+private:
+	bool		ok_;
+	ostream*	__ec2p_os;
+};
+
+// character inserters
+ostream& operator<<(ostream&, char);
+ostream& operator<<(ostream&, const char*);
+// signed and unsigned
+ostream& operator<<(ostream&, signed char);
+ostream& operator<<(ostream&, unsigned char);
+// signed and unsigned
+ostream& operator<<(ostream&, const signed char*);
+ostream& operator<<(ostream&, const unsigned char*);
+
+ostream & endl( ostream & );
+ostream & ends( ostream & );
+ostream & flush( ostream & );
+#endif

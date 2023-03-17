@@ -1,0 +1,189 @@
+/***************************************************************************/
+/* Copyright (C) 1998 (1998 - 2010) Renesas Electronics Corporation and    */
+/* Renesas Solutions Corp. All Rights Reserved.                            */
+/***************************************************************************/
+//====================================================================
+//  File:	complex
+//  Purpose:	Numerics library / Complex numbers
+//		Header <complex>
+//  Create:     1997.09.20 Rev. 1.0
+//====================================================================
+
+#ifndef _COMPLEX_
+#define _COMPLEX_
+
+#include <istream>
+#include <ostream>
+
+class float_complex;	// based on float
+class double_complex;	// based on double
+
+// complex specialization
+class float_complex {
+public:
+	typedef float value_type;
+
+	float_complex(float re = 0.0f, float im = 0.0f){
+		_re = re; _im = im; return; }
+	float_complex(const double_complex&);
+	float real() const{ return (_re);}
+	float imag() const{ return (_im);}
+
+	float_complex& operator= (float rhs){
+		_re = rhs; _im = 0.0; return *this; }
+	float_complex& operator+=(float rhs){ _re += rhs; return *this; }
+	float_complex& operator-=(float rhs){ _re -= rhs; return *this; }
+	float_complex& operator*=(float rhs){
+		_re *= rhs; _im *= rhs; return *this; }
+	float_complex& operator/=(float rhs){
+		_re /= rhs; _im /= rhs; return *this; }
+
+	float_complex& operator=(const float_complex&rhs){
+		_re = rhs.real(); _im = rhs.imag(); return *this; }
+	float_complex& operator+=(const float_complex&rhs){
+		_re += rhs.real(); _im += rhs.imag(); return *this; }
+	float_complex& operator-=(const float_complex&rhs){
+		_re -= rhs.real(); _im -= rhs.imag(); return *this; }
+	float_complex& operator*=(const float_complex&);
+	float_complex& operator/=(const float_complex&);
+private:
+	float	_re, _im;
+};
+
+class double_complex {
+public:
+	typedef double value_type;
+
+	double_complex(double re = 0.0, double im = 0.0){
+		_re = re; _im = im; return; }
+	double_complex(const float_complex&rhs){
+		_re = (double)rhs.real(); _im = (double)rhs.imag(); return; }
+	double real() const{ return (_re);}
+	double imag() const{ return (_im);}
+
+	double_complex& operator= (double rhs){
+		_re = rhs; _im = 0.0; return *this; }
+	double_complex& operator+=(double rhs){ _re += rhs; return *this; }
+	double_complex& operator-=(double rhs){ _re -= rhs; return *this; }
+	double_complex& operator*=(double rhs){
+		_re *= rhs; _im *= rhs; return *this; }
+	double_complex& operator/=(double rhs){
+		_re /= rhs; _im /= rhs; return *this; }
+
+	double_complex& operator=(const double_complex&rhs){
+		_re = rhs.real(); _im = rhs.imag(); return *this; }
+	double_complex& operator+=(const double_complex&rhs){
+		_re += rhs.real(); _im += rhs.imag(); return *this; }
+	double_complex& operator-=(const double_complex&rhs){
+		_re -= rhs.real(); _im -= rhs.imag(); return *this; }
+	double_complex& operator*=(const double_complex&);
+	double_complex& operator/=(const double_complex&);
+private:
+	double	_re, _im;
+};
+
+
+// complex non-member functions
+float_complex operator+(const float_complex&);
+float_complex operator-(const float_complex&);
+float_complex operator+(const float_complex&, const float_complex&);
+float_complex operator+(const float_complex&, const float&);
+float_complex operator+(const float&, const float_complex&);
+float_complex operator-(const float_complex&, const float_complex&);
+float_complex operator-(const float_complex&, const float&);
+float_complex operator-(const float&, const float_complex&);
+float_complex operator*(const float_complex&, const float_complex&);
+float_complex operator*(const float_complex&, const float&);
+float_complex operator*(const float&, const float_complex&);
+float_complex operator/(const float_complex&, const float_complex&);
+float_complex operator/(const float_complex&, const float&);
+float_complex operator/(const float&, const float_complex&);
+bool operator==(const float_complex&, const float_complex&);
+bool operator==(const float_complex&, const float&);
+bool operator==(const float&, const float_complex&);
+bool operator!=(const float_complex&, const float_complex&);
+bool operator!=(const float_complex&, const float&);
+bool operator!=(const float&, const float_complex&);
+istream& operator>>(istream&, float_complex&);
+ostream& operator<<(ostream&, const float_complex&);
+
+double_complex operator+(const double_complex&);
+double_complex operator-(const double_complex&);
+double_complex operator+(const double_complex&, const double_complex&);
+double_complex operator+(const double_complex&, const double&);
+double_complex operator+(const double&, const double_complex&);
+double_complex operator-(const double_complex&, const double_complex&);
+double_complex operator-(const double_complex&, const double&);
+double_complex operator-(const double&, const double_complex&);
+double_complex operator*(const double_complex&, const double_complex&);
+double_complex operator*(const double_complex&, const double&);
+double_complex operator*(const double&, const double_complex&);
+double_complex operator/(const double_complex&, const double_complex&);
+double_complex operator/(const double_complex&, const double&);
+double_complex operator/(const double&, const double_complex&);
+bool operator==(const double_complex&, const double_complex&);
+bool operator==(const double_complex&, const double&);
+bool operator==(const double&, const double_complex&);
+bool operator!=(const double_complex&, const double_complex&);
+bool operator!=(const double_complex&, const double&);
+bool operator!=(const double&, const double_complex&);
+istream& operator>>(istream&, double_complex&);
+ostream& operator<<(ostream&, const double_complex&);
+
+// complex value operations
+float real(const float_complex&);
+float imag(const float_complex&);
+float abs(const float_complex&);
+float arg(const float_complex&);
+float norm(const float_complex&);
+float_complex conj(const float_complex&);
+float_complex polar(const float&, const float&);
+
+double real(const double_complex&);
+double imag(const double_complex&);
+double abs(const double_complex&);
+double arg(const double_complex&);
+double norm(const double_complex&);
+double_complex conj(const double_complex&);
+double_complex polar(const double&, const double&);
+
+// complex transcendentals
+
+#ifdef sqrt
+#undef sqrt
+extern "C" double sqrt(double);
+#endif
+
+float_complex cos (const float_complex&);
+float_complex cosh (const float_complex&);
+float_complex exp (const float_complex&);
+float_complex log (const float_complex&);
+float_complex log10(const float_complex&);
+
+float_complex pow(const float_complex&, int);
+float_complex pow(const float_complex&, const float&);
+float_complex pow(const float_complex&, const float_complex&);
+float_complex pow(const float&, const float_complex&);
+float_complex sin (const float_complex&);
+float_complex sinh (const float_complex&);
+float_complex sqrt (const float_complex&);
+float_complex tan (const float_complex&);
+float_complex tanh (const float_complex&);
+
+double_complex cos (const double_complex&);
+double_complex cosh (const double_complex&);
+double_complex exp (const double_complex&);
+double_complex log (const double_complex&);
+double_complex log10(const double_complex&);
+
+double_complex pow(const double_complex&, int);
+double_complex pow(const double_complex&, const double&);
+double_complex pow(const double_complex&, const double_complex&);
+double_complex pow(const double&, const double_complex&);
+double_complex sin (const double_complex&);
+double_complex sinh (const double_complex&);
+double_complex sqrt (const double_complex&);
+double_complex tan (const double_complex&);
+double_complex tanh (const double_complex&);
+
+#endif
