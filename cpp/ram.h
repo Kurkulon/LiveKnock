@@ -1091,7 +1091,7 @@
 #define      word_FFFF8D5C                  							(*(u16*)0xFFFF8D5C)                                                        
 #define      word_FFFF8D5E                  							(*(u16*)0xFFFF8D5E)                                                        
 #define      word_FFFF8D60                  							(*(u16*)0xFFFF8D60)                                                        
-#define      word_FFFF8D62                  							(*(u16*)0xFFFF8D62)                                                        
+#define      thermoFanSpeedFlags                  							(*(u16*)0xFFFF8D62)                                                        
 #define      wMUT84_Thermo_Fan_Duty         							(*(u16*)0xFFFF8D64)                                                        
 #define      word_FFFF8D66                  							(*(u16*)0xFFFF8D66)                                                        
 #define      word_FFFF8D68                  							(*(u16*)0xFFFF8D68)                                                        

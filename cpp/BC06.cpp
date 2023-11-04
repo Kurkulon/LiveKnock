@@ -1351,12 +1351,12 @@ static u16 BC06_sub_1DCDC()
 
 static void BC06_sub_1DD12()
 {
-	TRG(word_FFFF8D62, 0x10,	wMUT2F_Vehicle_Speed, word_2398, word_239A);
-	TRG(word_FFFF8D62, 1,		wMUT2F_Vehicle_Speed, word_1B44, word_1B46);
-	TRG(word_FFFF8D62, 2,		wMUT2F_Vehicle_Speed, word_1B48, word_1B4A);
-	TRG(word_FFFF8D62, 0x20,	wMUT2F_Vehicle_Speed, word_239C, word_239E);
-	TRG(word_FFFF8D62, 4,		wMUT2F_Vehicle_Speed, word_1B4C, word_1B4E);
-	TRG(word_FFFF8D62, 8,		wMUT2F_Vehicle_Speed, word_1B50, word_1B52);
+	TRG(thermoFanSpeedFlags, 0x10,	wMUT2F_Vehicle_Speed, word_2398, word_239A); // >10
+	TRG(thermoFanSpeedFlags, 1,		wMUT2F_Vehicle_Speed, word_1B44, word_1B46); // >25
+	TRG(thermoFanSpeedFlags, 2,		wMUT2F_Vehicle_Speed, word_1B48, word_1B4A); // >40
+	TRG(thermoFanSpeedFlags, 0x20,	wMUT2F_Vehicle_Speed, word_239C, word_239E); // >10 
+	TRG(thermoFanSpeedFlags, 4,		wMUT2F_Vehicle_Speed, word_1B4C, word_1B4E); // >25
+	TRG(thermoFanSpeedFlags, 8,		wMUT2F_Vehicle_Speed, word_1B50, word_1B52); // >40
 
 	u32 r1 = BC06_TERMOFANDUTY_sub_1DF8A();
 
@@ -1420,11 +1420,11 @@ static u16 BC06_TERMOFANDUTY_sub_1DF8A()
 	{
 		if (word_FFFF8890 & 0x100)
 		{
-			if (ZRO(word_FFFF8D62, 0x20))
+			if (ZRO(thermoFanSpeedFlags, 0x20))
 			{
 				r13 = 8;
 			}
-			else if (ZRO(word_FFFF8D62, 4))
+			else if (ZRO(thermoFanSpeedFlags, 4))
 			{
 				r13 = 9;
 			}
@@ -1432,7 +1432,7 @@ static u16 BC06_TERMOFANDUTY_sub_1DF8A()
 			{
 				r13 = 11;
 
-				if (ZRO(word_FFFF8D62, 8))
+				if (ZRO(thermoFanSpeedFlags, 8))
 				{
 					r13 = 10;
 				};
@@ -1442,11 +1442,11 @@ static u16 BC06_TERMOFANDUTY_sub_1DF8A()
 		{
 			// loc_1DFFC
 
-			if (ZRO(word_FFFF8D62, 0x20))
+			if (ZRO(thermoFanSpeedFlags, 0x20))
 			{
 				r13 = 4;
 			}
-			else if (ZRO(word_FFFF8D62, 4))
+			else if (ZRO(thermoFanSpeedFlags, 4))
 			{
 				r13 = 5;
 			}
@@ -1454,7 +1454,7 @@ static u16 BC06_TERMOFANDUTY_sub_1DF8A()
 			{
 				r13 = 7;
 
-				if (ZRO(word_FFFF8D62, 8))
+				if (ZRO(thermoFanSpeedFlags, 8))
 				{
 					r13 = 6;
 				};
@@ -1463,11 +1463,11 @@ static u16 BC06_TERMOFANDUTY_sub_1DF8A()
 	}
 	else
 	{
-		if (ZRO(word_FFFF8D62, 0x10))
+		if (ZRO(thermoFanSpeedFlags, 0x10)) // <10
 		{
 			r13 = 0;
 		}
-		else if (ZRO(word_FFFF8D62, 1))
+		else if (ZRO(thermoFanSpeedFlags, 1)) // <25
 		{
 			r13 = 1;
 		}
@@ -1475,7 +1475,7 @@ static u16 BC06_TERMOFANDUTY_sub_1DF8A()
 		{
 			r13 = 3;
 
-			if (ZRO(word_FFFF8D62, 2))
+			if (ZRO(thermoFanSpeedFlags, 2)) // <40
 			{
 				r13 = 2;
 			};
