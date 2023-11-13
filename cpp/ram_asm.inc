@@ -1062,7 +1062,7 @@ word_FFFF8D5A                  							.EQU H'FFFF8D5A
 word_FFFF8D5C                  							.EQU H'FFFF8D5C                                                        
 word_FFFF8D5E                  							.EQU H'FFFF8D5E                                                        
 word_FFFF8D60                  							.EQU H'FFFF8D60                                                        
-word_FFFF8D62                  							.EQU H'FFFF8D62                                                        
+thermoFanSpeedFlags                  							.EQU H'FFFF8D62                                                        
 wMUT84_Thermo_Fan_Duty         							.EQU H'FFFF8D64                                                        
 word_FFFF8D66                  							.EQU H'FFFF8D66                                                        
 word_FFFF8D68                  							.EQU H'FFFF8D68                                                        
