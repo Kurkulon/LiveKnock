@@ -731,6 +731,7 @@ extern byte veMapIndex;
 extern byte fixAFR;						
 extern byte openLoop;						
 extern byte veFeedBackMul;						
+extern byte disableTrims;						
 
 
 //#define __axis_res_RPM25				(*(u16*)0xFFFF8460)

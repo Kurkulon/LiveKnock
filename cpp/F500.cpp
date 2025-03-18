@@ -380,9 +380,12 @@ void F500_Init_BitMap_Flags_New()
 	{
 		SET(wMUTD1_BitMap_FAA, FAA_4_CLOSED_LOOP);  // Closed loop
 
-		wMUT0C_Fuel_Trim_Low = 0x80;   
-		wMUT0D_Fuel_Trim_Middle = 0x80;
-		wMUT0E_Fuel_Trim_High = 0x80;
+		if (disableTrims)
+		{
+			wMUT0C_Fuel_Trim_Low = 0x80;   
+			wMUT0D_Fuel_Trim_Middle = 0x80;
+			wMUT0E_Fuel_Trim_High = 0x80;
+		};
 	};
 
 	WFLAG(wMUTD1_BitMap_FAA, FAA_7_HIGH_IGN, no_knock_retard == 0); 

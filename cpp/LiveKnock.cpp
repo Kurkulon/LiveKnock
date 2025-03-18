@@ -61,17 +61,18 @@ extern "C" void LiveKnock()
 	{
 		__DEADloc = 0xDEAD;
 
-		hiIgnMapIndex = 0;	
-		hiFuelMapIndex = 0;	
-		veMapIndex = 0;	
+		hiIgnMapIndex	= 0;	
+		hiFuelMapIndex	= 0;	
+		veMapIndex		= 0;	
 
-		fixAFR = false;
-		openLoop = false;
-		forcedIdleRPM = 112;
+		fixAFR			= false;
+		openLoop		= false;
+		forcedIdleRPM	= 112;
+		disableTrims	= 0;
 		no_knock_retard = 0;
 
-		knock_mul_high = 8;//t1_knock_control__17CC;
-		knock_mul_low = 4;//t1_knock_control__17CE;
+		knock_mul_high	= t1_knock_control__17CC;
+		knock_mul_low	= t1_knock_control__17CE;
 
 		wMUT27_Octane_Number = octaneNum = 255;
 	};
