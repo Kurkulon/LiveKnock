@@ -81,7 +81,8 @@ TEST_INTERPOLATE:			.DEFINE		"1"
 
 	.SECTION    B_ALTMAPS, DATA, LOCATE=H'FFFF8420
 	
-	.EXPORT		_hiIgnMapIndex, _hiFuelMapIndex, _veMapIndex, _fixAFR, _openLoop, _forcedIdleRPM, _disableTrims, _no_knock_retard
+	.EXPORT		_hiIgnMapIndex, _hiFuelMapIndex, _veMapIndex, _fixAFR, _openLoop, _forcedIdleRPM
+	.EXPORT		_disableTrims, _no_knock_retard, _ve_index, _fb_VE, _ve_timer
 	
 _hiIgnMapIndex:		.RES.B      1					
 _hiFuelMapIndex:	.RES.B      1					
@@ -91,11 +92,14 @@ _openLoop:			.RES.B      1
 _forcedIdleRPM:		.RES.B      1					
 _disableTrims:		.RES.B      1					
 _no_knock_retard:	.RES.B      1					
+_fb_VE				.RES.B      1					
+_ve_index:			.RES.B      1					
+_ve_timer:			.RES.B      1					
 
 	.ALIGN 2	
 	
-	.EXPORT		_axis_ig_RPM, _axis_ig_LOAD, _axis_fu_RPM, _axis_fu_LOAD, _axis_ve_RPM, _axis_ve_LOAD, _ve_index, _fb_VE, _ve_timer, _timeRPM
-	.EXPORT		_knock_mul_low, _knock_mul_high
+	.EXPORT		_axis_ig_RPM, _axis_ig_LOAD, _axis_fu_RPM, _axis_fu_LOAD, _axis_ve_RPM, _axis_ve_LOAD, _timeRPM
+	.EXPORT		_knock_mul_low, _knock_mul_high, _injMisfireCount1, _injMisfireCount2, _injMisfireCount3, _injMisfireCount4
 
 _axis_ig_RPM:		.RES.W      1					
 _axis_ig_LOAD:		.RES.W      1					
@@ -103,12 +107,14 @@ _axis_fu_RPM:		.RES.W      1
 _axis_fu_LOAD:		.RES.W      1					
 _axis_ve_RPM:		.RES.W      1					
 _axis_ve_LOAD:		.RES.W      1					
-_fb_VE				.RES.B      1					
-_ve_index:			.RES.B      1					
-_ve_timer:			.RES.B      1					
 _timeRPM:			.RES.W      1					
 _knock_mul_low:		.RES.W      1					
-_knock_mul_high:	.RES.W      1					
+_knock_mul_high:	.RES.W      1	
+_injMisfireCount1:	.RES.W      1	
+_injMisfireCount2:	.RES.W      1	
+_injMisfireCount3:	.RES.W      1	
+_injMisfireCount4:	.RES.W      1	
+				
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -553,6 +559,7 @@ altMUT:
 			.DATA.L		wMUT33_Corrected_Timing_Advance+1
 			.DATA.L		octanEgrIgnTiming+1
 			.DATA.L		wMUT9A_Ligths_Bit_Array+1
+			.DATA.L		injectors_misfire_mask+1
 			
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

@@ -752,6 +752,10 @@ extern u16 timeRPM;
 extern byte no_knock_retard;	
 extern u16 knock_mul_low;	
 extern u16 knock_mul_high;	
+extern u16 injMisfireCount1;	
+extern u16 injMisfireCount2;	
+extern u16 injMisfireCount3;	
+extern u16 injMisfireCount4;	
 
 extern byte hiFuelMapRAM[];
 extern u16	rpmTimeRAM[];

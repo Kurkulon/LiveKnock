@@ -11,7 +11,9 @@
 #include "EnVars.h"
 #include "hwreg.h"
 #include "hardware.h"
-//#include "MISFIRE.h"
+#include "MISFIRE.h"
+
+//#define DEF_MISFIRE
 
 
 #ifndef DEF_MISFIRE	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -37,6 +39,44 @@ void Misfire_CRANK75_root()							{	_Misfire_CRANK75_root(); 		}
 
 
 #else	//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void Misfire_CRANK75_sub_2B168();
+static void Misfire_CRANK5_root();
+static void Misfire_CRANK5_sub_29558(u16 v1, u16 v2);
+static void Misfire_CRANK5_sub_29750();
+static void Misfire_CRANK5_sub_2A684();
+static void Misfire_CRANK5_sub_2AAA2(u16 v);
+static void Misfire_CRANK5_sub_2AC5C();
+static void Misfire_CRANK5_sub_2AEE4();
+static void Misfire_Knock_Load_Filter_Tables_sub_283E8();
+static void Misfire_sub_28588();
+static void Misfire_sub_28606();
+static void Misfire_sub_28B74(u16 r4);
+static void Misfire_sub_28BDC();
+static void Misfire_sub_28BF2();
+static u16 Misfire_sub_28F88(u16 r4);
+static void Misfire_sub_29158();
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#define RPM11_6B0A							((Axis*)0x6B0A)
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#define unk110_3F3C							((Map3D_B *)0x3F3C)
+#define unk109_3F2A							((Map3D_B *)0x3F2A)
+#define unk108_3F18							((Map3D_B *)0x3F18)
+#define unk107_3F06							((Map3D_B *)0x3F06)
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#define word_989A							((const u16*)0x989A)
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+#define ENGINE_MAIN_VARIABLES_DIM_off_9198		((EnVars*)0x9198)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -95,11 +135,11 @@ static void Misfire_CRANK75_sub_2B168()
 
 	SET(word_FFFF8F7A, 0xA000);
 
-	u16 **p = &ENGINE_MAIN_VARIABLES_DIM_off_9198->_1064_word_FFFF901E;
+	u16 **p = &(ENGINE_MAIN_VARIABLES_DIM_off_9198->_1064_word_FFFF901E);
 
 	u16 *r2 = p[stroke_75];
 
-	p = &ENGINE_MAIN_VARIABLES_DIM_off_9198->_1144_word_FFFF9036;
+	p = &(ENGINE_MAIN_VARIABLES_DIM_off_9198->_1144_word_FFFF9036);
 
 	u16 *r1 = p[stroke_75];
 
@@ -140,8 +180,10 @@ static void Misfire_CRANK5_root()
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-static void Misfire_CRANK5_sub_29558(u16 v1, u16 v2)
+static void Misfire_CRANK5_sub_29558(u16 v1/*(crank_dt_ICR0AH_5 / 4)*/, u16 v2 /*0*/)
 {
+	// Misfire_CRANK5_sub_29558(Div_DW(crank_dt_ICR0AH_5, 4), 0);
+
 	null_crank_dt_ICR0AH_B_div_4_6 = null_crank_dt_ICR0AH_B_div_4_5;
 	null_crank_dt_ICR0AH_B_div_4_5 = null_crank_dt_ICR0AH_B_div_4_4;
 	null_crank_dt_ICR0AH_B_div_4_4 = null_crank_dt_ICR0AH_B_div_4_3;
@@ -201,13 +243,13 @@ static void Misfire_CRANK5_sub_29558(u16 v1, u16 v2)
 
 	if (r1 || r13 == 0)
 	{
-		bMUTD6 = (r13 < word_1CCC) ? r13 : word_1CCC;
+		bMUTD6 = (r13 < word_1CCC/*0x3FFF*/) ? r13 : word_1CCC/*0x3FFF*/;
 	}
 	else
 	{
 		r13 = -r13;
 
-		bMUTD6 = (r13 >= word_1CCA) ? r13 : word_1CCA;
+		bMUTD6 = (r13 >= word_1CCA/*0xC000*/) ? r13 : word_1CCA/*0xC000*/;
 	};
 
 	misfire_word_FFFF8F72 = misfire_word_FFFF8F70;
@@ -217,11 +259,11 @@ static void Misfire_CRANK5_sub_29558(u16 v1, u16 v2)
 
 	if (r13 & 0x8000)
 	{
-		bMUTD7 = (r13 >= word_1CCA) ? r13 : word_1CCA;
+		bMUTD7 = (r13 >= word_1CCA/*0xC000*/) ? r13 : word_1CCA/*0xC000*/;
 	}
 	else
 	{
-		bMUTD7 = (r13 < word_1CCC) ? r13 : word_1CCC;
+		bMUTD7 = (r13 < word_1CCC/*0x3FFF*/) ? r13 : word_1CCC/*0x3FFF*/;
 	};
 }
 
@@ -285,6 +327,210 @@ static void Misfire_CRANK5_sub_2AC5C()
 
 static void Misfire_CRANK5_sub_2AEE4()
 {
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+void Misfire_root_28320()
+{
+	Misfire_Knock_Load_Filter_Tables_sub_283E8();
+
+	Misfire_sub_28606();
+
+	if (bMUTD3_BitMap4_FCA_Store_FFFF89D8 & (FCA_4_10|FCA_5_20))
+	{
+		Misfire_sub_28BDC();
+	}
+	else
+	{
+		CLR(ZERO_8_IGNITION_FLAGS, 0x8000|0x4000);
+
+		injectors_misfire_mask = ~0;
+
+		faults_FFFF80F4 = 0;
+		wMUT8D = 0;
+	};
+
+	if ((injectors_misfire_mask & 0xF) != 0xF)
+	{
+		SET(word_FFFF9296, 0x80);
+		SET(word_FFFF9298, 0x80);
+	}
+	else
+	{
+		CLR(word_FFFF9296, 0x80);
+		CLR(word_FFFF9298, 0x80);
+	};
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void Misfire_Knock_Load_Filter_Tables_sub_283E8()
+{
+
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void Misfire_sub_28588()
+{
+
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void Misfire_sub_28606()
+{
+
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void Misfire_sub_28B74(u16 r4)
+{
+	if (bMUTDD < r4) bMUTDD = r4;
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void Misfire_sub_28B8E(u16 r4)
+{
+	if (misfire_timer_FFFF86E6 < r4) misfire_timer_FFFF86E6 = r4;
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void Misfire_sub_28BA8(u16 r4)
+{
+	if (bMUTDF < r4) bMUTDF = r4;
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void Misfire_sub_28BC2(u16 r4)
+{
+	if (misfire_timer_FFFF86E8 < r4) misfire_timer_FFFF86E8 = r4;
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void Misfire_sub_28BDC()
+{
+	Misfire_sub_28BF2();		
+
+	Misfire_sub_29158();
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void Misfire_sub_28BF2()
+{
+
+
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static u16 Misfire_sub_28F88(u16 r4)
+{
+	Table_Lookup_Axis(RPM11_6B0A);
+
+	Map3D_B *map;
+
+	if (r4 >= word_1C84/*0x50*/)
+	{
+		map = unk110_3F3C;
+	}
+	else if (r4 >= word_1C82/*0x3C*/)
+	{
+		map = unk109_3F2A;
+	}
+	else if (r4 >= word_1C80/*0x28*/)
+	{
+		map = unk108_3F18;
+	}
+	else if (r4 >= word_1C7E/*0xA*/)
+	{
+		map = unk107_3F06;
+	}
+	else
+	{
+		return ~0;
+	};
+
+	return Table_Lookup_byte_2D_3D(map);
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void Misfire_sub_28FF8(u16 *r4)
+{
+	u16 r2 = 0, r8 = 0;
+
+	u16 r9 = word_1C88/*40*/ / 4;
+
+	if (r9 > word_1C8E/*9*/) r9 = word_1C8E/*9*/;
+
+	u16 *r6 = r4;
+
+	const u16 *r3 = word_989A; // word_989A: .data.w      1, 2, 4, 8, h'10, h'20, h'40, h'80, h'100, h'200, h'400, h'800,h'1000,h'2000,h'4000,h'8000
+
+	u16 r13 = 6;
+
+	do
+	{
+		if (*r6 > r9) r2 |= *r3, r8 += 1;
+
+		r6++;
+		r3++;
+		r13--;
+	}
+	while (r13 != 0);
+
+	if (r8 != 1) r2 = 0x80;
+
+	if ((stored_DTC_2 & 0xC000) == 0)
+	{
+		faults_FFFF80F4 = (faults_FFFF80F4 & 0xFF40) | (r2 & ~0xFF40);
+	};
+}
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static u16 Misfire_sub_29110(u16 *r4, u16 r5)
+{
+	u16 r1 = r4[1];
+
+	u16 r7 = 2;
+
+	u16 r13 = r4[2];
+
+	if (r13 >= r1) r1 = r13, r7 = 4;
+
+	u16 r6 = r4[0];
+
+	u16 r3 = 1;
+
+	r13 = r4[3];
+
+	if (r13 >= r6) r6 = r13, r3 = 8;
+
+	if (r5 == 1 || r1 < r6) r7 = r3;
+
+	return ~r7;
+}
+
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+static void Misfire_sub_29158()
+{
+
 
 }
 

@@ -75,7 +75,17 @@ extern "C" void LiveKnock()
 		knock_mul_low	= t1_knock_control__17CE;
 
 		wMUT27_Octane_Number = octaneNum = 255;
+
+		injMisfireCount1 = 0;
+		injMisfireCount2 = 0;
+		injMisfireCount3 = 0;
+		injMisfireCount4 = 0;
 	};
+
+	if (ZRO(injectors_misfire_mask,1)) injMisfireCount1 += 1;
+	if (ZRO(injectors_misfire_mask,2)) injMisfireCount2 += 1;
+	if (ZRO(injectors_misfire_mask,4)) injMisfireCount3 += 1;
+	if (ZRO(injectors_misfire_mask,8)) injMisfireCount4 += 1;
 
 	//if (openLoop)
 	//{

@@ -222,3 +222,4 @@ bMUTDE:														.EQU H'FFFF8F74
 bMUTDF:														.EQU H'FFFF86E2 
 bMUTE0:														.EQU H'FFFF8F76 
 bMUTF9:														.EQU H'FFFF8B64 
+injectors_misfire_mask         								.EQU H'FFFF906C                                                        
